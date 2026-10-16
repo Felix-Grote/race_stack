@@ -39,9 +39,12 @@ if [[ "$mode" == all || "$mode" == numerical ]]; then
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_artifact.py --junitxml=/work/a07-artifact.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_compile.py --junitxml=/work/a07-cli.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_legacy_export.py -k 'not actual_nine_group_reader_and_generated_ros_cdr and not corrupt_staged_ros_serialization_is_never_published' --junitxml=/work/a07-export-pure.xml
-  python -m flake8 --max-line-length=99 /src/planner/global_planner/test/test_w3_benchmarks.py /src/scripts/project_a/benchmark_w3.py /src/scripts/project_a/w3_benchmark_support.py
+  python -m flake8 --max-line-length=99 /src/planner/global_planner/test/test_w3_benchmarks.py /src/scripts/project_a/benchmark_w3.py /src/scripts/project_a/w3_benchmark_support.py /src/scripts/project_a/w3_query_probe.py /src/scripts/project_a/tests/test_w3_scenario_installed.py
   ament_pep257 --convention pep257 /src/planner/global_planner/test/test_w3_benchmarks.py
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_w3_benchmarks.py --junitxml=/work/a08-regressions.xml
+  python -m flake8 --max-line-length=99 /src/scripts/project_a/tests/test_w3_harness.py
+  # The pinned /tmp is noexec; these local Git fixtures intentionally execute shell scripts.
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_w3_harness.py --basetemp=/work/a09-harness-tmp --junitxml=/work/a09-harness.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_numerical.py --junitxml=/work/numerical.xml
 fi
 if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
@@ -51,6 +54,7 @@ if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
   cp -a /src/utilities/libraries/f110_msgs /src/utilities/libraries/frenet_conversion /work/src/
   python /src/scripts/project_a/source_manifest.py --repository /src \
     --build-identity /work/src/global_planner/config/project_a/build_identity.json
+  cp /work/src/global_planner/config/project_a/build_identity.json /work/build-identity.json
   python /usr/bin/colcon --log-base /work/log build --base-paths /work/src \
     --build-base /work/build --install-base /work/install \
     --packages-select f110_msgs frenet_conversion global_planner --parallel-workers 2
@@ -91,7 +95,8 @@ python - <<'PY_SUMMARY'
 import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
-out = {'scope': 'W0_THROUGH_A08',
+out = {'scope': 'W0_THROUGH_A08_SOURCE_AND_A07_INSTALLED',
+       'source_free_a09': 'SEPARATE_HOST_RUN_FOR_ALL_OR_ROS',
        'legal_planner_acceptance': 'SYNTHETIC_PLANAR_OFFLINE',
        'independent_w3_adversarial_review': 'REQUIRED'}
 for kind in ('numerical', 'ros', 'a01', 'a02', 'a03', 'a04', 'a05', 'a05-oracle',
@@ -99,7 +104,7 @@ for kind in ('numerical', 'ros', 'a01', 'a02', 'a03', 'a04', 'a05', 'a05-oracle'
              'w2-numerical-oracle', 'w2-shared-cap', 'w2-pipeline', 'w2-novel-pipeline',
              'w1-installed',
              'w2-installed', 'a07-artifact', 'a07-cli', 'a07-export-pure', 'a07-export-ros',
-             'w3-installed', 'a08-regressions'):
+             'w3-installed', 'a08-regressions', 'a09-harness'):
     path = Path('/work', kind + '.xml')
     if path.exists():
         suite = ET.parse(path).getroot().find('testsuite')

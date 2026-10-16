@@ -1,5 +1,30 @@
 # Project A decision ledger
 
+## 2026-10-16 — A09 exact installed authority and isolated handoff
+
+- Freeze a committed candidate before fresh acceptance. A no-hardlink recursive
+  clone must retain literal HEAD and a clean tree before setup, after setup and
+  after successful verification. Full verification separately rejects HEAD,
+  source-hash and clean/dirty-state drift.
+- Build selected packages without symlink installation, then enter a different
+  nonroot, network-disabled, read-only-root container. Mount only installed
+  prefix/wheel, minimal harness and explicit results. Use the recorded immutable
+  image ID and explicit installed route/model/policy/build resources.
+- Correct the installed mutation tests to use actual reference.json products
+  and assert precise content/trust rejection reasons. Earlier unsupported-name
+  path rejection is preserved but not credited as content validation.
+- Exercise nine installed scenarios, including original S4 and preferred .52 m
+  S6 bytes, with new-process compile, dual replay, metric queries, original
+  nine-group reader and actual CDR. This is offline synthetic software evidence.
+- Run fresh-clone guard fixtures in explicit executable scratch because /tmp is
+  intentionally noexec. Preserve the red invocation and green retry. Extend the
+  CI ceiling to 90 minutes for full regressions and the separate installed
+  campaign; numerical solver and proof budgets are unchanged.
+- Record completed fresh-candidate evidence in a later ordinary commit, then
+  verify that literal delivered head in hosted push CI. Record its final SHA,
+  run and H outside that containing commit to avoid self-referential provenance.
+  Independent W3 adversarial review retains final acceptance/remediation authority.
+
 ## 2026-10-16 — A08 fair comparison and measured S6 mesh policy
 
 - Freeze the 92-job primary manifest before execution; predeclare a separate

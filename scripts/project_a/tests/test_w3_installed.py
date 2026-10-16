@@ -73,11 +73,15 @@ def _invoke(product, label, arguments, *, success=True, query=False):
         command.extend(('--report', str(report)))
     completed = subprocess.run(command, cwd=product['output'], capture_output=True,
                                text=True, timeout=240, check=False)
-    (product['output'] / (label + '.stdout.txt')).write_text(completed.stdout)
-    (product['output'] / (label + '.stderr.txt')).write_text(completed.stderr)
+    stdout = product['output'] / (label + '.stdout.txt')
+    stderr = product['output'] / (label + '.stderr.txt')
+    stdout.write_text(completed.stdout)
+    stderr.write_text(completed.stderr)
     value = json.loads(completed.stdout if query else report.read_text())
     product['commands'].append({'command': command, 'returncode': completed.returncode,
-                                'status': value.get('status'), 'report': str(report)})
+                                'status': value.get('status'), 'reason': value.get('reason'),
+                                'report': None if query else str(report),
+                                'stdout': str(stdout), 'stderr': str(stderr)})
     assert value['schema_version'] == 1
     if success:
         assert completed.returncode == 0, (value, completed.stderr)
@@ -126,6 +130,7 @@ def product():
 def test_installed_w3_origins_resources_and_isolation():
     """Verify non-symlink installed code, pinned inputs and actual runtime isolation."""
     _share, manifest, _executable = _inputs()
+    identities = {}
     for name in ('route_input', 'route_reference', 'route_corridor', 'iqp_route_adapter',
                  'route_validate', 'route_validate_dynamics', 'cyclic_retime',
                  'route_artifact', 'route_compile', 'route_legacy_export'):
@@ -135,6 +140,7 @@ def test_installed_w3_origins_resources_and_isolation():
         assert str(path.resolve()).startswith('/work/install/')
         source_key = 'planner/global_planner/global_planner/' + path.name
         assert _hash(path) == manifest['source_hashes'][source_key]
+        identities[module.__name__] = {'path': str(path.resolve()), 'sha256': _hash(path)}
     entries = {entry.name: entry.value for entry in
                importlib.metadata.distribution('global_planner').entry_points}
     assert entries == {
@@ -149,7 +155,8 @@ def test_installed_w3_origins_resources_and_isolation():
         assert _hash(message) == manifest['source_hashes'][
             'utilities/libraries/f110_msgs/msg/' + name]
     if os.environ.get('PROJECT_A_SOURCE_FREE') == '1':
-        for forbidden in ('/src', '/workspace', '/work/src', '/work/build', '/work/optimizer'):
+        forbidden_paths = ('/src', '/workspace', '/work/src', '/work/build', '/work/optimizer')
+        for forbidden in forbidden_paths:
             assert not Path(forbidden).exists(), forbidden
         assert os.getuid() != 0
         security = dict(line.split(':', 1) for line in
@@ -157,10 +164,22 @@ def test_installed_w3_origins_resources_and_isolation():
         assert int(security['CapEff'].strip(), 16) == 0
         assert security['NoNewPrivs'].strip() == '1'
         assert socket.if_nameindex() == [(1, 'lo')]
-        for path in ('/', '/work', '/work/install', '/work/python', '/runtime-harness'):
+        readonly_paths = ('/', '/work', '/work/install', '/work/python', '/runtime-harness')
+        for path in readonly_paths:
             assert os.statvfs(path).f_flag & os.ST_RDONLY, path
         assert not any('/src' in item or '/build' in item for item in __import__('sys').path)
         assert not Path('/work/.ros').exists()
+        Path('/results/runtime-identity.json').write_text(json.dumps({
+            'source_commit': manifest['source_commit'], 'source_dirty': manifest['source_dirty'],
+            'uid': os.getuid(), 'cap_eff': security['CapEff'].strip(),
+            'no_new_privileges': security['NoNewPrivs'].strip(),
+            'interfaces': socket.if_nameindex(), 'verified_readonly_paths': readonly_paths,
+            'verified_absent_paths': forbidden_paths, 'modules': identities,
+            'console_script': str(_executable),
+            'installed_resource_hashes': manifest['installed_resource_hashes'],
+        }, indent=2) + '\n')
+        Path('/results/build-identity.json').write_bytes(
+            (_share / 'build_identity.json').read_bytes())
 
 
 def test_installed_w3_persist_revalidate_query_export_cdr(product):
@@ -225,42 +244,77 @@ def test_installed_w3_corruption_and_context_fail_closed(product):
     """Challenge independent H, curve approval and policy trust in new processes."""
     policy = product['share'] / 'policies/synthetic_policy.json'
 
-    def reject(label, artifact, expected=None, selected_policy=None):
-        return _invoke(product, label, (
+    def reject(label, artifact, reason, expected=None, selected_policy=None):
+        rejected = _invoke(product, label, (
             'validate', '--artifact', artifact, '--expected-h', expected or product['H'],
             '--policy', selected_policy or policy), success=False)
+        assert reason in rejected['reason'], rejected
+        assert 'Not a directory' not in rejected['reason'], rejected
+        return rejected
+
+    def mutation_file(label, data):
+        directory = product['output'] / label
+        directory.mkdir()
+        path = directory / 'reference.json'
+        path.write_bytes(data)
+        assert list(directory.iterdir()) == [path]
+        return path
+
+    def changed_policy(payload):
+        payload['policies']['numeric']['arc_abs'] = 2e-10
+        for kind in ('geometry', 'dynamics'):
+            payload['policies'][kind]['numeric_policy']['arc_abs'] = 2e-10
+
+    def changed_approval(payload):
+        payload['approved_curve_digest'] = '0' * 64
+        payload['speed_profile']['curve_digest'] = '0' * 64
+        for kind in ('geometry', 'dynamics'):
+            payload['validation'][kind]['curve_digest'] = '0' * 64
 
     wrong = ('1' if product['H'][0] == '0' else '0') + product['H'][1:]
-    reject('wrong-expected-h', product['artifact'], wrong)
+    reject('wrong-expected-h', product['artifact'], 'H mismatch', wrong)
     envelope = json.loads(product['artifact'].read_text())
     mutations = {
-        'approval': lambda p: p.update(approved_curve_digest='0' * 64),
+        'approval': changed_approval,
         'model': lambda p: p['model']['regions'][0]['limits'].update(speed_max_mps=3.25),
-        'policy': lambda p: p['policies']['numeric'].update(arc_abs=2e-10),
+        'policy': changed_policy,
         'coefficient': lambda p: p['curve']['coefficients'][0][0].__setitem__(0, 1.25),
+        'implementation': lambda p: p['implementation'].update(contract_id='unsupported.v99'),
     }
     for label, mutate in mutations.items():
         changed = copy.deepcopy(envelope)
         mutate(changed['payload'])
         changed['H'] = hashlib.sha256(_canonical(changed['payload'])).hexdigest()
         assert changed['H'] != product['H']
-        path = product['output'] / ('mutated-' + label + '.json')
-        path.write_bytes(_canonical(changed))
-        reject('reject-' + label + '-old-h', path)
-        if label in ('approval', 'policy'):
-            reject('reject-' + label + '-new-h', path, changed['H'])
+        path = mutation_file('mutated-' + label, _canonical(changed))
+        reject('reject-' + label + '-old-h', path, 'H mismatch')
+        new_h_reason = {
+            'approval': 'geometry replay FAIL',
+            'model': 'dynamics replay FAIL',
+            'policy': 'independent acceptance policy',
+            'implementation': 'changed kernel/checker/dependency identity',
+        }
+        if label in new_h_reason:
+            reject('reject-' + label + '-new-h', path, new_h_reason[label], changed['H'])
     partial = product['output'] / '.tmp-interrupted'
     partial.mkdir()
     partial_file = partial / 'reference.json'
     partial_file.write_bytes(product['artifact'].read_bytes()[:200])
-    reject('incomplete-stage', partial_file)
-    corrupt = product['output'] / 'corrupt.json'
-    corrupt.write_bytes(product['artifact'].read_bytes() + b'\x00')
-    reject('corrupt-bytes', corrupt)
+    reject('incomplete-stage', partial_file, 'private staging')
+    truncated = mutation_file('truncated', product['artifact'].read_bytes()[:200])
+    reject('truncated-content', truncated, 'invalid bounded UTF-8 JSON')
+    corrupt = mutation_file('corrupt', product['artifact'].read_bytes() + b'\x00')
+    reject('corrupt-bytes', corrupt, 'invalid bounded UTF-8 JSON')
     unsupported = json.loads(policy.read_text())
     unsupported['required_geometry_coverage'] = ['three_dimensional_clearance']
     unsupported_file = product['output'] / 'unsupported-policy.json'
     unsupported_file.write_bytes(_canonical(unsupported))
-    reject('unsupported-coverage', product['artifact'], selected_policy=unsupported_file)
+    reject('unsupported-coverage', product['artifact'],
+           'unsupported independently required coverage', selected_policy=unsupported_file)
+    wrong_owner = _invoke(product, 'wrong-supplied-occurrence', (
+        'query', '--artifact', product['artifact'], '--expected-h', product['H'],
+        '--policy', policy, '--s-m', .5, '--occurrence-id', 'unapproved-occurrence'),
+        success=False, query=True)
+    assert 'supplied occurrence' in wrong_owner['reason'], wrong_owner
     # All mutations used independent copies; the accepted original stays intact.
     assert _hash(product['artifact']) == hashlib.sha256(_canonical(envelope)).hexdigest()

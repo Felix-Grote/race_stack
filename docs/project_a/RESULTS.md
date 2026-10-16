@@ -1,5 +1,14 @@
 # W3 current evidence
 
+The A09 implementation candidate is prepared for fresh exact-commit verification.
+Corrected exploratory installed acceptance passes 3 tests / 21 CLI processes /
+15 negative controls in a separate source-free container; the retained prefix
+accurately records the original dirty A07 snapshot rather than a release commit.
+Three fresh-candidate guard tests pass after moving executable test fixtures off
+the noexec /tmp mount. The original failed attempt remains evidence. Neither
+preflight substitutes for the pending clean recursive checkout and nine-case
+source-free acceptance. [Runbook](W3_RUNTIME.md).
+
 A07 commit `0c2d7c35fc50051a2ae96b9260de636610e280f4` passes exact-head push
 [CI 38918290086](https://github.com/Felix-Grote/race_stack/actions/runs/38918290086):
 532 functional tests / 24 groups, no functional failures/errors/skips, three

@@ -1,5 +1,29 @@
 # Project A status — 2026-10-16
 
+## W3 A09 candidate — implementation ready, fresh verification pending
+
+A07 is `0c2d7c35fc50051a2ae96b9260de636610e280f4`; A08 is
+`6a3295753235889389be1374ce1195435afb7b74`. The A09 candidate adds an exact
+fresh recursive checkout runner, ordinary selected-package install, and a
+separate runtime with installed prefix/wheel/resources and a minimal test harness
+only. No source or build tree is mounted there. Nine installed synthetic cases
+include reversal, rotated origin, split alternatives, disconnected surfaces,
+notch, repeated-location S4 and full-course S6 under explicit .52 m policy.
+
+Exploratory preflight against the retained dirty A07 prefix passes **3 installed
+tests in 85.04 s**, 21 CLI processes and all 15 content/trust negative controls.
+The three exact-candidate guard regressions pass in 0.19 s. Their initial attempt
+hit the intentionally noexec /tmp mount; explicit executable scratch fixes the
+test invocation and the original failures remain retained. This preflight is not
+the final clean candidate acceptance.
+
+Next executable gate: commit the candidate, then run
+`scripts/project_a/fresh_verify.sh EXACT_CANDIDATE_SHA work/w3/a09-fresh`.
+Keep setup, complete W0–W3 regressions, exact inherited failures, source-free
+commands, content-mutation reasons and all nine outcomes. Publish final evidence
+and exact-head push CI before handing the PR to the separate adversarial reviewer.
+[Runtime contract](W3_RUNTIME.md), [review instructions](W3_REVIEW.md).
+
 ## W3 A08 checkpoint — campaign complete, independent release review pending
 
 The frozen 92-attempt primary campaign completed with **54 PASS, 28 stock

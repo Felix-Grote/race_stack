@@ -30,19 +30,7 @@ PROJECT_A_GID=$(id -g)
   git status --short
   git submodule status --recursive
 } > "$out/source-identity.txt"
-python3 - "$out/source-hashes-before.json" <<'PY_HASH'
-import hashlib
-import json
-from pathlib import Path
-import sys
-paths = sorted(Path('planner/global_planner').rglob('*.py'))
-paths += sorted(Path('scripts/project_a').rglob('*.py'))
-paths += sorted(p for p in Path('planner/global_planner/test/fixtures/project_a').rglob('*')
-                if p.is_file())
-paths += [Path('scripts/project_a/unit.sh'), Path('docker-compose.test.yaml')]
-Path(sys.argv[1]).write_text(json.dumps({str(p): hashlib.sha256(p.read_bytes()).hexdigest()
-                                      for p in paths}, indent=2, sort_keys=True))
-PY_HASH
+python3 scripts/project_a/source_manifest.py > "$out/source-hashes-before.json"
 unset DOCKER_HOST DOCKER_CONTEXT DOCKER_TLS DOCKER_TLS_VERIFY DOCKER_CERT_PATH
 docker --host=unix:///var/run/docker.sock image inspect project-a-humble:w0 \
   --format '{{.Id}}' > "$out/image-id.txt"
@@ -58,23 +46,9 @@ docker --host=unix:///var/run/docker.sock compose -p project-a-unit \
   ' project-a-unit "$@" 2>&1 | tee "$out/run.log"
 rc=${PIPESTATUS[0]}
 set -e
-if ! python3 - "$out/source-hashes-before.json" "$out/source-hashes-after.json" <<'PY_HASH'
-import hashlib
-import json
-from pathlib import Path
-import sys
-before = json.loads(Path(sys.argv[1]).read_text())
-paths = sorted(Path('planner/global_planner').rglob('*.py'))
-paths += sorted(Path('scripts/project_a').rglob('*.py'))
-paths += sorted(p for p in Path('planner/global_planner/test/fixtures/project_a').rglob('*')
-                if p.is_file())
-paths += [Path('scripts/project_a/unit.sh'), Path('docker-compose.test.yaml')]
-after = {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
-Path(sys.argv[2]).write_text(json.dumps(after, indent=2, sort_keys=True))
-if before != after:
-    raise SystemExit('Source changed during verification; discard this acceptance run.')
-PY_HASH
-then
+python3 scripts/project_a/source_manifest.py > "$out/source-hashes-after.json"
+if ! cmp -s "$out/source-hashes-before.json" "$out/source-hashes-after.json"; then
+  echo 'Source changed during verification; discard this acceptance run.' >&2
   printf '1\n' > "$out/exit-code.txt"
   exit 1
 fi
