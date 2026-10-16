@@ -1,0 +1,68 @@
+{
+  "scope": "Installed synthetic offline software; independent W3 review remains required",
+  "source_free": true,
+  "source_commit": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "source_dirty": false,
+  "gitlinks": {
+    "base_system/f110_simulator/f1tenth_gym": "f8f8c9d4781d44a2959bae013f276410cb4e9da0",
+    "base_system/f110_simulator/f1tenth_gym_ros": "163020c0b631a5bdd9ddc59e6132337cec04cc27",
+    "base_system/f1tenth_system": "5d6490fc6426deb1254198020133a85c0614f183",
+    "base_system/f1tenth_system/ackermann_mux": "ed4eac7284d13cae66628688e6fd32e585a96a62",
+    "base_system/f1tenth_system/teleop_tools": "09938461991ec2260ddab6db8ac962f46d205669",
+    "planner/global_planner/global_planner/global_racetrajectory_optimization": "b1b38ecfefec7200d5bcb243f115af1d795b3766",
+    "sensors/vesc": "2fd19be756544693752d3e5b36c128e6157e4bd3"
+  },
+  "resources": {
+    "fixtures/s0_reverse_route.json": "eea555e7bd76e911bdf13cf395dd9958d40cdcda46a05681838844b3cc2891c6",
+    "fixtures/s0_rotated_route.json": "12fa1e23b1078ac1b0720defa8a90e8e4e3e545adc8f73bff6b2cff8a9dae465",
+    "fixtures/s0_route.json": "3bfddf1726bdf55d53496ddd37d6289cb2808136bfaba49fb0c6228340d85cff",
+    "fixtures/s2_lower_route.json": "5a8c24775d52901231dc7134ddf27d121854501cde7953a41a89f85c111a576f",
+    "fixtures/s2_upper_route.json": "9abdc88ead71bcff8e170be6b5e4df3935d4a2fac02ee4a493318b7b2a4bb42a",
+    "fixtures/s3_notch_route.json": "d1dcbfe952da8c2aa00b430e986cb8273ae0a0db95eb2869ea63ea444f715ef9",
+    "fixtures/s3_surfaces_route.json": "f397127bdd14e1713b4a4ace30b5aec76c16b0091d07b41d379c3411746afa98",
+    "fixtures/s4_repeated_route.json": "624f66a98d90c75aafd475f3e4daccf55cc2f0ce37aa6f955a2a9ab14432e912",
+    "fixtures/s6_competition_route.json": "d02e04769f0f1acb3c2aa4c3e52c5815af113908595296bf2a2586d09622d1a2",
+    "models/s0_reverse_route_model.json": "49bace7f73d98d96fc6721cabd5e8f1e54c8691d987333fa261b5290154d4702",
+    "models/s0_rotated_route_model.json": "d0ffc05d1daf9f0014c53e5ea189a49db65ee76e1a4da0b2a4cfa745c2ccb6a7",
+    "models/s0_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+    "models/s2_lower_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+    "models/s2_upper_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+    "models/s3_notch_route_model.json": "afbb0f3e947306aabfeaaf5834c399d4becf184a01453bf4a54d55fd1f64aea7",
+    "models/s3_surfaces_route_model.json": "afbb0f3e947306aabfeaaf5834c399d4becf184a01453bf4a54d55fd1f64aea7",
+    "models/s4_repeated_route_model.json": "71acf61ff91ded134c9e1da99da0e9bbaf014cb835b432424d405e754f836914",
+    "models/s6_competition_route_model.json": "39e1275cc05dd9b5569c0782f7963822746df2e177fdb79e17ee81e9f295ce82",
+    "models/synthetic_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+    "policies/s6_coarse_policy.json": "8fb57e0a592504b0e6e31ccd4b486a5db1251bbc16060ecbb041721ef5199b3f",
+    "policies/synthetic_policy.json": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133"
+  },
+  "trusted_identity_source": "Controlled compile receipt retained before mutation tests",
+  "H": "1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59",
+  "artifact_path": "/results/w3-installed/references/1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59/reference.json",
+  "artifact_sha256": "cfb3977e8dcc84b6922537465b982969ae0535ea3f09c8661d8a195dd87066e8",
+  "commands": [
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "compile",
+        "--manifest",
+        "/work/install/global_planner/share/global_planner/project_a/fixtures/s0_route.json",
+        "--vehicle-config",
+        "/work/install/global_planner/share/global_planner/project_a/models/synthetic_model.json",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--build-manifest",
+        "/work/install/global_planner/share/global_planner/project_a/build_identity.json",
+        "--output",
+        "/results/w3-installed/references",
+        "--report",
+        "/results/w3-installed/compile.json"
+      ],
+      "returncode": 0,
+      "status": "PASS",
+      "reason": "",
+      "report": "/results/w3-installed/compile.json",
+      "stdout": "/results/w3-installed/compile.stdout.txt",
+      "stderr": "/results/w3-installed/compile.stderr.txt"
+    }
+  ]
+}

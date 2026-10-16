@@ -1,0 +1,150 @@
+running bdist_wheel
+running build
+running build_py
+creating build
+creating build/lib
+creating build/lib/global_racetrajectory_optimization
+copying global_racetrajectory_optimization/__init__.py -> build/lib/global_racetrajectory_optimization
+copying global_racetrajectory_optimization/trajectory_optimizer.py -> build/lib/global_racetrajectory_optimization
+creating build/lib/global_racetrajectory_optimization/frictionmap
+copying global_racetrajectory_optimization/frictionmap/__init__.py -> build/lib/global_racetrajectory_optimization/frictionmap
+creating build/lib/global_racetrajectory_optimization/helper_funcs_glob
+copying global_racetrajectory_optimization/helper_funcs_glob/__init__.py -> build/lib/global_racetrajectory_optimization/helper_funcs_glob
+creating build/lib/global_racetrajectory_optimization/opt_mintime_traj
+copying global_racetrajectory_optimization/opt_mintime_traj/__init__.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj
+creating build/lib/global_racetrajectory_optimization/frictionmap/src
+copying global_racetrajectory_optimization/frictionmap/src/__init__.py -> build/lib/global_racetrajectory_optimization/frictionmap/src
+copying global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py -> build/lib/global_racetrajectory_optimization/frictionmap/src
+copying global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py -> build/lib/global_racetrajectory_optimization/frictionmap/src
+copying global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py -> build/lib/global_racetrajectory_optimization/frictionmap/src
+creating build/lib/global_racetrajectory_optimization/helper_funcs_glob/src
+copying global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py -> build/lib/global_racetrajectory_optimization/helper_funcs_glob/src
+copying global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py -> build/lib/global_racetrajectory_optimization/helper_funcs_glob/src
+copying global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py -> build/lib/global_racetrajectory_optimization/helper_funcs_glob/src
+copying global_racetrajectory_optimization/helper_funcs_glob/src/import_track.py -> build/lib/global_racetrajectory_optimization/helper_funcs_glob/src
+copying global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py -> build/lib/global_racetrajectory_optimization/helper_funcs_glob/src
+copying global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py -> build/lib/global_racetrajectory_optimization/helper_funcs_glob/src
+copying global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py -> build/lib/global_racetrajectory_optimization/helper_funcs_glob/src
+copying global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py -> build/lib/global_racetrajectory_optimization/helper_funcs_glob/src
+copying global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_race.py -> build/lib/global_racetrajectory_optimization/helper_funcs_glob/src
+creating build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src
+copying global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/__init__.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src
+creating build/lib/global_racetrajectory_optimization/opt_mintime_traj/src
+copying global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/src
+copying global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/src
+copying global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/src
+copying global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/src
+copying global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/src
+copying global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/src
+copying global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/src
+copying global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/src
+creating build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+copying global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+copying global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+copying global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+copying global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+copying global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py -> build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+warning: build_py: byte-compiling is disabled, skipping.
+
+/opt/project-a/lib/python3.10/site-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+  warnings.warn(
+installing to build/bdist.linux-x86_64/wheel
+running install
+running install_lib
+creating build/bdist.linux-x86_64
+creating build/bdist.linux-x86_64/wheel
+creating build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization
+copying build/lib/global_racetrajectory_optimization/__init__.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization
+copying build/lib/global_racetrajectory_optimization/trajectory_optimizer.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization
+creating build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/frictionmap
+copying build/lib/global_racetrajectory_optimization/frictionmap/__init__.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/frictionmap
+creating build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/frictionmap/src
+copying build/lib/global_racetrajectory_optimization/frictionmap/src/__init__.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/frictionmap/src
+copying build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/frictionmap/src
+copying build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/frictionmap/src
+copying build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/frictionmap/src
+creating build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob
+copying build/lib/global_racetrajectory_optimization/helper_funcs_glob/__init__.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob
+creating build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob/src
+copying build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob/src
+copying build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob/src
+copying build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob/src
+copying build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/import_track.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob/src
+copying build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob/src
+copying build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob/src
+copying build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob/src
+copying build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob/src
+copying build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_race.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/helper_funcs_glob/src
+creating build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/__init__.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj
+creating build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/__init__.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src
+creating build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src
+creating build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/src
+copying build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py -> build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization/opt_mintime_traj/src
+warning: install_lib: byte-compiling is disabled, skipping.
+
+running install_egg_info
+running egg_info
+creating global_racetrajectory_optimization.egg-info
+writing global_racetrajectory_optimization.egg-info/PKG-INFO
+writing dependency_links to global_racetrajectory_optimization.egg-info/dependency_links.txt
+writing top-level names to global_racetrajectory_optimization.egg-info/top_level.txt
+writing manifest file 'global_racetrajectory_optimization.egg-info/SOURCES.txt'
+reading manifest file 'global_racetrajectory_optimization.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'global_racetrajectory_optimization.egg-info/SOURCES.txt'
+Copying global_racetrajectory_optimization.egg-info to build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization-0.0.1-py3.10.egg-info
+running install_scripts
+creating build/bdist.linux-x86_64/wheel/global_racetrajectory_optimization-0.0.1.dist-info/WHEEL
+creating '/work/wheels/global_racetrajectory_optimization-0.0.1-py3-none-any.whl' and adding 'build/bdist.linux-x86_64/wheel' to it
+adding 'global_racetrajectory_optimization/__init__.py'
+adding 'global_racetrajectory_optimization/trajectory_optimizer.py'
+adding 'global_racetrajectory_optimization/frictionmap/__init__.py'
+adding 'global_racetrajectory_optimization/frictionmap/src/__init__.py'
+adding 'global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py'
+adding 'global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py'
+adding 'global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py'
+adding 'global_racetrajectory_optimization/helper_funcs_glob/__init__.py'
+adding 'global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py'
+adding 'global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py'
+adding 'global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py'
+adding 'global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py'
+adding 'global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_race.py'
+adding 'global_racetrajectory_optimization/helper_funcs_glob/src/import_track.py'
+adding 'global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py'
+adding 'global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py'
+adding 'global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/__init__.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/__init__.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py'
+adding 'global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py'
+adding 'global_racetrajectory_optimization-0.0.1.dist-info/LICENSE'
+adding 'global_racetrajectory_optimization-0.0.1.dist-info/METADATA'
+adding 'global_racetrajectory_optimization-0.0.1.dist-info/WHEEL'
+adding 'global_racetrajectory_optimization-0.0.1.dist-info/top_level.txt'
+adding 'global_racetrajectory_optimization-0.0.1.dist-info/RECORD'
+removing build/bdist.linux-x86_64/wheel

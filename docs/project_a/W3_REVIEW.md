@@ -29,6 +29,20 @@ scope; do not accept a count-only comparison that hides new failures.
 
 ## Priority attacks
 
+- Reproduce the retained 811bd708 cross-host report false rejection. Require the
+  repaired loader to accept legitimate outward-safe numerical witness changes
+  and a genuinely independently recertified adaptive geometry partition while
+  preserving exact artifact bytes/H/C/q/owners/model/profile. Both actual
+  validators must run and PASS; fresh FAIL, unsupported coverage, forged
+  categorical authority and incoherent historical snapshots must still reject.
+  Transport a newly compiled hosted product to the matching local implementation
+  and replay its unchanged bytes under its separately retained hosted H. Old
+  implementation identities must not be bypassed. Do not infer bit-identical
+  fresh compilation across CPUs or invent CPU/BLAS causation from kernel names.
+  Challenge the frozen main T at a Float32 midpoint: valid replay rounding must
+  not change legacy projection, saved profile or metric prefix accumulation;
+  a stored main T outside the actual fresh time enclosure must reject.
+
 - Change monotone q inside one occurrence and regenerate profile, all embedded
   identities and PASS reports. Original retained C and expected H must still
   reject the change, including staged publication. A hash does not reconstruct

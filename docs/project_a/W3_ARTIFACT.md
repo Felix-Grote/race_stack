@@ -88,7 +88,7 @@ The payload has exactly these members:
 | `speed_profile` | exact half-open segment/t/u knots, curve/model bindings and main moving-lap time; u is squared speed |
 | `policies` | complete numeric, solver, retimer and independent geometry/dynamics records |
 | `implementation` | supported contract, accepted W2/gitlink identity, actual installed kernel/checker/helper content hashes and pinned numerical runtime versions |
-| `validation` | complete independently replayable geometry interval/gate and dynamics edge reports, assumptions, coverage and model-time enclosure |
+| `validation` | immutable historical geometry interval/gate and dynamics edge reports, assumptions, coverage and model-time enclosure; fresh replay reports decide acceptance |
 | `provenance` | bounded informational string values, including controlled input identities and explicit build-manifest identity when supplied |
 
 No stored waypoint, arc table or interpolated spline replaces these coefficients.
@@ -119,8 +119,27 @@ The publisher requires both the independently frozen expected H and original
 A04 curve digest. It writes canonical bytes into a private same-parent stage,
 reads those exact persisted bytes back, verifies the separate expectations,
 reconstructs the original coefficients, and reruns both independent validators.
-Stored reports must also match complete recomputed reports. File and stage
-directories are fsynced. Linux `flock` serializes cooperative writers, while
+Stored reports are H-bound historical snapshots. Strict authority, identity,
+coverage, assumptions and internal snapshot coherence must hold. Their numerical
+values and adaptive geometry partitions need not equal a new replay bit for bit.
+The two freshly regenerated PASS reports are the sole runtime validation
+authority and populate the Reference's validation fields; the payload retains
+the unchanged historical bytes. Snapshot coherence is not a second numerical
+certificate.
+No generic closeness tolerance or proof-policy relaxation is used.
+The main binary64 lap-time display remains the producer's exact persisted
+dynamics-report nominal T. It must lie inside both its historical enclosure and
+the actual fresh replay enclosure. `Reference.lap_time_s`, terminal audit T and
+legacy Float32 projection use that frozen value. Fresh nominal report time may
+differ by rounding; it does not change the immutable display. Query prefix times
+remain derived from actual metric arcs, without rescaling to force equality.
+
+Every changed payload fails under the original external H. A separately
+controlled new expected H is a new external approval: actual fresh validators
+must still prove its saved authority, while historical numeric audit claims do
+not authorize acceptance. A received self-hash is never a trusted expectation.
+
+File and stage directories are fsynced. Linux `flock` serializes cooperative writers, while
 `renameat2(RENAME_NOREPLACE)` protects against existing targets and late races.
 Directory traversal uses file descriptors with no symlink following. Existing
 digest directories are never replaced; final files/directories are read-only.
@@ -139,6 +158,16 @@ Loading requires externally trusted `expected_H` and an independently selected
 The loader rejects changed behavioral implementation, numerical dependencies or
 proof policy, then reruns both validators before exposing a frozen `Reference`.
 Rehashing a received mutation does not supply external approval.
+
+Fresh compilation is not guaranteed to produce bit-identical coefficients/q/C/H
+across hosts merely because source, inputs and package versions match. The final
+811bd708 challenge measured this variation and exposed an overly strict
+historical-report comparison; the [red/green evidence](evidence/w3-report-portability/README.md)
+records the repair and its limits. Each controlled compile retains its own H and
+C. Portability replays one unchanged artifact under its externally trusted H and
+supported context, without refitting or changing that authority. No coefficients
+or identities are rounded to conflate distinct fresh products. The exact source
+of host-dependent numerical variation is unproven in the retained observations.
 
 ## Metric queries and the ROS projection
 

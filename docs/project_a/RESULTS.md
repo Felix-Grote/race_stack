@@ -1,5 +1,33 @@
 # W3 current evidence
 
+The extra 811bd708 portability challenge supersedes any inference of general
+cross-host byte identity from the historical 531667 equality observation below.
+811bd708 full fresh verification and push CI 38934109447 / PR CI 38934117548 all
+PASS: 552 functional tests / 27 groups, nine installed scenarios, zero functional
+failures/errors/skips and exact inherited legacy 541/0 errors/10 failures/2 skips.
+All 1,173 raw diagnostics and multiplicities match baseline on both hosts.
+
+Its archived hosted artifact 12063605159 is 9,280,836 bytes, SHA256
+`05bc2b23b3e5f71bdea3cc9d729f779549af66e0cfe8674de59c1d6c2fb0b3d9`.
+All nine freshly compiled hosted H/C differ from local H/C under identical build,
+route/model/body/policy/implementation/dependency identities. Maximum coefficient
+difference is 2.790e-9; maximum model-time difference is 6.015e-7 s. Both actual
+outputs are independently valid; their identities are not interchangeable.
+Corresponding-normalized-t coordinate comparison does not establish metric
+alignment or transfer a certificate. Exact CPU/BLAS causation is unrecorded.
+
+More importantly, unchanged hosted S0 fails local independent loading because
+the old loader compares historical and replay report bytes exactly. The failed
+equality assertion and actual source-free saved-artifact load are retained with
+exit code 1. [Red/green reproduction](evidence/w3-report-portability/README.md).
+The focused repair preserves external H/C, actual saved authority and both
+fresh validators: 98 artifact tests PASS in 230.79 s; four source-free installed
+tests PASS in 112.974 s after ordinary builds, with all 138 source hashes
+unchanged. A genuine constant-speed Float32-midpoint regression also PASSes.
+The original red runs and first 96-PASS/one-outdated-test-expectation retry are
+retained without relabeling. Complete new-head acceptance and cross-host artifact replay
+remain required and are published externally in PR #3 after candidate freeze.
+
 A09 implementation `531667abc0ad38236ec46825a544a3644c324b4f` passes a new
 no-hardlink recursive checkout, safe setup, full W0–W3 verification and a separate
 source-free installed runtime: **552 tests / 27 groups / zero functional failures,

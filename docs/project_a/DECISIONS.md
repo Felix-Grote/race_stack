@@ -1,5 +1,39 @@
 # Project A decision ledger
 
+## 2026-10-16 — Historical witnesses and independently replayed authority
+
+- Preserve the real 811bd708 cross-host failures despite its green complete
+  suites. Fresh-compilation C/H differs for all nine cases; CPU/BLAS dispatch is
+  not captured, so record the numerical differences without inventing causation
+  or claiming a general cross-host bitwise compiler guarantee.
+- Do not round coefficients, q, profile/model values or digests to force an
+  identity match. Each controlled producer retains its own trusted C and H;
+  transport a particular product without changing its authority.
+- Replace exact historical/replay report-byte equality with strict historical
+  snapshot coherence. Keep authority IDs, status, rationale, assumptions and
+  coverage claims strict; check supported domains/structure and necessary
+  consistency of corresponding fixed-edge enclosures. Valid adaptive geometry
+  partitions need not be identical. This is not numerical recertification.
+- Both actual independent validators still must PASS on saved authority under
+  the independently selected supported context. Only fresh replay reports
+  authorize the accepted handle. Stored H-bound reports remain immutable audit
+  evidence and cannot approve an incoming artifact themselves.
+- A separately controlled new expected H is a new external approval. Keep
+  original-H and frozen-producer mutation rejection unchanged; a legal changed
+  body under an independently approved new H needs fresh proof, while an unsafe
+  body must fail the actual checker. Correct the initial outdated test expectation
+  and retain its red run alongside the explicit positive and unsafe controls.
+- Freeze the original producer dynamics nominal as the main binary64 lap T;
+  require membership in both historical and fresh certified time enclosures.
+  The legacy Float32 projection and terminal audit use this immutable value.
+  Keep query prefix integration unchanged and preserve the saved W2 profile;
+  fresh replay nominal rounding never changes the published main time.
+- Require deterministic old-loader red cases, genuine alternative certified
+  partitions, semantic/unsupported-coverage negatives and actual new-product
+  cross-host replay after the fix. A changed module hash requires freshly
+  compiled matching products; never bypass implementation identity to load
+  an old artifact under repaired code. No solver/proof budget or policy changes.
+
 ## 2026-10-16 — A09 exact installed authority and isolated handoff
 
 - Freeze a committed candidate before fresh acceptance. A no-hardlink recursive

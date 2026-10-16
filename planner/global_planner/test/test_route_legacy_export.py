@@ -1,7 +1,7 @@
 """Independent metric, side-distance and actual legacy ROS projection checks."""
 
 from bisect import bisect_right
-from dataclasses import FrozenInstanceError
+from dataclasses import FrozenInstanceError, asdict
 import errno
 import gzip
 import json
@@ -15,10 +15,14 @@ import pytest
 from scipy.integrate import quad
 
 from global_planner import route_legacy_export as exporting
+from global_planner import route_validate_dynamics as independent_dynamics
 from global_planner.cyclic_retime import (
-    DynamicsModel, ModelRegion, RegionLimits, RetimePolicy, curve_digest, retime)
+    DynamicsModel, ModelRegion, RegionLimits, RetimePolicy, SpeedKnot, SpeedProfile,
+    curve_digest, model_digest, retime)
 from global_planner.iqp_route_adapter import SolverPolicy
-from global_planner.route_artifact import artifact_identity, build_payload, publish_reference
+from global_planner.route_artifact import (
+    ValidationContext, artifact_identity, build_payload, canonical_bytes, load_reference,
+    publish_reference)
 from global_planner.route_corridor import OrderedCurve
 from global_planner.route_input import load_route
 from global_planner.route_reference import Curve
@@ -182,6 +186,96 @@ def test_profile_boundaries_and_terminal_use_independent_closing_acceleration_an
     assert tuple(metadata['unavailable_groups']) == exporting.UNAVAILABLE_GROUPS
     assert metadata['main_lap_time_s'] == reference.lap_time_s
     assert metadata['side_distance_inward_allowance_m'] == 1e-9
+
+
+def test_frozen_main_time_controls_float32_projection_across_bounded_replay(
+        references, tmp_path, monkeypatch):
+    """Keep the frozen main time when genuine replay crosses a Float32 midpoint."""
+    original = references()
+    ordered, model = original.ordered, original.model
+    approval = curve_digest(ordered)
+    midpoint = 16. + 2. ** -20  # Halfway between Float32 16 and its successor.
+    lengths = tuple(segment.length for segment in ordered.curve.segments)
+
+    def nominal_time(squared_speed):
+        speed = math.sqrt(squared_speed)
+        return math.fsum(2 * length / (speed + speed) for length in lengths)
+
+    squared_speed = (ordered.curve.length / midpoint) ** 2
+    for _ in range(64):
+        producer_time = nominal_time(squared_speed)
+        if producer_time < midpoint:
+            preceding = math.nextafter(squared_speed, 0.)
+            if nominal_time(preceding) >= midpoint:
+                break
+            squared_speed = preceding
+        else:
+            squared_speed = math.nextafter(squared_speed, math.inf)
+    else:
+        pytest.fail('constant-speed midpoint construction exhausted its bounded search')
+    assert midpoint - 8 * math.ulp(midpoint) < producer_time < midpoint
+    assert math.sqrt(squared_speed) < 3.
+    profile = SpeedProfile(tuple(SpeedKnot(index, 0., squared_speed)
+                                 for index in range(len(lengths))),
+                           approval, model_digest(model), producer_time)
+    producer = validate_dynamics(ordered, profile, model,
+                                 expected_curve_digest=approval)
+    assert original.geometry_report.status == producer.status == 'PASS'
+    assert producer.lap_time_s == producer_time
+    profile_bytes = canonical_bytes(asdict(profile))
+    policies = original.policies
+    payload = build_payload(
+        ordered, profile, model, original.footprint, solver_policy=policies.solver,
+        retime_policy=policies.retime, geometry_policy=policies.geometry,
+        dynamics_policy=policies.dynamics, approved_curve_digest=approval,
+        geometry_report=original.geometry_report, dynamics_report=producer,
+        provenance={'scope': 'Synthetic constant-speed Float32 midpoint regression'})
+    expected_H = artifact_identity(payload)
+    published = publish_reference(payload, tmp_path / 'constant-speed', expected_H=expected_H,
+                                  expected_curve_digest=approval)
+    saved = published.path.read_bytes()
+    prefix = published.sample(.37 * published.length)
+    actual_arc = independent_dynamics._arc
+    varied_distances = []
+
+    def bounded_replay_arc(segment, low, high):
+        """Vary local nominal integration by ulps inside its unchanged certificate."""
+        nominal, lower, upper = actual_arc(segment, low, high)
+        varied = nominal
+        for _ in range(8):
+            varied = math.nextafter(varied, math.inf)
+        assert lower <= nominal < varied <= upper
+        varied_distances.append(varied)
+        return varied, lower, upper
+
+    # The actual checker reruns every constraint and computes the new report.
+    # Only nominal integration changes, within the original certified enclosure;
+    # no PASS report, model limit, policy, profile value or time is fabricated.
+    monkeypatch.setattr(independent_dynamics, '_arc', bounded_replay_arc)
+    reloaded = load_reference(published.path, expected_H=expected_H,
+                              validation_context=ValidationContext())
+    fresh = reloaded.dynamics_report
+    assert reloaded.geometry_report.status == fresh.status == 'PASS'
+    assert len(varied_distances) == len(profile.knots)
+    speed = math.sqrt(squared_speed)
+    assert fresh.lap_time_s == math.fsum(
+        2 * distance / (speed + speed) for distance in varied_distances)
+    assert producer_time < midpoint < fresh.lap_time_s
+    assert producer.lap_time_lower_s <= producer_time <= producer.lap_time_upper_s
+    assert fresh.lap_time_lower_s <= producer_time <= fresh.lap_time_upper_s
+    assert reloaded.lap_time_s == published.lap_time_s == producer_time
+    assert reloaded.profile.lap_time_s == profile.lap_time_s
+    assert canonical_bytes(asdict(reloaded.profile)) == profile_bytes
+    assert reloaded.sample(.37 * reloaded.length) == prefix
+    assert reloaded.path.read_bytes() == saved
+    view = exporting.waypoint_view(reloaded, step_m=.73)
+    assert float(np.float32(producer_time)) == 16.
+    assert float(np.float32(fresh.lap_time_s)) > 16.
+    assert view.lap_time_s == view.waypoints[-1].time_s == producer_time
+    assert view.legacy_lap_time_float32_s == 16.
+    metadata = json.loads(view.map_info)
+    assert metadata['main_lap_time_s'] == producer_time
+    assert metadata['legacy_lap_time_float32_s'] == 16.
 
 
 def test_every_original_cap_and_portal_support_event_is_a_metric_export_station(references):

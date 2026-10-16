@@ -251,6 +251,15 @@ refitting. New .53 m has 1,174 geometry leaves and 947 retiming/dynamics edges.
 Matched repaired .52/.53 m have 1,187/1,176 geometry leaves and 955/946 edges.
 Every row uses three QP iterations; QP N and raw/adapted N are distinct above.
 
+Campaign model-time metrics use the retimer profile nominal. The immutable main
+display/export T uses the producer dynamics report nominal; for preferred .52 m
+it is 68.00978787597403 s. These independently computed nominals can differ by
+rounding (at most 8.53e-14 s across the 58 saved outputs), within their certified
+enclosures. Historical H/C values identify these exact frozen campaign products;
+a changed implementation requires fresh products. Pinned dependencies do not
+promise bit-identical fresh compilation across hosts; see the
+[saved-artifact portability challenge](evidence/w3-report-portability/README.md).
+
 The two isolated .52 m repeats give these observed ranges, with no statistical
 claim from a sample of two. CPU columns include self and reaped-child CPU inside
 the named phase. Nested fit/corridor/QP entries are already included in the

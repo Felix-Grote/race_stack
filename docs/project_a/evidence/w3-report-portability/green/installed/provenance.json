@@ -1,0 +1,12 @@
+{
+  "scope": "Exploratory source-free installed portability regression; final clean candidate acceptance still required",
+  "source_commit": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "source_dirty": true,
+  "image_id": "sha256:2cc1f6ad969cdb3256f14b4b45500cb0fcdd4a3f321b4c2a1bbc7c7fb6ca0f88",
+  "source_sha256": {
+    "scripts/project_a/tests/test_w3_installed.py": "1bb00ed7ed9fd173713ae00def7c0a095c088d15812838bfa770bb45e3c878a5",
+    "planner/global_planner/global_planner/route_artifact.py": "443e6f7fdfae5fb78899ac3d887c66796574945335ecf45d84d768166b9dc5cb",
+    "planner/global_planner/test/test_route_artifact.py": "4f334d3f316c7427a736fabb1e517401598c2fb30d656f7d3137d7f7aa033e3f",
+    "planner/global_planner/test/test_route_legacy_export.py": "7c38d9c155ced33b682657a29b3d5668b73f3cdeebacd05c2cb0c77ecfcfaf3f"
+  }
+}

@@ -1,5 +1,35 @@
 # Project A status — 2026-10-16
 
+## W3 report replay remediation — full candidate verification required
+
+An additional actual cross-host test found a loader false rejection after
+`811bd708b32d4d61c2c3db69964bfd78c804caa6` passed 552 tests / 27 groups in
+both a clean fresh checkout and exact-head push CI 38934109447 (PR CI 38934117548
+also SUCCESS). All nine fresh hosted/local products independently PASS, but
+their exact binary64 curves/q and C/H differ. Identical build inputs and
+source/dependency identities do not establish bit-identical fresh compilation
+across hosts.
+
+Loading unchanged hosted S0 under its actual externally retained hosted H in
+the local source-free installed context fails solely on exact historical-report
+equality. The original artifact, failed process, host catalogs and quantitative
+comparison are retained in [the portability evidence](evidence/w3-report-portability/README.md).
+CPU/BLAS dispatch was not captured; the cause of the numerical drift is unproven.
+
+The remediation keeps exact payload/H/C authority and both actual validators.
+Historical snapshots receive strict typed/categorical/coherence checks; fresh
+dual PASS reports decide acceptance. No coefficient/q/model rounding, additional
+closeness tolerance, relaxed policy or alternate geometry kernel is introduced.
+Deterministic numeric-witness and genuinely recertified partition regressions
+reproduce the old rejection before the repair. The corrected full artifact suite
+passes 98 tests; the separate source-free installed preflight passes four tests
+in 112.974 s with all 138 source hashes unchanged. Original failures and the
+initial 96-PASS/one-outdated-expectation retry are retained. Complete new-candidate
+fresh/exact-head CI and actual post-fix unchanged-artifact portability are gates
+before review readiness; final literal head and results are recorded in PR #3.
+The earlier checkpoint records below remain historical. Independent W3
+adversarial review still has final acceptance and direct remediation authority.
+
 ## W3 A07–A09 implemented — independent adversarial review pending
 
 A07 is `0c2d7c35fc50051a2ae96b9260de636610e280f4`; A08 is

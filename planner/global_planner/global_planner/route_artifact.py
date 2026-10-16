@@ -2,8 +2,9 @@
 Strict immutable offline references and stateless true-metric queries.
 
 Only an externally expected artifact identity and an independently selected
-validation context authorize loading. Stored proofs are replayed on the exact
-saved coefficients. This module supports pinned Linux/Humble, planar software
+validation context authorize loading. Both proofs are regenerated on the exact
+saved coefficients; embedded reports are bounded historical snapshots.
+This module supports pinned Linux/Humble, planar software
 certificates only; it establishes no physical vehicle or 3D clearance evidence.
 """
 from bisect import bisect_right
@@ -31,7 +32,7 @@ from .route_input import validate_route
 from .route_reference import Curve, GeometryError, NumericPolicy
 from .route_validate import (
     Footprint, GateCertificate, GeometryValidationPolicy, IntervalCertificate,
-    ValidationReport, validate_geometry)
+    ValidationReport, _portal_delta, validate_geometry)
 from .route_validate_dynamics import (
     DynamicEdgeCertificate, DynamicsValidationPolicy, DynamicsValidationReport,
     validate_dynamics)
@@ -501,7 +502,7 @@ class ReferenceSample:
 
 @dataclass(frozen=True, init=False)
 class Reference:
-    """An immutable product exposed only after complete independent replay."""
+    """An immutable product exposing fresh proofs and the H-bound producer main time."""
 
     H: str
     path: object
@@ -513,6 +514,7 @@ class Reference:
     geometry_report: ValidationReport
     dynamics_report: DynamicsValidationReport
     _payload_bytes: bytes
+    _main_lap_time_s: float
     _stations: tuple
     _edge_lengths: tuple
     _start_arcs: tuple
@@ -531,12 +533,12 @@ class Reference:
 
     @property
     def lap_time_s(self):
-        """Return the independently regenerated main moving-lap model time."""
-        return self.dynamics_report.lap_time_s
+        """Return the immutable producer-selected main lap time certified by both enclosures."""
+        return self._main_lap_time_s
 
     @property
     def payload(self):
-        """Return a detached payload copy without exposing mutable authority."""
+        """Return detached saved authority and historical producer reports."""
         return _parse_json(self._payload_bytes)
 
     def locate(self, s_m):
@@ -620,12 +622,147 @@ def _reference(H, path, ordered, profile, model, footprint, policies, geometry, 
     values = dict(H=H, path=path, ordered=ordered, profile=profile, model=model,
                   footprint=footprint, policies=policies, geometry_report=geometry,
                   dynamics_report=dynamics, _payload_bytes=canonical_bytes(payload),
+                  _main_lap_time_s=payload['validation']['dynamics']['lap_time_s'],
                   _stations=tuple(stations), _edge_lengths=tuple(distances),
                   _start_arcs=tuple(starts), _times=tuple(times),
                   _portal_windows=tuple(windows), _seal=_REFERENCE_SEAL)
     for name, value in values.items():
         object.__setattr__(reference, name, value)
     return reference
+
+
+def _history_fields(stored, replay, names, label):
+    """Compare categorical authority without comparing historical numeric bounds."""
+    if canonical_bytes(tuple(getattr(stored, name) for name in names)) != canonical_bytes(
+            tuple(getattr(replay, name) for name in names)):
+        raise ArtifactError(label + ' stored historical authority differs from replay')
+
+
+def _history_fraction(pair):
+    if pair[1] <= 0:
+        raise ArtifactError('geometry stored historical rational denominator must be positive')
+    value = Fraction(*pair)
+    if pair != (value.numerator, value.denominator):
+        raise ArtifactError('geometry stored historical rational endpoint is not canonical')
+    return value
+
+
+def _historical_geometry(stored, replay, ordered, footprint, policy):
+    """Check snapshot structure and domains; the fresh proof alone certifies geometry."""
+    _history_fields(stored, replay, (
+        'status', 'reason', 'curve_digest', 'route_sha256', 'coefficients_sha256',
+        'coverage', 'assumptions', 'offending_interval'), 'geometry')
+    if len(stored.gates) != len(replay.gates):
+        raise ArtifactError('geometry stored historical gate coverage differs from replay')
+    for gate, actual in zip(stored.gates, replay.gates):
+        _history_fields(gate, actual, ('portal_id', 'segment', 't0', 't1', 'q_lower', 'q_upper'),
+                        'geometry gate')
+        if gate.signed_direction_upper >= -1e-9:
+            raise ArtifactError('geometry stored historical gate direction is inconsistent')
+    q = tuple(Fraction(value) for value in ordered.q)
+    ends = tuple(Fraction(value) for value in _layout(ordered.route))
+    portals = {portal.id: (i, portal) for i, portal in enumerate(ordered.route.portals)}
+    partitions = [[] for _ in ordered.curve.segments]
+    for leaf in stored.intervals:
+        if not 0 <= leaf.segment < len(partitions):
+            raise ArtifactError('geometry stored historical segment is out of range')
+        low, high = _history_fraction(leaf.exact_t0), _history_fraction(leaf.exact_t1)
+        if (not 0 <= low < high <= 1 or
+                canonical_bytes((leaf.t0, leaf.t1)) != canonical_bytes((float(low), float(high)))):
+            raise ArtifactError('geometry stored historical interval endpoints are inconsistent')
+        if leaf.occurrence_id != ordered.curve.owners[leaf.segment][0]:
+            raise ArtifactError('geometry stored historical occurrence owner is inconsistent')
+        if leaf.portal_id:
+            if leaf.portal_id not in portals:
+                raise ArtifactError('geometry stored historical portal is unknown')
+            index, portal = portals[leaf.portal_id]
+            qlow = q[leaf.segment] + low * (q[leaf.segment + 1] - q[leaf.segment])
+            qhigh = q[leaf.segment] + high * (q[leaf.segment + 1] - q[leaf.segment])
+            dlo = _portal_delta(qlow, ends[index + 1], ends[-1])
+            dhi = _portal_delta(qhigh, ends[index + 1], ends[-1])
+            if (leaf.occurrence_id not in (portal.source, portal.target) or
+                    not -Fraction(portal.before) <= dlo <= dhi <= Fraction(portal.after)):
+                raise ArtifactError('geometry stored historical portal support is inconsistent')
+        if (leaf.method not in ('enclosing_disc_sweep', 'rectangle_curvature_sweep') or
+                not 0 <= leaf.curvature_upper <= policy.max_curvature or
+                leaf.speed_lower <= policy.numeric_policy.min_speed or
+                min(leaf.displacement_upper_m, leaf.clearance_lower_m, leaf.numeric_error_m) < 0 or
+                canonical_bytes(leaf.required_margin_m) != canonical_bytes(footprint.margin_m)):
+            raise ArtifactError('geometry stored historical bound domain or method '
+                                'is inconsistent')
+        # Do not re-certify rounded historical clearance or require the replay's
+        # adaptive partition/method: either can legitimately differ across hosts.
+        partitions[leaf.segment].append((low, high))
+    for partition in partitions:
+        previous = Fraction(0)
+        for low, high in sorted(partition):
+            if low != previous:
+                raise ArtifactError('geometry stored historical intervals overlap or have a gap')
+            previous = high
+        if previous != 1:
+            raise ArtifactError('geometry stored historical intervals do not cover the segment')
+
+
+def _history_overlap(low, high, current_low, current_high, label, positive=False):
+    if (low > high or (positive and low <= 0) or
+            high < current_low or current_high < low):
+        raise ArtifactError('dynamics stored historical ' + label + ' enclosure is inconsistent')
+
+
+def _history_residual(value, limit):
+    # A06 renders an accepted exact residual by rounding outward twice. This
+    # permits that display conversion only; fresh acceptance keeps its policy.
+    return value <= math.nextafter(math.nextafter(limit, math.inf), math.inf)
+
+
+def _historical_dynamics(stored, replay, profile, policy):
+    """Check historical coherence without treating old quantitative bounds as authority."""
+    _history_fields(stored, replay, (
+        'status', 'reason', 'curve_digest', 'model_digest', 'coverage', 'assumptions',
+        'offending_edge'), 'dynamics')
+    if (len(stored.edges) != len(profile.knots) or len(stored.edges) != len(replay.edges) or
+            tuple(name for name, _ in stored.worst_residuals) != tuple(
+                name for name, _ in replay.worst_residuals)):
+        raise ArtifactError('dynamics stored historical edge or residual coverage is inconsistent')
+    work = 0
+    for index, (edge, actual) in enumerate(zip(stored.edges, replay.edges)):
+        _history_fields(edge, actual, ('edge', 'segment', 't0', 't1', 'closing', 'cap_mps',
+                                       'support_occurrences'), 'dynamics edge')
+        _history_overlap(edge.distance_lower_m, edge.distance_upper_m,
+                         actual.distance_lower_m, actual.distance_upper_m, 'distance', True)
+        _history_overlap(edge.time_lower_s, edge.time_upper_s,
+                         actual.time_lower_s, actual.time_upper_s, 'edge time', True)
+        _history_overlap(edge.acceleration_lower_mps2, edge.acceleration_upper_mps2,
+                         actual.acceleration_lower_mps2, actual.acceleration_upper_mps2,
+                         'acceleration')
+        du = Fraction(profile.knots[(index + 1) % len(profile.knots)].u) - Fraction(
+            profile.knots[index].u)
+        accelerations = (du / (2 * Fraction(edge.distance_lower_m)),
+                         du / (2 * Fraction(edge.distance_upper_m)))
+        if (not edge.distance_lower_m <= edge.distance_m <= edge.distance_upper_m or
+                Fraction(edge.acceleration_lower_mps2) > min(accelerations) or
+                Fraction(edge.acceleration_upper_mps2) < max(accelerations) or
+                min(edge.curvature_upper, edge.curvature_rate_upper) < 0 or
+                edge.bound_intervals <= 0 or
+                not _history_residual(edge.normalized_residual_upper, policy.residual_abs) or
+                not _history_residual(edge.steering_angle_residual_rad, policy.angle_abs_rad)):
+            raise ArtifactError('dynamics stored historical numeric domain is inconsistent')
+        work += edge.bound_intervals
+    if work > policy.max_intervals:
+        raise ArtifactError('dynamics stored historical refinement budget is inconsistent')
+    for name, value in stored.worst_residuals:
+        limit = policy.angle_abs_rad if name == 'steering_angle_rad' else policy.residual_abs
+        if not _history_residual(value, limit):
+            raise ArtifactError('dynamics stored historical residual exceeds its declared policy')
+    _history_overlap(stored.lap_time_lower_s, stored.lap_time_upper_s,
+                     replay.lap_time_lower_s, replay.lap_time_upper_s, 'lap time', True)
+    if not replay.lap_time_lower_s <= stored.lap_time_s <= replay.lap_time_upper_s:
+        raise ArtifactError('dynamics stored historical main lap time lies outside '
+                            'replay enclosure')
+    if (not stored.lap_time_lower_s <= stored.lap_time_s <= stored.lap_time_upper_s or
+            stored.lap_time_error_s < max(stored.lap_time_s - stored.lap_time_lower_s,
+                                          stored.lap_time_upper_s - stored.lap_time_s, 0.)):
+        raise ArtifactError('dynamics stored historical lap-time summary is inconsistent')
 
 
 def _decode_reference(raw, expected_H, context, path, expected_curve_digest=None):
@@ -717,16 +854,16 @@ def _decode_reference(raw, expected_H, context, path, expected_curve_digest=None
                                  expected_curve_digest=approval)
     dynamics = validate_dynamics(ordered, profile, model, context.dynamics_policy,
                                  expected_curve_digest=approval)
-    for name, report, stored, required in (
-            ('geometry', geometry, stored_geometry, context.required_geometry_coverage),
-            ('dynamics', dynamics, stored_dynamics, context.required_dynamics_coverage)):
+    for name, report, required in (
+            ('geometry', geometry, context.required_geometry_coverage),
+            ('dynamics', dynamics, context.required_dynamics_coverage)):
         if report.status != 'PASS' or report.curve_digest != approval:
             raise ArtifactError(name + ' replay ' + report.status + ': ' + report.reason,
                                 report.status)
         if not set(required) <= set(report.coverage):
             raise ArtifactError(name + ' lacks independently required coverage', 'UNSUPPORTED')
-        if canonical_bytes(asdict(report)) != canonical_bytes(asdict(stored)):
-            raise ArtifactError(name + ' stored proof differs from independent replay')
+    _historical_geometry(stored_geometry, geometry, ordered, footprint, context.geometry_policy)
+    _historical_dynamics(stored_dynamics, dynamics, profile, context.dynamics_policy)
     return _reference(expected_H, path, ordered, profile, model, footprint,
                       policies, geometry, dynamics, payload)
 

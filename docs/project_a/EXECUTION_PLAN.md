@@ -10,6 +10,13 @@ Current results, failures and limitations are recorded in STATUS, RESULTS,
 W3_ARTIFACT, W3_BENCHMARKS and W3_RUNTIME. Independent W3 adversarial review is
 still required; implementation tests do not issue final acceptance.
 
+An additional 811bd708 cross-host artifact replay exposed historical-report
+byte equality as a false rejection despite green full suites. The ordinary
+remediation retains exact authority and both independent validators, adds
+deterministic and real portability regressions, and requires complete new-head
+verification. Fresh-compilation bitwise equality across hosts is unguaranteed;
+STATUS/RESULTS and the separate portability evidence preserve that finding.
+
 # 1\. Executive decision and supersession
 
 This document supersedes the execution policy, sequencing, and “A01 only” authorization in the 2026-10-10 Project A roadmap and 2026-10-15 archive index. It does NOT supersede GLOBAL\_PLANNER\_PROJECT\_A\_ARCHITECTURE.md's engineering contracts, the A01–A09 acceptance requirements, or the recorded numerical findings. The original nine PR descriptions remain the implementation specification; A01–A09 are now sequential acceptance checkpoints, not necessarily nine manually commissioned Codex Cloud tasks or nine individual pull requests.

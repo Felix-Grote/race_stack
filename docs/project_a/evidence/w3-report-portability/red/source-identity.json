@@ -1,0 +1,9 @@
+{
+  "source_commit": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "accepted_W2": "fe53365f86d660b4f6d4389925f9810cf33d41b3",
+  "hosted_artifact_id": 12063605159,
+  "hosted_archive_sha256": "05bc2b23b3e5f71bdea3cc9d729f779549af66e0cfe8674de59c1d6c2fb0b3d9",
+  "fresh_equality": "FAIL",
+  "saved_artifact_crosshost_replay": "FAIL: dynamics stored proof differs from independent replay",
+  "both_original_full_suites": "PASS: 552 tests,27 groups,all9 scenarios; not a portability verdict"
+}

@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/harness/verify.py", line 27, in <module>
+    reference = load_reference(path, expected_H=case['H'], validation_context=context)
+  File "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_artifact.py", line 761, in load_reference
+    return _load_bytes(raw, expected_H, validation_context, path)
+  File "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_artifact.py", line 736, in _load_bytes
+    return _decode_reference(raw, expected_H, context, path, expected_curve_digest)
+  File "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_artifact.py", line 729, in _decode_reference
+    raise ArtifactError(name + ' stored proof differs from independent replay')
+global_planner.route_artifact.ArtifactError: dynamics stored proof differs from independent replay

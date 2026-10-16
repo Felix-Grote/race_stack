@@ -1,6 +1,7 @@
 """A07 exact binary64 authority, independent replay, metric and atomicity attacks."""
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import FrozenInstanceError, asdict, replace
+from fractions import Fraction
 import copy
 import gzip
 import hashlib
@@ -14,6 +15,7 @@ import sys
 import pytest
 
 import global_planner.route_artifact as artifact
+import global_planner.route_validate as geometry_checker
 from global_planner.cyclic_retime import (
     DynamicsModel, ModelRegion, RegionLimits, RetimePolicy, curve_digest,
     model_digest, retime)
@@ -192,7 +194,7 @@ def mutate(payload, kind):
     elif kind == 'implementation':
         changed['implementation']['module_sha256']['route_validate'] = '0' * 64
     elif kind == 'proof':
-        changed['validation']['geometry']['intervals'][0]['clearance_lower_m'] = 1000.
+        changed['validation']['geometry']['intervals'][0]['clearance_lower_m'] = -1.
     elif kind == 'unknown':
         changed['new_authority'] = True
     elif kind == 'owner':
@@ -220,9 +222,17 @@ def test_old_external_H_rejects_every_authority_mutation(kind, authority, tmp_pa
 def test_self_rehash_and_stored_PASS_cannot_bypass_independent_replay(kind, authority, tmp_path):
     """Verify self rehash and stored PASS cannot bypass independent replay."""
     payload, context, _, _, _ = authority
-    path, H = write_reference(tmp_path / 'mutated', mutate(payload, kind))
-    with pytest.raises(ArtifactError):
+    changed = mutate(payload, kind)
+    if kind == 'footprint':
+        # A new external H can authorize a different body that really fits.
+        # This case must instead demonstrate an actual geometric violation.
+        changed['footprint']['front_m'] = payload['footprint']['front_m'] + 10.
+    path, H = write_reference(tmp_path / 'mutated', changed)
+    with pytest.raises(ArtifactError) as result:
         load_reference(path, expected_H=H, validation_context=context)
+    if kind == 'footprint':
+        assert result.value.status == 'FAIL'
+        assert result.value.reason.startswith('geometry replay FAIL:')
 
 
 def test_wrong_missing_expected_H_and_unsupported_context(authority, published):
@@ -561,3 +571,269 @@ def test_publisher_requires_independently_frozen_H_before_mutable_payload_handof
         publish_reference(changed, tmp_path / 'output', expected_H=retained_H,
                           expected_curve_digest=retained_curve, validation_context=context)
     assert not (tmp_path / 'output').exists()
+
+
+def test_historical_numeric_variation_does_not_reject_fresh_dual_pass(
+        published, monkeypatch):
+    """Accept unchanged authority after genuine checks produce different display bounds."""
+    before = published.path.read_bytes()
+    approval = curve_digest(published.ordered)
+    actual_geometry = artifact.validate_geometry
+    actual_dynamics = artifact.validate_dynamics
+    reports = {}
+
+    def replay_geometry(*args, **kwargs):
+        """Run the real proof before varying one numeric report field outward."""
+        assert kwargs['expected_curve_digest'] == approval
+        report = actual_geometry(*args, **kwargs)
+        assert report.status == 'PASS'
+        first = report.intervals[0]
+        varied = replace(first, displacement_upper_m=math.nextafter(
+            first.displacement_upper_m, math.inf))
+        reports['geometry'] = replace(report, intervals=(varied,) + report.intervals[1:])
+        assert reports['geometry'] != report
+        return reports['geometry']
+
+    def replay_dynamics(*args, **kwargs):
+        """Run the real proof before varying its outward lap-time display bound."""
+        assert kwargs['expected_curve_digest'] == approval
+        report = actual_dynamics(*args, **kwargs)
+        assert report.status == 'PASS'
+        upper = math.nextafter(report.lap_time_upper_s, math.inf)
+        nominal = math.nextafter(report.lap_time_s, math.inf)
+        assert report.lap_time_lower_s <= nominal <= upper
+        reports['dynamics'] = replace(
+            report, lap_time_s=nominal, lap_time_upper_s=upper,
+            lap_time_error_s=max(nominal - report.lap_time_lower_s, upper - nominal))
+        assert reports['dynamics'] != report
+        return reports['dynamics']
+
+    monkeypatch.setattr(artifact, 'validate_geometry', replay_geometry)
+    monkeypatch.setattr(artifact, 'validate_dynamics', replay_dynamics)
+    reference = load_reference(published.path, expected_H=published.H,
+                               validation_context=ValidationContext())
+    assert reference.geometry_report is reports['geometry']
+    assert reference.dynamics_report is reports['dynamics']
+    assert reference.path.read_bytes() == before
+    assert reference.H == published.H
+    assert curve_digest(reference.ordered) == approval
+    for value, original in ((reference.ordered.curve.coefficients,
+                             published.ordered.curve.coefficients),
+                            (reference.ordered.q, published.ordered.q),
+                            (reference.ordered.curve.owners, published.ordered.curve.owners),
+                            (asdict(reference.profile), asdict(published.profile))):
+        assert canonical_bytes(value) == canonical_bytes(original)
+    assert reference.payload['validation'] == published.payload['validation']
+    assert reference.lap_time_s == published.lap_time_s
+    assert reference.lap_time_s != reference.dynamics_report.lap_time_s
+    assert reference.sample(.3 * reference.length).time_s == published.sample(
+        .3 * published.length).time_s
+
+
+def test_historical_geometry_can_have_a_different_genuine_adaptive_partition(
+        published, monkeypatch):
+    """Accept unchanged bytes when conservative uncertainty refines a real geometry proof."""
+    before = published.path.read_bytes()
+    approval = curve_digest(published.ordered)
+    original_report = published.geometry_report
+    leaf = original_report.intervals[0]
+    target = (published.ordered.curve.segments[leaf.segment].coefficients,
+              Fraction(*leaf.exact_t0), Fraction(*leaf.exact_t1))
+    actual_bounds = geometry_checker.interval_bounds
+    actual_geometry = artifact.validate_geometry
+    actual_dynamics = artifact.validate_dynamics
+    reports, refined = {}, []
+
+    def uncertain_once(coefficients, low, high):
+        """Request one additional conservative subdivision after evaluating real bounds."""
+        result = actual_bounds(coefficients, low, high)
+        coefficient_tuple = tuple(tuple(float(value) for value in row) for row in coefficients)
+        if not refined and (coefficient_tuple, low, high) == target:
+            refined.append(True)
+            raise geometry_checker.BoundUncertain('test-only conservative refinement')
+        return result
+
+    def replay_geometry(*args, **kwargs):
+        """Produce a genuine independent PASS after one additional adaptive split."""
+        assert kwargs['expected_curve_digest'] == approval
+        with monkeypatch.context() as patch:
+            patch.setattr(geometry_checker, 'interval_bounds', uncertain_once)
+            report = actual_geometry(*args, **kwargs)
+        assert refined and report.status == 'PASS'
+        assert len(report.intervals) > len(original_report.intervals)
+        reports['geometry'] = report
+        return report
+
+    def replay_dynamics(*args, **kwargs):
+        """Retain the separate real cyclic dynamics acceptance call."""
+        assert kwargs['expected_curve_digest'] == approval
+        reports['dynamics'] = actual_dynamics(*args, **kwargs)
+        assert reports['dynamics'].status == 'PASS'
+        return reports['dynamics']
+
+    monkeypatch.setattr(artifact, 'validate_geometry', replay_geometry)
+    monkeypatch.setattr(artifact, 'validate_dynamics', replay_dynamics)
+    reference = load_reference(published.path, expected_H=published.H,
+                               validation_context=ValidationContext())
+    assert reference.geometry_report is reports['geometry']
+    assert reference.dynamics_report is reports['dynamics']
+    assert reference.path.read_bytes() == before
+    assert reference.H == published.H
+    assert curve_digest(reference.ordered) == approval
+
+
+@pytest.mark.parametrize('case', [
+    'geometry_reason', 'geometry_curve', 'geometry_coefficients', 'geometry_coverage',
+    'geometry_assumptions', 'geometry_gap', 'geometry_overlap', 'geometry_owner',
+    'geometry_portal', 'geometry_method', 'geometry_bound', 'geometry_rational', 'geometry_gate',
+    'dynamics_status', 'dynamics_model', 'dynamics_curve', 'dynamics_support', 'dynamics_cap',
+    'dynamics_distance', 'dynamics_time', 'dynamics_acceleration', 'dynamics_work',
+    'dynamics_residual', 'dynamics_lap', 'dynamics_error', 'dynamics_residual_names',
+])
+def test_historical_snapshots_fail_closed_on_incoherent_claims(case, published):
+    """Reject categorical forgery and malformed snapshots without recertifying old numbers."""
+    geometry = asdict(published.geometry_report)
+    dynamics = asdict(published.dynamics_report)
+    if case == 'geometry_reason':
+        geometry['reason'] = 'fabricated physical safety approval'
+    elif case == 'geometry_curve':
+        geometry['curve_digest'] = '0' * 64
+    elif case == 'geometry_coefficients':
+        geometry['coefficients_sha256'] = '0' * 64
+    elif case == 'geometry_coverage':
+        geometry['coverage'] += ('physical_clearance',)
+    elif case == 'geometry_assumptions':
+        geometry['assumptions'] = ()
+    elif case == 'geometry_gap':
+        geometry['intervals'] = geometry['intervals'][1:]
+    elif case == 'geometry_overlap':
+        geometry['intervals'] += (copy.deepcopy(geometry['intervals'][0]),)
+    elif case == 'geometry_owner':
+        geometry['intervals'][0]['occurrence_id'] = 'unrelated_occurrence'
+    elif case == 'geometry_portal':
+        geometry['intervals'][0]['portal_id'] = 'unrelated_portal'
+    elif case == 'geometry_method':
+        geometry['intervals'][0]['method'] = 'sampling_only'
+    elif case == 'geometry_bound':
+        geometry['intervals'][0]['clearance_lower_m'] = -1.
+    elif case == 'geometry_rational':
+        geometry['intervals'][0]['exact_t0'] = (0, 0)
+    elif case == 'geometry_gate':
+        geometry['gates'][0]['portal_id'] = 'unrelated_portal'
+    elif case == 'dynamics_status':
+        dynamics['status'] = 'INCONCLUSIVE'
+    elif case == 'dynamics_model':
+        dynamics['model_digest'] = '0' * 64
+    elif case == 'dynamics_curve':
+        dynamics['curve_digest'] = '0' * 64
+    elif case == 'dynamics_support':
+        dynamics['edges'][0]['support_occurrences'] = ('unrelated_occurrence',)
+    elif case == 'dynamics_cap':
+        dynamics['edges'][0]['cap_mps'] *= 2
+    elif case == 'dynamics_distance':
+        dynamics['edges'][0]['distance_lower_m'] = -1.
+    elif case == 'dynamics_time':
+        dynamics['edges'][0]['time_lower_s'] = -1.
+    elif case == 'dynamics_acceleration':
+        dynamics['edges'][0]['acceleration_lower_mps2'] = 1000.
+    elif case == 'dynamics_work':
+        dynamics['edges'][0]['bound_intervals'] = 0
+    elif case == 'dynamics_residual':
+        dynamics['edges'][0]['normalized_residual_upper'] = 1.
+    elif case == 'dynamics_lap':
+        dynamics['lap_time_lower_s'] = 1000.
+        dynamics['lap_time_s'] = 1001.
+        dynamics['lap_time_upper_s'] = 1002.
+        dynamics['lap_time_error_s'] = 1.
+    elif case == 'dynamics_error':
+        dynamics['lap_time_error_s'] = -1.
+    elif case == 'dynamics_residual_names':
+        dynamics['worst_residuals'] = (('invented_physical_metric', -1.),)
+    with pytest.raises(ArtifactError, match='stored historical'):
+        if case.startswith('geometry'):
+            artifact._historical_geometry(
+                decode_record(type(published.geometry_report), geometry),
+                published.geometry_report, published.ordered, published.footprint,
+                published.policies.geometry)
+        else:
+            artifact._historical_dynamics(
+                decode_record(type(published.dynamics_report), dynamics),
+                published.dynamics_report, published.profile, published.policies.dynamics)
+
+
+@pytest.mark.parametrize('checker,status', [
+    ('geometry', 'FAIL'), ('geometry', 'INCONCLUSIVE'), ('geometry', 'UNSUPPORTED'),
+    ('dynamics', 'FAIL'), ('dynamics', 'INCONCLUSIVE'), ('dynamics', 'UNSUPPORTED'),
+])
+def test_historical_PASS_never_overrides_failed_or_uncertain_fresh_proof(
+        checker, status, published, monkeypatch):
+    """Require both real checker calls and preserve every fresh non-PASS outcome."""
+    approval = curve_digest(published.ordered)
+    actual_geometry = artifact.validate_geometry
+    actual_dynamics = artifact.validate_dynamics
+    calls = []
+
+    def replay_geometry(*args, **kwargs):
+        """Run the actual geometry proof before injecting its declared non-PASS outcome."""
+        calls.append(('geometry', kwargs['expected_curve_digest']))
+        report = actual_geometry(*args, **kwargs)
+        assert report.status == 'PASS'
+        return replace(report, status=status) if checker == 'geometry' else report
+
+    def replay_dynamics(*args, **kwargs):
+        """Run the actual dynamics proof before injecting its declared non-PASS outcome."""
+        calls.append(('dynamics', kwargs['expected_curve_digest']))
+        report = actual_dynamics(*args, **kwargs)
+        assert report.status == 'PASS'
+        return replace(report, status=status) if checker == 'dynamics' else report
+
+    monkeypatch.setattr(artifact, 'validate_geometry', replay_geometry)
+    monkeypatch.setattr(artifact, 'validate_dynamics', replay_dynamics)
+    with pytest.raises(ArtifactError, match=checker + ' replay ' + status) as result:
+        load_reference(published.path, expected_H=published.H,
+                       validation_context=ValidationContext())
+    assert result.value.status == status
+    assert calls == [('geometry', approval), ('dynamics', approval)]
+
+
+def test_frozen_main_time_must_remain_inside_fresh_enclosure(published, monkeypatch):
+    """Reject a replay enclosure excluding immutable main time despite interval overlap."""
+    actual_dynamics = artifact.validate_dynamics
+    calls = []
+
+    def replay_dynamics(*args, **kwargs):
+        """Run the real checker before injecting an enclosure that excludes main time."""
+        report = actual_dynamics(*args, **kwargs)
+        assert report.status == 'PASS'
+        lower = math.nextafter(published.lap_time_s, math.inf)
+        assert report.lap_time_lower_s < lower < report.lap_time_upper_s
+        calls.append(kwargs['expected_curve_digest'])
+        return replace(report, lap_time_s=lower, lap_time_lower_s=lower,
+                       lap_time_error_s=report.lap_time_upper_s - lower)
+
+    monkeypatch.setattr(artifact, 'validate_dynamics', replay_dynamics)
+    with pytest.raises(ArtifactError, match='main lap time lies outside replay enclosure'):
+        load_reference(published.path, expected_H=published.H,
+                       validation_context=ValidationContext())
+    assert calls == [curve_digest(published.ordered)]
+
+
+def test_new_external_approval_can_authorize_a_different_independently_legal_body(
+        authority, published, tmp_path):
+    """Accept a caller-approved legal body only with fresh proof of the actual new body."""
+    payload, context, ordered, _, _ = authority
+    changed = mutate(payload, 'footprint')  # Deliberately small and still legal.
+    # This controlled caller approves the new body before writing the test file.
+    # Never derive a trusted expected H from an untrusted received envelope.
+    expected_H = artifact_identity(changed)
+    assert expected_H != published.H
+    path, _ = write_reference(tmp_path / 'new-approved-body', changed, expected_H)
+    reference = load_reference(path, expected_H=expected_H, validation_context=context)
+    assert reference.geometry_report.status == reference.dynamics_report.status == 'PASS'
+    assert reference.footprint.front_m == published.footprint.front_m + .01
+    assert curve_digest(reference.ordered) == curve_digest(ordered)
+    assert canonical_bytes(reference.payload['validation']) == canonical_bytes(
+        payload['validation'])
+    assert canonical_bytes(asdict(reference.geometry_report)) != canonical_bytes(
+        payload['validation']['geometry'])
+    assert published.path.read_bytes() != path.read_bytes()

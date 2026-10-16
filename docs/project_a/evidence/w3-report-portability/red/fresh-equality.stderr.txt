@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/workspace/race_stack/work/w3/reproduce_final_crosshost_equality.py", line 8, in <module>
+    assert a['H'] == b['H'], (a['case'], a['H'], b['H'])
+           ^^^^^^^^^^^^^^^^
+AssertionError: ('s0_route', '1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59', '4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909')

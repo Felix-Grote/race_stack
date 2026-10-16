@@ -1,0 +1,26 @@
+..............................F......................................... [ 74%]
+.........................                                                [100%]
+=================================== FAILURES ===================================
+_ test_self_rehash_and_stored_PASS_cannot_bypass_independent_replay[footprint] _
+
+kind = 'footprint'
+authority = ({'approved_curve_digest': 'f77eb66f8058dea5f99f3cfc85d580f664da853e4b0a455ca0c562b5786e8599', 'approved_route': {'con...176), lap_time_s=11.456316732476841, curve_digest='f77eb66f8058dea5f99f3cfc85d580f664da853e4b0a455ca0c562b5786e8599')))
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_self_rehash_and_stored_PA5')
+
+    @pytest.mark.parametrize('kind', [
+        'coefficients', 'q', 'approval', 'model', 'profile', 'footprint', 'policy',
+        'implementation', 'proof', 'unknown', 'owner',
+    ])
+    def test_self_rehash_and_stored_PASS_cannot_bypass_independent_replay(kind, authority, tmp_path):
+        """Verify self rehash and stored PASS cannot bypass independent replay."""
+        payload, context, _, _, _ = authority
+        path, H = write_reference(tmp_path / 'mutated', mutate(payload, kind))
+>       with pytest.raises(ArtifactError):
+E       Failed: DID NOT RAISE <class 'global_planner.route_artifact.ArtifactError'>
+
+planner/global_planner/test/test_route_artifact.py:226: Failed
+---------------------- generated xml file: /work/unit.xml ----------------------
+=========================== short test summary info ============================
+FAILED planner/global_planner/test/test_route_artifact.py::test_self_rehash_and_stored_PASS_cannot_bypass_independent_replay[footprint]
+1 failed, 96 passed in 222.12s (0:03:42)
+

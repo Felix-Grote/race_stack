@@ -1,0 +1,14 @@
+{
+  "commands": [
+    "python -m flake8 --max-line-length=99 /pkg/global_planner/route_artifact.py /pkg/test/test_route_artifact.py",
+    "ament_pep257 /pkg/global_planner/route_artifact.py /pkg/test/test_route_artifact.py"
+  ],
+  "image": "project-a-humble:w0",
+  "scope": "Strict new-source lint on the frozen portability remediation module and tests",
+  "source_commit": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "source_dirty": true,
+  "source_sha256": {
+    "planner/global_planner/global_planner/route_artifact.py": "443e6f7fdfae5fb78899ac3d887c66796574945335ecf45d84d768166b9dc5cb",
+    "planner/global_planner/test/test_route_artifact.py": "4f334d3f316c7427a736fabb1e517401598c2fb30d656f7d3137d7f7aa033e3f"
+  }
+}

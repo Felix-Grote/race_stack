@@ -1,0 +1,25 @@
+Starting >>> f110_msgs
+Starting >>> frenet_conversion
+--- stderr: frenet_conversion
+warning: build_py: byte-compiling is disabled, skipping.
+
+warning: install_lib: byte-compiling is disabled, skipping.
+
+---
+Finished <<< frenet_conversion [1.01s]
+Finished <<< f110_msgs [15.4s]
+Starting >>> global_planner
+--- stderr: global_planner
+warning: build_py: byte-compiling is disabled, skipping.
+
+warning: install_lib: byte-compiling is disabled, skipping.
+
+---
+Finished <<< global_planner [0.95s]
+
+Summary: 3 packages finished [16.6s]
+  2 packages had stderr output: frenet_conversion global_planner
+WARNING: The directory '/.cache/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing ./wheels/global_racetrajectory_optimization-0.0.1-py3-none-any.whl
+Installing collected packages: global-racetrajectory-optimization
+Successfully installed global-racetrajectory-optimization-0.0.1

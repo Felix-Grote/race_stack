@@ -165,6 +165,17 @@ verifies H/context/runtime identities, reconstructs
 the actual saved coefficients and profile, and reruns both independent validators
 with the same H-authorized A04 expectation before returning an immutable handle.
 Stored PASS reports or self-consistent internal hashes are insufficient.
+The payload preserves historical producer reports exactly. Their supported
+authority/identity/coverage/assumption and internal coherence checks remain
+strict, but new numerical bounds or valid adaptive partitions need not be
+bit-identical to that historical run. The accepted handle exposes only both
+fresh independent PASS reports. It never substitutes a historical PASS for
+replay, changes saved coefficients/q/model/profile, or adds a numerical tolerance.
+The exposed main lap T is the exact stored producer dynamics nominal, checked
+inside both historical and fresh enclosures. The legacy Float32 field projects
+that frozen T, including rounding-midpoint cases. Fresh replay nominal and
+derived query prefix times may have bounded arithmetic differences; no prefix
+rescaling or change to the saved speed profile is permitted.
 Publication also requires the producer's separately retained expected H and A04
 curve digest. It writes a private same-filesystem stage, reloads/revalidates its exact
 bytes, syncs them, and atomically publishes a new digest directory without
@@ -229,6 +240,21 @@ explicit synthetic dynamics model. Approved real-course geometry, calibration,
 controller tracking and real-car safety evidence remain external requirements.
 
 ## Evidence and independent review
+
+The additional [811bd708 portability challenge](evidence/w3-report-portability/README.md)
+found that identical source, inputs, build manifest and dependencies can produce
+different exact binary64 coefficients/q and different C/H on two hosts. Both
+fresh products passed their own independent checks. The subsequent unchanged-
+artifact cross-host load exposed exact historical-report equality as a false
+rejection. The focused repair keeps both real validators, strict external H/C
+and supported context, and treats historical snapshots as audit evidence.
+Fresh-compilation byte identity across hosts remains unguaranteed. Capture each
+controlled compile's own trusted H, or transport an unchanged approved product.
+The root cause of numerical drift is not established: CPU feature/BLAS dispatch
+was not captured. No curve, q, digest or model value is rounded to hide it.
+The containing remediation candidate requires complete fresh and exact-head CI;
+its final artifact portability outcome and controlled catalogs are published in
+PR #3. The 531667 equality observation below is historical, not a general promise.
 
 The clean implementation candidate
 `531667abc0ad38236ec46825a544a3644c324b4f` passed

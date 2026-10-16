@@ -1,5 +1,6 @@
 """Exercise the actual installed CLI, persisted bytes and generated ROS messages."""
 import copy
+from dataclasses import asdict, replace
 import hashlib
 import importlib
 import importlib.metadata
@@ -318,3 +319,118 @@ def test_installed_w3_corruption_and_context_fail_closed(product):
     assert 'supplied occurrence' in wrong_owner['reason'], wrong_owner
     # All mutations used independent copies; the accepted original stays intact.
     assert _hash(product['artifact']) == hashlib.sha256(_canonical(envelope)).hexdigest()
+
+
+def test_installed_w3_replays_numeric_proofs_without_rewriting_authority(product, monkeypatch):
+    """Replay both real checks despite conservative report drift and reject false contracts."""
+    from global_planner import route_artifact as artifact
+    from global_planner.route_compile import load_policy
+
+    assert str(Path(artifact.__file__).resolve()).startswith('/work/install/')
+    original_bytes = product['artifact'].read_bytes()
+    envelope = json.loads(original_bytes)
+    payload = envelope['payload']
+    approved = product['receipt']['geometry']['curve_digest']
+    assert approved == payload['approved_curve_digest']
+    _, context, _ = load_policy(product['share'] / 'policies/synthetic_policy.json')
+    context = replace(context, required_geometry_coverage=('legal_planar_geometry',),
+                      required_dynamics_coverage=('declared_planar_diamond',))
+    real_geometry, real_dynamics = artifact.validate_geometry, artifact.validate_dynamics
+    calls = {'geometry': 0, 'dynamics': 0}
+    fresh, changes = {}, {}
+
+    def geometry(*arguments, **keywords):
+        assert keywords['expected_curve_digest'] == approved
+        report = real_geometry(*arguments, **keywords)
+        assert report.status == 'PASS' and report.curve_digest == approved
+        calls['geometry'] += 1
+        previous = payload['validation']['geometry']['intervals'][0]['curvature_upper']
+        upper = math.nextafter(max(report.intervals[0].curvature_upper, previous), math.inf)
+        assert upper < context.geometry_policy.max_curvature
+        changed = replace(report.intervals[0], curvature_upper=upper)
+        changes['geometry'] = {'historical': previous,
+                               'independent_replay': report.intervals[0].curvature_upper,
+                               'conservative_replay': upper}
+        fresh['geometry'] = replace(report, intervals=(changed, *report.intervals[1:]))
+        return fresh['geometry']
+
+    def dynamics(*arguments, **keywords):
+        assert keywords['expected_curve_digest'] == approved
+        report = real_dynamics(*arguments, **keywords)
+        assert report.status == 'PASS' and report.curve_digest == approved
+        calls['dynamics'] += 1
+        previous = payload['validation']['dynamics']['lap_time_upper_s']
+        upper = math.nextafter(max(report.lap_time_upper_s, previous), math.inf)
+        stored_time = payload['validation']['dynamics']['lap_time_s']
+        nominal = math.nextafter(stored_time, math.inf)
+        assert max(report.lap_time_lower_s,
+                   payload['validation']['dynamics']['lap_time_lower_s']) <= nominal
+        assert nominal <= min(report.lap_time_upper_s, previous)
+        error = max(nominal - report.lap_time_lower_s, upper - nominal, 0.)
+        changes['dynamics'] = {'historical': previous,
+                               'independent_replay': report.lap_time_upper_s,
+                               'conservative_replay': upper,
+                               'historical_nominal': stored_time,
+                               'simulated_replay_nominal': nominal}
+        fresh['dynamics'] = replace(report, lap_time_s=nominal, lap_time_upper_s=upper,
+                                    lap_time_error_s=error)
+        return fresh['dynamics']
+
+    # The producer was the compile CLI subprocess; this installed pytest process is a consumer.
+    monkeypatch.setattr(artifact, 'validate_geometry', geometry)
+    monkeypatch.setattr(artifact, 'validate_dynamics', dynamics)
+    reference = artifact.load_reference(product['artifact'], expected_H=product['H'],
+                                        validation_context=context)
+    assert calls == {'geometry': 1, 'dynamics': 1}
+    assert reference.H == product['H'] and artifact.curve_digest(reference.ordered) == approved
+    for key, actual in (('coefficients', reference.ordered.curve.coefficients),
+                        ('owners', reference.ordered.curve.owners), ('q', reference.ordered.q)):
+        assert _canonical(actual) == _canonical(payload['curve'][key])
+    for key, actual in (('speed_profile', reference.profile), ('model', reference.model),
+                        ('footprint', reference.footprint), ('policies', reference.policies)):
+        assert _canonical(asdict(actual)) == _canonical(payload[key])
+    assert _canonical(reference.payload) == _canonical(payload)
+    for kind, report in (('geometry', reference.geometry_report),
+                         ('dynamics', reference.dynamics_report)):
+        assert report == fresh[kind]
+        assert _canonical(asdict(report)) != _canonical(payload['validation'][kind])
+    assert reference.lap_time_s == payload['validation']['dynamics']['lap_time_s']
+    assert reference.dynamics_report.lap_time_s != reference.lap_time_s
+    assert reference.sample(.5).H == product['H']
+    positive_calls = dict(calls)
+    positive_changes = copy.deepcopy(changes)
+
+    # Independently approve this controlled test H, rather than trust received self-hashes.
+    # Even that new approval cannot turn fabricated categorical metadata into a certificate.
+    forged = copy.deepcopy(envelope)
+    forged['payload']['validation']['geometry']['reason'] = 'fabricated historical rationale'
+    forged['H'] = hashlib.sha256(_canonical(forged['payload'])).hexdigest()
+    directory = product['output'] / 'stored-proof-contract'
+    directory.mkdir()
+    forged_path = directory / 'reference.json'
+    forged_path.write_bytes(_canonical(forged))
+    with pytest.raises(artifact.ArtifactError, match='stored historical') as stored_error:
+        artifact.load_reference(forged_path, expected_H=forged['H'], validation_context=context)
+    assert str(stored_error.value).startswith('geometry stored historical')
+
+    # A real PASS with missing independently required coverage still cannot authorize a handle.
+    def missing_coverage(*arguments, **keywords):
+        report = dynamics(*arguments, **keywords)
+        return replace(report, coverage=tuple(value for value in report.coverage
+                                              if value != 'declared_planar_diamond'))
+
+    monkeypatch.setattr(artifact, 'validate_dynamics', missing_coverage)
+    with pytest.raises(artifact.ArtifactError,
+                       match='independently required coverage') as coverage_error:
+        artifact.load_reference(product['artifact'], expected_H=product['H'],
+                                validation_context=context)
+    assert coverage_error.value.status == 'UNSUPPORTED'
+    assert product['artifact'].read_bytes() == original_bytes
+    (product['output'] / 'numeric-replay-variation.json').write_text(json.dumps({
+        'status': 'PASS', 'H': product['H'], 'curve_digest': approved,
+        'unchanged_artifact_sha256': hashlib.sha256(original_bytes).hexdigest(),
+        'positive_real_validator_calls': positive_calls, 'numeric_changes': positive_changes,
+        'stored_contract_rejection': str(stored_error.value),
+        'missing_fresh_required_coverage': str(coverage_error.value),
+        'scope': 'Deterministic conservative report-variation injection after both real checks',
+    }, indent=2) + '\n')

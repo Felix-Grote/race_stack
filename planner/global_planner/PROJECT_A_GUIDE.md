@@ -63,6 +63,14 @@ manifest retained before transport. Reading H from received bytes does not
 authorize those bytes. The independently selected validation context defines
 supported numerical implementation, proof policy and required coverage.
 
+Fresh compilation can produce different binary64 authorities and H values on
+different hosts under the same source and inputs. Retain each controlled
+compile's own C/H, or transport one unchanged artifact. Historical stored reports
+are immutable audit snapshots; the accepted handle exposes freshly rerun PASS
+reports. Conservative bounds and valid adaptive partitions may differ between
+replays. [The report portability contract](../../docs/project_a/W3_ARTIFACT.md)
+keeps exact authority, semantic coverage and both validators mandatory.
+
 The planner team owns schema/codec, actual coefficient and speed authorities,
 source q lineage, original legal geometry, numerical policies, independent
 offline checks, metric queries and the lossy waypoint projection. It supplies
