@@ -1,0 +1,78 @@
+{
+  "audit_status": "PASS",
+  "audit_scope": "Independent read-only integrity and consistency audit of completed cross-host replay evidence; no numerical or ROS checks were rerun",
+  "source_commit_at_audit": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "source_clean_at_audit": true,
+  "archive": {
+    "path": "work/w3/postfix-portability-evidence.tar.gz",
+    "sha256": "6eede78dc5096621311d16724f3e11193d3288271a26398740ac30295b807172",
+    "bytes": 2645440,
+    "unique_regular_members": 64,
+    "uncompressed_bytes": 10804387,
+    "all_member_paths_safe": true,
+    "symlink_or_hardlink_members": 0,
+    "ledger_entries_excluding_ledger_itself": 63,
+    "ledger_complete_and_all_member_lengths_and_hashes_match": true,
+    "file_ledger_sha256": "39c2207d803b7101df5fb55cb99ef3fa7f9613596afb40751a81dfbcfb9bc0f7",
+    "summary_sha256": "f09087b168fa61592045881ce40a9d76d2f8ce24bfbad59587112180bd53368e",
+    "external_metadata_and_summary_match_archive": true
+  },
+  "hosted_inputs": {
+    "push_run_url": "https://github.com/Felix-Grote/race_stack/actions/runs/38945204845",
+    "archived_run_metadata": "Completed successful push at the exact source commit",
+    "original_ci_zip_sha256": "5ba01962bd2cd39ce8f9742d3a2464d1f5d086cd42ad06448c6bf5bb7fe4a180",
+    "externally_trusted_catalog_sha256": "bcd45dbae8b092116ae26e8125ae8d3ac81d2c0cfed9a72643348ded38278138",
+    "raw_artifact_bindings_to_unique_zip_members": 9,
+    "raw_controlled_compile_receipt_bindings_to_unique_zip_members": 9,
+    "raw_hosted_build_manifest_binding_to_unique_zip_member": true,
+    "hosted_and_local_build_manifest_sha256": "6eafd47cf3c5bbacacb22ac706ddd00e975a5f5c6ebc75bf25f46334fdfedf87",
+    "canonical_hosted_build_manifest_sha256": "274340ed261d8a85a46979f2498a3f1dc7122764c1dccd9bef5584f4c99d0be5"
+  },
+  "source_checks": {
+    "hosted_and_local_before_after_source_hash_inventory_sha256": "bc14338e91912dc8a38a646ef107b40f2e25f2736116888845fa34da46a9fa82",
+    "all_four_source_hash_inventories_identical": true,
+    "all_declared_source_file_bytes_match_actual_clean_source": true,
+    "local_and_hosted_build_manifests_identical": true,
+    "both_archived_policy_hashes_match_installed_resource_manifest": true
+  },
+  "independent_data_checks": {
+    "canonical_payload_H_recomputed_and_matched": 9,
+    "W2_curve_C_recomputed_and_matched": 9,
+    "W2_model_digest_recomputed_and_matched": 9,
+    "receipt_profile_and_validation_identity_bindings_matched": 9,
+    "archived_summary_and_runtime_case_H_C_correspondence_matched": 9,
+    "frozen_producer_time_hex_correspondence_matched": 9,
+    "raw_artifact_hashes_match_incoming_zip_runtime_and_summary_records": 9
+  },
+  "recorded_runtime_checks": {
+    "runtime_exit_code": 0,
+    "original_harness_exit_code": 0,
+    "both_fresh_independent_validator_reports_recorded_PASS_for_each_product": 9,
+    "original_harness_sha256": {
+      "harness/verify.py": "5c6642b6d8d7054f6bed25f596d99d14666823ec22d33a6f1a208f4c6f077a08",
+      "harness/run.sh": "b46df64b20b73acf1c84faca156d096fa2acc936ec5869c3e30d44b364ea0710"
+    },
+    "original_and_supplemental_harness_hashes_match_launch_provenance": true,
+    "geometry_report_drift_cases": 0,
+    "dynamics_report_drift_cases": 9,
+    "changed_fresh_nominal_time_cases": 1,
+    "changed_fresh_nominal_time_case": "s0_rotated_route",
+    "fresh_nominal_time_change_ULPs": -1,
+    "fresh_minus_stored_nominal_time_s": -1.7763568394002505e-15,
+    "all_nine_frozen_producer_times_preserved_exactly": true,
+    "S6_H": "7331d604864405e3d886744939ac54d5fd857d81942f2a60510e9d3ee0fce12d",
+    "S6_frozen_producer_time_hex": "0x1.100a05d53c9b7p+6",
+    "S6_correct_Float32_time_s": 68.0097885131836,
+    "S6_export_raw_waypoint_JSON_and_recorded_reader_Float32_values_match": true,
+    "S6_recorded_actual_reader_and_CDR": "PASS; all nine groups",
+    "S6_terminal_waypoint_station_matches_exported_length": true
+  },
+  "findings": [],
+  "audit_execution": {
+    "Docker_or_runtime_launches": 0,
+    "numerical_experiments": 0,
+    "source_or_documentation_writes": 0,
+    "persisted_record": "This JSON records already verified audit outcomes without rerunning acceptance"
+  },
+  "limitation": "Evidence-integrity audit of synthetic planar offline software; does not replace independent W3 adversarial acceptance or establish physical vehicle safety"
+}

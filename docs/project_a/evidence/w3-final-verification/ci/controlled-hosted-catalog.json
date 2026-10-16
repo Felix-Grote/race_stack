@@ -1,0 +1,56 @@
+[
+  {
+    "case": "s0_route",
+    "H": "abdb43f9d0b04fb8cb5317f21d5ab7abadd0679ed6191f63da3b5ee8220fdc09",
+    "curve_digest": "239e6c76dee1d3b5c4a438796ba20ede3104da035bc193227a78f637c4d342e8",
+    "relative_artifact": "w3-scenarios/s0_route/references/abdb43f9d0b04fb8cb5317f21d5ab7abadd0679ed6191f63da3b5ee8220fdc09/reference.json"
+  },
+  {
+    "case": "s0_reverse_route",
+    "H": "ec57530730611639c7d3ca0c3b5d267cd01d925c7c5c90822f9e86005df35222",
+    "curve_digest": "776117be87c87c61bcc0b69044b4bf1e290897836fb14bba15215f42e0df78b1",
+    "relative_artifact": "w3-scenarios/s0_reverse_route/references/ec57530730611639c7d3ca0c3b5d267cd01d925c7c5c90822f9e86005df35222/reference.json"
+  },
+  {
+    "case": "s0_rotated_route",
+    "H": "eb9ccf2aa894f6bfe7acabfb43684347d9f7dd3f696cc53bb61ffc9435af2bbc",
+    "curve_digest": "845249e58bab6a449b0b8d2e999c1b9778cf51e348f4a32b4d083661d01bed66",
+    "relative_artifact": "w3-scenarios/s0_rotated_route/references/eb9ccf2aa894f6bfe7acabfb43684347d9f7dd3f696cc53bb61ffc9435af2bbc/reference.json"
+  },
+  {
+    "case": "s2_upper_route",
+    "H": "bde04d89aece5b42401e6a58093ef7332435fd9c6ecb47f3c3431604e57c2657",
+    "curve_digest": "c11b66c01d7476889cf8602b1a6c86b24b47f21b0e57571360673ee495ffd2c5",
+    "relative_artifact": "w3-scenarios/s2_upper_route/references/bde04d89aece5b42401e6a58093ef7332435fd9c6ecb47f3c3431604e57c2657/reference.json"
+  },
+  {
+    "case": "s2_lower_route",
+    "H": "3ef767e7dee5d61eb6a1e3749f82d0ca6105ad16124e304fd6b04578f0aa2814",
+    "curve_digest": "7f0aa5ff09b06a183803ce8b598112d54a9d351febba5e5a0e45eeb5b96c446c",
+    "relative_artifact": "w3-scenarios/s2_lower_route/references/3ef767e7dee5d61eb6a1e3749f82d0ca6105ad16124e304fd6b04578f0aa2814/reference.json"
+  },
+  {
+    "case": "s3_surfaces_route",
+    "H": "7fb4068ffb3d1454eb0504abccdf01ed37c552f804bf6d271f5a7a74b46682c2",
+    "curve_digest": "9bedda5b0cb2eca92cbe84385a641e3e76b3bf48e02fb46dc230f2ca485fde96",
+    "relative_artifact": "w3-scenarios/s3_surfaces_route/references/7fb4068ffb3d1454eb0504abccdf01ed37c552f804bf6d271f5a7a74b46682c2/reference.json"
+  },
+  {
+    "case": "s3_notch_route",
+    "H": "5537139ba438e31372732b5df5405a2e73ced0a08ffda0af3a0c6096bcbebbdb",
+    "curve_digest": "07a4c9d7e693aa94c78b059cb63142c3571bddb94247847277f83893dc66ac56",
+    "relative_artifact": "w3-scenarios/s3_notch_route/references/5537139ba438e31372732b5df5405a2e73ced0a08ffda0af3a0c6096bcbebbdb/reference.json"
+  },
+  {
+    "case": "s4_repeated_route",
+    "H": "1772402d4a0064c93d0c40476288c3fafa365465fc65f250c36491646762e059",
+    "curve_digest": "d979a10074f4bf97cd6e3afc6f42819690fd4dba2e036918f37ec1fd90f7ad4b",
+    "relative_artifact": "w3-scenarios/s4_repeated_route/references/1772402d4a0064c93d0c40476288c3fafa365465fc65f250c36491646762e059/reference.json"
+  },
+  {
+    "case": "s6_competition_route",
+    "H": "7331d604864405e3d886744939ac54d5fd857d81942f2a60510e9d3ee0fce12d",
+    "curve_digest": "2cbd2d35e40b9221d54204f28e4c907204215a9829801c824fe6c1de9b34e936",
+    "relative_artifact": "w3-scenarios/s6_competition_route/references/7331d604864405e3d886744939ac54d5fd857d81942f2a60510e9d3ee0fce12d/reference.json"
+  }
+]

@@ -1,0 +1,661 @@
+{
+  "actual_xml": [
+    {
+      "path": "work/w3/postfix-ci/a01.xml",
+      "sha256": "1c71055f9e1825bf98f160e3905e47757776c8368e144b32e8349078cf5e38e9",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 60
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a02.xml",
+      "sha256": "b692607c1ed166024cbc74663199c6e0b93a826912639690286552a05770693f",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 47
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a03.xml",
+      "sha256": "9a83e1094c9da2b7a9c501a8b0d759d89bbb1fd2a7cef6b5c174f01e7d001b39",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 38
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a04.xml",
+      "sha256": "963983d1aa802ffffb4d495b3ebb7e3f8b8bd0c209320fcd14bc12c08df20255",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 18
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a05-oracle.xml",
+      "sha256": "2e4473750dea7d9d672d54e02945bd691f524da7dd3f2e49302e80bf9aa25fe6",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 13
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a05.xml",
+      "sha256": "4374eb4bfcff78579a407b3372603e5b2dcdcad5abd29a7541dd83d5e868e470",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 40
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a06-ellipse.xml",
+      "sha256": "53e4188828e10cf620add65a7d9ab29a8fcea56b6b24dce7c58fd6bde9999a5d",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 1
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a06-independent.xml",
+      "sha256": "91ac3490c33f46b5f8fbb4a43fc595a4bca7f9807b398c02aa1a3f5a05096a3f",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 41
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a06-oracle.xml",
+      "sha256": "9bb6388403c63ea4f3b6c969ce08e20bcc7323dd8a278af2adcadab7d0ffa731",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 8
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a06.xml",
+      "sha256": "7751467a2dae6607223998f3103f267c6df87b753f5ef573fb404a89d5fe8c2b",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 21
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a07-artifact.xml",
+      "sha256": "3cfbfd7049fceaa736104bd59c320ff0b694667c7added09d64c2c621fee5cc8",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 98
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a07-cli.xml",
+      "sha256": "fa46e1b1eed455ffa357a7aaa375bc9b0aeecc437df57da54280ee277ba9e412",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 68
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a07-export-pure.xml",
+      "sha256": "2e83da577970c45456fe72497e6cb607361d8530aa2a812cd19c8c58d79b473f",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 25
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a07-export-ros.xml",
+      "sha256": "21037d6b00d1bd0ad2c00fd133ab9fc264f8a5d05fe7974b691653ab3bc4acbd",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 2
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a08-regressions.xml",
+      "sha256": "197e1d2dabd00a5231f89849a5a349f3763ed80cf9df72ac10485ac6376c790b",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 13
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/a09-harness.xml",
+      "sha256": "8c5db3434c4365c5565e5c4205b3f8b907c6b91c20d7240521bb764157761b51",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 3
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/numerical.xml",
+      "sha256": "5da7eacd7de1321f1bba5ac5e7f096b32f4fc1bdf144f8c885d8518558eb382a",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 7
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/ros.xml",
+      "sha256": "23f4a201f24a609bd2cf98633cf1e8dfea68c515f10fe28b0ade91c67ee95a8d",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 4
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/w1-installed.xml",
+      "sha256": "a129421ca69c52151cae4770be0ceb5ac33766d0a86eeb55ced6b0020c1f8388",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 1
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/w2-handoff.xml",
+      "sha256": "7f513213b1e8b7beadc10b8e004d09d6c2e9c508e4ce5826894f5ce97f5a7f01",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 10
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/w2-installed.xml",
+      "sha256": "98e9cca027c095e874d9f1a70a49e85483bef1b09cff541eb96e43e6f792d413",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 1
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/w2-novel-pipeline.xml",
+      "sha256": "b9b3e77d811cc530194edb8686c579f6d1e79d328b5a1ca0abff70fcf194509a",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 1
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/w2-numerical-oracle.xml",
+      "sha256": "4c6da3a0f10b0d4cbfc3791ee6a4911526d9a2857c6497ed903c48e955574248",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 3
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/w2-pipeline.xml",
+      "sha256": "e6f77a7cbfdf54d78c2c74ffbaec20f4c02decb2e2c45a29cd36a9b02247fd10",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 10
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/w2-shared-cap.xml",
+      "sha256": "98982f656795fdc22330e4b14729c237d661b0fe766385c0875d809de508602a",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 49
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/w3-installed.xml",
+      "sha256": "d65f405e11e79189f698a19630c034682bde26f52faf1135eebc310abb216c11",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 4
+      }
+    },
+    {
+      "path": "work/w3/postfix-ci/source-free/results/w3-source-free.xml",
+      "sha256": "ab36af3d8c341677dafd8fc5ebec7faab5f9e4beb730458ad0dac55212854fc4",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 5
+      }
+    }
+  ],
+  "all_source_entries_match_literal17e4_or_pinned_optimizer_blobs": true,
+  "build_dirty": false,
+  "build_source_commit": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "candidate_commit": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "conclusion": "PASS: actual original successful17e4 hosted artifact verifies591tests/27groups,138exact stable source identities, exact inherited578/10/2legacy outcomes and1173unchanged diagnostics, allnine controlled H/C/report/query/export/mainT bindings. Fresh cross-host compilation differs numerically and is explicitly not used as an equality gate.",
+  "fresh_comparison": {
+    "C_differences": 9,
+    "H_differences": 9,
+    "path": "work/w3/postfix-fresh-hosted-compare.json",
+    "sha256": "ddcb00cbfef761a0b9624bb02cc9ca17454bc86eba5e8e9cf4a492ab7d09b177"
+  },
+  "functional_groups": 27,
+  "functional_totals": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 591
+  },
+  "hosted_case_count": 9,
+  "hosted_controlled_catalog": [
+    {
+      "C": "239e6c76dee1d3b5c4a438796ba20ede3104da035bc193227a78f637c4d342e8",
+      "H": "abdb43f9d0b04fb8cb5317f21d5ab7abadd0679ed6191f63da3b5ee8220fdc09",
+      "artifact_file_sha256": "4926fc972309bee439fd76b9536f16534a48493f8beb27caa5bcc89bf0ef85e5",
+      "case": "s0_route",
+      "controlled_receipt_bindings": true,
+      "dual_actual_replay_reports": "PASS",
+      "frozenT_inside_stored_and_compile_validate_enclosures": true,
+      "legacy_float32_T_s": 11.456316947937012,
+      "legacy_nine_groups_terminal_station_and_float32": "PASS",
+      "length_m": 34.36895019738418,
+      "main_T_s": 11.456316732461396,
+      "profile_nominal_s": 11.456316732461397,
+      "query_count": 106,
+      "reader_CDR_evidence": "Executed source-free test/export PASS follows actual existing-reader and every-message CDR assertions; static audit did not rerun ROS."
+    },
+    {
+      "C": "776117be87c87c61bcc0b69044b4bf1e290897836fb14bba15215f42e0df78b1",
+      "H": "ec57530730611639c7d3ca0c3b5d267cd01d925c7c5c90822f9e86005df35222",
+      "artifact_file_sha256": "f09460b2c0db28150b146a44f5febfe3fe189b815b9ec773396e69d3ac610284",
+      "case": "s0_reverse_route",
+      "controlled_receipt_bindings": true,
+      "dual_actual_replay_reports": "PASS",
+      "frozenT_inside_stored_and_compile_validate_enclosures": true,
+      "legacy_float32_T_s": 11.456316947937012,
+      "legacy_nine_groups_terminal_station_and_float32": "PASS",
+      "length_m": 34.368950197367155,
+      "main_T_s": 11.45631673245572,
+      "profile_nominal_s": 11.45631673245572,
+      "query_count": 106,
+      "reader_CDR_evidence": "Executed source-free test/export PASS follows actual existing-reader and every-message CDR assertions; static audit did not rerun ROS."
+    },
+    {
+      "C": "845249e58bab6a449b0b8d2e999c1b9778cf51e348f4a32b4d083661d01bed66",
+      "H": "eb9ccf2aa894f6bfe7acabfb43684347d9f7dd3f696cc53bb61ffc9435af2bbc",
+      "artifact_file_sha256": "50c17f74ff09832ac37895506462b4fad9ff5ea1092678f5fcdf27610a278ef3",
+      "case": "s0_rotated_route",
+      "controlled_receipt_bindings": true,
+      "dual_actual_replay_reports": "PASS",
+      "frozenT_inside_stored_and_compile_validate_enclosures": true,
+      "legacy_float32_T_s": 11.456316947937012,
+      "legacy_nine_groups_terminal_station_and_float32": "PASS",
+      "length_m": 34.368950197402135,
+      "main_T_s": 11.45631673246738,
+      "profile_nominal_s": 11.45631673246738,
+      "query_count": 106,
+      "reader_CDR_evidence": "Executed source-free test/export PASS follows actual existing-reader and every-message CDR assertions; static audit did not rerun ROS."
+    },
+    {
+      "C": "c11b66c01d7476889cf8602b1a6c86b24b47f21b0e57571360673ee495ffd2c5",
+      "H": "bde04d89aece5b42401e6a58093ef7332435fd9c6ecb47f3c3431604e57c2657",
+      "artifact_file_sha256": "fea7aed7afff15380f39313e54f05e3a07cecab2a36999ba8b85c79239b1d2c0",
+      "case": "s2_upper_route",
+      "controlled_receipt_bindings": true,
+      "dual_actual_replay_reports": "PASS",
+      "frozenT_inside_stored_and_compile_validate_enclosures": true,
+      "legacy_float32_T_s": 11.072362899780273,
+      "legacy_nine_groups_terminal_station_and_float32": "PASS",
+      "length_m": 31.79045935820842,
+      "main_T_s": 11.072362772989473,
+      "profile_nominal_s": 11.072362772989472,
+      "query_count": 100,
+      "reader_CDR_evidence": "Executed source-free test/export PASS follows actual existing-reader and every-message CDR assertions; static audit did not rerun ROS."
+    },
+    {
+      "C": "7f0aa5ff09b06a183803ce8b598112d54a9d351febba5e5a0e45eeb5b96c446c",
+      "H": "3ef767e7dee5d61eb6a1e3749f82d0ca6105ad16124e304fd6b04578f0aa2814",
+      "artifact_file_sha256": "697a81fb4614a85bafa06cf5c5605013daf1c0d1abbfa0e94c0fe11b508f68bc",
+      "case": "s2_lower_route",
+      "controlled_receipt_bindings": true,
+      "dual_actual_replay_reports": "PASS",
+      "frozenT_inside_stored_and_compile_validate_enclosures": true,
+      "legacy_float32_T_s": 10.368340492248535,
+      "legacy_nine_groups_terminal_station_and_float32": "PASS",
+      "length_m": 31.105020353339064,
+      "main_T_s": 10.36834011777969,
+      "profile_nominal_s": 10.368340117779693,
+      "query_count": 97,
+      "reader_CDR_evidence": "Executed source-free test/export PASS follows actual existing-reader and every-message CDR assertions; static audit did not rerun ROS."
+    },
+    {
+      "C": "9bedda5b0cb2eca92cbe84385a641e3e76b3bf48e02fb46dc230f2ca485fde96",
+      "H": "7fb4068ffb3d1454eb0504abccdf01ed37c552f804bf6d271f5a7a74b46682c2",
+      "artifact_file_sha256": "1f80969a7610339e953b7943ad839df5062cfcd741fe14f7fea55f3886ba824a",
+      "case": "s3_surfaces_route",
+      "controlled_receipt_bindings": true,
+      "dual_actual_replay_reports": "PASS",
+      "frozenT_inside_stored_and_compile_validate_enclosures": true,
+      "legacy_float32_T_s": 17.56421661376953,
+      "legacy_nine_groups_terminal_station_and_float32": "PASS",
+      "length_m": 48.90859029627971,
+      "main_T_s": 17.564217325770205,
+      "profile_nominal_s": 17.564217325770205,
+      "query_count": 142,
+      "reader_CDR_evidence": "Executed source-free test/export PASS follows actual existing-reader and every-message CDR assertions; static audit did not rerun ROS."
+    },
+    {
+      "C": "07a4c9d7e693aa94c78b059cb63142c3571bddb94247847277f83893dc66ac56",
+      "H": "5537139ba438e31372732b5df5405a2e73ced0a08ffda0af3a0c6096bcbebbdb",
+      "artifact_file_sha256": "a200c757f115367c2b96bfe8e78ad7e12a2d02f974138fbcc154c9d5b8f3202c",
+      "case": "s3_notch_route",
+      "controlled_receipt_bindings": true,
+      "dual_actual_replay_reports": "PASS",
+      "frozenT_inside_stored_and_compile_validate_enclosures": true,
+      "legacy_float32_T_s": 17.564176559448242,
+      "legacy_nine_groups_terminal_station_and_float32": "PASS",
+      "length_m": 48.90862051285766,
+      "main_T_s": 17.56417717652297,
+      "profile_nominal_s": 17.56417717652299,
+      "query_count": 143,
+      "reader_CDR_evidence": "Executed source-free test/export PASS follows actual existing-reader and every-message CDR assertions; static audit did not rerun ROS."
+    },
+    {
+      "C": "d979a10074f4bf97cd6e3afc6f42819690fd4dba2e036918f37ec1fd90f7ad4b",
+      "H": "1772402d4a0064c93d0c40476288c3fafa365465fc65f250c36491646762e059",
+      "artifact_file_sha256": "16a4a23dc31ce307d651d1473880466f08bc34e241f9ecd0526f11eee10bc55f",
+      "case": "s4_repeated_route",
+      "controlled_receipt_bindings": true,
+      "dual_actual_replay_reports": "PASS",
+      "frozenT_inside_stored_and_compile_validate_enclosures": true,
+      "legacy_float32_T_s": 23.670515060424805,
+      "legacy_nine_groups_terminal_station_and_float32": "PASS",
+      "length_m": 68.78201873651668,
+      "main_T_s": 23.67051592956302,
+      "profile_nominal_s": 23.670515929563027,
+      "query_count": 206,
+      "reader_CDR_evidence": "Executed source-free test/export PASS follows actual existing-reader and every-message CDR assertions; static audit did not rerun ROS."
+    },
+    {
+      "C": "2cbd2d35e40b9221d54204f28e4c907204215a9829801c824fe6c1de9b34e936",
+      "H": "7331d604864405e3d886744939ac54d5fd857d81942f2a60510e9d3ee0fce12d",
+      "artifact_file_sha256": "850e2487103caa696347068a2f3a85d8bf52a86329cc7eea370eba6a11d0889c",
+      "case": "s6_competition_route",
+      "controlled_receipt_bindings": true,
+      "dual_actual_replay_reports": "PASS",
+      "frozenT_inside_stored_and_compile_validate_enclosures": true,
+      "legacy_float32_T_s": 68.0097885131836,
+      "legacy_nine_groups_terminal_station_and_float32": "PASS",
+      "length_m": 240.8560691394369,
+      "main_T_s": 68.00978787596146,
+      "profile_nominal_s": 68.00978787596144,
+      "query_count": 482,
+      "reader_CDR_evidence": "Executed source-free test/export PASS follows actual existing-reader and every-message CDR assertions; static audit did not rerun ROS."
+    }
+  ],
+  "installed_negative_controls": {
+    "count": 15,
+    "intended_reasons": [
+      "externally trusted artifact H mismatch",
+      "externally trusted artifact H mismatch",
+      "geometry replay FAIL: complete curve differs from independently retained authority",
+      "externally trusted artifact H mismatch",
+      "dynamics replay FAIL: profile curve/model provenance digest mismatch",
+      "externally trusted artifact H mismatch",
+      "artifact differs from independent acceptance policy",
+      "externally trusted artifact H mismatch",
+      "externally trusted artifact H mismatch",
+      "unsupported or changed kernel/checker/dependency identity",
+      "private staging and lock paths cannot be accepted references",
+      "invalid bounded UTF-8 JSON",
+      "invalid bounded UTF-8 JSON",
+      "unsupported independently required coverage",
+      "supplied occurrence disagrees with ordered progress"
+    ],
+    "no_incidental_path_error": true
+  },
+  "installed_numeric_replay_variation": "PASS with both actual validator calls and frozenT checks in executed installed regression",
+  "legacy": {
+    "actual_file_sha256": "1624c3c9755fb81113a927947b8879836729ea2c2d0f839fcddbd35e49be6686",
+    "all1173_raw_diagnostic_identities_and_multiplicities_equal": true,
+    "failure_messages": [
+      {
+        "full_text_equal": true,
+        "identity": "lint_cmake",
+        "line_multiset_equal": true
+      },
+      {
+        "full_text_equal": false,
+        "identity": "xmllint",
+        "line_multiset_equal": false
+      },
+      {
+        "full_text_equal": true,
+        "identity": "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+        "line_multiset_equal": true
+      },
+      {
+        "full_text_equal": true,
+        "identity": "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+        "line_multiset_equal": true
+      },
+      {
+        "full_text_equal": true,
+        "identity": "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+        "line_multiset_equal": true
+      },
+      {
+        "full_text_equal": false,
+        "identity": "f110_msgs.xmllint package.xml",
+        "line_multiset_equal": false
+      },
+      {
+        "full_text_equal": false,
+        "identity": "frenet_conversion.test.test_flake8 test_flake8",
+        "line_multiset_equal": true
+      },
+      {
+        "full_text_equal": true,
+        "identity": "frenet_conversion.test.test_pep257 test_pep257",
+        "line_multiset_equal": true
+      },
+      {
+        "full_text_equal": false,
+        "identity": "global_planner.test.test_flake8 test_flake8",
+        "line_multiset_equal": true
+      },
+      {
+        "full_text_equal": true,
+        "identity": "global_planner.test.test_pep257 test_pep257",
+        "line_multiset_equal": true
+      }
+    ],
+    "new": 0,
+    "removed": 0,
+    "skip_evidence_scope": "Hosted ZIP retains the exact parser output from actual build JUnit; raw build pytest XMLs were not in this ZIP.",
+    "skips_from_CI_parser_actual_build_JUnit": [
+      {
+        "identity": "frenet_conversion.test.test_copyright test_copyright",
+        "reason": "No copyright header has been placed in the generated source file."
+      },
+      {
+        "identity": "global_planner.test.test_copyright test_copyright",
+        "reason": "No copyright header has been placed in the generated source file."
+      }
+    ],
+    "summary": {
+      "errors": 0,
+      "failures": 10,
+      "skipped": 2,
+      "tests": 578
+    },
+    "ten_failure_identities_equal": true
+  },
+  "original_archive": {
+    "all_extracted_bytes_match_archive": true,
+    "artifact_id": 12067848728,
+    "bytes": 9327825,
+    "path": "work/w3/postfix-ci.zip",
+    "safe_unique_regular_file_entries": 295,
+    "sha256": "5ba01962bd2cd39ce8f9742d3a2464d1f5d086cd42ad06448c6bf5bb7fe4a180"
+  },
+  "provided_portability_catalog": {
+    "all_nine_match_controlled_hosted_receipts_and_actual_bytes": true,
+    "path": "work/w3/postfix-portability/catalog.json",
+    "sha256": "bcd45dbae8b092116ae26e8125ae8d3ac81d2c0cfed9a72643348ded38278138"
+  },
+  "pull_request_run": {
+    "conclusion": "success",
+    "head": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+    "id": 38945212759,
+    "status": "completed"
+  },
+  "push": {
+    "conclusion": "success",
+    "head": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+    "id": 38945204845,
+    "status": "completed"
+  },
+  "remaining_gate": "Actual matching-implementation saved-hosted-artifact cross-host replay/export/CDR is pending; no unfinished output inspected.",
+  "scope": "Internal static hosted-artifact audit. No numerical/ROS rerun and no source/document changes. External adversarial review remains required.",
+  "source_before_after_byte_equal": true,
+  "source_manifest_entries": 138,
+  "source_manifest_sha256": "bc14338e91912dc8a38a646ef107b40f2e25f2736116888845fa34da46a9fa82",
+  "sourcefree_runtime_facts": {
+    "cap_eff": "0000000000000000",
+    "console_script": "/work/install/global_planner/lib/global_planner/compile_route",
+    "installed_resource_hashes": {
+      "fixtures/s0_reverse_route.json": "eea555e7bd76e911bdf13cf395dd9958d40cdcda46a05681838844b3cc2891c6",
+      "fixtures/s0_rotated_route.json": "12fa1e23b1078ac1b0720defa8a90e8e4e3e545adc8f73bff6b2cff8a9dae465",
+      "fixtures/s0_route.json": "3bfddf1726bdf55d53496ddd37d6289cb2808136bfaba49fb0c6228340d85cff",
+      "fixtures/s2_lower_route.json": "5a8c24775d52901231dc7134ddf27d121854501cde7953a41a89f85c111a576f",
+      "fixtures/s2_upper_route.json": "9abdc88ead71bcff8e170be6b5e4df3935d4a2fac02ee4a493318b7b2a4bb42a",
+      "fixtures/s3_notch_route.json": "d1dcbfe952da8c2aa00b430e986cb8273ae0a0db95eb2869ea63ea444f715ef9",
+      "fixtures/s3_surfaces_route.json": "f397127bdd14e1713b4a4ace30b5aec76c16b0091d07b41d379c3411746afa98",
+      "fixtures/s4_repeated_route.json": "624f66a98d90c75aafd475f3e4daccf55cc2f0ce37aa6f955a2a9ab14432e912",
+      "fixtures/s6_competition_route.json": "d02e04769f0f1acb3c2aa4c3e52c5815af113908595296bf2a2586d09622d1a2",
+      "models/s0_reverse_route_model.json": "49bace7f73d98d96fc6721cabd5e8f1e54c8691d987333fa261b5290154d4702",
+      "models/s0_rotated_route_model.json": "d0ffc05d1daf9f0014c53e5ea189a49db65ee76e1a4da0b2a4cfa745c2ccb6a7",
+      "models/s0_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "models/s2_lower_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "models/s2_upper_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "models/s3_notch_route_model.json": "afbb0f3e947306aabfeaaf5834c399d4becf184a01453bf4a54d55fd1f64aea7",
+      "models/s3_surfaces_route_model.json": "afbb0f3e947306aabfeaaf5834c399d4becf184a01453bf4a54d55fd1f64aea7",
+      "models/s4_repeated_route_model.json": "71acf61ff91ded134c9e1da99da0e9bbaf014cb835b432424d405e754f836914",
+      "models/s6_competition_route_model.json": "39e1275cc05dd9b5569c0782f7963822746df2e177fdb79e17ee81e9f295ce82",
+      "models/synthetic_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "policies/s6_coarse_policy.json": "8fb57e0a592504b0e6e31ccd4b486a5db1251bbc16060ecbb041721ef5199b3f",
+      "policies/synthetic_policy.json": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133"
+    },
+    "interfaces": [
+      [
+        1,
+        "lo"
+      ]
+    ],
+    "modules": {
+      "global_planner.cyclic_retime": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/cyclic_retime.py",
+        "sha256": "7ff74dbf3f57500731e5eebb069882d35efc6ed6d2b5805e22c796556286ceb3"
+      },
+      "global_planner.iqp_route_adapter": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/iqp_route_adapter.py",
+        "sha256": "2af86a21c10c16a8202ec70265b323c5a999bbfa3100631240605cae040ea9dd"
+      },
+      "global_planner.route_artifact": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_artifact.py",
+        "sha256": "443e6f7fdfae5fb78899ac3d887c66796574945335ecf45d84d768166b9dc5cb"
+      },
+      "global_planner.route_compile": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_compile.py",
+        "sha256": "7abbd29f6c3e21757abe8e74046da12ab918bf2baf7d08529b55a6be7b697a50"
+      },
+      "global_planner.route_corridor": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_corridor.py",
+        "sha256": "50b97011b805642287cd41f9fbb8f262b7b69124f5f43031b5e1409548fe770d"
+      },
+      "global_planner.route_input": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_input.py",
+        "sha256": "fb834bcb3d26c0078575f10768771f842111ca9c92b0a3b179206b61678aeeb8"
+      },
+      "global_planner.route_legacy_export": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_legacy_export.py",
+        "sha256": "dc6f8a0c5d0b8e025f20f2a0cbc2a171cc6adf39fb0ab2f09118c4cbb44e8ad2"
+      },
+      "global_planner.route_reference": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_reference.py",
+        "sha256": "9302188ac655c12c773383f45b99246425c51d6f59f2fde6b99f29a2284fa6b8"
+      },
+      "global_planner.route_validate": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_validate.py",
+        "sha256": "3d19294aa72dea9c3c2d66c47cbf115f83661ab360b0922d6fdf91e8cd52c651"
+      },
+      "global_planner.route_validate_dynamics": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_validate_dynamics.py",
+        "sha256": "9e8f8b787f2f0468b4cfeb18860c83bc54956e698b91fd7442fd9b38aae436d2"
+      }
+    },
+    "no_new_privileges": "1",
+    "source_commit": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+    "source_dirty": false,
+    "uid": 1001,
+    "verified_absent_paths": [
+      "/src",
+      "/workspace",
+      "/work/src",
+      "/work/build",
+      "/work/optimizer"
+    ],
+    "verified_readonly_paths": [
+      "/",
+      "/work",
+      "/work/install",
+      "/work/python",
+      "/runtime-harness"
+    ]
+  },
+  "sourceful_sourcefree_build_identity_equal": true
+}

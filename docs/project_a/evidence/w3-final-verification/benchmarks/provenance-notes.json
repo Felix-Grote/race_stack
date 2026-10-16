@@ -1,0 +1,18 @@
+{
+  "primary_and_matched": {
+    "role": "final17e4 functional replay, all96 jobs predeclared in root manifest, no numerical retries",
+    "timing": "NONISOLATED FUNCTIONAL ONLY; retain original isolated A08 performance evidence"
+  },
+  "inherited_original_matched_metadata": {
+    "launcher_sha256": "retained original A08 launcher identity as historical protocol metadata; current actual replay launcher is final_functional_context.runner_sha256",
+    "paired_new_manifest_sha256": "retained historical A08 primary pairing identity; current root manifest submanifests bind the new final-head primary+matched manifests",
+    "current_source": "source_sha, implementation and source_import_origins in final_functional_context describe actual17e4 source"
+  },
+  "preparation_failures": {
+    "preparation-failure-1": "tuple/list verification comparison rejected before any numerical worker/control or manifest",
+    "preparation-failure-2": "original four-job manifest lacks fixtures key; interrupted after writing92 primary plans, before all96 root manifest and before any numerical worker/control",
+    "plan_history": "partial abandoned submanifests and runner/console bytes are retained; these are not optimization attempts and do not replace any outcome"
+  },
+  "production_edits": false,
+  "old_campaign_evidence_edits": false
+}

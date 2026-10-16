@@ -1,0 +1,13 @@
+{
+  "archive": "final-functional-17e4ec4e.tar.gz",
+  "archive_bytes": 24203191,
+  "archive_content_verification": "PASS: every archived file matches exact input SHA256",
+  "archive_sha256": "cbd2cef83a15882a63a8fa682fbba37fc1484977c7979af85ac44b44e8d01b2d",
+  "determinism": "sorted GNU tar entries, uid/gid/names/mtime normalized; gzip filename empty, mtime0, level9",
+  "external_metadata_scope": "archive.json and archive file excluded from their own content inventory",
+  "raw_bytes": 72500481,
+  "raw_files": 1056,
+  "scope": "data-only final-functional archive; no new performance comparison",
+  "sha256sum_inventory_sha256": "a4c1e8cf8c9768ad94f5612011cdd701461b4dc413afba2dc459e72892277b06",
+  "source_sha": "17e4ec4e8fedfa736467d02f6204b04e8552decb"
+}

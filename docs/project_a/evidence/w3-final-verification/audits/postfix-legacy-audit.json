@@ -1,0 +1,412 @@
+{
+  "actual": "work/w3/postfix-fresh/verification/legacy-results.txt",
+  "actual_entries": 1173,
+  "actual_file_sha256": "d1a03e20b259075021f10afaaec78ffce1de940f9fe49998cca54644ba53db61",
+  "actual_ten_failure_identities": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ],
+  "actual_unique_diagnostics": 1173,
+  "all_full_failure_messages_equal": true,
+  "baseline": "docs/project_a/evidence/w3-baseline/legacy-results.txt.gz",
+  "baseline_decompressed_sha256": "5c8790cc5a2995cfd95836667470afa49c45a9dffb262c7a35aaf764e30c0a54",
+  "baseline_entries": 1173,
+  "baseline_file_sha256": "c4058c4d7a91ef0da94040fc1e9c83782639f7f870451eb04f3c29c2f38e95ec",
+  "baseline_unique_diagnostics": 1173,
+  "build_dirty": false,
+  "build_manifest_sha256": "6eafd47cf3c5bbacacb22ac706ddd00e975a5f5c6ebc75bf25f46334fdfedf87",
+  "candidate_commit": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "completed_functional_root_groups": 26,
+  "completed_functional_xml": [
+    {
+      "path": "work/w3/postfix-fresh/verification/a01.xml",
+      "sha256": "48d0aabc8386e6d552ebad733dfe19dfb104546b26e109c864d73cec0d106acd",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 60
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a02.xml",
+      "sha256": "a44785a7b77305660562e4cca71638ba4a5cc93900efa41c23a7175615922118",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 47
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a03.xml",
+      "sha256": "5f2b4adda9ff3fb920d279d91c9f53cf6da043686d5388bd85d20dc9f7c53cbb",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 38
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a04.xml",
+      "sha256": "ac44df95922810a645c122fc3b098ed3562e8fc53578d429943e475ea1a8d53f",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 18
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a05-oracle.xml",
+      "sha256": "bfb485ce08f26ebf5c52617034916465dc6d2fe714211a88c50449bc7c4e3b97",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 13
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a05.xml",
+      "sha256": "58fe4d2536e4d4f09368f5b83eebaca5f1738a2440145297f75977d3bc4b760c",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 40
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a06-ellipse.xml",
+      "sha256": "cd07cf40ff936b3b61078027e62cc583e531a81f505510535a8cac5f3bb0c62c",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 1
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a06-independent.xml",
+      "sha256": "8a086fe389e0e06b63b4b753ecab1ed3b11866cf06b7225717bbf767ef01d9ee",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 41
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a06-oracle.xml",
+      "sha256": "8253a1d951261879979aa130c509fc7e73f5f64d84d88eee6d19e60bf2a2cdbb",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 8
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a06.xml",
+      "sha256": "3b7102bd5ab720e04039bb6e427e062768db67732523cb06766a7e5d53de380a",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 21
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a07-artifact.xml",
+      "sha256": "a58b43c9d237714769ac0adb46421cd59bb847c29f7b31faf82808f7a5d85e55",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 98
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a07-cli.xml",
+      "sha256": "8a2a05cf518e6f586665a81362751cd89842ac6f184622328edf704385c4ed82",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 68
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a07-export-pure.xml",
+      "sha256": "0436d5c351b2f84727ad3d25a6057b30dded063d0a0bc117205ac767a44dbccd",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 25
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a07-export-ros.xml",
+      "sha256": "5b3e1fa2c227237e93e78bce684cf2e2e2e4ff2e2b551db47ab4e7185b81490d",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 2
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a08-regressions.xml",
+      "sha256": "e67444205f413f6e3a65e5c0655c7e82a798aaa0cecdc2fbc8e1b1e02de30a88",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 13
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/a09-harness.xml",
+      "sha256": "32b87331f37c36fba42a3af55478db629604ac95ad86730de97681f56fb0f129",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 3
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/numerical.xml",
+      "sha256": "16a019f9231818941f373fa5afa2be136f715cf6929280b07a9389f798a4910a",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 7
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/ros.xml",
+      "sha256": "6a549ec0fa4460ecbe0e08b8d4a7aefc71c6916e79cfcbb197740909b6e7811a",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 4
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/w1-installed.xml",
+      "sha256": "00ce53dcfd39c2195cc01615cf795191b7a42536b17b39e9349c026d97211219",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 1
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/w2-handoff.xml",
+      "sha256": "1a728ead73e000cb80382ede66cf54da1c4d12cc93c87c6d65c2cf020ec00399",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 10
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/w2-installed.xml",
+      "sha256": "693f442fdec20cfb928468b64b1fa1c87f47254c108540bb4c04617f0e21af64",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 1
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/w2-novel-pipeline.xml",
+      "sha256": "74c8ffd0ce52dead7d2df0b3a7a02dd799df79e9842725434401645d50c439bf",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 1
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/w2-numerical-oracle.xml",
+      "sha256": "cb04dbe5f83f2dd1f4a38669e7d4b823ef12d508adc66eb1457932837be78334",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 3
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/w2-pipeline.xml",
+      "sha256": "ec15f6303f3e0d0c07ded45dab0e682886c9dac6fc3f6e95922e7f6b3414483f",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 10
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/w2-shared-cap.xml",
+      "sha256": "b6bcd7178bfb3945d9cba09980c23f9f3fa1cbd45e01aa804a69c1a51fe02f25",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 49
+      }
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/w3-installed.xml",
+      "sha256": "ec4c2a98fa42139b228bda5a2776f4068f12d9f45c1eefdd13f73393e9fce228",
+      "totals": {
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "tests": 4
+      }
+    }
+  ],
+  "completed_sourceful_functional_totals": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 586
+  },
+  "conclusion": "PASS: exact ten inherited failure identities and two skip identities/reasons; all1173 raw style diagnostic identities/multiplicities unchanged, new0/removed0. Completed26 sourceful functional groups total586/0 failures/0 errors/0 skips.",
+  "diagnostic_code_counts": {
+    "E116": 3,
+    "E125": 1,
+    "E127": 10,
+    "E128": 4,
+    "E222": 2,
+    "E228": 2,
+    "E231": 10,
+    "E251": 6,
+    "E261": 2,
+    "E262": 1,
+    "E265": 2,
+    "E302": 7,
+    "E303": 9,
+    "E305": 2,
+    "E402": 24,
+    "E501": 919,
+    "F401": 59,
+    "F541": 1,
+    "W291": 25,
+    "W292": 6,
+    "W293": 77,
+    "W391": 1
+  },
+  "diagnostic_identities_and_multiplicities_equal": true,
+  "diagnostic_regex": "^\\s*(.+:\\d+:\\d+: [A-Z]\\d{3} .+?)\\s*$",
+  "failure_identities_equal": true,
+  "failure_message_blocks": [
+    {
+      "byte_text_equal": true,
+      "identity": "lint_cmake",
+      "line_multiset_equal": true
+    },
+    {
+      "byte_text_equal": true,
+      "identity": "xmllint",
+      "line_multiset_equal": true
+    },
+    {
+      "byte_text_equal": true,
+      "identity": "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+      "line_multiset_equal": true
+    },
+    {
+      "byte_text_equal": true,
+      "identity": "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+      "line_multiset_equal": true
+    },
+    {
+      "byte_text_equal": true,
+      "identity": "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+      "line_multiset_equal": true
+    },
+    {
+      "byte_text_equal": true,
+      "identity": "f110_msgs.xmllint package.xml",
+      "line_multiset_equal": true
+    },
+    {
+      "byte_text_equal": true,
+      "identity": "frenet_conversion.test.test_flake8 test_flake8",
+      "line_multiset_equal": true
+    },
+    {
+      "byte_text_equal": true,
+      "identity": "frenet_conversion.test.test_pep257 test_pep257",
+      "line_multiset_equal": true
+    },
+    {
+      "byte_text_equal": true,
+      "identity": "global_planner.test.test_flake8 test_flake8",
+      "line_multiset_equal": true
+    },
+    {
+      "byte_text_equal": true,
+      "identity": "global_planner.test.test_pep257 test_pep257",
+      "line_multiset_equal": true
+    }
+  ],
+  "full_591_test_acceptance": "Pending the separate five-test source-free campaign; no current completed591 claim.",
+  "legacy_summary": {
+    "errors": 0,
+    "failures": 10,
+    "skipped": 2,
+    "tests": 578
+  },
+  "method": "Decode raw verbose colcon results; extract every emitted path:line:column:CODE message. Strip surrounding indentation only. Compare complete diagnostic text and Counter multiplicities, retaining source/build reports. No path/code/file exclusions. Compare all ten failure identities in order, then every full message block and its line multiset. Read actual build JUnit skips and exact reasons independently.",
+  "new_diagnostics": {},
+  "removed_diagnostics": {},
+  "scope": "Internal independent audit of completed final17e4 sourceful verification and inherited failures. Running source-free outputs were not read or modified. All inherited failures remain failures; no new identity is relabeled.",
+  "skip_xml_sources": [
+    {
+      "path": "work/w3/postfix-fresh/verification/build/frenet_conversion/pytest.xml",
+      "sha256": "dc3b39d9e32ce3a36110c200540aeadc683e95778303a3a81ef401d531e6d005"
+    },
+    {
+      "path": "work/w3/postfix-fresh/verification/build/global_planner/pytest.xml",
+      "sha256": "1b7d63d1aedd25350fc85b572d7f269d326e7222e6da856de9b5a9b6ecc50535"
+    }
+  ],
+  "skips": [
+    {
+      "identity": "frenet_conversion.test.test_copyright test_copyright",
+      "reason": "No copyright header has been placed in the generated source file."
+    },
+    {
+      "identity": "global_planner.test.test_copyright test_copyright",
+      "reason": "No copyright header has been placed in the generated source file."
+    }
+  ],
+  "source_after_manifest_present": false,
+  "source_before_after_byte_equal": null,
+  "source_manifest_entries": 138,
+  "source_manifest_note": "After-manifest not yet emitted during active full verification",
+  "source_manifest_sha256": "bc14338e91912dc8a38a646ef107b40f2e25f2736116888845fa34da46a9fa82"
+}

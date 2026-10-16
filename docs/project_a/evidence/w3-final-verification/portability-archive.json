@@ -1,0 +1,13 @@
+{
+  "source_commit": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "archive": "work/w3/postfix-portability-evidence.tar.gz",
+  "archive_sha256": "6eede78dc5096621311d16724f3e11193d3288271a26398740ac30295b807172",
+  "archive_bytes": 2645440,
+  "files": 64,
+  "uncompressed_bytes": 10804387,
+  "file_ledger_sha256": "39c2207d803b7101df5fb55cb99ef3fa7f9613596afb40751a81dfbcfb9bc0f7",
+  "summary": "work/w3/postfix-portability-summary.json",
+  "summary_sha256": "f09087b168fa61592045881ce40a9d76d2f8ce24bfbad59587112180bd53368e",
+  "original_CI_zip_sha256": "5ba01962bd2cd39ce8f9742d3a2464d1f5d086cd42ad06448c6bf5bb7fe4a180",
+  "scope": "Data-only cross-host acceptance evidence; product source unchanged"
+}

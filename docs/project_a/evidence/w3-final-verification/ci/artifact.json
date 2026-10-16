@@ -1,0 +1,10 @@
+{
+  "artifact_id": 12067848728,
+  "run_id": 38945204845,
+  "event": "push",
+  "candidate": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "size_in_bytes": 9327825,
+  "sha256": "5ba01962bd2cd39ce8f9742d3a2464d1f5d086cd42ad06448c6bf5bb7fe4a180",
+  "verified_against": "GitHub artifact API digest/size and literal successful push run metadata",
+  "expires_at": "2027-01-14T18:09:48Z"
+}
