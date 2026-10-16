@@ -1,0 +1,1 @@
+Workflow status, job logs and artifact metadata fetched successfully via gh. Artifact ZIP download returned HTTP 403; raw hosted artifacts remain linked on the successful run. No CI artifact contents were inferred or substituted. Full workflow logs confirm 7 numerical and 4 ROS tests plus the 3-package build; legacy report is 12/0/10/2.

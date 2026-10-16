@@ -1,0 +1,20 @@
+{
+  "scope": "W0_ONLY",
+  "legal_planner_acceptance": "NOT_IMPLEMENTED",
+  "numerical": {
+    "tests": "7",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "ros": {
+    "tests": "4",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "legacy_baseline": [
+    "colcon_test=1",
+    "colcon_test_result=1"
+  ]
+}

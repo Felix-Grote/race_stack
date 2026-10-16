@@ -36,3 +36,14 @@
 8. **Historical references remain dated inputs.** Vendor byte-identical canonical
    architecture/roadmap and current execution plan. Their workstation paths and
    old SHAs are not fresh evidence. W0 does not act on older A01-only orchestration.
+9. **Closeout evidence is separate from executable changes.** Commit `73afd1f`
+   was pushed, cloned recursively, retested with clean source and independently
+   passed hosted CI. The closeout commit adds documentation/raw evidence only.
+   Preserve the exact tested implementation identity rather than imply a
+   self-referential final evidence-commit hash.
+10. **Branch satisfies publication despite PR restriction.** Actual upstream draft
+    PR creation was denied by the GitHub integration. The authorized fork push
+    succeeded; deliver its reviewable branch and prepared PR text, without
+    requesting routine confirmation or implying that an upstream PR exists.
+    CI ZIP retrieval also returned 403, while CI job logs and metadata were
+    accessible; preserve those exact logs and do not infer missing artifact data.

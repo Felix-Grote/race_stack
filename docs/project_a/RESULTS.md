@@ -55,3 +55,39 @@ build because launch-testing imported neighboring ROS tests. The bounded runner
 repair disables plugin autoload for explicit W0 files; legacy tests keep plugins.
 `evidence/initial-collection-failure.log` preserves that failure. Direct-only pins
 were expanded to a hash-locked numerical/build closure before the final run.
+
+## Repetition from the published source and independent hosted execution
+
+Implementation/test commit: **73afd1f95600da8aac1a29a0aa871aed227b4e49**. A fresh
+remote recursive clone ran setup and `verify.sh all work/clean-verify-final`:
+exit 0; **7 numerical, 4 ROS and 3 package builds passed**; same 12/0/10/2 red
+legacy aggregate; clean source before/after. Both QP measurement reports are
+identical to the pinned working-tree run. [Clean-clone evidence](evidence/clean-clone/SHA256SUMS)
+records the exact SHA, image and gitlinks. Subsequent closeout changes contain
+only documentation/evidence; executable-file hashes remain those in
+`evidence/implementation-files.json`.
+
+Independent hosted run [38862974185](https://github.com/Felix-Grote/race_stack/actions/runs/38862974185)
+at that SHA: **SUCCESS**, Ubuntu 22.04 GitHub runner, digest-pinned Humble container.
+Fetched job logs explicitly show **7 passed in 0.24 s**, **3 packages built in
+26.2 s**, **4 ROS tests passed in 1.11 s**, and the same red legacy aggregate.
+The locally built image ID there was
+`sha256:2af52db62ac0320d2404573e275159da55576e8b62063034105595c10a08d48e`;
+local image IDs need not match across rebuilds (documented in RUNBOOK).
+[CI metadata/full logs](evidence/ci-73afd1f/SHA256SUMS) and artifact ID/digest are
+committed. The artifact ZIP fetch returned HTTP 403; hosted artifact contents
+were not inspected. Job logs and metadata were retrieved successfully, and full
+Cloud JUnit/inventories are committed independently.
+
+Authored scripts/docs pass syntax/compile/whitespace checks. The imported
+execution-plan document retains intentional Markdown hard-break spaces; raw logs
+retain their original whitespace. The scoped whitespace check is:
+
+```bash
+git diff --check 67981ed HEAD -- scripts/project_a .github/workflows docker-compose.test.yaml .gitignore planner/global_planner/AGENTS.md 'docs/project_a/*.md' ':!docs/project_a/EXECUTION_PLAN.md'
+```
+
+Production byte preservation was checked with `git diff --exit-code 67981ed HEAD
+-- planner/global_planner/global_planner planner/global_planner/setup.py
+planner/global_planner/package.xml utilities controller state_estimation
+perception stack_master .gitmodules` and recursive clean-submodule checks (exit 0).
