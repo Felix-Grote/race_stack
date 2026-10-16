@@ -47,3 +47,41 @@ Fixed fixtures include S0, reversed direction with swapped sides and transformed
 gates, rotated origin, independent S2 upper/lower selections with common return,
 and S3 with disconnected projected crossing occurrences on ground/upper-deck.
 They describe synthetic software geometry only.
+
+## A02 coefficient and metric kernel
+
+`Curve.interpolate(points,q=...)` fits a periodic ordered cubic once, without
+smoothing. `Curve(coefficients, owners, policy)` consumes exact `(N,2,4)` ascending
+coefficients on normalized t in [0,1]. Segment owners are explicitly supplied
+`(occurrence_id,surface_id)` pairs; equality in XY has no role. Public records and
+all coefficient/length/owner arrays are immutable tuples. Artifact I/O is A07.
+
+Every join including closure checks position, unit tangent and signed curvature
+within 1e-8 (metres, dimensionless, 1/metre respectively). Parameter derivatives
+need not have equal magnitudes across normalized segments. Quadratic derivative
+Bézier boxes prove a conservative nonzero lower bound >1e-7 metres per normalized
+t; ambiguous near-zero cases fail closed. Rounding allowance is 128 binary64 eps
+scaled by coefficient magnitude, which is limited to 1e8. Subdivision is limited
+to depth 24 and 10000 boxes per segment. These are software numerical assumptions,
+not a continuous legal/footprint certificate.
+
+QUADPACK adaptive Gauss-Kronrod integrates speed with total-lap absolute estimated
+error budget 1e-10 m, divided among segments; relative request 5e-14, 100 interval
+limit. QUADPACK's estimates are numerical error control, not formal interval
+arithmetic. Nonconvergence or excess estimate rejects. Compensated sums accumulate
+lengths. Brent inversion uses physical station tolerance 1e-8 m and verifies the
+residual plus two partial integration allowances; the regression acceptance is
+<=1e-7 m as required by the roadmap. No chord approximation is substituted.
+
+`locate`, `station`, `sample` and `window` share these exact coefficients. Queries
+wrap negative/multiple-lap progress; knots and seam use the right-hand segment.
+Reject nonfinite progress and lap counts whose binary64 resolution exceeds 1/16
+of the station budget. Windows include endpoints and have at most 100000 samples.
+Heading is +X-zero/CCW, curvature is signed, normal is left-positive. There is no
+speed profile, tracking state or XY association in W1.
+
+Independent oracles use the analytic parabola integral, fixed-order
+Gauss-Legendre integration of coefficients, polynomial differentiation and the
+complete elliptic integral for an ellipse. Reconstructing from stored coefficients
+performs no refit. The unchanged W0 defect test remains green alongside the new
+true-metric inverse test.

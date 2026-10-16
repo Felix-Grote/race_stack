@@ -15,6 +15,7 @@ if [[ "$mode" == all || "$mode" == numerical ]]; then
   export PYTHONPATH="/src/planner/global_planner:${PYTHONPATH:-}"
   python -m flake8 --max-line-length=99 /src/planner/global_planner/global_planner/*route*.py /src/planner/global_planner/test/test_route*.py
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_input.py --junitxml=/work/a01.xml
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_reference.py --junitxml=/work/a02.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_numerical.py --junitxml=/work/numerical.xml
 fi
 if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
@@ -32,6 +33,7 @@ if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
   source /work/install/setup.bash
   cd /work
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_ros.py --junitxml=/work/ros.xml
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_w1_installed.py --junitxml=/work/w1-installed.xml
 fi
 if [[ "$mode" == all || "$mode" == legacy ]]; then
   # Legacy failures remain visible in a separate result; never used to mask functional failure.
@@ -54,8 +56,8 @@ python - <<'PY_SUMMARY'
 import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
-out = {'scope': 'W0_AND_A01', 'legal_planner_acceptance': 'NOT_IMPLEMENTED'}
-for kind in ('numerical', 'ros', 'a01'):
+out = {'scope': 'W0_THROUGH_A02', 'legal_planner_acceptance': 'NOT_IMPLEMENTED'}
+for kind in ('numerical', 'ros', 'a01', 'a02', 'w1-installed'):
     path = Path('/work', kind + '.xml')
     if path.exists():
         suite = ET.parse(path).getroot().find('testsuite')

@@ -1,0 +1,38 @@
+{
+  "scope": "W0_THROUGH_A02",
+  "legal_planner_acceptance": "NOT_IMPLEMENTED",
+  "numerical": {
+    "tests": "7",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "ros": {
+    "tests": "4",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a01": {
+    "tests": "39",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a02": {
+    "tests": "12",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w1-installed": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "legacy_baseline": [
+    "colcon_test=1",
+    "colcon_test_result=1"
+  ]
+}

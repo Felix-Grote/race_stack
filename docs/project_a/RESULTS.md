@@ -119,3 +119,28 @@ and subsequent full acceptance are the authoritative results.
 A01 follow-up: `verify.sh all work/w1-a01-clean` exit **0**, same counts;
 enforced new-file flake8 passes and no new pep257 diagnostic appears in legacy
 logs. [Corrected evidence](evidence/w1-a01-clean/SHA256SUMS), parent `6dc2b38`.
+
+## W1 / A02 — periodic canonical metric geometry
+
+Tested parent `cd6749d88139222bd6d4016bee5bb160feb19405` + exact source hashes in
+[evidence/w1-a02](evidence/w1-a02/SHA256SUMS). Command:
+`scripts/project_a/verify.sh all work/w1-a02-final` exit **0**.
+**12 A02 + 39 A01 + 7 W0 numerical + 4 W0 ROS + 1 installed W1 test passed**;
+three-package build passes. Legacy 63 aggregate, same 10 failures / 2 skipped;
+new-file scoped flake8 passes, no new pep257 diagnostics. Initial focused runs
+stopped on new-file formatting errors; corrected before full acceptance.
+
+Analytic `x=t,y=t²`: exact L **1.4789428575445975 m**, computed
+**1.4789428575445973 m**; quadrature estimated error **1.364128191450888e-13 m**;
+maximum inverse station residual **1.2471490506982263e-10 m** over 51 queries.
+The rejected linear-fraction assumption has **0.1670177992500138 m** maximum
+error on that mesh. Acceptance <=1e-8 m (roadmap <=1e-7 m); total-lap estimated
+arc budget 1e-10 m. Independent nonuniform ellipse Gauss oracle agrees within
+1e-10 m; analytic ellipse length within 1e-6 m on 300 nonuniform cubic knots.
+Radius-6 circle/reversal tests bound interpolation error separately (5e-6 m lap,
+2e-6 m radius, 1.4e-4 /m curvature). All joins/seam tolerance 1e-8.
+
+Tests reject nonperiodic XY/tangent/curvature, interior zero derivative, NaN,
+regularity/integration exhaustion, ownership mismatch and nonfinite/unresolvable
+progress. Exact coefficient reconstruction, immutable records and periodic
+negative/multiple-lap/right-hand queries pass. No optimized/legal swept result.

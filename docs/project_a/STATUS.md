@@ -1,6 +1,6 @@
 # Project A status — 2026-10-16
 
-**W0 COMPLETE. W1 IN PROGRESS: A01 COMPLETE; A02/A03 NEXT.**
+**W0 COMPLETE. W1 IN PROGRESS: A01/A02 COMPLETE; A03 NEXT.**
 No accepted E1 trajectory or physical vehicle result exists.
 
 W1 starts from exactly `6370d0436aabd011d1b885fe1f500644b957b536`,
@@ -14,6 +14,13 @@ was caught during evidence review and fixed in the checkpoint follow-up; the
 runner now enforces scoped new-file flake8. See `evidence/w1-a01` and [W1 contract](W1_GEOMETRY.md).
 Checkpoint commit is the commit introducing this section; exact source bytes
 and tested parent are recorded in its evidence. A02 follows only after this commit.
+
+A01 final checkpoint: `cd6749d88139222bd6d4016bee5bb160feb19405` (hosted CI
+38865240952 SUCCESS). A02: `verify.sh all work/w1-a02-final` exit 0,
+39 A01 + 12 A02 + 7 W0 numerical + 4 ROS + 1 installed W1 test pass; three
+packages built. Original 10 legacy failures / 2 skips remain (63 aggregate
+reports including 51 new passing functional tests). A02 source/fixture hashes
+and full evidence: `evidence/w1-a02`. Checkpoint commit introduces this section.
 
 ## Source and durable review route
 

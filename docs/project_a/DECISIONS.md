@@ -63,3 +63,21 @@
   in W1_GEOMETRY.md. Physical provenance/coverage remains a separate input identity.
 - Legacy colcon discovers the new functional tests too: aggregate count grows;
   compare failure identities and scoped new-file lint, not just total count.
+
+## 2026-10-16 — A02 metric authority
+
+- Use SciPy periodic interpolation only to obtain exact stored normalized cubic
+  coefficients. Load/reconstruct from those coefficients without a refit.
+- Allocate 1e-10 m estimated integration error across the entire lap, use
+  compensated cumulative sums, and enforce 1e-8 m inverse residual. QUADPACK
+  estimates are numerical control, not a formal interval/continuous legal proof.
+- Conservative derivative Bézier boxes reject zero/uncertain derivative or
+  exhausted budgets. All joins/seam check XY, unit tangent and signed curvature
+  at 1e-8; normalized parameter derivative magnitudes may differ.
+- Owners are explicit per ordered segment. Pure `sample/locate/window` has no
+  mutable closest index/history. Unresolvable huge progress is rejected.
+- Independent tests use analytic integration, fixed Gaussian quadrature, complete
+  elliptic integral and independent polynomial differentiation. Preserve the W0
+  legacy metric-defect characterization alongside the new inverse regression.
+- Add explicit NumPy/SciPy ROS package dependencies and a separate installed pure
+  module check; preserve the original four W0 ROS tests and all entry points.
