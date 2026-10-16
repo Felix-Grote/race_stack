@@ -1,7 +1,18 @@
 # Project A status — 2026-10-16
 
-**W0 COMPLETE. A01–A09 NOT STARTED.** No accepted E1 trajectory or physical
-vehicle result exists. W1 is prepared, not implemented.
+**W0 COMPLETE. W1 IN PROGRESS: A01 COMPLETE; A02/A03 NEXT.**
+No accepted E1 trajectory or physical vehicle result exists.
+
+W1 starts from exactly `6370d0436aabd011d1b885fe1f500644b957b536`,
+on new durable branch `project-a/w1-geometry`; no upstream rebase was performed
+because the user explicitly required that verified W0 base. A01 adds the strict
+v1 manifest, frozen records, canonical identity and six fixed synthetic fixtures.
+`verify.sh all work/w1-a01-final`: exit 0, 39 A01 + 7 W0 numerical + 4 installed
+ROS tests; three packages built. Legacy now collects 51 tests (39 new functional
+tests + original 12), with the same 10 failures / 2 skips and no added W1 lint
+diagnostics. See `evidence/w1-a01` and [W1 contract](W1_GEOMETRY.md).
+Checkpoint commit is the commit introducing this section; exact source bytes
+and tested parent are recorded in its evidence. A02 follows only after this commit.
 
 ## Source and durable review route
 

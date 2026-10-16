@@ -12,6 +12,8 @@ python -m pip check
 # Evidence of actual execution isolation (not just YAML intent).
 python /src/scripts/project_a/identity.py > /work/runtime-identity.json
 if [[ "$mode" == all || "$mode" == numerical ]]; then
+  export PYTHONPATH="/src/planner/global_planner:${PYTHONPATH:-}"
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_input.py --junitxml=/work/a01.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_numerical.py --junitxml=/work/numerical.xml
 fi
 if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
@@ -25,7 +27,7 @@ if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
   optimizer=/work/src/global_planner/global_planner/global_racetrajectory_optimization
   (cd "$optimizer" && python setup.py bdist_wheel --dist-dir /work/wheels) > /work/optimizer-wheel.log 2>&1
   python -m pip install --no-index --no-deps --target /work/python /work/wheels/*.whl
-  export PYTHONPATH="/work/python:${PYTHONPATH:-}"
+  export PYTHONPATH="/work/python"
   source /work/install/setup.bash
   cd /work
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_ros.py --junitxml=/work/ros.xml
@@ -51,8 +53,8 @@ python - <<'PY_SUMMARY'
 import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
-out = {'scope': 'W0_ONLY', 'legal_planner_acceptance': 'NOT_IMPLEMENTED'}
-for kind in ('numerical', 'ros'):
+out = {'scope': 'W0_AND_A01', 'legal_planner_acceptance': 'NOT_IMPLEMENTED'}
+for kind in ('numerical', 'ros', 'a01'):
     path = Path('/work', kind + '.xml')
     if path.exists():
         suite = ET.parse(path).getroot().find('testsuite')

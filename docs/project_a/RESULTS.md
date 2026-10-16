@@ -91,3 +91,27 @@ Production byte preservation was checked with `git diff --exit-code 67981ed HEAD
 -- planner/global_planner/global_planner planner/global_planner/setup.py
 planner/global_planner/package.xml utilities controller state_estimation
 perception stack_master .gitmodules` and recursive clean-submodule checks (exit 0).
+
+## W1 / A01 — strict selected route input
+
+Base: `6370d0436aabd011d1b885fe1f500644b957b536`. Command:
+`scripts/project_a/verify.sh all work/w1-a01-final`, exit **0**.
+**39 A01 + 7 W0 numerical + 4 installed ROS passed**, three packages built.
+Legacy: 51 collected aggregate, 0 errors, same 10 failures / 2 skipped (the new
+39 functional tests also pass under colcon). New files have no added legacy
+flake8/pep257 diagnostics. The initial run exposed formatting diagnostics in new
+files; corrected before the checkpoint. No legacy assertion was modified.
+
+Six frozen fixtures: S0 forward/reverse/rotated, both selected S2 cycles, S3
+crossing with ground/upper-deck occurrences. Acceptance covers explicit complete
+cycle/closure, gate order/direction, shared caps, invalid polygons/sides, unknown
+surfaces, malformed JSON/duplicate keys/NaN/Inf/booleans, canonical hash mutations,
+immutability and ROS/TUM-free import. Annotation tolerance **1e-9 m** within the
+coordinate range **|XY| <=1e5 m**. No solver, speed or physical acceptance.
+[Raw evidence and exact implementation/fixture hashes](evidence/w1-a01/SHA256SUMS).
+
+Environment setup exit 0; rebuilt image
+`sha256:0698a83758f1d8155b2f758ccb148175a2b19b890d0aff39be68c0272be9fbe0`.
+A preliminary runner invocation before the image build finished failed at image
+inspection; no test result was claimed for that invocation. The completed setup
+and subsequent full acceptance are the authoritative results.

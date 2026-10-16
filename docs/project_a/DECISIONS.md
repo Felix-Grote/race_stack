@@ -47,3 +47,19 @@
     requesting routine confirmation or implying that an upstream PR exists.
     CI ZIP retrieval also returned 403, while CI job logs and metadata were
     accessible; preserve those exact logs and do not infer missing artifact data.
+
+## 2026-10-16 — A01 selected input contract
+
+- User-required W0 HEAD takes precedence over the historical rebase instruction.
+  Start `project-a/w1-geometry` at `6370d0436aabd011d1b885fe1f500644b957b536`.
+- v1 supports simple local ribbons, shared directed end caps and explicit portal
+  support/progress brackets. Connectors require their own occurrence. Reject holes,
+  alternate graph fields and disconnected cap contracts instead of guessing edges.
+- Portal support is a restriction on adjacent original legal regions, never an
+  additive polygon that could inflate legality. A03 will enforce this intersection.
+- Use private planar predicates, no new geometry dependency/framework. Coordinate
+  range <=1e5 m, distance ambiguity 1e-9 m; later charts may reject valid input.
+- Canonical binary64/NFC/integral/-0 normalization and frozen tuples are documented
+  in W1_GEOMETRY.md. Physical provenance/coverage remains a separate input identity.
+- Legacy colcon discovers the new functional tests too: aggregate count grows;
+  compare failure identities and scoped new-file lint, not just total count.
