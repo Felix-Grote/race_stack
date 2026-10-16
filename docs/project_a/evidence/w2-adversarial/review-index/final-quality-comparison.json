@@ -1,0 +1,57 @@
+{
+  "source_sha256": {
+    "/workspace/race_stack/work/adversarial/adapter/f2-quality/runtime/independent-quality.json": "2a432f54f7b48b6f5580a95fe7971b3954ba88cb8631464126a5a15f13ea146c",
+    "/workspace/race_stack/work/adversarial/adapter/runtime-quality-final/independent-quality.json": "6b98db42c1adcc055cb279ab807d6c2b59921e14acff34308df8c3d5181ad0ba"
+  },
+  "before_after": {
+    "base": {
+      "coefficient_max_abs_difference_m": 0.0,
+      "q_max_abs_difference_m": 0.0,
+      "metric_differences": {
+        "length_m": 0.0,
+        "energy_per_m": 0.0,
+        "max_abs_curvature_per_m": 0.0,
+        "quad_error_estimate_length_m": 0.0,
+        "quad_error_estimate_energy_per_m": 0.0
+      },
+      "model_lap_time_difference_s": 0.0,
+      "geometry": "PASS",
+      "dynamics": "PASS"
+    },
+    "changed_origin": {
+      "coefficient_max_abs_difference_m": 3.7658161493661635e-09,
+      "q_max_abs_difference_m": 3.552713678800501e-15,
+      "metric_differences": {
+        "length_m": -1.0814460438268725e-11,
+        "energy_per_m": -1.5134116182480284e-11,
+        "max_abs_curvature_per_m": -6.491924220419776e-10,
+        "quad_error_estimate_length_m": -1.2005831888739623e-25,
+        "quad_error_estimate_energy_per_m": -1.6802263964664419e-25
+      },
+      "model_lap_time_difference_s": -1.2006395877506293e-10,
+      "geometry": "PASS",
+      "dynamics": "PASS"
+    },
+    "remeshed": {
+      "coefficient_max_abs_difference_m": 5.765940424770633e-10,
+      "q_max_abs_difference_m": 7.464251439159852e-12,
+      "metric_differences": {
+        "length_m": 6.117772954894463e-12,
+        "energy_per_m": -1.011124517447115e-11,
+        "max_abs_curvature_per_m": -4.696303346207742e-10,
+        "quad_error_estimate_length_m": 6.795563381935884e-26,
+        "quad_error_estimate_energy_per_m": -1.1225806225657086e-25
+      },
+      "model_lap_time_difference_s": -1.2508949208012154e-05,
+      "geometry": "PASS",
+      "dynamics": "PASS"
+    }
+  },
+  "cyclic_origin": {
+    "max_q_position_difference_m": 0.0015463902639211455,
+    "max_q_tangential_difference_m": 0.001527003079874244,
+    "max_q_normal_difference_m": 0.0012627036790778222,
+    "projected_shape_discrepancy_control_m": 0.0012626849932009564,
+    "model_time_difference_s": 3.213962429526873e-11
+  }
+}

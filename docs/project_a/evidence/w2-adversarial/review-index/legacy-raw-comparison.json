@@ -1,0 +1,40 @@
+{
+  "raw_identity_method": "lines immediately preceding failure-message blocks in raw colcon verbose results",
+  "baseline": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ],
+  "e3f94dc_local": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ],
+  "e852641_push": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ],
+  "identities_equal": true
+}

@@ -1,0 +1,4423 @@
+{
+  "initial_head": "e852641849b2497efea51dfca5ead38ad4476235",
+  "base": "9440c2ce68e3dee549de7efacff1cf723fe830df",
+  "merge_base": "9440c2ce68e3dee549de7efacff1cf723fe830df",
+  "manifests": [
+    {
+      "path": "docs/project_a/evidence/w2-a04/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-a04/REVIEW.md",
+          "declared": "07d0572682e39e30c2db4f8f55e4a7ec29d42d71b36cb05516cea5ff87916044",
+          "actual": "07d0572682e39e30c2db4f8f55e4a7ec29d42d71b36cb05516cea5ff87916044",
+          "git_blob": "07d0572682e39e30c2db4f8f55e4a7ec29d42d71b36cb05516cea5ff87916044",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/a04-candidates.json.gz",
+          "declared": "98161422b031e9897c9443dcd6c99b791bcdb1d272e4fad4054c47bb935e0b95",
+          "actual": "98161422b031e9897c9443dcd6c99b791bcdb1d272e4fad4054c47bb935e0b95",
+          "git_blob": "98161422b031e9897c9443dcd6c99b791bcdb1d272e4fad4054c47bb935e0b95",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/a04-origin-shift.json",
+          "declared": "51929688d9179600febe5319149ac435d4b5102283c12df9c657c8816a5a82cf",
+          "actual": "51929688d9179600febe5319149ac435d4b5102283c12df9c657c8816a5a82cf",
+          "git_blob": "51929688d9179600febe5319149ac435d4b5102283c12df9c657c8816a5a82cf",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/dependencies.txt",
+          "declared": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "actual": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "git_blob": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/image-id.txt",
+          "declared": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "actual": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "git_blob": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/lint.json",
+          "declared": "3b7255255d755ba93b04a8732d4d9c50ef261279131c2260c75d03c47783a10a",
+          "actual": "3b7255255d755ba93b04a8732d4d9c50ef261279131c2260c75d03c47783a10a",
+          "git_blob": "3b7255255d755ba93b04a8732d4d9c50ef261279131c2260c75d03c47783a10a",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/lint.log",
+          "declared": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actual": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "git_blob": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/metrics.json",
+          "declared": "62758ce60671cc8e63fcc7636402789d9f455787e8ebfb30147ef37a30af19a0",
+          "actual": "62758ce60671cc8e63fcc7636402789d9f455787e8ebfb30147ef37a30af19a0",
+          "git_blob": "62758ce60671cc8e63fcc7636402789d9f455787e8ebfb30147ef37a30af19a0",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/run.log.gz",
+          "declared": "e9018a2fecda499dce4b4693be7c625c1d1329f2ac6b3239d61b38752339c74d",
+          "actual": "e9018a2fecda499dce4b4693be7c625c1d1329f2ac6b3239d61b38752339c74d",
+          "git_blob": "e9018a2fecda499dce4b4693be7c625c1d1329f2ac6b3239d61b38752339c74d",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/runtime-identity.json",
+          "declared": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "actual": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "git_blob": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/source-hashes-after.json",
+          "declared": "35d58939149869057caff56ce3c972b96a6a01c9cf383ec78de9379c665f0eb7",
+          "actual": "35d58939149869057caff56ce3c972b96a6a01c9cf383ec78de9379c665f0eb7",
+          "git_blob": "35d58939149869057caff56ce3c972b96a6a01c9cf383ec78de9379c665f0eb7",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/source-hashes-before.json",
+          "declared": "35d58939149869057caff56ce3c972b96a6a01c9cf383ec78de9379c665f0eb7",
+          "actual": "35d58939149869057caff56ce3c972b96a6a01c9cf383ec78de9379c665f0eb7",
+          "git_blob": "35d58939149869057caff56ce3c972b96a6a01c9cf383ec78de9379c665f0eb7",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/source-identity.txt",
+          "declared": "dac8caa333b537a504e3096e2190ad8d9a06b4cf2f4531fcea612d9f597d9946",
+          "actual": "dac8caa333b537a504e3096e2190ad8d9a06b4cf2f4531fcea612d9f597d9946",
+          "git_blob": "dac8caa333b537a504e3096e2190ad8d9a06b4cf2f4531fcea612d9f597d9946",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04/unit.xml",
+          "declared": "fb49d200a955fc60c2b9a6457bb8f55cefb826043d09d03e1355604ff8db8a16",
+          "actual": "fb49d200a955fc60c2b9a6457bb8f55cefb826043d09d03e1355604ff8db8a16",
+          "git_blob": "fb49d200a955fc60c2b9a6457bb8f55cefb826043d09d03e1355604ff8db8a16",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04-ci/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-a04-ci/job.log.gz",
+          "declared": "5774b01d76efb83b59d0af543c2fd3bde6c02141c818e2d2b72e4b45af7776be",
+          "actual": "5774b01d76efb83b59d0af543c2fd3bde6c02141c818e2d2b72e4b45af7776be",
+          "git_blob": "5774b01d76efb83b59d0af543c2fd3bde6c02141c818e2d2b72e4b45af7776be",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04-ci/jobs.json",
+          "declared": "9eb793c3ffa7265026d1ac61da9f1915434c2ceb61abd784ff09769ba7b46ae9",
+          "actual": "9eb793c3ffa7265026d1ac61da9f1915434c2ceb61abd784ff09769ba7b46ae9",
+          "git_blob": "9eb793c3ffa7265026d1ac61da9f1915434c2ceb61abd784ff09769ba7b46ae9",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a04-ci/run.json",
+          "declared": "033e73ce40ab6dcd89953d757e0137d47036f87b6ded3d3dea958f3f0d3c8711",
+          "actual": "033e73ce40ab6dcd89953d757e0137d47036f87b6ded3d3dea958f3f0d3c8711",
+          "git_blob": "033e73ce40ab6dcd89953d757e0137d47036f87b6ded3d3dea958f3f0d3c8711",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-a05/REVIEW.md",
+          "declared": "6544878893f17f3fb1c42e95bbbfa389464fab3bd28c920ffdb9fce49d0a34df",
+          "actual": "6544878893f17f3fb1c42e95bbbfa389464fab3bd28c920ffdb9fce49d0a34df",
+          "git_blob": "6544878893f17f3fb1c42e95bbbfa389464fab3bd28c920ffdb9fce49d0a34df",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/a05-bounds-oracle.json",
+          "declared": "9e1fa252f7b64d9851fb27f9a6a55b030d1e8f422ca8f3de3066e33f75719f5b",
+          "actual": "9e1fa252f7b64d9851fb27f9a6a55b030d1e8f422ca8f3de3066e33f75719f5b",
+          "git_blob": "9e1fa252f7b64d9851fb27f9a6a55b030d1e8f422ca8f3de3066e33f75719f5b",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/a05-geometry.json.gz",
+          "declared": "64747ff1954dc73e746732dfefedb70582cacf033cd77ac6ccfc6a9cdbad6c5c",
+          "actual": "64747ff1954dc73e746732dfefedb70582cacf033cd77ac6ccfc6a9cdbad6c5c",
+          "git_blob": "64747ff1954dc73e746732dfefedb70582cacf033cd77ac6ccfc6a9cdbad6c5c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/ast-after-format.json",
+          "declared": "b0a88ad1add2358c747ca1acfde1965127b6c38bf1f13f7cc9e576215d769450",
+          "actual": "b0a88ad1add2358c747ca1acfde1965127b6c38bf1f13f7cc9e576215d769450",
+          "git_blob": "b0a88ad1add2358c747ca1acfde1965127b6c38bf1f13f7cc9e576215d769450",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/ast-before-format.json",
+          "declared": "27cff6c462caf90e2953d63246905cde0208d4d8baa0e0ccf4693c013e11b856",
+          "actual": "27cff6c462caf90e2953d63246905cde0208d4d8baa0e0ccf4693c013e11b856",
+          "git_blob": "27cff6c462caf90e2953d63246905cde0208d4d8baa0e0ccf4693c013e11b856",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/dependencies.txt",
+          "declared": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "actual": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "git_blob": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/first-exit-code.txt",
+          "declared": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "actual": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "git_blob": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/first-run.log.gz",
+          "declared": "4f67235cd28af0971b5f2b039169d34920203b77d53a2f92dac7fae23edc20af",
+          "actual": "4f67235cd28af0971b5f2b039169d34920203b77d53a2f92dac7fae23edc20af",
+          "git_blob": "4f67235cd28af0971b5f2b039169d34920203b77d53a2f92dac7fae23edc20af",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/first-source-hashes-after.json",
+          "declared": "d38634bc81a5a64e76c0596ca8b203110350f33f686ceba50a046d6c32068079",
+          "actual": "d38634bc81a5a64e76c0596ca8b203110350f33f686ceba50a046d6c32068079",
+          "git_blob": "d38634bc81a5a64e76c0596ca8b203110350f33f686ceba50a046d6c32068079",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/first-source-hashes-before.json",
+          "declared": "d38634bc81a5a64e76c0596ca8b203110350f33f686ceba50a046d6c32068079",
+          "actual": "d38634bc81a5a64e76c0596ca8b203110350f33f686ceba50a046d6c32068079",
+          "git_blob": "d38634bc81a5a64e76c0596ca8b203110350f33f686ceba50a046d6c32068079",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/first-unit.xml",
+          "declared": "975d9620defd8a7ba80d2ea98261f008db4eeac5d676539d70ecc53a2acd8be3",
+          "actual": "975d9620defd8a7ba80d2ea98261f008db4eeac5d676539d70ecc53a2acd8be3",
+          "git_blob": "975d9620defd8a7ba80d2ea98261f008db4eeac5d676539d70ecc53a2acd8be3",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/historical-relaxed-lint.json",
+          "declared": "83798ff390a2929d4a13d1186e464f0ee81eb413f9c826039dda99eba6766043",
+          "actual": "83798ff390a2929d4a13d1186e464f0ee81eb413f9c826039dda99eba6766043",
+          "git_blob": "83798ff390a2929d4a13d1186e464f0ee81eb413f9c826039dda99eba6766043",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/image-id.txt",
+          "declared": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "actual": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "git_blob": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/metrics.json",
+          "declared": "b6f51dee469e4757615f7990e293fe48e7d7c46b0ccfbcce7459ef10605acc5d",
+          "actual": "b6f51dee469e4757615f7990e293fe48e7d7c46b0ccfbcce7459ef10605acc5d",
+          "git_blob": "b6f51dee469e4757615f7990e293fe48e7d7c46b0ccfbcce7459ef10605acc5d",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/pre-format-run.log.gz",
+          "declared": "b774e7865dc16ae9b956db0829d70eb63161a30ddcfd9383dabe8a2f3537ae66",
+          "actual": "b774e7865dc16ae9b956db0829d70eb63161a30ddcfd9383dabe8a2f3537ae66",
+          "git_blob": "b774e7865dc16ae9b956db0829d70eb63161a30ddcfd9383dabe8a2f3537ae66",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/pre-format-source-hashes-after.json",
+          "declared": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "actual": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "git_blob": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/pre-format-source-hashes-before.json",
+          "declared": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "actual": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "git_blob": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/pre-format-source-identity.txt",
+          "declared": "d14049913d898c8864f8b6832874020a9e8e3724f28c4e579915c0448dcd1871",
+          "actual": "d14049913d898c8864f8b6832874020a9e8e3724f28c4e579915c0448dcd1871",
+          "git_blob": "d14049913d898c8864f8b6832874020a9e8e3724f28c4e579915c0448dcd1871",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/pre-format-unit.xml",
+          "declared": "1139eb3b06b3963635d266131ec99f8b4cae9bb540065a21b7731ffb0f60117c",
+          "actual": "1139eb3b06b3963635d266131ec99f8b4cae9bb540065a21b7731ffb0f60117c",
+          "git_blob": "1139eb3b06b3963635d266131ec99f8b4cae9bb540065a21b7731ffb0f60117c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/run.log.gz",
+          "declared": "220ee62a69eeab832fffa92a213a2fdc3ef00ddb85ec58023edec1806c7552fc",
+          "actual": "220ee62a69eeab832fffa92a213a2fdc3ef00ddb85ec58023edec1806c7552fc",
+          "git_blob": "220ee62a69eeab832fffa92a213a2fdc3ef00ddb85ec58023edec1806c7552fc",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/runtime-identity.json",
+          "declared": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "actual": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "git_blob": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/second-exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/second-run.log.gz",
+          "declared": "cef82905cf37f68c2aa7dfd443aeaa569b9296f4d1d562c19f9601729d3f64cf",
+          "actual": "cef82905cf37f68c2aa7dfd443aeaa569b9296f4d1d562c19f9601729d3f64cf",
+          "git_blob": "cef82905cf37f68c2aa7dfd443aeaa569b9296f4d1d562c19f9601729d3f64cf",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/second-source-hashes-after.json",
+          "declared": "9118f6687f46d9856c39c9772ee2844dfe633dec22725c5a167e424669f9ec35",
+          "actual": "9118f6687f46d9856c39c9772ee2844dfe633dec22725c5a167e424669f9ec35",
+          "git_blob": "9118f6687f46d9856c39c9772ee2844dfe633dec22725c5a167e424669f9ec35",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/second-source-hashes-before.json",
+          "declared": "9118f6687f46d9856c39c9772ee2844dfe633dec22725c5a167e424669f9ec35",
+          "actual": "9118f6687f46d9856c39c9772ee2844dfe633dec22725c5a167e424669f9ec35",
+          "git_blob": "9118f6687f46d9856c39c9772ee2844dfe633dec22725c5a167e424669f9ec35",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/second-unit.xml",
+          "declared": "85b32796b390a9f31a740d1a46467e966871b0eee288f4a0ec780144816f0f96",
+          "actual": "85b32796b390a9f31a740d1a46467e966871b0eee288f4a0ec780144816f0f96",
+          "git_blob": "85b32796b390a9f31a740d1a46467e966871b0eee288f4a0ec780144816f0f96",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/source-hashes-after.json",
+          "declared": "020cec46bf9db1ddff9f6a1adcb01367a6efdf30382ab6cf1c0fb9310f6ba075",
+          "actual": "020cec46bf9db1ddff9f6a1adcb01367a6efdf30382ab6cf1c0fb9310f6ba075",
+          "git_blob": "020cec46bf9db1ddff9f6a1adcb01367a6efdf30382ab6cf1c0fb9310f6ba075",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/source-hashes-before.json",
+          "declared": "020cec46bf9db1ddff9f6a1adcb01367a6efdf30382ab6cf1c0fb9310f6ba075",
+          "actual": "020cec46bf9db1ddff9f6a1adcb01367a6efdf30382ab6cf1c0fb9310f6ba075",
+          "git_blob": "020cec46bf9db1ddff9f6a1adcb01367a6efdf30382ab6cf1c0fb9310f6ba075",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/source-identity.txt",
+          "declared": "18e2adff53586713fb844fe5abdcf11d569a975e7fadd5aa1956b5794eb00173",
+          "actual": "18e2adff53586713fb844fe5abdcf11d569a975e7fadd5aa1956b5794eb00173",
+          "git_blob": "18e2adff53586713fb844fe5abdcf11d569a975e7fadd5aa1956b5794eb00173",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/strict-ast-invariance.json",
+          "declared": "b9f47f754fe454592e84761624c0dc2556fd1dd293d0c23ae730d12f148e8ad6",
+          "actual": "b9f47f754fe454592e84761624c0dc2556fd1dd293d0c23ae730d12f148e8ad6",
+          "git_blob": "b9f47f754fe454592e84761624c0dc2556fd1dd293d0c23ae730d12f148e8ad6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/strict-exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/strict-lint-before-format.log.gz",
+          "declared": "023495920d018b36626a6c0f343731c1192cc65389e0e3b62c82f82ca3b6dbe4",
+          "actual": "023495920d018b36626a6c0f343731c1192cc65389e0e3b62c82f82ca3b6dbe4",
+          "git_blob": "023495920d018b36626a6c0f343731c1192cc65389e0e3b62c82f82ca3b6dbe4",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/strict-lint.json",
+          "declared": "74eb2e8754db36710f00c6b871090e3a9821feb10dc5af18f7bf3f0e14966fa1",
+          "actual": "74eb2e8754db36710f00c6b871090e3a9821feb10dc5af18f7bf3f0e14966fa1",
+          "git_blob": "74eb2e8754db36710f00c6b871090e3a9821feb10dc5af18f7bf3f0e14966fa1",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/strict-lint.log",
+          "declared": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actual": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "git_blob": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/strict-source-hashes-after.json",
+          "declared": "747b791c17167eecf98e671df12f9ad95c27aa6018b61dfd5a327d9b49d9a873",
+          "actual": "747b791c17167eecf98e671df12f9ad95c27aa6018b61dfd5a327d9b49d9a873",
+          "git_blob": "747b791c17167eecf98e671df12f9ad95c27aa6018b61dfd5a327d9b49d9a873",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/strict-source-hashes-before.json",
+          "declared": "747b791c17167eecf98e671df12f9ad95c27aa6018b61dfd5a327d9b49d9a873",
+          "actual": "747b791c17167eecf98e671df12f9ad95c27aa6018b61dfd5a327d9b49d9a873",
+          "git_blob": "747b791c17167eecf98e671df12f9ad95c27aa6018b61dfd5a327d9b49d9a873",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05/unit.xml",
+          "declared": "4cbe3bb2af28d73409d942beb9547db9f4484160945e0a412074f349f6b2d68c",
+          "actual": "4cbe3bb2af28d73409d942beb9547db9f4484160945e0a412074f349f6b2d68c",
+          "git_blob": "4cbe3bb2af28d73409d942beb9547db9f4484160945e0a412074f349f6b2d68c",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-ci/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-a05-ci/artifacts.json",
+          "declared": "a4b2b7d228b0e62004061e55206959a66a8a65c19707afc75aa61322edffa952",
+          "actual": "a4b2b7d228b0e62004061e55206959a66a8a65c19707afc75aa61322edffa952",
+          "git_blob": "a4b2b7d228b0e62004061e55206959a66a8a65c19707afc75aa61322edffa952",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-ci/job.log.gz",
+          "declared": "a60e3ecdc5e4b05aceaba74137ec7a7548378c5cf2979d655bee5a06ebb806d2",
+          "actual": "a60e3ecdc5e4b05aceaba74137ec7a7548378c5cf2979d655bee5a06ebb806d2",
+          "git_blob": "a60e3ecdc5e4b05aceaba74137ec7a7548378c5cf2979d655bee5a06ebb806d2",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-ci/jobs.json",
+          "declared": "4675665b0e09515598b3a84052d11ea032ce57a1d05daab394ce35391bf9a235",
+          "actual": "4675665b0e09515598b3a84052d11ea032ce57a1d05daab394ce35391bf9a235",
+          "git_blob": "4675665b0e09515598b3a84052d11ea032ce57a1d05daab394ce35391bf9a235",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-ci/legacy-identity-comparison.json",
+          "declared": "a3703be695dd34933f39428e6b75c84bbd13407b3a8ea426a1a2d646f3a16962",
+          "actual": "a3703be695dd34933f39428e6b75c84bbd13407b3a8ea426a1a2d646f3a16962",
+          "git_blob": "a3703be695dd34933f39428e6b75c84bbd13407b3a8ea426a1a2d646f3a16962",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-ci/retrieval.json",
+          "declared": "f2584d1ed93aea8450526e770badbd5fcb890cb95eeb525b02d4f0af2aa9a49a",
+          "actual": "f2584d1ed93aea8450526e770badbd5fcb890cb95eeb525b02d4f0af2aa9a49a",
+          "git_blob": "f2584d1ed93aea8450526e770badbd5fcb890cb95eeb525b02d4f0af2aa9a49a",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-ci/run.json",
+          "declared": "77579af4f5fb67ef7390e18223833807e175d20b796a27565b077a69928be58b",
+          "actual": "77579af4f5fb67ef7390e18223833807e175d20b796a27565b077a69928be58b",
+          "git_blob": "77579af4f5fb67ef7390e18223833807e175d20b796a27565b077a69928be58b",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-ci/summary.json",
+          "declared": "93267b025c73e85445e893931bbf0a44decc8b8975057afecfbe3c056fb9211c",
+          "actual": "93267b025c73e85445e893931bbf0a44decc8b8975057afecfbe3c056fb9211c",
+          "git_blob": "93267b025c73e85445e893931bbf0a44decc8b8975057afecfbe3c056fb9211c",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/README.md",
+          "declared": "3cc40637089e7fc9935c3942953a4cf6d2a428b736e5173d964281497b03250b",
+          "actual": "3cc40637089e7fc9935c3942953a4cf6d2a428b736e5173d964281497b03250b",
+          "git_blob": "3cc40637089e7fc9935c3942953a4cf6d2a428b736e5173d964281497b03250b",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/dependencies.txt",
+          "declared": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "actual": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "git_blob": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/hidden-notch-candidate.json",
+          "declared": "9ca72f745fbd339b4fdf9fe69c441a95c75c6a8572e2df4f8d7876a87c76617c",
+          "actual": "9ca72f745fbd339b4fdf9fe69c441a95c75c6a8572e2df4f8d7876a87c76617c",
+          "git_blob": "9ca72f745fbd339b4fdf9fe69c441a95c75c6a8572e2df4f8d7876a87c76617c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/hidden-notch-generated-route.json",
+          "declared": "c009c7824c13fd5ff01df7dcca9e2bba9cc3d2d719c905c0788546134f5f7732",
+          "actual": "c009c7824c13fd5ff01df7dcca9e2bba9cc3d2d719c905c0788546134f5f7732",
+          "git_blob": "c009c7824c13fd5ff01df7dcca9e2bba9cc3d2d719c905c0788546134f5f7732",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/hidden-notch-probe.json",
+          "declared": "c1fc070405dc312e4ee2226cb15ddc4ded7cbc07c85aa13236fb784e864a0d9e",
+          "actual": "c1fc070405dc312e4ee2226cb15ddc4ded7cbc07c85aa13236fb784e864a0d9e",
+          "git_blob": "c1fc070405dc312e4ee2226cb15ddc4ded7cbc07c85aa13236fb784e864a0d9e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/host-polygon-oracle.json",
+          "declared": "9b46f033654c77d8a70e3c65179b9cff626fa8e4a37f1761ca4bee66bf038669",
+          "actual": "9b46f033654c77d8a70e3c65179b9cff626fa8e4a37f1761ca4bee66bf038669",
+          "git_blob": "9b46f033654c77d8a70e3c65179b9cff626fa8e4a37f1761ca4bee66bf038669",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/host-sqrt-oracle.json",
+          "declared": "61ed8134b85bad47dc25f6d40095e0bbab19f826b70fe1168a378ecb1bfa18b3",
+          "actual": "61ed8134b85bad47dc25f6d40095e0bbab19f826b70fe1168a378ecb1bfa18b3",
+          "git_blob": "61ed8134b85bad47dc25f6d40095e0bbab19f826b70fe1168a378ecb1bfa18b3",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/image-id.txt",
+          "declared": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "actual": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "git_blob": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/run.log",
+          "declared": "ac8da035dccc4068f4defd29f51d8a90313e373d710aa429296434e47d3c152d",
+          "actual": "ac8da035dccc4068f4defd29f51d8a90313e373d710aa429296434e47d3c152d",
+          "git_blob": "ac8da035dccc4068f4defd29f51d8a90313e373d710aa429296434e47d3c152d",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/runtime-identity.json",
+          "declared": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "actual": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "git_blob": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/source-hashes-after.json",
+          "declared": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "actual": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "git_blob": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/source-hashes-before.json",
+          "declared": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "actual": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "git_blob": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/source-identity.txt",
+          "declared": "0aa8b471282f5c9dc130fbfe36e26e5b264f9199a2ce3e6fe4b1b2c2eabad07b",
+          "actual": "0aa8b471282f5c9dc130fbfe36e26e5b264f9199a2ce3e6fe4b1b2c2eabad07b",
+          "git_blob": "0aa8b471282f5c9dc130fbfe36e26e5b264f9199a2ce3e6fe4b1b2c2eabad07b",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/test_hidden_notch_probe.py",
+          "declared": "7b01eece7f5069542f6c0d16a32147b65eb094bc9bf74021fcc288e4cfbb7cae",
+          "actual": "7b01eece7f5069542f6c0d16a32147b65eb094bc9bf74021fcc288e4cfbb7cae",
+          "git_blob": "7b01eece7f5069542f6c0d16a32147b65eb094bc9bf74021fcc288e4cfbb7cae",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a05-independent/unit.xml",
+          "declared": "aa339752cab6a9e35e71987a08adf062dfa93833fa532e4751ab2deb9a301e1f",
+          "actual": "aa339752cab6a9e35e71987a08adf062dfa93833fa532e4751ab2deb9a301e1f",
+          "git_blob": "aa339752cab6a9e35e71987a08adf062dfa93833fa532e4751ab2deb9a301e1f",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-a06/REVIEW.md",
+          "declared": "29368818c9a509357a9428cfa4c144cb6ab194ea89e8ecfce98fa6ab386e3005",
+          "actual": "29368818c9a509357a9428cfa4c144cb6ab194ea89e8ecfce98fa6ab386e3005",
+          "git_blob": "29368818c9a509357a9428cfa4c144cb6ab194ea89e8ecfce98fa6ab386e3005",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/a06-combined-source-review.json",
+          "declared": "70f1b6af4bdd50da00c9bbc5abb11f62aa210505a949d7d84d555c4a3a6ff549",
+          "actual": "70f1b6af4bdd50da00c9bbc5abb11f62aa210505a949d7d84d555c4a3a6ff549",
+          "git_blob": "70f1b6af4bdd50da00c9bbc5abb11f62aa210505a949d7d84d555c4a3a6ff549",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/a06-cycle-oracle.json",
+          "declared": "2b41652c2003da05c109623c5c2cce65b316bf50a1704e1a74b4c8e22a26f9b0",
+          "actual": "2b41652c2003da05c109623c5c2cce65b316bf50a1704e1a74b4c8e22a26f9b0",
+          "git_blob": "2b41652c2003da05c109623c5c2cce65b316bf50a1704e1a74b4c8e22a26f9b0",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/a06-independent-dynamics.json.gz",
+          "declared": "23d1d0b4aa88e6d2582be6eab9607ab4770a0725b47e6f8bb80f2c285174c417",
+          "actual": "23d1d0b4aa88e6d2582be6eab9607ab4770a0725b47e6f8bb80f2c285174c417",
+          "git_blob": "23d1d0b4aa88e6d2582be6eab9607ab4770a0725b47e6f8bb80f2c285174c417",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/a06-retimer-s0_reverse_route.json.gz",
+          "declared": "72da483e02b014c6a96d1badf632c99baba51f52865ba7f2b5e76c5a9ceb9322",
+          "actual": "72da483e02b014c6a96d1badf632c99baba51f52865ba7f2b5e76c5a9ceb9322",
+          "git_blob": "72da483e02b014c6a96d1badf632c99baba51f52865ba7f2b5e76c5a9ceb9322",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/a06-retimer-s0_rotated_route.json.gz",
+          "declared": "ce57000c0c95d91521ea1949d742a43167afee2ed2ff83aad2667cb2df4f78bb",
+          "actual": "ce57000c0c95d91521ea1949d742a43167afee2ed2ff83aad2667cb2df4f78bb",
+          "git_blob": "ce57000c0c95d91521ea1949d742a43167afee2ed2ff83aad2667cb2df4f78bb",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/a06-retimer-s0_route.json.gz",
+          "declared": "35895e86142a46902b7ebd8868ed30ee78cb51b7f4c234a8de66a88599e0c692",
+          "actual": "35895e86142a46902b7ebd8868ed30ee78cb51b7f4c234a8de66a88599e0c692",
+          "git_blob": "35895e86142a46902b7ebd8868ed30ee78cb51b7f4c234a8de66a88599e0c692",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/a06-retimer-s2_lower_route.json.gz",
+          "declared": "a12020ce74485f71ebd3f8bb850f811375f798aaac9f93359f16ff6933bf02c3",
+          "actual": "a12020ce74485f71ebd3f8bb850f811375f798aaac9f93359f16ff6933bf02c3",
+          "git_blob": "a12020ce74485f71ebd3f8bb850f811375f798aaac9f93359f16ff6933bf02c3",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/a06-retimer-s2_upper_route.json.gz",
+          "declared": "7fdd1f4b3fc8fe1c719224ce76a8c43fcec5eea7f48fde73870864abc2519c25",
+          "actual": "7fdd1f4b3fc8fe1c719224ce76a8c43fcec5eea7f48fde73870864abc2519c25",
+          "git_blob": "7fdd1f4b3fc8fe1c719224ce76a8c43fcec5eea7f48fde73870864abc2519c25",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/a06-retimer-s3_notch_route.json.gz",
+          "declared": "26d8e530785174e36428cfe64d4fe08e09a86b6998e717b5144bbd4c0c109842",
+          "actual": "26d8e530785174e36428cfe64d4fe08e09a86b6998e717b5144bbd4c0c109842",
+          "git_blob": "26d8e530785174e36428cfe64d4fe08e09a86b6998e717b5144bbd4c0c109842",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/a06-retimer-s3_surfaces_route.json.gz",
+          "declared": "4c108b6059dcc12adeb0d0ccfa6302c77405a40cfadb21952393f16424cd4780",
+          "actual": "4c108b6059dcc12adeb0d0ccfa6302c77405a40cfadb21952393f16424cd4780",
+          "git_blob": "4c108b6059dcc12adeb0d0ccfa6302c77405a40cfadb21952393f16424cd4780",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/checker-first-exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/checker-first-run.log.gz",
+          "declared": "9b5f9876738ad675180613577fae8927dbaedb50993beda148e15d4988a960ac",
+          "actual": "9b5f9876738ad675180613577fae8927dbaedb50993beda148e15d4988a960ac",
+          "git_blob": "9b5f9876738ad675180613577fae8927dbaedb50993beda148e15d4988a960ac",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/checker-first-source-hashes-after.json",
+          "declared": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+          "actual": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+          "git_blob": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/checker-first-source-hashes-before.json",
+          "declared": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+          "actual": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+          "git_blob": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/checker-first-unit.xml",
+          "declared": "21e2a09eb9241812f875c1842b1723e1d33cfc836d4031e0b2a68ec3ccd590d0",
+          "actual": "21e2a09eb9241812f875c1842b1723e1d33cfc836d4031e0b2a68ec3ccd590d0",
+          "git_blob": "21e2a09eb9241812f875c1842b1723e1d33cfc836d4031e0b2a68ec3ccd590d0",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/checker-second-exit-code.txt",
+          "declared": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "actual": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "git_blob": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/checker-second-run.log.gz",
+          "declared": "952acf6f6effd1746b43831b77fbfc944a149c205ae5b86ffd1e8c524fd0c134",
+          "actual": "952acf6f6effd1746b43831b77fbfc944a149c205ae5b86ffd1e8c524fd0c134",
+          "git_blob": "952acf6f6effd1746b43831b77fbfc944a149c205ae5b86ffd1e8c524fd0c134",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/checker-second-source-hashes-after.json",
+          "declared": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "actual": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "git_blob": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/checker-second-source-hashes-before.json",
+          "declared": "9de2912ba2a93905f86a6d0e1a9a32eacdd472a6e04769987c4721aa6443a092",
+          "actual": "9de2912ba2a93905f86a6d0e1a9a32eacdd472a6e04769987c4721aa6443a092",
+          "git_blob": "9de2912ba2a93905f86a6d0e1a9a32eacdd472a6e04769987c4721aa6443a092",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/checker-second-unit.xml",
+          "declared": "b63e2d2e2916065ffdd702f05e913d9a4dd7233ffb2b60d1f677952aa4c53851",
+          "actual": "b63e2d2e2916065ffdd702f05e913d9a4dd7233ffb2b60d1f677952aa4c53851",
+          "git_blob": "b63e2d2e2916065ffdd702f05e913d9a4dd7233ffb2b60d1f677952aa4c53851",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/dependencies.txt",
+          "declared": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "actual": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "git_blob": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/exploratory-provenance.json",
+          "declared": "4c0bd08ef5d564173b84380c522df5ee9c1ac34c8d1117dcf17cfa77a9588355",
+          "actual": "4c0bd08ef5d564173b84380c522df5ee9c1ac34c8d1117dcf17cfa77a9588355",
+          "git_blob": "4c0bd08ef5d564173b84380c522df5ee9c1ac34c8d1117dcf17cfa77a9588355",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/image-id.txt",
+          "declared": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "actual": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "git_blob": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/metrics.json",
+          "declared": "c9572279bf0a17e84be7759d39992d505af9ed9aa2ff5edaec81b1f92204a806",
+          "actual": "c9572279bf0a17e84be7759d39992d505af9ed9aa2ff5edaec81b1f92204a806",
+          "git_blob": "c9572279bf0a17e84be7759d39992d505af9ed9aa2ff5edaec81b1f92204a806",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/oracle-first-exit-code.txt",
+          "declared": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "actual": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "git_blob": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/oracle-first-run.log.gz",
+          "declared": "f57a127cd9b3c6bea8095541a0670ab1d30ca6732296d14a85965bd79cb4bd98",
+          "actual": "f57a127cd9b3c6bea8095541a0670ab1d30ca6732296d14a85965bd79cb4bd98",
+          "git_blob": "f57a127cd9b3c6bea8095541a0670ab1d30ca6732296d14a85965bd79cb4bd98",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/oracle-first-source-hashes-after.json",
+          "declared": "6927839bd960da361a03b1e2be23619e8f5903666e2cb0eb2e594434b99cca65",
+          "actual": "6927839bd960da361a03b1e2be23619e8f5903666e2cb0eb2e594434b99cca65",
+          "git_blob": "6927839bd960da361a03b1e2be23619e8f5903666e2cb0eb2e594434b99cca65",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/oracle-first-source-hashes-before.json",
+          "declared": "072bceba5e31614c249e3e1ec4afc72e15c220892d837252010f072026d3efc4",
+          "actual": "072bceba5e31614c249e3e1ec4afc72e15c220892d837252010f072026d3efc4",
+          "git_blob": "072bceba5e31614c249e3e1ec4afc72e15c220892d837252010f072026d3efc4",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/oracle-first-unit.xml",
+          "declared": "2c56ae5be3f7b6df7eb09f5b2cc44b7f311335af14337c375d33ce3a8e29be52",
+          "actual": "2c56ae5be3f7b6df7eb09f5b2cc44b7f311335af14337c375d33ce3a8e29be52",
+          "git_blob": "2c56ae5be3f7b6df7eb09f5b2cc44b7f311335af14337c375d33ce3a8e29be52",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/oracle-second-exit-code.txt",
+          "declared": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "actual": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "git_blob": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/oracle-second-run.log.gz",
+          "declared": "d8e5ead85f2b0e16ffcb5e46ce0fc97d114a295b7305e703e60c79b839b9c3b0",
+          "actual": "d8e5ead85f2b0e16ffcb5e46ce0fc97d114a295b7305e703e60c79b839b9c3b0",
+          "git_blob": "d8e5ead85f2b0e16ffcb5e46ce0fc97d114a295b7305e703e60c79b839b9c3b0",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/oracle-second-source-hashes-after.json",
+          "declared": "c1a917b2f717139c29cc9c9264a45fe125ff41427c56d00cc9b1d5c48b5eb6c8",
+          "actual": "c1a917b2f717139c29cc9c9264a45fe125ff41427c56d00cc9b1d5c48b5eb6c8",
+          "git_blob": "c1a917b2f717139c29cc9c9264a45fe125ff41427c56d00cc9b1d5c48b5eb6c8",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/oracle-second-source-hashes-before.json",
+          "declared": "3110d232d590317693f18505755e142d4a956825de8f2833fcf26f35dc65257d",
+          "actual": "3110d232d590317693f18505755e142d4a956825de8f2833fcf26f35dc65257d",
+          "git_blob": "3110d232d590317693f18505755e142d4a956825de8f2833fcf26f35dc65257d",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/oracle-second-unit.xml",
+          "declared": "3aab370f537e7eaa476e001908b3424ea6a2513c6c50b4de2c57662518f3e19e",
+          "actual": "3aab370f537e7eaa476e001908b3424ea6a2513c6c50b4de2c57662518f3e19e",
+          "git_blob": "3aab370f537e7eaa476e001908b3424ea6a2513c6c50b4de2c57662518f3e19e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-first-exit-code.txt",
+          "declared": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "actual": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "git_blob": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-first-run.log.gz",
+          "declared": "ed6f5bc7d2cc243faf77d26b4dcc1eff9d0fe6a2ec35ec699b0b94e34a9ff14c",
+          "actual": "ed6f5bc7d2cc243faf77d26b4dcc1eff9d0fe6a2ec35ec699b0b94e34a9ff14c",
+          "git_blob": "ed6f5bc7d2cc243faf77d26b4dcc1eff9d0fe6a2ec35ec699b0b94e34a9ff14c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-first-source-hashes-after.json",
+          "declared": "b6c873d9c9a0ecea1a6ae1cb6691d60d68b1bc4ee69f5eee6241dee0944135fa",
+          "actual": "b6c873d9c9a0ecea1a6ae1cb6691d60d68b1bc4ee69f5eee6241dee0944135fa",
+          "git_blob": "b6c873d9c9a0ecea1a6ae1cb6691d60d68b1bc4ee69f5eee6241dee0944135fa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-first-source-hashes-before.json",
+          "declared": "c908d0a92937dc93fbfc9b77f06e30d757259b6dd4f58cc3113ed533179d2653",
+          "actual": "c908d0a92937dc93fbfc9b77f06e30d757259b6dd4f58cc3113ed533179d2653",
+          "git_blob": "c908d0a92937dc93fbfc9b77f06e30d757259b6dd4f58cc3113ed533179d2653",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-first-unit.xml",
+          "declared": "51dca1404e4b5a2396f55a236cf98c3d2e7237071d00d9fffafafca28008c786",
+          "actual": "51dca1404e4b5a2396f55a236cf98c3d2e7237071d00d9fffafafca28008c786",
+          "git_blob": "51dca1404e4b5a2396f55a236cf98c3d2e7237071d00d9fffafafca28008c786",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-review.json",
+          "declared": "3f425d501720ce92372f7044f352a7adee14eecb0ce935b17865d4834f5e6694",
+          "actual": "3f425d501720ce92372f7044f352a7adee14eecb0ce935b17865d4834f5e6694",
+          "git_blob": "3f425d501720ce92372f7044f352a7adee14eecb0ce935b17865d4834f5e6694",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-second-exit-code.txt",
+          "declared": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "actual": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "git_blob": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-second-run.log.gz",
+          "declared": "0c0ee79765a90fb6fcae38391173d22a6f8da52eb9bfca4bbea6ccb3ee909506",
+          "actual": "0c0ee79765a90fb6fcae38391173d22a6f8da52eb9bfca4bbea6ccb3ee909506",
+          "git_blob": "0c0ee79765a90fb6fcae38391173d22a6f8da52eb9bfca4bbea6ccb3ee909506",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-second-source-hashes-after.json",
+          "declared": "efcf5647279c089af3d7b593c037ec068c361f2f16bd7a1770617c8bfb8e20ef",
+          "actual": "efcf5647279c089af3d7b593c037ec068c361f2f16bd7a1770617c8bfb8e20ef",
+          "git_blob": "efcf5647279c089af3d7b593c037ec068c361f2f16bd7a1770617c8bfb8e20ef",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-second-source-hashes-before.json",
+          "declared": "8c7cf33c1fb73387497017703caa745abe45a22ee65d6ab23abe0a655a07349b",
+          "actual": "8c7cf33c1fb73387497017703caa745abe45a22ee65d6ab23abe0a655a07349b",
+          "git_blob": "8c7cf33c1fb73387497017703caa745abe45a22ee65d6ab23abe0a655a07349b",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-second-unit.xml",
+          "declared": "0d4a7afd86ee2124963a0c301c4ea11d271b92dc89844d6b8bf5e190c91f6b81",
+          "actual": "0d4a7afd86ee2124963a0c301c4ea11d271b92dc89844d6b8bf5e190c91f6b81",
+          "git_blob": "0d4a7afd86ee2124963a0c301c4ea11d271b92dc89844d6b8bf5e190c91f6b81",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-third-exit-code.txt",
+          "declared": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "actual": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "git_blob": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-third-run.log.gz",
+          "declared": "74b1001224e2008ab754f1a3e49fd1ae44ed7f28f370d3d55701e04429c703c4",
+          "actual": "74b1001224e2008ab754f1a3e49fd1ae44ed7f28f370d3d55701e04429c703c4",
+          "git_blob": "74b1001224e2008ab754f1a3e49fd1ae44ed7f28f370d3d55701e04429c703c4",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-third-source-hashes-after.json",
+          "declared": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+          "actual": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+          "git_blob": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-third-source-hashes-before.json",
+          "declared": "c1a917b2f717139c29cc9c9264a45fe125ff41427c56d00cc9b1d5c48b5eb6c8",
+          "actual": "c1a917b2f717139c29cc9c9264a45fe125ff41427c56d00cc9b1d5c48b5eb6c8",
+          "git_blob": "c1a917b2f717139c29cc9c9264a45fe125ff41427c56d00cc9b1d5c48b5eb6c8",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/retimer-third-unit.xml",
+          "declared": "558ca3417493e22b0ecc70f4447c770d2edf4cbd725c9e7eb103241c21522749",
+          "actual": "558ca3417493e22b0ecc70f4447c770d2edf4cbd725c9e7eb103241c21522749",
+          "git_blob": "558ca3417493e22b0ecc70f4447c770d2edf4cbd725c9e7eb103241c21522749",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/run.log.gz",
+          "declared": "10e117105c552fa46c2b9a139143b4f1c93c810d0bd681e034d41286a2aafe3d",
+          "actual": "10e117105c552fa46c2b9a139143b4f1c93c810d0bd681e034d41286a2aafe3d",
+          "git_blob": "10e117105c552fa46c2b9a139143b4f1c93c810d0bd681e034d41286a2aafe3d",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/runtime-identity.json",
+          "declared": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "actual": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "git_blob": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/source-hashes-after.json",
+          "declared": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "actual": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "git_blob": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/source-hashes-before.json",
+          "declared": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "actual": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "git_blob": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/source-identity.txt",
+          "declared": "ced6c96c958f28363fd895c3a3a948970599298e5fe59d924d5965eeef40a6a4",
+          "actual": "ced6c96c958f28363fd895c3a3a948970599298e5fe59d924d5965eeef40a6a4",
+          "git_blob": "ced6c96c958f28363fd895c3a3a948970599298e5fe59d924d5965eeef40a6a4",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/strict-command.txt",
+          "declared": "0813ef44d2ad132083df058b591c60467a69c485afaea28bf013794701597935",
+          "actual": "0813ef44d2ad132083df058b591c60467a69c485afaea28bf013794701597935",
+          "git_blob": "0813ef44d2ad132083df058b591c60467a69c485afaea28bf013794701597935",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/strict-exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/strict-lint.log",
+          "declared": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actual": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "git_blob": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/strict-source-hashes-after.json",
+          "declared": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "actual": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "git_blob": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/strict-source-hashes-before.json",
+          "declared": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "actual": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "git_blob": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/unit.xml",
+          "declared": "bb2ac09efb090c0cd23b00b195f00de1efe3293a6d7d38bf4d1ed7ca0ab1c1a7",
+          "actual": "bb2ac09efb090c0cd23b00b195f00de1efe3293a6d7d38bf4d1ed7ca0ab1c1a7",
+          "git_blob": "bb2ac09efb090c0cd23b00b195f00de1efe3293a6d7d38bf4d1ed7ca0ab1c1a7",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06/w2-pipeline.json.gz",
+          "declared": "3fbd16061cb96b14c124fcbfde3e44bda641420251675cb755b572499538c86e",
+          "actual": "3fbd16061cb96b14c124fcbfde3e44bda641420251675cb755b572499538c86e",
+          "git_blob": "3fbd16061cb96b14c124fcbfde3e44bda641420251675cb755b572499538c86e",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06-ci/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-a06-ci/artifacts.json",
+          "declared": "51ff3a2af58429d24f57b7fff8b1a3e911eb2b3871463c75a5615e6e9aa765c2",
+          "actual": "51ff3a2af58429d24f57b7fff8b1a3e911eb2b3871463c75a5615e6e9aa765c2",
+          "git_blob": "51ff3a2af58429d24f57b7fff8b1a3e911eb2b3871463c75a5615e6e9aa765c2",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06-ci/job.log.gz",
+          "declared": "b7e7b39c9596a255144574c159a5bdd32ffb32da55eae8d3afa6d54b0588ee61",
+          "actual": "b7e7b39c9596a255144574c159a5bdd32ffb32da55eae8d3afa6d54b0588ee61",
+          "git_blob": "b7e7b39c9596a255144574c159a5bdd32ffb32da55eae8d3afa6d54b0588ee61",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06-ci/jobs.json",
+          "declared": "c666281be334a81504333d1b05c0f64329cbfb07c036a66c7715591fc5310ed7",
+          "actual": "c666281be334a81504333d1b05c0f64329cbfb07c036a66c7715591fc5310ed7",
+          "git_blob": "c666281be334a81504333d1b05c0f64329cbfb07c036a66c7715591fc5310ed7",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06-ci/legacy-identity-comparison.json",
+          "declared": "22be26385b235d15ae8027f2502a619e0bd4c1154ee55108ac4b391273a8f67d",
+          "actual": "22be26385b235d15ae8027f2502a619e0bd4c1154ee55108ac4b391273a8f67d",
+          "git_blob": "22be26385b235d15ae8027f2502a619e0bd4c1154ee55108ac4b391273a8f67d",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06-ci/retrieval.json",
+          "declared": "b5c60c9082a4fd1f697d01c579e502b5555a639d8e92aaeca82cd128b46311cf",
+          "actual": "b5c60c9082a4fd1f697d01c579e502b5555a639d8e92aaeca82cd128b46311cf",
+          "git_blob": "b5c60c9082a4fd1f697d01c579e502b5555a639d8e92aaeca82cd128b46311cf",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06-ci/run.json",
+          "declared": "34b8d407d3719231b2bbe16cb90cdde1a165d5c073295feb0578ad084ea86c10",
+          "actual": "34b8d407d3719231b2bbe16cb90cdde1a165d5c073295feb0578ad084ea86c10",
+          "git_blob": "34b8d407d3719231b2bbe16cb90cdde1a165d5c073295feb0578ad084ea86c10",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-a06-ci/summary.json",
+          "declared": "ba31a430caef13f651d248f5f5cd0b71c1f88bad1bad89eb584617575a4c3a2e",
+          "actual": "ba31a430caef13f651d248f5f5cd0b71c1f88bad1bad89eb584617575a4c3a2e",
+          "git_blob": "ba31a430caef13f651d248f5f5cd0b71c1f88bad1bad89eb584617575a4c3a2e",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-baseline/a01.xml",
+          "declared": "11923bf75ede4b1c87b5e6765bf5b9de475cc6d85452de61c4276cce27d4b820",
+          "actual": "11923bf75ede4b1c87b5e6765bf5b9de475cc6d85452de61c4276cce27d4b820",
+          "git_blob": "11923bf75ede4b1c87b5e6765bf5b9de475cc6d85452de61c4276cce27d4b820",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/a02.xml",
+          "declared": "68e160e7067a5a449c9917f3bcbe615300eb64a09c303f2fcee77fd44e4afbf2",
+          "actual": "68e160e7067a5a449c9917f3bcbe615300eb64a09c303f2fcee77fd44e4afbf2",
+          "git_blob": "68e160e7067a5a449c9917f3bcbe615300eb64a09c303f2fcee77fd44e4afbf2",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/a03.xml",
+          "declared": "92e2c925e3be05a81af4383573ec34809582b7f8c836e56aa788559fbd74cd44",
+          "actual": "92e2c925e3be05a81af4383573ec34809582b7f8c836e56aa788559fbd74cd44",
+          "git_blob": "92e2c925e3be05a81af4383573ec34809582b7f8c836e56aa788559fbd74cd44",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/dependencies.txt",
+          "declared": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a",
+          "actual": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a",
+          "git_blob": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/helper-hashes.json",
+          "declared": "cacf561dfcc3094e79c368c0c06d252aa7cfc2be710184826310eac65e878018",
+          "actual": "cacf561dfcc3094e79c368c0c06d252aa7cfc2be710184826310eac65e878018",
+          "git_blob": "cacf561dfcc3094e79c368c0c06d252aa7cfc2be710184826310eac65e878018",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/image-id.txt",
+          "declared": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "actual": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "git_blob": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/legacy-exit-codes.txt",
+          "declared": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d",
+          "actual": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d",
+          "git_blob": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/legacy-identity-comparison.json",
+          "declared": "909babb37800ee5696accc30f83c04de1eab0af4a0ea58b4bafe922aed8632e3",
+          "actual": "909babb37800ee5696accc30f83c04de1eab0af4a0ea58b4bafe922aed8632e3",
+          "git_blob": "909babb37800ee5696accc30f83c04de1eab0af4a0ea58b4bafe922aed8632e3",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/legacy-results.txt.gz",
+          "declared": "8d2d9a01d07b628c12d281d5a13c3835f28164bd0853699f39244db9189fda30",
+          "actual": "8d2d9a01d07b628c12d281d5a13c3835f28164bd0853699f39244db9189fda30",
+          "git_blob": "8d2d9a01d07b628c12d281d5a13c3835f28164bd0853699f39244db9189fda30",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/legacy.log.gz",
+          "declared": "6092920bb9bb221240a3aea0e984cf50216a10ce40f8383dbb084859f1647d37",
+          "actual": "6092920bb9bb221240a3aea0e984cf50216a10ce40f8383dbb084859f1647d37",
+          "git_blob": "6092920bb9bb221240a3aea0e984cf50216a10ce40f8383dbb084859f1647d37",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/numerical.xml",
+          "declared": "9541ffd8df1946c714fd876c7a463008387ca6fd145e2f83c32c8ef917efd0b7",
+          "actual": "9541ffd8df1946c714fd876c7a463008387ca6fd145e2f83c32c8ef917efd0b7",
+          "git_blob": "9541ffd8df1946c714fd876c7a463008387ca6fd145e2f83c32c8ef917efd0b7",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/os-packages.txt",
+          "declared": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f",
+          "actual": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f",
+          "git_blob": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/ros.xml",
+          "declared": "1f4a7613c0686ee0b9c6fd0e3cca084454b2764f7d0ac17eebcfe57d6feeb003",
+          "actual": "1f4a7613c0686ee0b9c6fd0e3cca084454b2764f7d0ac17eebcfe57d6feeb003",
+          "git_blob": "1f4a7613c0686ee0b9c6fd0e3cca084454b2764f7d0ac17eebcfe57d6feeb003",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/run.log.gz",
+          "declared": "b810b7956f1e1a096ef278d7463917530bec724ec35942d71e3c1d3526fbc183",
+          "actual": "b810b7956f1e1a096ef278d7463917530bec724ec35942d71e3c1d3526fbc183",
+          "git_blob": "b810b7956f1e1a096ef278d7463917530bec724ec35942d71e3c1d3526fbc183",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/runtime-identity.json",
+          "declared": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "actual": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "git_blob": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/setup.log.gz",
+          "declared": "501fe3f879e0170f020517567fa7b109f89922ebb908c841afe51706eed6413f",
+          "actual": "501fe3f879e0170f020517567fa7b109f89922ebb908c841afe51706eed6413f",
+          "git_blob": "501fe3f879e0170f020517567fa7b109f89922ebb908c841afe51706eed6413f",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/source-identity.txt",
+          "declared": "f500412fe678317a9f6bc034f806b3ffcf373f08aa9351c684bb6f52a2e2efd8",
+          "actual": "f500412fe678317a9f6bc034f806b3ffcf373f08aa9351c684bb6f52a2e2efd8",
+          "git_blob": "f500412fe678317a9f6bc034f806b3ffcf373f08aa9351c684bb6f52a2e2efd8",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/summary.json",
+          "declared": "48f399226c73fc3f361073125c5bfc22d0e2c4937f247124586f1882f70b7da8",
+          "actual": "48f399226c73fc3f361073125c5bfc22d0e2c4937f247124586f1882f70b7da8",
+          "git_blob": "48f399226c73fc3f361073125c5bfc22d0e2c4937f247124586f1882f70b7da8",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/w1-ci-full.log.gz",
+          "declared": "f0d3d2aa3b0be175bc0f89e20700d881c9f66409ec0b8a3dbc7d520a6dbb7b4c",
+          "actual": "f0d3d2aa3b0be175bc0f89e20700d881c9f66409ec0b8a3dbc7d520a6dbb7b4c",
+          "git_blob": "f0d3d2aa3b0be175bc0f89e20700d881c9f66409ec0b8a3dbc7d520a6dbb7b4c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/w1-ci-jobs.json",
+          "declared": "5d2a2f68529c198756e01d6d6ef3d6f7da9efbeba7f3e96e4ce2dc06bb22a4f8",
+          "actual": "5d2a2f68529c198756e01d6d6ef3d6f7da9efbeba7f3e96e4ce2dc06bb22a4f8",
+          "git_blob": "5d2a2f68529c198756e01d6d6ef3d6f7da9efbeba7f3e96e4ce2dc06bb22a4f8",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/w1-ci-runs.json",
+          "declared": "57681ea70a4980bad7d97eaa75d82a813311ebb63d6a644e3885d0cac83abae8",
+          "actual": "57681ea70a4980bad7d97eaa75d82a813311ebb63d6a644e3885d0cac83abae8",
+          "git_blob": "57681ea70a4980bad7d97eaa75d82a813311ebb63d6a644e3885d0cac83abae8",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-baseline/w1-installed.xml",
+          "declared": "a6d21c089f2faf26a7261b633f61d4e6b2d25c16b84bed321b5fd3e75c899c87",
+          "actual": "a6d21c089f2faf26a7261b633f61d4e6b2d25c16b84bed321b5fd3e75c899c87",
+          "git_blob": "a6d21c089f2faf26a7261b633f61d4e6b2d25c16b84bed321b5fd3e75c899c87",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-full/README.md",
+          "declared": "cd9ba48a6642cdc113829782cfe4f856b27fb29e11cd17fae3a8f5215b945fbd",
+          "actual": "cd9ba48a6642cdc113829782cfe4f856b27fb29e11cd17fae3a8f5215b945fbd",
+          "git_blob": "cd9ba48a6642cdc113829782cfe4f856b27fb29e11cd17fae3a8f5215b945fbd",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/a01.xml",
+          "declared": "79e90f1e78412d6322817638b46681f8cc7bff91536688f39850195271d69f64",
+          "actual": "79e90f1e78412d6322817638b46681f8cc7bff91536688f39850195271d69f64",
+          "git_blob": "79e90f1e78412d6322817638b46681f8cc7bff91536688f39850195271d69f64",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/a02.xml",
+          "declared": "155a97a9433c1d132033815f249e65207a554d909a29583fe33ec177e4dbd483",
+          "actual": "155a97a9433c1d132033815f249e65207a554d909a29583fe33ec177e4dbd483",
+          "git_blob": "155a97a9433c1d132033815f249e65207a554d909a29583fe33ec177e4dbd483",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/a03.xml",
+          "declared": "a8958bd5c4859a7fce8ec45dc28a3a58f0ee39dd1697b8eccb301306d16c03a1",
+          "actual": "a8958bd5c4859a7fce8ec45dc28a3a58f0ee39dd1697b8eccb301306d16c03a1",
+          "git_blob": "a8958bd5c4859a7fce8ec45dc28a3a58f0ee39dd1697b8eccb301306d16c03a1",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/a04.xml",
+          "declared": "cf9f007ba4211742d11fd1667f8074cad67f571944cefc33266a1a87335f87fa",
+          "actual": "cf9f007ba4211742d11fd1667f8074cad67f571944cefc33266a1a87335f87fa",
+          "git_blob": "cf9f007ba4211742d11fd1667f8074cad67f571944cefc33266a1a87335f87fa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/a05-oracle.xml",
+          "declared": "2792e9f0a254590c565436819bbe1aace0f732fd94c4568448133237162a8f80",
+          "actual": "2792e9f0a254590c565436819bbe1aace0f732fd94c4568448133237162a8f80",
+          "git_blob": "2792e9f0a254590c565436819bbe1aace0f732fd94c4568448133237162a8f80",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/a05.xml",
+          "declared": "fa4812c0ddcf78183b22735ebf2b2f0d8c4290da9d1e0f0db46b41d9d9a178f1",
+          "actual": "fa4812c0ddcf78183b22735ebf2b2f0d8c4290da9d1e0f0db46b41d9d9a178f1",
+          "git_blob": "fa4812c0ddcf78183b22735ebf2b2f0d8c4290da9d1e0f0db46b41d9d9a178f1",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/a06-independent.xml",
+          "declared": "5c73e38a015d164273def140c4b78acb6677c163b8c35b261a2abc8b2d4c5e3e",
+          "actual": "5c73e38a015d164273def140c4b78acb6677c163b8c35b261a2abc8b2d4c5e3e",
+          "git_blob": "5c73e38a015d164273def140c4b78acb6677c163b8c35b261a2abc8b2d4c5e3e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/a06-oracle.xml",
+          "declared": "28760cb8b6db16060363ea833c1a6ee5fa84edb450b26765473b77fdcf9bc780",
+          "actual": "28760cb8b6db16060363ea833c1a6ee5fa84edb450b26765473b77fdcf9bc780",
+          "git_blob": "28760cb8b6db16060363ea833c1a6ee5fa84edb450b26765473b77fdcf9bc780",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/a06.xml",
+          "declared": "88bc95183a87f2d680a135f36a50fbeb263c096ab0b8dbc5d4627c14cb05461b",
+          "actual": "88bc95183a87f2d680a135f36a50fbeb263c096ab0b8dbc5d4627c14cb05461b",
+          "git_blob": "88bc95183a87f2d680a135f36a50fbeb263c096ab0b8dbc5d4627c14cb05461b",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/dependencies.txt",
+          "declared": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a",
+          "actual": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a",
+          "git_blob": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/image-id.txt",
+          "declared": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "actual": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "git_blob": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/installed-source-identity-check.json",
+          "declared": "d0bd1665c57aad4d56cac75dfcb4b6d6dfc2049048e947a5c44e0e2181fdbcc5",
+          "actual": "d0bd1665c57aad4d56cac75dfcb4b6d6dfc2049048e947a5c44e0e2181fdbcc5",
+          "git_blob": "d0bd1665c57aad4d56cac75dfcb4b6d6dfc2049048e947a5c44e0e2181fdbcc5",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/legacy-exit-codes.txt",
+          "declared": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d",
+          "actual": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d",
+          "git_blob": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/legacy-identity-comparison.json",
+          "declared": "b0fd8490e169f1add838d2d5848cb4c406b6b7f95acf3ac74bc194389e20a161",
+          "actual": "b0fd8490e169f1add838d2d5848cb4c406b6b7f95acf3ac74bc194389e20a161",
+          "git_blob": "b0fd8490e169f1add838d2d5848cb4c406b6b7f95acf3ac74bc194389e20a161",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/legacy-results.txt.gz",
+          "declared": "320f397cccdaf41faaa82c17278a5322927cc38520af27743fbc1112b5606c53",
+          "actual": "320f397cccdaf41faaa82c17278a5322927cc38520af27743fbc1112b5606c53",
+          "git_blob": "320f397cccdaf41faaa82c17278a5322927cc38520af27743fbc1112b5606c53",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/legacy.log.gz",
+          "declared": "58b71621c377b4049e3a8783fded7c6ea5347541c63709a237e920f59d600f68",
+          "actual": "58b71621c377b4049e3a8783fded7c6ea5347541c63709a237e920f59d600f68",
+          "git_blob": "58b71621c377b4049e3a8783fded7c6ea5347541c63709a237e920f59d600f68",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/numerical.xml",
+          "declared": "8418e57b052b7b08fd6da79749857da72255cd17a048259986ab007c103ec3a0",
+          "actual": "8418e57b052b7b08fd6da79749857da72255cd17a048259986ab007c103ec3a0",
+          "git_blob": "8418e57b052b7b08fd6da79749857da72255cd17a048259986ab007c103ec3a0",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/optimizer-wheel.log.gz",
+          "declared": "9466d34f2e118dd9ac05bc447c313a489593e7050f99c1c0728e03c2dea1008d",
+          "actual": "9466d34f2e118dd9ac05bc447c313a489593e7050f99c1c0728e03c2dea1008d",
+          "git_blob": "9466d34f2e118dd9ac05bc447c313a489593e7050f99c1c0728e03c2dea1008d",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/os-packages.txt",
+          "declared": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f",
+          "actual": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f",
+          "git_blob": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/ros.xml",
+          "declared": "077500901dc359b911e208b03b5c5a71766b5ac5dcfadba651088402210569d8",
+          "actual": "077500901dc359b911e208b03b5c5a71766b5ac5dcfadba651088402210569d8",
+          "git_blob": "077500901dc359b911e208b03b5c5a71766b5ac5dcfadba651088402210569d8",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/run.log.gz",
+          "declared": "b196407c1c03269c1d69f254202dd1d80baa50921413f0c6c5c1d98b85de9e63",
+          "actual": "b196407c1c03269c1d69f254202dd1d80baa50921413f0c6c5c1d98b85de9e63",
+          "git_blob": "b196407c1c03269c1d69f254202dd1d80baa50921413f0c6c5c1d98b85de9e63",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/runtime-identity.json",
+          "declared": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "actual": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "git_blob": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/source-hashes-after.json",
+          "declared": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "actual": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "git_blob": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/source-hashes-before.json",
+          "declared": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "actual": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "git_blob": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/source-identity.txt",
+          "declared": "e5e48cdda2bcfff0d4a525cd658ffc0d211da7385d6f4b485ffc0296fd69ca82",
+          "actual": "e5e48cdda2bcfff0d4a525cd658ffc0d211da7385d6f4b485ffc0296fd69ca82",
+          "git_blob": "e5e48cdda2bcfff0d4a525cd658ffc0d211da7385d6f4b485ffc0296fd69ca82",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/summary.json",
+          "declared": "332b059c1dce82e706619ba27a3c4a73bd9a4ee010ede5e37f42f3889ece34dc",
+          "actual": "332b059c1dce82e706619ba27a3c4a73bd9a4ee010ede5e37f42f3889ece34dc",
+          "git_blob": "332b059c1dce82e706619ba27a3c4a73bd9a4ee010ede5e37f42f3889ece34dc",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/w1-installed.xml",
+          "declared": "d5d86c9dd33dcd24091823526bf17a2a03dfc5cd8b046d2d0d2b892ac867d927",
+          "actual": "d5d86c9dd33dcd24091823526bf17a2a03dfc5cd8b046d2d0d2b892ac867d927",
+          "git_blob": "d5d86c9dd33dcd24091823526bf17a2a03dfc5cd8b046d2d0d2b892ac867d927",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/w2-installed.json.gz",
+          "declared": "e2c999c797e19e10bd8e340b0d59aa5f8a9d1ddaf449df7d3abc65a0fc934234",
+          "actual": "e2c999c797e19e10bd8e340b0d59aa5f8a9d1ddaf449df7d3abc65a0fc934234",
+          "git_blob": "e2c999c797e19e10bd8e340b0d59aa5f8a9d1ddaf449df7d3abc65a0fc934234",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/w2-installed.xml",
+          "declared": "a82ecd8781f5ced614d86f8a56647e7dfe458e3502e90f356fca1c3cfc47ff40",
+          "actual": "a82ecd8781f5ced614d86f8a56647e7dfe458e3502e90f356fca1c3cfc47ff40",
+          "git_blob": "a82ecd8781f5ced614d86f8a56647e7dfe458e3502e90f356fca1c3cfc47ff40",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-full/w2-pipeline.xml",
+          "declared": "a5998ad21546d0c9655e0e7e1b4bcf3fe88628d59c59a6267c9a7958da21ab9a",
+          "actual": "a5998ad21546d0c9655e0e7e1b4bcf3fe88628d59c59a6267c9a7958da21ab9a",
+          "git_blob": "a5998ad21546d0c9655e0e7e1b4bcf3fe88628d59c59a6267c9a7958da21ab9a",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/README.md",
+          "declared": "0ed45bf1bd9be37610b8c7d11df75a6e610e4c608d9cd393f56987b4f81f60f6",
+          "actual": "0ed45bf1bd9be37610b8c7d11df75a6e610e4c608d9cd393f56987b4f81f60f6",
+          "git_blob": "0ed45bf1bd9be37610b8c7d11df75a6e610e4c608d9cd393f56987b4f81f60f6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/a05-wrong-deck-coincident.json.gz",
+          "declared": "cb8977984bcc1f488307e02e4d43086d288a0d96037031f392ed45ae8b55f43b",
+          "actual": "cb8977984bcc1f488307e02e4d43086d288a0d96037031f392ed45ae8b55f43b",
+          "git_blob": "cb8977984bcc1f488307e02e4d43086d288a0d96037031f392ed45ae8b55f43b",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/a06-ellipse-profile.json.gz",
+          "declared": "0f467725d707219b4bdb8e6c1e0a433ad615bb3f04598ecd9c9d795007298ea9",
+          "actual": "0f467725d707219b4bdb8e6c1e0a433ad615bb3f04598ecd9c9d795007298ea9",
+          "git_blob": "0f467725d707219b4bdb8e6c1e0a433ad615bb3f04598ecd9c9d795007298ea9",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/a06-ellipse-route.json.gz",
+          "declared": "687c602c301e5bdae5e8db3218530b2c3068e09f8e2ac53ace07a639f9a1a8f0",
+          "actual": "687c602c301e5bdae5e8db3218530b2c3068e09f8e2ac53ace07a639f9a1a8f0",
+          "git_blob": "687c602c301e5bdae5e8db3218530b2c3068e09f8e2ac53ace07a639f9a1a8f0",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/a06-ellipse.json.gz",
+          "declared": "66463134858e7d654871eb2e509a9f6575e7ab44d62f896a1e4ceaebea8f739e",
+          "actual": "66463134858e7d654871eb2e509a9f6575e7ab44d62f896a1e4ceaebea8f739e",
+          "git_blob": "66463134858e7d654871eb2e509a9f6575e7ab44d62f896a1e4ceaebea8f739e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/a06-narrow-lower-cap.json.gz",
+          "declared": "84603419106de51ac6957018ee4ad6dd6e1e8681f32599a61c7c63df56381f22",
+          "actual": "84603419106de51ac6957018ee4ad6dd6e1e8681f32599a61c7c63df56381f22",
+          "git_blob": "84603419106de51ac6957018ee4ad6dd6e1e8681f32599a61c7c63df56381f22",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/before-header-wrap-run.log.gz",
+          "declared": "c8a3a687a7eff14dd76bee4679b695fa43ea49f5f228812203e6741372a3972b",
+          "actual": "c8a3a687a7eff14dd76bee4679b695fa43ea49f5f228812203e6741372a3972b",
+          "git_blob": "c8a3a687a7eff14dd76bee4679b695fa43ea49f5f228812203e6741372a3972b",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/before-header-wrap-source-hashes-after.json",
+          "declared": "ae7b5d04bb25fa9c170ec00df50ed0fa0ab2359dadb24891bcc05179e39d06db",
+          "actual": "ae7b5d04bb25fa9c170ec00df50ed0fa0ab2359dadb24891bcc05179e39d06db",
+          "git_blob": "ae7b5d04bb25fa9c170ec00df50ed0fa0ab2359dadb24891bcc05179e39d06db",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/before-header-wrap-source-hashes-before.json",
+          "declared": "ae7b5d04bb25fa9c170ec00df50ed0fa0ab2359dadb24891bcc05179e39d06db",
+          "actual": "ae7b5d04bb25fa9c170ec00df50ed0fa0ab2359dadb24891bcc05179e39d06db",
+          "git_blob": "ae7b5d04bb25fa9c170ec00df50ed0fa0ab2359dadb24891bcc05179e39d06db",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/before-header-wrap-unit.xml",
+          "declared": "dc26b4bc54b96a9434d2cea4244c9b886f4ed54d1b380521bc3dd833fc2cefb7",
+          "actual": "dc26b4bc54b96a9434d2cea4244c9b886f4ed54d1b380521bc3dd833fc2cefb7",
+          "git_blob": "dc26b4bc54b96a9434d2cea4244c9b886f4ed54d1b380521bc3dd833fc2cefb7",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/completeness-final-verdict.json",
+          "declared": "a52e78e3e3f5d534cefdb670911c6c46d1dd583e5d208feee0f51ab33dfd4168",
+          "actual": "a52e78e3e3f5d534cefdb670911c6c46d1dd583e5d208feee0f51ab33dfd4168",
+          "git_blob": "a52e78e3e3f5d534cefdb670911c6c46d1dd583e5d208feee0f51ab33dfd4168",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/completeness-review.json",
+          "declared": "c550c1218392997d0fbfa332de641c6bbd4c324179bdb47dba67bd50da41a57c",
+          "actual": "c550c1218392997d0fbfa332de641c6bbd4c324179bdb47dba67bd50da41a57c",
+          "git_blob": "c550c1218392997d0fbfa332de641c6bbd4c324179bdb47dba67bd50da41a57c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/completeness-review.md",
+          "declared": "ff740a8346b054b002e7ce304bca5f8b70d7ff65f4a85c9168cbc0e547f94333",
+          "actual": "ff740a8346b054b002e7ce304bca5f8b70d7ff65f4a85c9168cbc0e547f94333",
+          "git_blob": "ff740a8346b054b002e7ce304bca5f8b70d7ff65f4a85c9168cbc0e547f94333",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/dependencies.txt",
+          "declared": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "actual": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "git_blob": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/draft-provenance.json",
+          "declared": "136b807673269c4296f6c5044709065cc2e7180194662bd43d3f06de31d6fc52",
+          "actual": "136b807673269c4296f6c5044709065cc2e7180194662bd43d3f06de31d6fc52",
+          "git_blob": "136b807673269c4296f6c5044709065cc2e7180194662bd43d3f06de31d6fc52",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/ellipse-draft-lint.json",
+          "declared": "f6cebd5108d06327fb404e1d8c72a359a3bb6bf4eeb0f2eb201a1c3a3429060e",
+          "actual": "f6cebd5108d06327fb404e1d8c72a359a3bb6bf4eeb0f2eb201a1c3a3429060e",
+          "git_blob": "f6cebd5108d06327fb404e1d8c72a359a3bb6bf4eeb0f2eb201a1c3a3429060e",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/image-id.txt",
+          "declared": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "actual": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "git_blob": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/all_zero.json",
+          "declared": "3e222af7eff7bb85b28108271b6588db48fa15b55edee885526549d853f1f07b",
+          "actual": "3e222af7eff7bb85b28108271b6588db48fa15b55edee885526549d853f1f07b",
+          "git_blob": "3e222af7eff7bb85b28108271b6588db48fa15b55edee885526549d853f1f07b",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/dependencies.txt",
+          "declared": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "actual": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "git_blob": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/image-id.txt",
+          "declared": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "actual": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "git_blob": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/independent-review.json",
+          "declared": "454efd3e9b16c9091eccd8092ef51f9fa2cd6f17a88a92b342b60ce6ca803a3a",
+          "actual": "454efd3e9b16c9091eccd8092ef51f9fa2cd6f17a88a92b342b60ce6ca803a3a",
+          "git_blob": "454efd3e9b16c9091eccd8092ef51f9fa2cd6f17a88a92b342b60ce6ca803a3a",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/isolated_zero.json",
+          "declared": "ba22b52f3db2e14ad13e385b4e47e7c3f8afc8e18973500175cdd7af176b45f4",
+          "actual": "ba22b52f3db2e14ad13e385b4e47e7c3f8afc8e18973500175cdd7af176b45f4",
+          "git_blob": "ba22b52f3db2e14ad13e385b4e47e7c3f8afc8e18973500175cdd7af176b45f4",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/positive_below_floor.json",
+          "declared": "fe6a6a874b90b55255fcf1ce1b180363cd78c5aa78a709848a8e935486421a82",
+          "actual": "fe6a6a874b90b55255fcf1ce1b180363cd78c5aa78a709848a8e935486421a82",
+          "git_blob": "fe6a6a874b90b55255fcf1ce1b180363cd78c5aa78a709848a8e935486421a82",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/run.log",
+          "declared": "65c69b6e7ed9a012ce306311e3c7c661c9b9aa78fb6fff40010f2afa8bb3cded",
+          "actual": "65c69b6e7ed9a012ce306311e3c7c661c9b9aa78fb6fff40010f2afa8bb3cded",
+          "git_blob": "65c69b6e7ed9a012ce306311e3c7c661c9b9aa78fb6fff40010f2afa8bb3cded",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/runtime-identity.json",
+          "declared": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "actual": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "git_blob": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/source-hashes-after.json",
+          "declared": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "actual": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "git_blob": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/source-hashes-before.json",
+          "declared": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "actual": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "git_blob": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/source-identity.txt",
+          "declared": "259ddc483d127a37ff687b29ab0874673be63e24680fa48504338cf9b0148fba",
+          "actual": "259ddc483d127a37ff687b29ab0874673be63e24680fa48504338cf9b0148fba",
+          "git_blob": "259ddc483d127a37ff687b29ab0874673be63e24680fa48504338cf9b0148fba",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/test_zero_motion_audit.py",
+          "declared": "ba2d96c3a502801a2de75eadcff349800ee801f9340d007c25845e9ad6562cce",
+          "actual": "ba2d96c3a502801a2de75eadcff349800ee801f9340d007c25845e9ad6562cce",
+          "git_blob": "ba2d96c3a502801a2de75eadcff349800ee801f9340d007c25845e9ad6562cce",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/unit.xml",
+          "declared": "65b723308eac171917d1932cd24ae184232ff1be087cffd068f07987d4db405c",
+          "actual": "65b723308eac171917d1932cd24ae184232ff1be087cffd068f07987d4db405c",
+          "git_blob": "65b723308eac171917d1932cd24ae184232ff1be087cffd068f07987d4db405c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/metrics.json",
+          "declared": "07bbb96354b500d18b7fcb6717c133735a027745b385e0f79bfedb8cb5198a47",
+          "actual": "07bbb96354b500d18b7fcb6717c133735a027745b385e0f79bfedb8cb5198a47",
+          "git_blob": "07bbb96354b500d18b7fcb6717c133735a027745b385e0f79bfedb8cb5198a47",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/promotion-closeout.json",
+          "declared": "1c21261b580e4de363a5d03f0717c4c90d639605d72a1efb11de61652e132022",
+          "actual": "1c21261b580e4de363a5d03f0717c4c90d639605d72a1efb11de61652e132022",
+          "git_blob": "1c21261b580e4de363a5d03f0717c4c90d639605d72a1efb11de61652e132022",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/run.log.gz",
+          "declared": "8674841f27ab5875b31943981ceb967b0d439fd53aeb89a93e4a6ed64cbd8032",
+          "actual": "8674841f27ab5875b31943981ceb967b0d439fd53aeb89a93e4a6ed64cbd8032",
+          "git_blob": "8674841f27ab5875b31943981ceb967b0d439fd53aeb89a93e4a6ed64cbd8032",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/runtime-identity.json",
+          "declared": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "actual": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "git_blob": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/source-hashes-after.json",
+          "declared": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03",
+          "actual": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03",
+          "git_blob": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/source-hashes-before.json",
+          "declared": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03",
+          "actual": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03",
+          "git_blob": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/source-identity.txt",
+          "declared": "e820b9ac7509e945c6b9cdfebcb4b38fc6c5c468f862f9771c7f3290e8eb8396",
+          "actual": "e820b9ac7509e945c6b9cdfebcb4b38fc6c5c468f862f9771c7f3290e8eb8396",
+          "git_blob": "e820b9ac7509e945c6b9cdfebcb4b38fc6c5c468f862f9771c7f3290e8eb8396",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/strict-exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/strict-lint.log",
+          "declared": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "actual": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "git_blob": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/strict-source-hashes-after.json",
+          "declared": "c4430e8fee3faeed14fa178e439b6d84ed610b16b14d38f0edf63ae765cf89b2",
+          "actual": "c4430e8fee3faeed14fa178e439b6d84ed610b16b14d38f0edf63ae765cf89b2",
+          "git_blob": "c4430e8fee3faeed14fa178e439b6d84ed610b16b14d38f0edf63ae765cf89b2",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/strict-source-hashes-before.json",
+          "declared": "c4430e8fee3faeed14fa178e439b6d84ed610b16b14d38f0edf63ae765cf89b2",
+          "actual": "c4430e8fee3faeed14fa178e439b6d84ed610b16b14d38f0edf63ae765cf89b2",
+          "git_blob": "c4430e8fee3faeed14fa178e439b6d84ed610b16b14d38f0edf63ae765cf89b2",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/unit.xml",
+          "declared": "675d8d5f6df3242b0db7d1908672b6cb094a2d40f7f40916f283b2461ebd3e01",
+          "actual": "675d8d5f6df3242b0db7d1908672b6cb094a2d40f7f40916f283b2461ebd3e01",
+          "git_blob": "675d8d5f6df3242b0db7d1908672b6cb094a2d40f7f40916f283b2461ebd3e01",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/SHA256SUMS",
+      "entries": [
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/all_zero.json",
+          "declared": "3e222af7eff7bb85b28108271b6588db48fa15b55edee885526549d853f1f07b",
+          "actual": "3e222af7eff7bb85b28108271b6588db48fa15b55edee885526549d853f1f07b",
+          "git_blob": "3e222af7eff7bb85b28108271b6588db48fa15b55edee885526549d853f1f07b",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/dependencies.txt",
+          "declared": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "actual": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "git_blob": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/exit-code.txt",
+          "declared": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "actual": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "git_blob": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/image-id.txt",
+          "declared": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "actual": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "git_blob": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/independent-review.json",
+          "declared": "454efd3e9b16c9091eccd8092ef51f9fa2cd6f17a88a92b342b60ce6ca803a3a",
+          "actual": "454efd3e9b16c9091eccd8092ef51f9fa2cd6f17a88a92b342b60ce6ca803a3a",
+          "git_blob": "454efd3e9b16c9091eccd8092ef51f9fa2cd6f17a88a92b342b60ce6ca803a3a",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/isolated_zero.json",
+          "declared": "ba22b52f3db2e14ad13e385b4e47e7c3f8afc8e18973500175cdd7af176b45f4",
+          "actual": "ba22b52f3db2e14ad13e385b4e47e7c3f8afc8e18973500175cdd7af176b45f4",
+          "git_blob": "ba22b52f3db2e14ad13e385b4e47e7c3f8afc8e18973500175cdd7af176b45f4",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/positive_below_floor.json",
+          "declared": "fe6a6a874b90b55255fcf1ce1b180363cd78c5aa78a709848a8e935486421a82",
+          "actual": "fe6a6a874b90b55255fcf1ce1b180363cd78c5aa78a709848a8e935486421a82",
+          "git_blob": "fe6a6a874b90b55255fcf1ce1b180363cd78c5aa78a709848a8e935486421a82",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/run.log",
+          "declared": "65c69b6e7ed9a012ce306311e3c7c661c9b9aa78fb6fff40010f2afa8bb3cded",
+          "actual": "65c69b6e7ed9a012ce306311e3c7c661c9b9aa78fb6fff40010f2afa8bb3cded",
+          "git_blob": "65c69b6e7ed9a012ce306311e3c7c661c9b9aa78fb6fff40010f2afa8bb3cded",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/runtime-identity.json",
+          "declared": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "actual": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "git_blob": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/source-hashes-after.json",
+          "declared": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "actual": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "git_blob": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/source-hashes-before.json",
+          "declared": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "actual": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "git_blob": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/source-identity.txt",
+          "declared": "259ddc483d127a37ff687b29ab0874673be63e24680fa48504338cf9b0148fba",
+          "actual": "259ddc483d127a37ff687b29ab0874673be63e24680fa48504338cf9b0148fba",
+          "git_blob": "259ddc483d127a37ff687b29ab0874673be63e24680fa48504338cf9b0148fba",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/test_zero_motion_audit.py",
+          "declared": "ba2d96c3a502801a2de75eadcff349800ee801f9340d007c25845e9ad6562cce",
+          "actual": "ba2d96c3a502801a2de75eadcff349800ee801f9340d007c25845e9ad6562cce",
+          "git_blob": "ba2d96c3a502801a2de75eadcff349800ee801f9340d007c25845e9ad6562cce",
+          "matches": true
+        },
+        {
+          "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/unit.xml",
+          "declared": "65b723308eac171917d1932cd24ae184232ff1be087cffd068f07987d4db405c",
+          "actual": "65b723308eac171917d1932cd24ae184232ff1be087cffd068f07987d4db405c",
+          "git_blob": "65b723308eac171917d1932cd24ae184232ff1be087cffd068f07987d4db405c",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    }
+  ],
+  "manifest_count": 11,
+  "entry_count": 263,
+  "unique_files": 249,
+  "all_manifest_entries_match": true,
+  "diff_inventory": [
+    {
+      "path": ".github/workflows/project-a.yml",
+      "additions": "2",
+      "deletions": "2",
+      "size": 1861,
+      "sha256": "278f34970d613824b89f7085194e7f12589f1c8f101c3c732fc07a48b7bf6c6f",
+      "kind": "harness"
+    },
+    {
+      "path": "docs/project_a/DECISIONS.md",
+      "additions": "98",
+      "deletions": "0",
+      "size": 20616,
+      "sha256": "fe339d94addb94fc50a870fe7400a7c131e9dd1e1a60bc4f0bf7f4916df11e8a",
+      "kind": "documentation"
+    },
+    {
+      "path": "docs/project_a/RESULTS.md",
+      "additions": "174",
+      "deletions": "1",
+      "size": 34713,
+      "sha256": "2578a95ac9005c4e1c7285a884dab7c48e79a6afd2dcced49fb33cb6d6c92127",
+      "kind": "documentation"
+    },
+    {
+      "path": "docs/project_a/STATUS.md",
+      "additions": "97",
+      "deletions": "0",
+      "size": 12398,
+      "sha256": "e61dbe53f5dfa8a02c93bab6c08ec504fa91947a2d382aa5c718d9e9b755c4c7",
+      "kind": "documentation"
+    },
+    {
+      "path": "docs/project_a/W2_NUMERICS.md",
+      "additions": "207",
+      "deletions": "0",
+      "size": 12948,
+      "sha256": "19984d42fc900cd991b740da87bb2a947ccee788ce299f0bc611e72d293c4c35",
+      "kind": "documentation"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04-ci/SHA256SUMS",
+      "additions": "3",
+      "deletions": "0",
+      "size": 228,
+      "sha256": "41ebac42679fa621d9611cc5ecd5c54f280fa923e508ed039195504f60397239",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04-ci/job.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 30907,
+      "sha256": "5774b01d76efb83b59d0af543c2fd3bde6c02141c818e2d2b72e4b45af7776be",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04-ci/jobs.json",
+      "additions": "1",
+      "deletions": "0",
+      "size": 675,
+      "sha256": "9eb793c3ffa7265026d1ac61da9f1915434c2ceb61abd784ff09769ba7b46ae9",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04-ci/run.json",
+      "additions": "1",
+      "deletions": "0",
+      "size": 212,
+      "sha256": "033e73ce40ab6dcd89953d757e0137d47036f87b6ded3d3dea958f3f0d3c8711",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/REVIEW.md",
+      "additions": "28",
+      "deletions": "0",
+      "size": 1623,
+      "sha256": "07d0572682e39e30c2db4f8f55e4a7ec29d42d71b36cb05516cea5ff87916044",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/SHA256SUMS",
+      "additions": "15",
+      "deletions": "0",
+      "size": 1234,
+      "sha256": "0cfc2a8d6318101befea0b4a54553f23125df3bc97d0037fae97983046d78176",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/a04-candidates.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 879470,
+      "sha256": "98161422b031e9897c9443dcd6c99b791bcdb1d272e4fad4054c47bb935e0b95",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/a04-origin-shift.json",
+      "additions": "21650",
+      "deletions": "0",
+      "size": 533341,
+      "sha256": "51929688d9179600febe5319149ac435d4b5102283c12df9c657c8816a5a82cf",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/dependencies.txt",
+      "additions": "91",
+      "deletions": "0",
+      "size": 1760,
+      "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/image-id.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 72,
+      "sha256": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/lint.json",
+      "additions": "23",
+      "deletions": "0",
+      "size": 670,
+      "sha256": "3b7255255d755ba93b04a8732d4d9c50ef261279131c2260c75d03c47783a10a",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/lint.log",
+      "additions": "0",
+      "deletions": "0",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/metrics.json",
+      "additions": "114",
+      "deletions": "0",
+      "size": 3698,
+      "sha256": "62758ce60671cc8e63fcc7636402789d9f455787e8ebfb30147ef37a30af19a0",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 102,
+      "sha256": "e9018a2fecda499dce4b4693be7c625c1d1329f2ac6b3239d61b38752339c74d",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/runtime-identity.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 267,
+      "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/source-hashes-after.json",
+      "additions": "67",
+      "deletions": "0",
+      "size": 11356,
+      "sha256": "35d58939149869057caff56ce3c972b96a6a01c9cf383ec78de9379c665f0eb7",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/source-hashes-before.json",
+      "additions": "67",
+      "deletions": "0",
+      "size": 11356,
+      "sha256": "35d58939149869057caff56ce3c972b96a6a01c9cf383ec78de9379c665f0eb7",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/source-identity.txt",
+      "additions": "16",
+      "deletions": "0",
+      "size": 1121,
+      "sha256": "dac8caa333b537a504e3096e2190ad8d9a06b4cf2f4531fcea612d9f597d9946",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a04/unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2568,
+      "sha256": "fb49d200a955fc60c2b9a6457bb8f55cefb826043d09d03e1355604ff8db8a16",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-ci/SHA256SUMS",
+      "additions": "7",
+      "deletions": "0",
+      "size": 567,
+      "sha256": "5decde06a652036e258755958c883adec5b077d1c7b24ba1814400d6b817e777",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-ci/artifacts.json",
+      "additions": "25",
+      "deletions": "0",
+      "size": 952,
+      "sha256": "a4b2b7d228b0e62004061e55206959a66a8a65c19707afc75aa61322edffa952",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-ci/job.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 29898,
+      "sha256": "a60e3ecdc5e4b05aceaba74137ec7a7548378c5cf2979d655bee5a06ebb806d2",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-ci/jobs.json",
+      "additions": "97",
+      "deletions": "0",
+      "size": 3365,
+      "sha256": "4675665b0e09515598b3a84052d11ea032ce57a1d05daab394ce35391bf9a235",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-ci/legacy-identity-comparison.json",
+      "additions": "25",
+      "deletions": "0",
+      "size": 1015,
+      "sha256": "a3703be695dd34933f39428e6b75c84bbd13407b3a8ea426a1a2d646f3a16962",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-ci/retrieval.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 712,
+      "sha256": "f2584d1ed93aea8450526e770badbd5fcb890cb95eeb525b02d4f0af2aa9a49a",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-ci/run.json",
+      "additions": "224",
+      "deletions": "0",
+      "size": 13915,
+      "sha256": "77579af4f5fb67ef7390e18223833807e175d20b796a27565b077a69928be58b",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-ci/summary.json",
+      "additions": "63",
+      "deletions": "0",
+      "size": 1045,
+      "sha256": "93267b025c73e85445e893931bbf0a44decc8b8975057afecfbe3c056fb9211c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/README.md",
+      "additions": "3",
+      "deletions": "0",
+      "size": 248,
+      "sha256": "3cc40637089e7fc9935c3942953a4cf6d2a428b736e5173d964281497b03250b",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/SHA256SUMS",
+      "additions": "16",
+      "deletions": "0",
+      "size": 1380,
+      "sha256": "66414920bbd3976b9f987a17bd4c6f29269fae99aae3b9910c8bdcfb945cbf4e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/dependencies.txt",
+      "additions": "91",
+      "deletions": "0",
+      "size": 1760,
+      "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/hidden-notch-candidate.json",
+      "additions": "856",
+      "deletions": "0",
+      "size": 15401,
+      "sha256": "9ca72f745fbd339b4fdf9fe69c441a95c75c6a8572e2df4f8d7876a87c76617c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/hidden-notch-generated-route.json",
+      "additions": "1",
+      "deletions": "0",
+      "size": 19933,
+      "sha256": "c009c7824c13fd5ff01df7dcca9e2bba9cc3d2d719c905c0788546134f5f7732",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/hidden-notch-probe.json",
+      "additions": "17",
+      "deletions": "0",
+      "size": 529,
+      "sha256": "c1fc070405dc312e4ee2226cb15ddc4ded7cbc07c85aa13236fb784e864a0d9e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/host-polygon-oracle.json",
+      "additions": "7",
+      "deletions": "0",
+      "size": 271,
+      "sha256": "9b46f033654c77d8a70e3c65179b9cff626fa8e4a37f1761ca4bee66bf038669",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/host-sqrt-oracle.json",
+      "additions": "7",
+      "deletions": "0",
+      "size": 330,
+      "sha256": "61ed8134b85bad47dc25f6d40095e0bbab19f826b70fe1168a378ecb1bfa18b3",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/image-id.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 72,
+      "sha256": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/run.log",
+      "additions": "3",
+      "deletions": "0",
+      "size": 179,
+      "sha256": "ac8da035dccc4068f4defd29f51d8a90313e373d710aa429296434e47d3c152d",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/runtime-identity.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 267,
+      "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/source-hashes-after.json",
+      "additions": "73",
+      "deletions": "0",
+      "size": 12099,
+      "sha256": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/source-hashes-before.json",
+      "additions": "73",
+      "deletions": "0",
+      "size": 12099,
+      "sha256": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/source-identity.txt",
+      "additions": "21",
+      "deletions": "0",
+      "size": 1436,
+      "sha256": "0aa8b471282f5c9dc130fbfe36e26e5b264f9199a2ce3e6fe4b1b2c2eabad07b",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/test_hidden_notch_probe.py",
+      "additions": "85",
+      "deletions": "0",
+      "size": 4589,
+      "sha256": "7b01eece7f5069542f6c0d16a32147b65eb094bc9bf74021fcc288e4cfbb7cae",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05-independent/unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 392,
+      "sha256": "aa339752cab6a9e35e71987a08adf062dfa93833fa532e4751ab2deb9a301e1f",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/REVIEW.md",
+      "additions": "48",
+      "deletions": "0",
+      "size": 2908,
+      "sha256": "6544878893f17f3fb1c42e95bbbfa389464fab3bd28c920ffdb9fce49d0a34df",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/SHA256SUMS",
+      "additions": "38",
+      "deletions": "0",
+      "size": 3366,
+      "sha256": "43a4d43fcaea285d9367fde9659dab4358da0342a9e06b37d14b27300c768177",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/a05-bounds-oracle.json",
+      "additions": "123",
+      "deletions": "0",
+      "size": 3567,
+      "sha256": "9e1fa252f7b64d9851fb27f9a6a55b030d1e8f422ca8f3de3066e33f75719f5b",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/a05-geometry.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 91755,
+      "sha256": "64747ff1954dc73e746732dfefedb70582cacf033cd77ac6ccfc6a9cdbad6c5c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/ast-after-format.json",
+      "additions": "4",
+      "deletions": "0",
+      "size": 264,
+      "sha256": "b0a88ad1add2358c747ca1acfde1965127b6c38bf1f13f7cc9e576215d769450",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/ast-before-format.json",
+      "additions": "4",
+      "deletions": "0",
+      "size": 265,
+      "sha256": "27cff6c462caf90e2953d63246905cde0208d4d8baa0e0ccf4693c013e11b856",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/dependencies.txt",
+      "additions": "91",
+      "deletions": "0",
+      "size": 1760,
+      "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/first-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/first-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 545,
+      "sha256": "4f67235cd28af0971b5f2b039169d34920203b77d53a2f92dac7fae23edc20af",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/first-source-hashes-after.json",
+      "additions": "70",
+      "deletions": "0",
+      "size": 11756,
+      "sha256": "d38634bc81a5a64e76c0596ca8b203110350f33f686ceba50a046d6c32068079",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/first-source-hashes-before.json",
+      "additions": "70",
+      "deletions": "0",
+      "size": 11756,
+      "sha256": "d38634bc81a5a64e76c0596ca8b203110350f33f686ceba50a046d6c32068079",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/first-unit.xml",
+      "additions": "11",
+      "deletions": "0",
+      "size": 8134,
+      "sha256": "975d9620defd8a7ba80d2ea98261f008db4eeac5d676539d70ecc53a2acd8be3",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/historical-relaxed-lint.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 1495,
+      "sha256": "83798ff390a2929d4a13d1186e464f0ee81eb413f9c826039dda99eba6766043",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/image-id.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 72,
+      "sha256": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/metrics.json",
+      "additions": "86",
+      "deletions": "0",
+      "size": 3378,
+      "sha256": "b6f51dee469e4757615f7990e293fe48e7d7c46b0ccfbcce7459ef10605acc5d",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/pre-format-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 102,
+      "sha256": "b774e7865dc16ae9b956db0829d70eb63161a30ddcfd9383dabe8a2f3537ae66",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/pre-format-source-hashes-after.json",
+      "additions": "73",
+      "deletions": "0",
+      "size": 12099,
+      "sha256": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/pre-format-source-hashes-before.json",
+      "additions": "73",
+      "deletions": "0",
+      "size": 12099,
+      "sha256": "135b208f4ea9e66a1508f4a840d6e5bc3fe7420e938b3a2f5cd580eaeab3892e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/pre-format-source-identity.txt",
+      "additions": "20",
+      "deletions": "0",
+      "size": 1441,
+      "sha256": "d14049913d898c8864f8b6832874020a9e8e3724f28c4e579915c0448dcd1871",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/pre-format-unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 7813,
+      "sha256": "1139eb3b06b3963635d266131ec99f8b4cae9bb540065a21b7731ffb0f60117c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 103,
+      "sha256": "220ee62a69eeab832fffa92a213a2fdc3ef00ddb85ec58023edec1806c7552fc",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/runtime-identity.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 267,
+      "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/second-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/second-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 102,
+      "sha256": "cef82905cf37f68c2aa7dfd443aeaa569b9296f4d1d562c19f9601729d3f64cf",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/second-source-hashes-after.json",
+      "additions": "70",
+      "deletions": "0",
+      "size": 11756,
+      "sha256": "9118f6687f46d9856c39c9772ee2844dfe633dec22725c5a167e424669f9ec35",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/second-source-hashes-before.json",
+      "additions": "70",
+      "deletions": "0",
+      "size": 11756,
+      "sha256": "9118f6687f46d9856c39c9772ee2844dfe633dec22725c5a167e424669f9ec35",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/second-unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 7668,
+      "sha256": "85b32796b390a9f31a740d1a46467e966871b0eee288f4a0ec780144816f0f96",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/source-hashes-after.json",
+      "additions": "73",
+      "deletions": "0",
+      "size": 12099,
+      "sha256": "020cec46bf9db1ddff9f6a1adcb01367a6efdf30382ab6cf1c0fb9310f6ba075",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/source-hashes-before.json",
+      "additions": "73",
+      "deletions": "0",
+      "size": 12099,
+      "sha256": "020cec46bf9db1ddff9f6a1adcb01367a6efdf30382ab6cf1c0fb9310f6ba075",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/source-identity.txt",
+      "additions": "25",
+      "deletions": "0",
+      "size": 1611,
+      "sha256": "18e2adff53586713fb844fe5abdcf11d569a975e7fadd5aa1956b5794eb00173",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/strict-ast-invariance.json",
+      "additions": "11",
+      "deletions": "0",
+      "size": 590,
+      "sha256": "b9f47f754fe454592e84761624c0dc2556fd1dd293d0c23ae730d12f148e8ad6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/strict-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/strict-lint-before-format.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 360,
+      "sha256": "023495920d018b36626a6c0f343731c1192cc65389e0e3b62c82f82ca3b6dbe4",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/strict-lint.json",
+      "additions": "43",
+      "deletions": "0",
+      "size": 3035,
+      "sha256": "74eb2e8754db36710f00c6b871090e3a9821feb10dc5af18f7bf3f0e14966fa1",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/strict-lint.log",
+      "additions": "0",
+      "deletions": "0",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/strict-source-hashes-after.json",
+      "additions": "5",
+      "deletions": "0",
+      "size": 403,
+      "sha256": "747b791c17167eecf98e671df12f9ad95c27aa6018b61dfd5a327d9b49d9a873",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/strict-source-hashes-before.json",
+      "additions": "5",
+      "deletions": "0",
+      "size": 403,
+      "sha256": "747b791c17167eecf98e671df12f9ad95c27aa6018b61dfd5a327d9b49d9a873",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a05/unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 7814,
+      "sha256": "4cbe3bb2af28d73409d942beb9547db9f4484160945e0a412074f349f6b2d68c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06-ci/SHA256SUMS",
+      "additions": "7",
+      "deletions": "0",
+      "size": 567,
+      "sha256": "883170e07875dbee66adb2edd06b5c29dc971ff5830efb4a1b15b3d9107b2dd6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06-ci/artifacts.json",
+      "additions": "25",
+      "deletions": "0",
+      "size": 952,
+      "sha256": "51ff3a2af58429d24f57b7fff8b1a3e911eb2b3871463c75a5615e6e9aa765c2",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06-ci/job.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 30418,
+      "sha256": "b7e7b39c9596a255144574c159a5bdd32ffb32da55eae8d3afa6d54b0588ee61",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06-ci/jobs.json",
+      "additions": "97",
+      "deletions": "0",
+      "size": 3359,
+      "sha256": "c666281be334a81504333d1b05c0f64329cbfb07c036a66c7715591fc5310ed7",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06-ci/legacy-identity-comparison.json",
+      "additions": "62",
+      "deletions": "0",
+      "size": 1847,
+      "sha256": "22be26385b235d15ae8027f2502a619e0bd4c1154ee55108ac4b391273a8f67d",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06-ci/retrieval.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 712,
+      "sha256": "b5c60c9082a4fd1f697d01c579e502b5555a639d8e92aaeca82cd128b46311cf",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06-ci/run.json",
+      "additions": "248",
+      "deletions": "0",
+      "size": 14621,
+      "sha256": "34b8d407d3719231b2bbe16cb90cdde1a165d5c073295feb0578ad084ea86c10",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06-ci/summary.json",
+      "additions": "93",
+      "deletions": "0",
+      "size": 1556,
+      "sha256": "ba31a430caef13f651d248f5f5cd0b71c1f88bad1bad89eb584617575a4c3a2e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/REVIEW.md",
+      "additions": "49",
+      "deletions": "0",
+      "size": 3032,
+      "sha256": "29368818c9a509357a9428cfa4c144cb6ab194ea89e8ecfce98fa6ab386e3005",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/SHA256SUMS",
+      "additions": "64",
+      "deletions": "0",
+      "size": 6016,
+      "sha256": "56bd88859ec87aedbf7371095435a5ce93390b8007cd457cadc139032a2f6b24",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/a06-combined-source-review.json",
+      "additions": "44",
+      "deletions": "0",
+      "size": 2970,
+      "sha256": "70f1b6af4bdd50da00c9bbc5abb11f62aa210505a949d7d84d555c4a3a6ff549",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/a06-cycle-oracle.json",
+      "additions": "12",
+      "deletions": "0",
+      "size": 470,
+      "sha256": "2b41652c2003da05c109623c5c2cce65b316bf50a1704e1a74b4c8e22a26f9b0",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/a06-independent-dynamics.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 102451,
+      "sha256": "23d1d0b4aa88e6d2582be6eab9607ab4770a0725b47e6f8bb80f2c285174c417",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/a06-retimer-s0_reverse_route.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 7990,
+      "sha256": "72da483e02b014c6a96d1badf632c99baba51f52865ba7f2b5e76c5a9ceb9322",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/a06-retimer-s0_rotated_route.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 7984,
+      "sha256": "ce57000c0c95d91521ea1949d742a43167afee2ed2ff83aad2667cb2df4f78bb",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/a06-retimer-s0_route.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 8003,
+      "sha256": "35895e86142a46902b7ebd8868ed30ee78cb51b7f4c234a8de66a88599e0c692",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/a06-retimer-s2_lower_route.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 10040,
+      "sha256": "a12020ce74485f71ebd3f8bb850f811375f798aaac9f93359f16ff6933bf02c3",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/a06-retimer-s2_upper_route.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 9997,
+      "sha256": "7fdd1f4b3fc8fe1c719224ce76a8c43fcec5eea7f48fde73870864abc2519c25",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/a06-retimer-s3_notch_route.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 15064,
+      "sha256": "26d8e530785174e36428cfe64d4fe08e09a86b6998e717b5144bbd4c0c109842",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/a06-retimer-s3_surfaces_route.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 15012,
+      "sha256": "4c108b6059dcc12adeb0d0ccfa6302c77405a40cfadb21952393f16424cd4780",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/checker-first-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/checker-first-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 92,
+      "sha256": "9b5f9876738ad675180613577fae8927dbaedb50993beda148e15d4988a960ac",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/checker-first-source-hashes-after.json",
+      "additions": "83",
+      "deletions": "0",
+      "size": 13385,
+      "sha256": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/checker-first-source-hashes-before.json",
+      "additions": "83",
+      "deletions": "0",
+      "size": 13385,
+      "sha256": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/checker-first-unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 4512,
+      "sha256": "21e2a09eb9241812f875c1842b1723e1d33cfc836d4031e0b2a68ec3ccd590d0",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/checker-second-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/checker-second-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 92,
+      "sha256": "952acf6f6effd1746b43831b77fbfc944a149c205ae5b86ffd1e8c524fd0c134",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/checker-second-source-hashes-after.json",
+      "additions": "83",
+      "deletions": "0",
+      "size": 13385,
+      "sha256": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/checker-second-source-hashes-before.json",
+      "additions": "83",
+      "deletions": "0",
+      "size": 13385,
+      "sha256": "9de2912ba2a93905f86a6d0e1a9a32eacdd472a6e04769987c4721aa6443a092",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/checker-second-unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 5119,
+      "sha256": "b63e2d2e2916065ffdd702f05e913d9a4dd7233ffb2b60d1f677952aa4c53851",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/dependencies.txt",
+      "additions": "91",
+      "deletions": "0",
+      "size": 1760,
+      "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/exploratory-provenance.json",
+      "additions": "6",
+      "deletions": "0",
+      "size": 508,
+      "sha256": "4c0bd08ef5d564173b84380c522df5ee9c1ac34c8d1117dcf17cfa77a9588355",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/image-id.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 72,
+      "sha256": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/metrics.json",
+      "additions": "184",
+      "deletions": "0",
+      "size": 7832,
+      "sha256": "c9572279bf0a17e84be7759d39992d505af9ed9aa2ff5edaec81b1f92204a806",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/oracle-first-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/oracle-first-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 90,
+      "sha256": "f57a127cd9b3c6bea8095541a0670ab1d30ca6732296d14a85965bd79cb4bd98",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/oracle-first-source-hashes-after.json",
+      "additions": "82",
+      "deletions": "0",
+      "size": 13252,
+      "sha256": "6927839bd960da361a03b1e2be23619e8f5903666e2cb0eb2e594434b99cca65",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/oracle-first-source-hashes-before.json",
+      "additions": "81",
+      "deletions": "0",
+      "size": 13114,
+      "sha256": "072bceba5e31614c249e3e1ec4afc72e15c220892d837252010f072026d3efc4",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/oracle-first-unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 1156,
+      "sha256": "2c56ae5be3f7b6df7eb09f5b2cc44b7f311335af14337c375d33ce3a8e29be52",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/oracle-second-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/oracle-second-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 91,
+      "sha256": "d8e5ead85f2b0e16ffcb5e46ce0fc97d114a295b7305e703e60c79b839b9c3b0",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/oracle-second-source-hashes-after.json",
+      "additions": "82",
+      "deletions": "0",
+      "size": 13252,
+      "sha256": "c1a917b2f717139c29cc9c9264a45fe125ff41427c56d00cc9b1d5c48b5eb6c8",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/oracle-second-source-hashes-before.json",
+      "additions": "82",
+      "deletions": "0",
+      "size": 13252,
+      "sha256": "3110d232d590317693f18505755e142d4a956825de8f2833fcf26f35dc65257d",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/oracle-second-unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 1426,
+      "sha256": "3aab370f537e7eaa476e001908b3424ea6a2513c6c50b4de2c57662518f3e19e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-first-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-first-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 778,
+      "sha256": "ed6f5bc7d2cc243faf77d26b4dcc1eff9d0fe6a2ec35ec699b0b94e34a9ff14c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-first-source-hashes-after.json",
+      "additions": "80",
+      "deletions": "0",
+      "size": 12983,
+      "sha256": "b6c873d9c9a0ecea1a6ae1cb6691d60d68b1bc4ee69f5eee6241dee0944135fa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-first-source-hashes-before.json",
+      "additions": "80",
+      "deletions": "0",
+      "size": 12983,
+      "sha256": "c908d0a92937dc93fbfc9b77f06e30d757259b6dd4f58cc3113ed533179d2653",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-first-unit.xml",
+      "additions": "29",
+      "deletions": "0",
+      "size": 4080,
+      "sha256": "51dca1404e4b5a2396f55a236cf98c3d2e7237071d00d9fffafafca28008c786",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-review.json",
+      "additions": "28",
+      "deletions": "0",
+      "size": 1547,
+      "sha256": "3f425d501720ce92372f7044f352a7adee14eecb0ce935b17865d4834f5e6694",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-second-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-second-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 92,
+      "sha256": "0c0ee79765a90fb6fcae38391173d22a6f8da52eb9bfca4bbea6ccb3ee909506",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-second-source-hashes-after.json",
+      "additions": "82",
+      "deletions": "0",
+      "size": 13252,
+      "sha256": "efcf5647279c089af3d7b593c037ec068c361f2f16bd7a1770617c8bfb8e20ef",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-second-source-hashes-before.json",
+      "additions": "81",
+      "deletions": "0",
+      "size": 13114,
+      "sha256": "8c7cf33c1fb73387497017703caa745abe45a22ee65d6ab23abe0a655a07349b",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-second-unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2552,
+      "sha256": "0d4a7afd86ee2124963a0c301c4ea11d271b92dc89844d6b8bf5e190c91f6b81",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-third-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-third-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 92,
+      "sha256": "74b1001224e2008ab754f1a3e49fd1ae44ed7f28f370d3d55701e04429c703c4",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-third-source-hashes-after.json",
+      "additions": "83",
+      "deletions": "0",
+      "size": 13385,
+      "sha256": "2e0eb93016a5535097361c1c76ffa1d5bd6c089c8f4852da89af126c918c8f0f",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-third-source-hashes-before.json",
+      "additions": "82",
+      "deletions": "0",
+      "size": 13252,
+      "sha256": "c1a917b2f717139c29cc9c9264a45fe125ff41427c56d00cc9b1d5c48b5eb6c8",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/retimer-third-unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2809,
+      "sha256": "558ca3417493e22b0ecc70f4447c770d2edf4cbd725c9e7eb103241c21522749",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 104,
+      "sha256": "10e117105c552fa46c2b9a139143b4f1c93c810d0bd681e034d41286a2aafe3d",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/runtime-identity.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 267,
+      "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/source-hashes-after.json",
+      "additions": "83",
+      "deletions": "0",
+      "size": 13385,
+      "sha256": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/source-hashes-before.json",
+      "additions": "83",
+      "deletions": "0",
+      "size": 13385,
+      "sha256": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/source-identity.txt",
+      "additions": "26",
+      "deletions": "0",
+      "size": 1784,
+      "sha256": "ced6c96c958f28363fd895c3a3a948970599298e5fe59d924d5965eeef40a6a4",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/strict-command.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 419,
+      "sha256": "0813ef44d2ad132083df058b591c60467a69c485afaea28bf013794701597935",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/strict-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/strict-lint.log",
+      "additions": "0",
+      "deletions": "0",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/strict-source-hashes-after.json",
+      "additions": "87",
+      "deletions": "0",
+      "size": 13803,
+      "sha256": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/strict-source-hashes-before.json",
+      "additions": "87",
+      "deletions": "0",
+      "size": 13803,
+      "sha256": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 10151,
+      "sha256": "bb2ac09efb090c0cd23b00b195f00de1efe3293a6d7d38bf4d1ed7ca0ab1c1a7",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-a06/w2-pipeline.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 1224165,
+      "sha256": "3fbd16061cb96b14c124fcbfde3e44bda641420251675cb755b572499538c86e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/SHA256SUMS",
+      "additions": "23",
+      "deletions": "0",
+      "size": 1879,
+      "sha256": "3f5f68336800f07381353efe530b8935614a54e6e331dcb2d716637b17f082ab",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/a01.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 7315,
+      "sha256": "11923bf75ede4b1c87b5e6765bf5b9de475cc6d85452de61c4276cce27d4b820",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/a02.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 5804,
+      "sha256": "68e160e7067a5a449c9917f3bcbe615300eb64a09c303f2fcee77fd44e4afbf2",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/a03.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 5090,
+      "sha256": "92e2c925e3be05a81af4383573ec34809582b7f8c836e56aa788559fbd74cd44",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/dependencies.txt",
+      "additions": "177",
+      "deletions": "0",
+      "size": 3697,
+      "sha256": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/helper-hashes.json",
+      "additions": "5",
+      "deletions": "0",
+      "size": 276,
+      "sha256": "cacf561dfcc3094e79c368c0c06d252aa7cfc2be710184826310eac65e878018",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/image-id.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 72,
+      "sha256": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/legacy-exit-codes.txt",
+      "additions": "2",
+      "deletions": "0",
+      "size": 35,
+      "sha256": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/legacy-identity-comparison.json",
+      "additions": "16",
+      "deletions": "0",
+      "size": 560,
+      "sha256": "909babb37800ee5696accc30f83c04de1eab0af4a0ea58b4bafe922aed8632e3",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/legacy-results.txt.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 8479,
+      "sha256": "8d2d9a01d07b628c12d281d5a13c3835f28164bd0853699f39244db9189fda30",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/legacy.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 73368,
+      "sha256": "6092920bb9bb221240a3aea0e984cf50216a10ce40f8383dbb084859f1647d37",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/numerical.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 962,
+      "sha256": "9541ffd8df1946c714fd876c7a463008387ca6fd145e2f83c32c8ef917efd0b7",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/os-packages.txt",
+      "additions": "578",
+      "deletions": "0",
+      "size": 23293,
+      "sha256": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/ros.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 597,
+      "sha256": "1f4a7613c0686ee0b9c6fd0e3cca084454b2764f7d0ac17eebcfe57d6feeb003",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 9406,
+      "sha256": "b810b7956f1e1a096ef278d7463917530bec724ec35942d71e3c1d3526fbc183",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/runtime-identity.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 267,
+      "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/setup.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 5093,
+      "sha256": "501fe3f879e0170f020517567fa7b109f89922ebb908c841afe51706eed6413f",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/source-identity.txt",
+      "additions": "20",
+      "deletions": "0",
+      "size": 1062,
+      "sha256": "f500412fe678317a9f6bc034f806b3ffcf373f08aa9351c684bb6f52a2e2efd8",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/summary.json",
+      "additions": "44",
+      "deletions": "0",
+      "size": 732,
+      "sha256": "48f399226c73fc3f361073125c5bfc22d0e2c4937f247124586f1882f70b7da8",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/w1-ci-full.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 31154,
+      "sha256": "f0d3d2aa3b0be175bc0f89e20700d881c9f66409ec0b8a3dbc7d520a6dbb7b4c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/w1-ci-jobs.json",
+      "additions": "1",
+      "deletions": "0",
+      "size": 703,
+      "sha256": "5d2a2f68529c198756e01d6d6ef3d6f7da9efbeba7f3e96e4ce2dc06bb22a4f8",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/w1-ci-runs.json",
+      "additions": "1",
+      "deletions": "0",
+      "size": 510,
+      "sha256": "57681ea70a4980bad7d97eaa75d82a813311ebb63d6a644e3885d0cac83abae8",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-baseline/w1-installed.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 322,
+      "sha256": "a6d21c089f2faf26a7261b633f61d4e6b2d25c16b84bed321b5fd3e75c899c87",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/README.md",
+      "additions": "18",
+      "deletions": "0",
+      "size": 1115,
+      "sha256": "cd9ba48a6642cdc113829782cfe4f856b27fb29e11cd17fae3a8f5215b945fbd",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/SHA256SUMS",
+      "additions": "32",
+      "deletions": "0",
+      "size": 2640,
+      "sha256": "01aa3fadf2b31325f46482a6112051364841a66c68dd18d6a96e070b7f9075de",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/a01.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 7315,
+      "sha256": "79e90f1e78412d6322817638b46681f8cc7bff91536688f39850195271d69f64",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/a02.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 5804,
+      "sha256": "155a97a9433c1d132033815f249e65207a554d909a29583fe33ec177e4dbd483",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/a03.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 5090,
+      "sha256": "a8958bd5c4859a7fce8ec45dc28a3a58f0ee39dd1697b8eccb301306d16c03a1",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/a04.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2568,
+      "sha256": "cf9f007ba4211742d11fd1667f8074cad67f571944cefc33266a1a87335f87fa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/a05-oracle.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2285,
+      "sha256": "2792e9f0a254590c565436819bbe1aace0f732fd94c4568448133237162a8f80",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/a05.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 5758,
+      "sha256": "fa4812c0ddcf78183b22735ebf2b2f0d8c4290da9d1e0f0db46b41d9d9a178f1",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/a06-independent.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 5118,
+      "sha256": "5c73e38a015d164273def140c4b78acb6677c163b8c35b261a2abc8b2d4c5e3e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/a06-oracle.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 1426,
+      "sha256": "28760cb8b6db16060363ea833c1a6ee5fa84edb450b26765473b77fdcf9bc780",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/a06.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2940,
+      "sha256": "88bc95183a87f2d680a135f36a50fbeb263c096ab0b8dbc5d4627c14cb05461b",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/dependencies.txt",
+      "additions": "177",
+      "deletions": "0",
+      "size": 3697,
+      "sha256": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/image-id.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 72,
+      "sha256": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/installed-source-identity-check.json",
+      "additions": "25",
+      "deletions": "0",
+      "size": 1122,
+      "sha256": "d0bd1665c57aad4d56cac75dfcb4b6d6dfc2049048e947a5c44e0e2181fdbcc5",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/legacy-exit-codes.txt",
+      "additions": "2",
+      "deletions": "0",
+      "size": 35,
+      "sha256": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/legacy-identity-comparison.json",
+      "additions": "22",
+      "deletions": "0",
+      "size": 688,
+      "sha256": "b0fd8490e169f1add838d2d5848cb4c406b6b7f95acf3ac74bc194389e20a161",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/legacy-results.txt.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 8480,
+      "sha256": "320f397cccdaf41faaa82c17278a5322927cc38520af27743fbc1112b5606c53",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/legacy.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 74002,
+      "sha256": "58b71621c377b4049e3a8783fded7c6ea5347541c63709a237e920f59d600f68",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/numerical.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 962,
+      "sha256": "8418e57b052b7b08fd6da79749857da72255cd17a048259986ab007c103ec3a0",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/optimizer-wheel.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 1321,
+      "sha256": "9466d34f2e118dd9ac05bc447c313a489593e7050f99c1c0728e03c2dea1008d",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/os-packages.txt",
+      "additions": "578",
+      "deletions": "0",
+      "size": 23293,
+      "sha256": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/ros.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 597,
+      "sha256": "077500901dc359b911e208b03b5c5a71766b5ac5dcfadba651088402210569d8",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 9625,
+      "sha256": "b196407c1c03269c1d69f254202dd1d80baa50921413f0c6c5c1d98b85de9e63",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/runtime-identity.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 267,
+      "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/source-hashes-after.json",
+      "additions": "87",
+      "deletions": "0",
+      "size": 13803,
+      "sha256": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/source-hashes-before.json",
+      "additions": "87",
+      "deletions": "0",
+      "size": 13803,
+      "sha256": "cb1ef6ad59b2f98a2ec8af34475aaf5ecdb2217813742f436634206debb4c88e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/source-identity.txt",
+      "additions": "20",
+      "deletions": "0",
+      "size": 1062,
+      "sha256": "e5e48cdda2bcfff0d4a525cd658ffc0d211da7385d6f4b485ffc0296fd69ca82",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/summary.json",
+      "additions": "93",
+      "deletions": "0",
+      "size": 1555,
+      "sha256": "332b059c1dce82e706619ba27a3c4a73bd9a4ee010ede5e37f42f3889ece34dc",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/w1-installed.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 322,
+      "sha256": "d5d86c9dd33dcd24091823526bf17a2a03dfc5cd8b046d2d0d2b892ac867d927",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/w2-installed.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 45913,
+      "sha256": "e2c999c797e19e10bd8e340b0d59aa5f8a9d1ddaf449df7d3abc65a0fc934234",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/w2-installed.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 319,
+      "sha256": "a82ecd8781f5ced614d86f8a56647e7dfe458e3502e90f356fca1c3cfc47ff40",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-full/w2-pipeline.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 1355,
+      "sha256": "a5998ad21546d0c9655e0e7e1b4bcf3fe88628d59c59a6267c9a7958da21ab9a",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/README.md",
+      "additions": "36",
+      "deletions": "0",
+      "size": 2342,
+      "sha256": "0ed45bf1bd9be37610b8c7d11df75a6e610e4c608d9cd393f56987b4f81f60f6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/SHA256SUMS",
+      "additions": "44",
+      "deletions": "0",
+      "size": 4219,
+      "sha256": "00fbaa24f51d2ee8633a4928792a5a3567dde43fc0b944ba5656db816603835f",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/a05-wrong-deck-coincident.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 21742,
+      "sha256": "cb8977984bcc1f488307e02e4d43086d288a0d96037031f392ed45ae8b55f43b",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/a06-ellipse-profile.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 3424,
+      "sha256": "0f467725d707219b4bdb8e6c1e0a433ad615bb3f04598ecd9c9d795007298ea9",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/a06-ellipse-route.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 5047,
+      "sha256": "687c602c301e5bdae5e8db3218530b2c3068e09f8e2ac53ace07a639f9a1a8f0",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/a06-ellipse.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 55203,
+      "sha256": "66463134858e7d654871eb2e509a9f6575e7ab44d62f896a1e4ceaebea8f739e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/a06-narrow-lower-cap.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 61632,
+      "sha256": "84603419106de51ac6957018ee4ad6dd6e1e8681f32599a61c7c63df56381f22",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/before-header-wrap-run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 104,
+      "sha256": "c8a3a687a7eff14dd76bee4679b695fa43ea49f5f228812203e6741372a3972b",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/before-header-wrap-source-hashes-after.json",
+      "additions": "84",
+      "deletions": "0",
+      "size": 13517,
+      "sha256": "ae7b5d04bb25fa9c170ec00df50ed0fa0ab2359dadb24891bcc05179e39d06db",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/before-header-wrap-source-hashes-before.json",
+      "additions": "84",
+      "deletions": "0",
+      "size": 13517,
+      "sha256": "ae7b5d04bb25fa9c170ec00df50ed0fa0ab2359dadb24891bcc05179e39d06db",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/before-header-wrap-unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 674,
+      "sha256": "dc26b4bc54b96a9434d2cea4244c9b886f4ed54d1b380521bc3dd833fc2cefb7",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/completeness-final-verdict.json",
+      "additions": "21",
+      "deletions": "0",
+      "size": 1706,
+      "sha256": "a52e78e3e3f5d534cefdb670911c6c46d1dd583e5d208feee0f51ab33dfd4168",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/completeness-review.json",
+      "additions": "281",
+      "deletions": "0",
+      "size": 14623,
+      "sha256": "c550c1218392997d0fbfa332de641c6bbd4c324179bdb47dba67bd50da41a57c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/completeness-review.md",
+      "additions": "16",
+      "deletions": "0",
+      "size": 1985,
+      "sha256": "ff740a8346b054b002e7ce304bca5f8b70d7ff65f4a85c9168cbc0e547f94333",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/dependencies.txt",
+      "additions": "91",
+      "deletions": "0",
+      "size": 1760,
+      "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/draft-provenance.json",
+      "additions": "67",
+      "deletions": "0",
+      "size": 2658,
+      "sha256": "136b807673269c4296f6c5044709065cc2e7180194662bd43d3f06de31d6fc52",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/ellipse-draft-lint.json",
+      "additions": "27",
+      "deletions": "0",
+      "size": 834,
+      "sha256": "f6cebd5108d06327fb404e1d8c72a359a3bb6bf4eeb0f2eb201a1c3a3429060e",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/image-id.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 72,
+      "sha256": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/SHA256SUMS",
+      "additions": "14",
+      "deletions": "0",
+      "size": 1187,
+      "sha256": "9bc400c019a51aef9c444ccab7fb928d936646d8b75d743d971315bc5a796793",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/all_zero.json",
+      "additions": "9",
+      "deletions": "0",
+      "size": 248,
+      "sha256": "3e222af7eff7bb85b28108271b6588db48fa15b55edee885526549d853f1f07b",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/dependencies.txt",
+      "additions": "91",
+      "deletions": "0",
+      "size": 1760,
+      "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/image-id.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 72,
+      "sha256": "d0ec6d4b71d14bbdc7572db7d8536eea7e4cc1b7a8e7e5d13ad9bfafc0484d36",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/independent-review.json",
+      "additions": "42",
+      "deletions": "0",
+      "size": 1872,
+      "sha256": "454efd3e9b16c9091eccd8092ef51f9fa2cd6f17a88a92b342b60ce6ca803a3a",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/isolated_zero.json",
+      "additions": "9",
+      "deletions": "0",
+      "size": 267,
+      "sha256": "ba22b52f3db2e14ad13e385b4e47e7c3f8afc8e18973500175cdd7af176b45f4",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/positive_below_floor.json",
+      "additions": "9",
+      "deletions": "0",
+      "size": 288,
+      "sha256": "fe6a6a874b90b55255fcf1ce1b180363cd78c5aa78a709848a8e935486421a82",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/run.log",
+      "additions": "3",
+      "deletions": "0",
+      "size": 179,
+      "sha256": "65c69b6e7ed9a012ce306311e3c7c661c9b9aa78fb6fff40010f2afa8bb3cded",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/runtime-identity.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 267,
+      "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/source-hashes-after.json",
+      "additions": "83",
+      "deletions": "0",
+      "size": 13385,
+      "sha256": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/source-hashes-before.json",
+      "additions": "83",
+      "deletions": "0",
+      "size": 13385,
+      "sha256": "d9b2a5e7e43373d41d6360c545655ea0587c224b1f675cd698d18adc9b9ca76c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/source-identity.txt",
+      "additions": "9",
+      "deletions": "0",
+      "size": 805,
+      "sha256": "259ddc483d127a37ff687b29ab0874673be63e24680fa48504338cf9b0148fba",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/test_zero_motion_audit.py",
+      "additions": "51",
+      "deletions": "0",
+      "size": 2417,
+      "sha256": "ba2d96c3a502801a2de75eadcff349800ee801f9340d007c25845e9ad6562cce",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/independent-zero-motion/unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 614,
+      "sha256": "65b723308eac171917d1932cd24ae184232ff1be087cffd068f07987d4db405c",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/metrics.json",
+      "additions": "77",
+      "deletions": "0",
+      "size": 2264,
+      "sha256": "07bbb96354b500d18b7fcb6717c133735a027745b385e0f79bfedb8cb5198a47",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/promotion-closeout.json",
+      "additions": "14",
+      "deletions": "0",
+      "size": 632,
+      "sha256": "1c21261b580e4de363a5d03f0717c4c90d639605d72a1efb11de61652e132022",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/run.log.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 104,
+      "sha256": "8674841f27ab5875b31943981ceb967b0d439fd53aeb89a93e4a6ed64cbd8032",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/runtime-identity.json",
+      "additions": "15",
+      "deletions": "0",
+      "size": 267,
+      "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/source-hashes-after.json",
+      "additions": "84",
+      "deletions": "0",
+      "size": 13517,
+      "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/source-hashes-before.json",
+      "additions": "84",
+      "deletions": "0",
+      "size": 13517,
+      "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/source-identity.txt",
+      "additions": "16",
+      "deletions": "0",
+      "size": 1334,
+      "sha256": "e820b9ac7509e945c6b9cdfebcb4b38fc6c5c468f862f9771c7f3290e8eb8396",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/strict-exit-code.txt",
+      "additions": "1",
+      "deletions": "0",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/strict-lint.log",
+      "additions": "0",
+      "deletions": "0",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/strict-source-hashes-after.json",
+      "additions": "88",
+      "deletions": "0",
+      "size": 13935,
+      "sha256": "c4430e8fee3faeed14fa178e439b6d84ed610b16b14d38f0edf63ae765cf89b2",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/strict-source-hashes-before.json",
+      "additions": "88",
+      "deletions": "0",
+      "size": 13935,
+      "sha256": "c4430e8fee3faeed14fa178e439b6d84ed610b16b14d38f0edf63ae765cf89b2",
+      "kind": "evidence"
+    },
+    {
+      "path": "docs/project_a/evidence/w2-supplemental/unit.xml",
+      "additions": "1",
+      "deletions": "0",
+      "size": 674,
+      "sha256": "675d8d5f6df3242b0db7d1908672b6cb094a2d40f7f40916f283b2461ebd3e01",
+      "kind": "evidence"
+    },
+    {
+      "path": "planner/global_planner/global_planner/cyclic_retime.py",
+      "additions": "519",
+      "deletions": "0",
+      "size": 23918,
+      "sha256": "7ff74dbf3f57500731e5eebb069882d35efc6ed6d2b5805e22c796556286ceb3",
+      "kind": "implementation"
+    },
+    {
+      "path": "planner/global_planner/global_planner/iqp_route_adapter.py",
+      "additions": "425",
+      "deletions": "0",
+      "size": 20057,
+      "sha256": "2af86a21c10c16a8202ec70265b323c5a999bbfa3100631240605cae040ea9dd",
+      "kind": "implementation"
+    },
+    {
+      "path": "planner/global_planner/global_planner/route_validate.py",
+      "additions": "811",
+      "deletions": "0",
+      "size": 39342,
+      "sha256": "ad1fcad2430866af0b99541f2749712d0e888fbb307469a1dc7b2a0fd2577481",
+      "kind": "implementation"
+    },
+    {
+      "path": "planner/global_planner/global_planner/route_validate_dynamics.py",
+      "additions": "668",
+      "deletions": "0",
+      "size": 34020,
+      "sha256": "76e162abd99ef8d6fcc2a4b03cca08929622ef67eb63745a95d2712c3605af08",
+      "kind": "implementation"
+    },
+    {
+      "path": "planner/global_planner/test/fixtures/project_a/dynamics/ggv_dip.csv",
+      "additions": "6",
+      "deletions": "0",
+      "size": 114,
+      "sha256": "9d99d01f4338f75929b81f7ed28cb3713b76cd19c413d2beb538d7ff4d035b6f",
+      "kind": "test"
+    },
+    {
+      "path": "planner/global_planner/test/fixtures/project_a/dynamics/motor_dip.csv",
+      "additions": "6",
+      "deletions": "0",
+      "size": 90,
+      "sha256": "1ca99761d074476b7b0eccb2b6c107352b01f5da0f7b6b1700e4acad6bb4f17d",
+      "kind": "test"
+    },
+    {
+      "path": "planner/global_planner/test/fixtures/project_a/w2_a04_candidates.json.gz",
+      "additions": "-",
+      "deletions": "-",
+      "size": 60383,
+      "sha256": "2a506953026b75fc5be4defb1b018577faa46cebdbdfcd767c0103e733b2279b",
+      "kind": "test"
+    },
+    {
+      "path": "planner/global_planner/test/test_cyclic_retime.py",
+      "additions": "363",
+      "deletions": "0",
+      "size": 18869,
+      "sha256": "fd00ca4c73af7ef11a69258f9f380e8360a87d0081c621dba039c71a1ada7a34",
+      "kind": "test"
+    },
+    {
+      "path": "planner/global_planner/test/test_iqp_route_adapter.py",
+      "additions": "292",
+      "deletions": "0",
+      "size": 14997,
+      "sha256": "9a50ee046200b56646a1e8830e4983dc3bdd1e73625428789d442860f847d8f6",
+      "kind": "test"
+    },
+    {
+      "path": "planner/global_planner/test/test_route_dynamics_oracle.py",
+      "additions": "239",
+      "deletions": "0",
+      "size": 11498,
+      "sha256": "8b1e3e5e8f38e39c4db932348d5b15179fdfe1a00f234d22f1b95c15288a5880",
+      "kind": "test"
+    },
+    {
+      "path": "planner/global_planner/test/test_route_ellipse_dynamics.py",
+      "additions": "182",
+      "deletions": "0",
+      "size": 9629,
+      "sha256": "001aad1541eb4179a676150690eba364bdedd9c5fa8c3ee0c4477257d262b323",
+      "kind": "test"
+    },
+    {
+      "path": "planner/global_planner/test/test_route_validate_bounds_oracle.py",
+      "additions": "198",
+      "deletions": "0",
+      "size": 9597,
+      "sha256": "357c5490d49a7150755e32f02afb3d6821b9e91781984a898927bcd1a653fb15",
+      "kind": "test"
+    },
+    {
+      "path": "planner/global_planner/test/test_route_validate_dynamics.py",
+      "additions": "258",
+      "deletions": "0",
+      "size": 13030,
+      "sha256": "3e200c5783b8033bc0c5db1760cde087abeeb57ef4bb213236265a36facd7c40",
+      "kind": "test"
+    },
+    {
+      "path": "planner/global_planner/test/test_route_validate_geometry.py",
+      "additions": "418",
+      "deletions": "0",
+      "size": 20561,
+      "sha256": "86c9807ebb4a0446ea3d482338d2908e9340d32591b4323375fa4f75c715bf2e",
+      "kind": "test"
+    },
+    {
+      "path": "planner/global_planner/test/test_w2_pipeline.py",
+      "additions": "95",
+      "deletions": "0",
+      "size": 4954,
+      "sha256": "57c510737a8cdae9d7b16793084007a70454e1f259be0cf9416131c599edb8bf",
+      "kind": "test"
+    },
+    {
+      "path": "scripts/project_a/container_verify.sh",
+      "additions": "15",
+      "deletions": "2",
+      "size": 6115,
+      "sha256": "c4677bc43387a73fa519cbfe5942305996cac363429c66ee332c39b7c565eedd",
+      "kind": "harness"
+    },
+    {
+      "path": "scripts/project_a/source_manifest.py",
+      "additions": "14",
+      "deletions": "0",
+      "size": 648,
+      "sha256": "4bb767777eaca277410a136ab2ffefd872464d7cb81fba24645f0b35269070df",
+      "kind": "harness"
+    },
+    {
+      "path": "scripts/project_a/tests/test_w2_installed.py",
+      "additions": "52",
+      "deletions": "0",
+      "size": 2828,
+      "sha256": "7361515e6acd6da0b56a17bae1204baa82eeeffebfb2392beccc4f75c675e72b",
+      "kind": "test"
+    },
+    {
+      "path": "scripts/project_a/unit.sh",
+      "additions": "82",
+      "deletions": "0",
+      "size": 3206,
+      "sha256": "c1b3de0de9c90eb6fc9f5d237af35928005426ffd0abf4edafec1868d272a254",
+      "kind": "harness"
+    },
+    {
+      "path": "scripts/project_a/verify.sh",
+      "additions": "6",
+      "deletions": "0",
+      "size": 1734,
+      "sha256": "4f6f1ba03d2ce0db5f63b3b68bc88af1756a65e224572ca9c84c6e769b3a3bf6",
+      "kind": "harness"
+    }
+  ],
+  "diff_files": 285,
+  "recursive_submodules": [
+    {
+      "path": "base_system/f110_simulator/f1tenth_gym",
+      "baseline_gitlink": "f8f8c9d4781d44a2959bae013f276410cb4e9da0",
+      "checkout": "f8f8c9d4781d44a2959bae013f276410cb4e9da0",
+      "matches": true,
+      "clean": true
+    },
+    {
+      "path": "base_system/f110_simulator/f1tenth_gym_ros",
+      "baseline_gitlink": "163020c0b631a5bdd9ddc59e6132337cec04cc27",
+      "checkout": "163020c0b631a5bdd9ddc59e6132337cec04cc27",
+      "matches": true,
+      "clean": true
+    },
+    {
+      "path": "base_system/f1tenth_system",
+      "baseline_gitlink": "5d6490fc6426deb1254198020133a85c0614f183",
+      "checkout": "5d6490fc6426deb1254198020133a85c0614f183",
+      "matches": true,
+      "clean": true
+    },
+    {
+      "path": "base_system/f1tenth_system/ackermann_mux",
+      "baseline_gitlink": "ed4eac7284d13cae66628688e6fd32e585a96a62",
+      "checkout": "ed4eac7284d13cae66628688e6fd32e585a96a62",
+      "matches": true,
+      "clean": true
+    },
+    {
+      "path": "base_system/f1tenth_system/teleop_tools",
+      "baseline_gitlink": "09938461991ec2260ddab6db8ac962f46d205669",
+      "checkout": "09938461991ec2260ddab6db8ac962f46d205669",
+      "matches": true,
+      "clean": true
+    },
+    {
+      "path": "planner/global_planner/global_planner/global_racetrajectory_optimization",
+      "baseline_gitlink": "b1b38ecfefec7200d5bcb243f115af1d795b3766",
+      "checkout": "b1b38ecfefec7200d5bcb243f115af1d795b3766",
+      "matches": true,
+      "clean": true
+    },
+    {
+      "path": "sensors/vesc",
+      "baseline_gitlink": "2fd19be756544693752d3e5b36c128e6157e4bd3",
+      "checkout": "2fd19be756544693752d3e5b36c128e6157e4bd3",
+      "matches": true,
+      "clean": true
+    }
+  ],
+  "uploaded_final_xml": [
+    {
+      "file": "a01.xml",
+      "tests": 60,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a02.xml",
+      "tests": 47,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a03.xml",
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a04.xml",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a05-oracle.xml",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a05.xml",
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a06-ellipse.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a06-independent.xml",
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a06-oracle.xml",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a06.xml",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "numerical.xml",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "ros.xml",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "w1-installed.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "w2-installed.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "w2-pipeline.xml",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "uploaded_functional_total": 299,
+  "ci_summary": {
+    "pr": {
+      "state": "open",
+      "draft": false,
+      "merged": false,
+      "mergeable": true,
+      "merge_commit_sha": "3ed45017c695d2cbec63a53f294ff4847d6a3579"
+    },
+    "pr_head": "e852641849b2497efea51dfca5ead38ad4476235",
+    "pr_base": "9440c2ce68e3dee549de7efacff1cf723fe830df",
+    "runs": [
+      {
+        "id": 38893830596,
+        "event": "push",
+        "head_sha": "e852641849b2497efea51dfca5ead38ad4476235",
+        "head_branch": "project-a/w2-optimization",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Felix-Grote/race_stack/actions/runs/38893830596",
+        "created_at": "2026-10-16T11:26:52Z",
+        "updated_at": "2026-10-16T11:43:30Z"
+      },
+      {
+        "id": 38893836597,
+        "event": "pull_request",
+        "head_sha": "e852641849b2497efea51dfca5ead38ad4476235",
+        "head_branch": "project-a/w2-optimization",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Felix-Grote/race_stack/actions/runs/38893836597",
+        "created_at": "2026-10-16T11:26:56Z",
+        "updated_at": "2026-10-16T11:43:43Z"
+      }
+    ],
+    "jobs": [
+      {
+        "run": "push-jobs",
+        "jobs": [
+          {
+            "id": 116949454885,
+            "name": "isolated-humble",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-16T11:26:54Z",
+            "completed_at": "2026-10-16T11:43:29Z"
+          }
+        ]
+      },
+      {
+        "run": "pr-jobs",
+        "jobs": [
+          {
+            "id": 116949475445,
+            "name": "isolated-humble",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-16T11:26:58Z",
+            "completed_at": "2026-10-16T11:43:42Z"
+          }
+        ]
+      }
+    ]
+  }
+}

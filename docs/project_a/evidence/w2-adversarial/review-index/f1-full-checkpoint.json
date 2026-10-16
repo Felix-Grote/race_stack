@@ -1,0 +1,143 @@
+{
+  "code_checkpoint": "6b778519de74b09a7b66be2ac89e12d687226c9d",
+  "exit_code": "0",
+  "group_count": 17,
+  "functional_total": 323,
+  "groups": [
+    {
+      "file": "a01.xml",
+      "tests": 60,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a02.xml",
+      "tests": 47,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a03.xml",
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a04.xml",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a05-oracle.xml",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a05.xml",
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a06-ellipse.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a06-independent.xml",
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a06-oracle.xml",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "a06.xml",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "numerical.xml",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "ros.xml",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "w1-installed.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "w2-handoff.xml",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "w2-installed.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "w2-numerical-oracle.xml",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "w2-pipeline.xml",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "source_hashstable": true,
+  "source_manifest_sha256": "4bd3731da3c65064c43292a4c983dc8548d8517d1b5482ab5fe6196b0e2ad81b",
+  "legacy_identities_equal_initial": true,
+  "legacy_identities": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ],
+  "legacy_summary_line": "Summary: 322 tests, 0 errors, 10 failures, 2 skipped"
+}

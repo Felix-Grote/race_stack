@@ -1,0 +1,4820 @@
+[
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/REVIEW.md",
+    "bytes": 16588,
+    "sha256": "156c6c4b2e1456ed1c91ba922689f84741d68630d1f814d4c8a259d4d90a160d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/SHA256SUMS.json",
+    "bytes": 9851,
+    "sha256": "ec19473a0cfb31d081bd2d12eccb6df54963cf9471f819bad06ebb6fbe1aaa2a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/a04-full-diff.patch",
+    "bytes": 36304,
+    "sha256": "3a005d4e486f3db705f1a98345d3b8861ee88cd17de269cd97c9f312f6644296"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/compare_quality.py",
+    "bytes": 2391,
+    "sha256": "76d63440e75f7f73b4af2c57b934ceaf31b8357253a1ee6b26cf73e0e17e160d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/comparison.json",
+    "bytes": 2299,
+    "sha256": "56a28ea35a3d47d022b0ab8a4e8c6256f256cdac0f2e330a0c4689a9dadffcd9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/comparison.log",
+    "bytes": 2299,
+    "sha256": "56a28ea35a3d47d022b0ab8a4e8c6256f256cdac0f2e330a0c4689a9dadffcd9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/harness-sha256.json",
+    "bytes": 527,
+    "sha256": "93ef41ea82d918b81fc23829f51bdc94be40f83af5d11d086a860d9d6a1918c9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/profile_time_oracle.json",
+    "bytes": 1533,
+    "sha256": "a06bc9537fee4478a99fdef8ce2e28afdf51d48b707d2d45d72453c157cf8b88"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/profile_time_oracle.log",
+    "bytes": 1533,
+    "sha256": "a06bc9537fee4478a99fdef8ce2e28afdf51d48b707d2d45d72453c157cf8b88"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/profile_time_oracle.py",
+    "bytes": 2788,
+    "sha256": "cb442baa268763b5ef43d82e7d209b34cbea31455c4439d46ca987f4bd09d00f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/quality_oracle.py",
+    "bytes": 6531,
+    "sha256": "d276357e9ac0624ec062d21c29624e1fb7a7d25c648ac96ad92c46af8d3ba8dd"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/independent-quality.json",
+    "bytes": 1513914,
+    "sha256": "2a432f54f7b48b6f5580a95fe7971b3954ba88cb8631464126a5a15f13ea146c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/resource-preflight.json",
+    "bytes": 730,
+    "sha256": "1574ec421cc82ee6c8c4bb9b2a371f2289c1758eb7d731df1f0812d934924664"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/run.log",
+    "bytes": 180,
+    "sha256": "0c7389744c48b7364b35d71b196eee6918037994198ce4afa18e7653a2494aa1"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/source-hashes-after.json",
+    "bytes": 14324,
+    "sha256": "8ad42058cbe3ea78a519da1abb6cc9de582c81e365ba380e38f7aac71a063b7e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/source-hashes-before.json",
+    "bytes": 14324,
+    "sha256": "8ad42058cbe3ea78a519da1abb6cc9de582c81e365ba380e38f7aac71a063b7e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/source-identity.txt",
+    "bytes": 1247,
+    "sha256": "4424f414ee61911d2d377e99b32828db580a0d4543b470c85378a0d5c1840fdd"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/runtime/unit.xml",
+    "bytes": 575,
+    "sha256": "a831130c30ea2708b52be17fb82f6cb48dfa65081e6a2f3ea90e73d4f7f5fef1"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/f2-quality/test_independent_adapter.py",
+    "bytes": 6777,
+    "sha256": "c1c4907333b0782d57b463688190d89fcbf14848684a6f3061999796caa05be0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/helper-check/proposed-replay.json",
+    "bytes": 1935,
+    "sha256": "b24664a0b35269eba7c47527544b0ea53b5e949c41dd7a64e44d18a1f27fdb1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/helper-check/run.log",
+    "bytes": 1935,
+    "sha256": "b24664a0b35269eba7c47527544b0ea53b5e949c41dd7a64e44d18a1f27fdb1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/helper-source/calc_splines.py",
+    "bytes": 9831,
+    "sha256": "2943a4cb0c614a541551a8c6d031cf43b18b81b701221ac02ae51337fbf075a8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/helper-source/iqp_handler.py",
+    "bytes": 10841,
+    "sha256": "b764ff805fd5585a6dfb30e23b1c0b3ef667c91d66129dca78d9b37a356f65ae"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/helper-source/opt_min_curv.py",
+    "bytes": 17650,
+    "sha256": "a2ce75c33498426a5276e5b3455f2059040e8c5e5e54734aee3dde0436bef46d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/oracle-host-environment.txt",
+    "bytes": 79,
+    "sha256": "5fab390ec9813dae9da890d87739d0e87de257b32daa028d7d5c76088c32455e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/profile_time_oracle.json",
+    "bytes": 1513,
+    "sha256": "c698587e7a7cecc20f0d34444351640a52b42f9279858cf8978b5c6d59fa243d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/profile_time_oracle.log",
+    "bytes": 1513,
+    "sha256": "c698587e7a7cecc20f0d34444351640a52b42f9279858cf8978b5c6d59fa243d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/profile_time_oracle.py",
+    "bytes": 2802,
+    "sha256": "a6d50192558ca61ed2c0ae8fb6cf12d1056fe957e95550d2cc8fd049a1aa6678"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/promoted-final/promoted-replay.json",
+    "bytes": 1935,
+    "sha256": "b24664a0b35269eba7c47527544b0ea53b5e949c41dd7a64e44d18a1f27fdb1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/promoted-final/run.log",
+    "bytes": 1935,
+    "sha256": "b24664a0b35269eba7c47527544b0ea53b5e949c41dd7a64e44d18a1f27fdb1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/promoted-lint/run.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/proposed/test_route_w2_trace_oracle.py",
+    "bytes": 7339,
+    "sha256": "7e959e79d0c3fb30b1df0d3fba7be6ebfd336cc8504da47035d8e8f545659667"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/quality_oracle.json",
+    "bytes": 5977,
+    "sha256": "75469b7476813dde4f17e32e4348d09a40c9bcb221e5e51ec435b6e7ab59261c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/quality_oracle.log",
+    "bytes": 5977,
+    "sha256": "75469b7476813dde4f17e32e4348d09a40c9bcb221e5e51ec435b6e7ab59261c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/quality_oracle.py",
+    "bytes": 6531,
+    "sha256": "e28389bfab6546ecfca50a4090c9cec52ba44adfb22f46cd34d17c95d4077d8b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality/run.log",
+    "bytes": 2295,
+    "sha256": "638ab9869381b07d28d0128ad948673c70e0d5a16f1364b9369310539582271b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality/source-identity.txt",
+    "bytes": 823,
+    "sha256": "1e6b6eaacacb7e5a8a6a954b997da516273b66eb76d8178c56f1934ceb3fc230"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality/unit.xml",
+    "bytes": 2304,
+    "sha256": "7e87d027e28f083782e54839d76ab4319a565c26ca2c453b9d440a91e8d8df38"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/independent-quality.json",
+    "bytes": 1513509,
+    "sha256": "6b98db42c1adcc055cb279ab807d6c2b59921e14acff34308df8c3d5181ad0ba"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/resource-preflight.json",
+    "bytes": 730,
+    "sha256": "1574ec421cc82ee6c8c4bb9b2a371f2289c1758eb7d731df1f0812d934924664"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/run.log",
+    "bytes": 180,
+    "sha256": "8e885bc1b3f1c4c50d4f6cef6ffb25b0c3da3a969f62e6cd117442a1d7c002a8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/source-identity.txt",
+    "bytes": 823,
+    "sha256": "1e6b6eaacacb7e5a8a6a954b997da516273b66eb76d8178c56f1934ceb3fc230"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-final/unit.xml",
+    "bytes": 553,
+    "sha256": "6348d50860f227bb67cae7c3d6cebbd93970b3a88b85844896ccce91447bc849"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-v2/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-v2/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-v2/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-v2/independent-quality.json",
+    "bytes": 1513509,
+    "sha256": "6b98db42c1adcc055cb279ab807d6c2b59921e14acff34308df8c3d5181ad0ba"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-v2/run.log",
+    "bytes": 180,
+    "sha256": "e35f2333e21266f37c1ed9743ab216459d292dd58cca50cb7a149e499deb6bf8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-v2/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-v2/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-v2/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-v2/source-identity.txt",
+    "bytes": 823,
+    "sha256": "1e6b6eaacacb7e5a8a6a954b997da516273b66eb76d8178c56f1934ceb3fc230"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/runtime-quality-v2/unit.xml",
+    "bytes": 390,
+    "sha256": "a9028749e07d61630728d29b98e2e1b520bd4c2cca76102278415ff92809d618"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/test_independent_adapter.py",
+    "bytes": 6611,
+    "sha256": "0074178018c36228504487d3fe2c587d56ca6c06352108608d41be1047c95890"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/trace-runtime/failed-exact-roundtrip.log",
+    "bytes": 478,
+    "sha256": "18179c0d5b876a00ee6fdd17f73c4eac2afe657c5535a2b2e66d50590b36f129"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/trace-runtime/run.log",
+    "bytes": 1747,
+    "sha256": "2af1a792e70320e4950dfab80553326b44ff4d61516d1bfd498a3d083ee37ff0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/trace-runtime/trace-replay.json",
+    "bytes": 1747,
+    "sha256": "2af1a792e70320e4950dfab80553326b44ff4d61516d1bfd498a3d083ee37ff0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/adapter/trace_replay.py",
+    "bytes": 7067,
+    "sha256": "e6d96fbabb4591a3b9913331feab1b9b8f91747da55a33e3c8b78725a95908eb"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/.cache/matplotlib/fontlist-v330.json",
+    "bytes": 26026,
+    "sha256": "b13b2292c8925052c603e93b2af1eba497230d35895d1459bdf3167c504dbd60"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a01.xml",
+    "bytes": 7315,
+    "sha256": "3e30b6cd579830af636a4ede7a7d60076e44bb7a4e409b825995c9c222a85920"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a02-parabola.json",
+    "bytes": 292,
+    "sha256": "0193a6686f0125d1cb8e3be044df8c56d8b85ea2f846181101cc0afe608e79b4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a02.xml",
+    "bytes": 5804,
+    "sha256": "e182a91a69f8a3ef8882f0cfaaeba2242832d01ccf3d3bcaf9551d701b95d8d4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a03-metrics.json",
+    "bytes": 801,
+    "sha256": "4f4ed0f06875424216b24608ab48dffdc1c27cdf0bbd833c8b396af4955c6765"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a03.xml",
+    "bytes": 5091,
+    "sha256": "e00db86d3db2859471408792c454294a51f6a2c45f6b7dfeba6a3495558194a4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a04-candidates.json",
+    "bytes": 4514112,
+    "sha256": "b8cab540e2329bcc22761e0ee229979eddf49940bf6d0929b68a2292d18d4520"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a04-origin-shift.json",
+    "bytes": 533339,
+    "sha256": "2ee67b2927ce04401288fb67d789eef6c81520df1985d3fc3c30b395d28bdbd2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a04.xml",
+    "bytes": 2568,
+    "sha256": "1b1a1adeb5a3c5622eb3bd15518498604f85a0d4e51d4b3dfe89353855d71099"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a05-bounds-oracle.json",
+    "bytes": 3567,
+    "sha256": "9e1fa252f7b64d9851fb27f9a6a55b030d1e8f422ca8f3de3066e33f75719f5b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a05-geometry.json",
+    "bytes": 971135,
+    "sha256": "15341a6a6d70ca3acfa26ae456e64e8bbb4ef9c445858fb53032cf8e287f3b88"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a05-oracle.xml",
+    "bytes": 2285,
+    "sha256": "340457be46884ac035c73735c4ba17dda732e5744b41ab3e1040cdc00a1beb84"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a05-wrong-deck-coincident.json",
+    "bytes": 96663,
+    "sha256": "ca43add5af6a9cece5ebf90ac8da89859b232cd95544c1d8788a8173a3e44be4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a05.xml",
+    "bytes": 5903,
+    "sha256": "381d7c6b5f3efaabd5dde8e309e338a903128af5c6839464622d06e97d019222"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-cycle-oracle.json",
+    "bytes": 470,
+    "sha256": "2b41652c2003da05c109623c5c2cce65b316bf50a1704e1a74b4c8e22a26f9b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-ellipse-profile.json",
+    "bytes": 19512,
+    "sha256": "b39105a345fa92ce1c8027a45c2d31ead136ddebcf9efe7621bdd32ca962712f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-ellipse-route.json",
+    "bytes": 19893,
+    "sha256": "71a88a1da6eb4482d09dad829ce73c893b4cb3e8f5e9816927600977753a4657"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-ellipse.json",
+    "bytes": 325535,
+    "sha256": "bd76d5eef3462ab697e1816329838623ffd52ee13be36e69681ed4e392cc5cd8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-ellipse.xml",
+    "bytes": 384,
+    "sha256": "fd97c10a0c2bf453968a3b56c9b295ec49b83dedf78d15116d23a80089408749"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-independent-dynamics.json",
+    "bytes": 806399,
+    "sha256": "1ea1e4ca8aba12978667319e3459847851f8b459b991e5c14680a34e5bef10fa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-independent.xml",
+    "bytes": 5118,
+    "sha256": "1b815b4dd9ae8a709178969870420e8771c3118c307982ed501baaa5029a0395"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-narrow-lower-cap.json",
+    "bytes": 323665,
+    "sha256": "a1c72628611f535eededa9a1910feabf2cb957dc113eebd2c1604f3c05d54737"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-oracle.xml",
+    "bytes": 1426,
+    "sha256": "2a64c253400bcd628463c8e9df3be2c1c52400aebd64b54b025702b52c05152e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-retimer-s0_reverse_route.json",
+    "bytes": 40226,
+    "sha256": "06f2340f55e387910a8c4bbc34ca220c932248322f8211bb9ff3b94d7fa5f491"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-retimer-s0_rotated_route.json",
+    "bytes": 40092,
+    "sha256": "a49a2b022a00a4a23cbf13dc77d246eb3d1be091243c31ed4d51dc7c8288b804"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-retimer-s0_route.json",
+    "bytes": 40087,
+    "sha256": "0cff131422efc79a68a97347e5934f42e41784d4b09bf6e32c976f39d9091a1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-retimer-s2_lower_route.json",
+    "bytes": 37654,
+    "sha256": "a07c8bd7f8e10c127e7510cc161e5790ad3e65288a2a8f1bf6d4b525c74a0220"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-retimer-s2_upper_route.json",
+    "bytes": 38512,
+    "sha256": "8197876ad52a00866d0e7173e3f2dcdbf621ce132279d51862a6259446040eee"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-retimer-s3_notch_route.json",
+    "bytes": 56534,
+    "sha256": "df1fd55ae68da429624ee541edd1e36ecc5a4225754389ede8f38812ec948ab9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06-retimer-s3_surfaces_route.json",
+    "bytes": 56307,
+    "sha256": "48249ff3e68fdd3b12ae955e229ebf09d60fb50034e9e6013e94645dcb6eaeb7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/a06.xml",
+    "bytes": 3084,
+    "sha256": "2554f1c5e2eb2e2c25515f7edfbaa2fd588756bee3d17e8c659517bf82864292"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/dependencies.txt",
+    "bytes": 3697,
+    "sha256": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/helper-hashes.json",
+    "bytes": 276,
+    "sha256": "cacf561dfcc3094e79c368c0c06d252aa7cfc2be710184826310eac65e878018"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/legacy-exit-codes.txt",
+    "bytes": 35,
+    "sha256": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/legacy-metric.json",
+    "bytes": 43,
+    "sha256": "026ee03e20a9c3e470a8c6585f414685dff8cfc52bb14bb2d3d53ea05d0ef5b6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/legacy-results.txt",
+    "bytes": 195067,
+    "sha256": "cfe611da548aeb29230a0d055c1aa6ff1fefbfed1b287fb0510fec6fc3f6344a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/legacy.log",
+    "bytes": 1053771,
+    "sha256": "217fbd50b3d2d572fe28b8aa176e8df577c50cf0cb5c369e062dea0297458d3c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/numerical.xml",
+    "bytes": 962,
+    "sha256": "8256a757ded3aff872dfd1f8371f10c2b5de95245165f18e6af9ef90a77dd3b4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/optimizer-wheel.log",
+    "bytes": 16794,
+    "sha256": "a42cff9eee8c154c59a58a213613e63137fdffaf97733bc9f2783e65300ee514"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/os-packages.txt",
+    "bytes": 23293,
+    "sha256": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/qp-ellipse.json",
+    "bytes": 351,
+    "sha256": "f5320643d82f202e77084341e3d38003f7a981514a6e105a33c43da2e327da58"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/qp-projected_crossing.json",
+    "bytes": 360,
+    "sha256": "8daf527c287f2fe794a611e0bf2603446f9737355c46cd53d26f0f704b981bf2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/ros.xml",
+    "bytes": 597,
+    "sha256": "b07a613c563f3a42b97b9a207f45d4394594d6c4590ace16b4b145c8b3285824"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/run.log",
+    "bytes": 200720,
+    "sha256": "5c539f52067960adb62f7caff67162d890fdb951756893b42da227cf2684b3ad"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/source-hashes-after.json",
+    "bytes": 13935,
+    "sha256": "c4430e8fee3faeed14fa178e439b6d84ed610b16b14d38f0edf63ae765cf89b2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/source-hashes-before.json",
+    "bytes": 13935,
+    "sha256": "c4430e8fee3faeed14fa178e439b6d84ed610b16b14d38f0edf63ae765cf89b2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/source-identity.txt",
+    "bytes": 1062,
+    "sha256": "a31e3a91a29e95c6c1664d27acff735d6a66b2089c4f0163495983de26b32ab7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/summary.json",
+    "bytes": 1629,
+    "sha256": "7b83930d6f6639fc7a074d31172627e0ab4c94f284901fcf19e0ced27a65fb0d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/w1-installed.xml",
+    "bytes": 322,
+    "sha256": "cf974745a234003c8861e4ed313f67e4b2725d02450a83f3658d61b7913f4fb1"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/w2-installed.json",
+    "bytes": 343207,
+    "sha256": "49988c7e62e5c483496a7d80d9c801240062b776fd9ae37b4fb67c01a2255461"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/w2-installed.xml",
+    "bytes": 319,
+    "sha256": "cd3bdccd781a2c63806590a5d0fdcec284428730797d685353bc7fe53f092bc8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/w2-pipeline.json",
+    "bytes": 7464079,
+    "sha256": "ee1df7a042f709f9bfa059782e4766ba6e9409e462b42fdf3e2e92f8a86898fe"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/baseline-full/w2-pipeline.xml",
+    "bytes": 1353,
+    "sha256": "a9bc4a35a51ec0493621c0c2e02b47c038efe886c8513bf52b26b58db7d02cb0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/INDEPENDENT_NUMERICAL_REVIEW.md",
+    "bytes": 8973,
+    "sha256": "98aabe4655b30f3ef5d37726feaeb315be313820dd68dac35a9e346261a330a8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/SHA256SUMS",
+    "bytes": 2108,
+    "sha256": "1cb33ed288491360763b76a93ae803a3e2179a85fdad948e2d96e907465725d2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/compact-pinned/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/compact-pinned/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/compact-pinned/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/compact-pinned/run.log",
+    "bytes": 179,
+    "sha256": "0c0d42b73ae38602cb95a9d901d237a1be6bacf01cbf5b2f33db6743e1aa8511"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/compact-pinned/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/compact-pinned/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/compact-pinned/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/compact-pinned/source-identity.txt",
+    "bytes": 846,
+    "sha256": "886017203d7a324efca956dc7c427993724a8a774fad74625518f06aa70046f9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/compact-pinned/unit.xml",
+    "bytes": 790,
+    "sha256": "ff87709b8de4e056d59aebb5ae60c16bcda577fe019cb9d0c6cd7ae18281b31f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/container-inspect.json",
+    "bytes": 6416,
+    "sha256": "3cb426dcd4ffc7cb20229777afb70856a37a630019259290164e700586c358d0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/numerical_contracts_decimal_results.json",
+    "bytes": 5022,
+    "sha256": "1010bcca57f514a7f9a7550f10ddbf6c216532823bbbde130b302238f03fe661"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/oracle-source-sha256.json",
+    "bytes": 267,
+    "sha256": "db28614d2e0210036439febd5ea52ae58c05de923ec1e4c3abf8cd99ead6122f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/run.log",
+    "bytes": 180,
+    "sha256": "cdc000247dd9d5dbb8dfe73cc266d590d4cacc23186528713723014e70e6a07f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/source-identity.txt",
+    "bytes": 822,
+    "sha256": "b05d89e4d48ca0048e0a20c0cf7714f70741356e2a8e92da4705fc4f096d72a5"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/final-pinned/unit.xml",
+    "bytes": 364,
+    "sha256": "5edb36b022ba582bc8449f69455bd852554a48c1f2ee4c6076614b89e5e583f4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/numerical_contracts_decimal_results.json",
+    "bytes": 5025,
+    "sha256": "08e038cc8ee1451d03d4a51b18f385d887c3afd3a2a5e866ec791dac3afad67f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/numerical_contracts_results.json",
+    "bytes": 4966,
+    "sha256": "f37d90e78f46d8d689a30469d41a0c41bc7122dcbf3b70d390ae62f15067c2a3"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/probe_numerical_contracts.log",
+    "bytes": 4539,
+    "sha256": "7bbd1844693b99109e98adb4affc04069962f310ccedf4d5930bafc62c2f7516"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/probe_numerical_contracts.py",
+    "bytes": 6123,
+    "sha256": "98b6f15761bac700a66b3aaecde9347d05e754bc2d983f924086afa7d7fc4855"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/probe_numerical_contracts_decimal.log",
+    "bytes": 4598,
+    "sha256": "1058c9e6047af93e790699e6bc402ea21de49ea18302077f4d30e8accea50854"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/probe_numerical_contracts_decimal.py",
+    "bytes": 6412,
+    "sha256": "301554c990c41dd6d7615c7a6e1717828249ee03b395234b5399feeb44245427"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/probe_numerical_contracts_initial_harness_failure.log",
+    "bytes": 609,
+    "sha256": "1ed138a3aaa263102317fb099e5f57a5fea52dd162a02b74617e3e1f4ad19ff7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/run.log",
+    "bytes": 179,
+    "sha256": "77b7cf3a93306a206cc506c51052d393d08d05ee25335155ca38e6663c1aa908"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "3f70c8beff713ef7c8d45d172b27eaf2cbb6bc23318cb0589a9f39c3d85b72be"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/source-hashes-before.json",
+    "bytes": 13783,
+    "sha256": "574ea1e913c9b8b3feae9d7d2ecb53c5b6d513d1251e239a440cbb31f2b90b13"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/source-identity.txt",
+    "bytes": 1384,
+    "sha256": "6394018732ab9644bca56936395ea52e7f93d0f55b1c307ae0a954ae8bb809b8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/strict-lint-exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/strict-lint.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/promoted-pinned/unit.xml",
+    "bytes": 670,
+    "sha256": "ebccbcc9cf492de219f4afdd99373f717d33fc2cb22d00bf5799775a63394bf9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/proposed/test_w2_independent_numerical_contracts.py",
+    "bytes": 4744,
+    "sha256": "cb30c1049e98c3c8a4132b12083857624cc4dc7b86c50c10f45ef13600ac8214"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/contracts/test_numerical_contracts.py",
+    "bytes": 306,
+    "sha256": "71b46ef6e197b2868942db2d40f063a7dac51d98854bb9887f91ce459006ea7b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/.cache/matplotlib/fontlist-v330.json",
+    "bytes": 26026,
+    "sha256": "558cb52c99245f67d3ec14c04cc04e40d373e017609fba6e6610426ebf8de6d4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a01.xml",
+    "bytes": 7315,
+    "sha256": "5df7539244dcffc00954cd8af4b769b537df195c58ffab0ac6a331fcd696b292"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a02-parabola.json",
+    "bytes": 292,
+    "sha256": "0193a6686f0125d1cb8e3be044df8c56d8b85ea2f846181101cc0afe608e79b4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a02.xml",
+    "bytes": 5804,
+    "sha256": "106969bb1a71e181aa8f72912a643c3d18295d9dca2f84f3557c59dd568e9d2e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a03-metrics.json",
+    "bytes": 801,
+    "sha256": "4f4ed0f06875424216b24608ab48dffdc1c27cdf0bbd833c8b396af4955c6765"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a03.xml",
+    "bytes": 5090,
+    "sha256": "e9c54076d1a35ef0ffbc9e206c09b76bf2b4ac14899095aeeb4fe020811511a3"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a04-candidates.json",
+    "bytes": 4514120,
+    "sha256": "c75b4618c228b3a37c3c6c867333ce0624658b827276ef2eb785306f6122b7c2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a04-origin-shift.json",
+    "bytes": 533341,
+    "sha256": "e1c53f9a782583ff69e55a9b0fbd673f0a749264bcc3fb087384b3b08aed1f7c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a04.xml",
+    "bytes": 2568,
+    "sha256": "93c34bcb6d10585a73d2390573e51d9e918586feac5669e7ef7940d5a2fc7f4c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a05-bounds-oracle.json",
+    "bytes": 3567,
+    "sha256": "9e1fa252f7b64d9851fb27f9a6a55b030d1e8f422ca8f3de3066e33f75719f5b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a05-geometry.json",
+    "bytes": 971765,
+    "sha256": "bfe748e7cf80874367c1666f5f851fc76edfd481bb30aaae540ea416da5e130d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a05-oracle.xml",
+    "bytes": 2285,
+    "sha256": "ce027bb8effdd0445e46f5b03f680380fb7721fed023f42680edf3f87a63d8ef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a05-wrong-deck-coincident.json",
+    "bytes": 96687,
+    "sha256": "3c0b74543a0a2219dae658ee2f8becfbbd463612ca3d6fd99ee79d0bac7a65c9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a05.xml",
+    "bytes": 6204,
+    "sha256": "bcf75473a61bfde2c92b4ff79b4911197aa6e26966877ba864ad0bee0d601b66"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-cycle-oracle.json",
+    "bytes": 470,
+    "sha256": "2b41652c2003da05c109623c5c2cce65b316bf50a1704e1a74b4c8e22a26f9b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-ellipse-profile.json",
+    "bytes": 19512,
+    "sha256": "b39105a345fa92ce1c8027a45c2d31ead136ddebcf9efe7621bdd32ca962712f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-ellipse-route.json",
+    "bytes": 19893,
+    "sha256": "71a88a1da6eb4482d09dad829ce73c893b4cb3e8f5e9816927600977753a4657"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-ellipse.json",
+    "bytes": 325535,
+    "sha256": "bd76d5eef3462ab697e1816329838623ffd52ee13be36e69681ed4e392cc5cd8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-ellipse.xml",
+    "bytes": 384,
+    "sha256": "59e4b9dc18fccc5011cbf33af5fa563e72d1a53b8ddcf042f429737c4be8607c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-independent-dynamics.json",
+    "bytes": 806399,
+    "sha256": "1ea1e4ca8aba12978667319e3459847851f8b459b991e5c14680a34e5bef10fa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-independent.xml",
+    "bytes": 6368,
+    "sha256": "8de2ca7d26d471c5a79975b30be5bb98c2fafcb1db5396e74af94f0406bd9332"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-narrow-lower-cap.json",
+    "bytes": 323665,
+    "sha256": "a1c72628611f535eededa9a1910feabf2cb957dc113eebd2c1604f3c05d54737"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-oracle.xml",
+    "bytes": 1426,
+    "sha256": "1c958d78981d01af6137a46701ebb13cd0ac329c27547878215e45a57f4892f4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-retimer-s0_reverse_route.json",
+    "bytes": 40226,
+    "sha256": "06f2340f55e387910a8c4bbc34ca220c932248322f8211bb9ff3b94d7fa5f491"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-retimer-s0_rotated_route.json",
+    "bytes": 40092,
+    "sha256": "a49a2b022a00a4a23cbf13dc77d246eb3d1be091243c31ed4d51dc7c8288b804"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-retimer-s0_route.json",
+    "bytes": 40087,
+    "sha256": "0cff131422efc79a68a97347e5934f42e41784d4b09bf6e32c976f39d9091a1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-retimer-s2_lower_route.json",
+    "bytes": 37654,
+    "sha256": "a07c8bd7f8e10c127e7510cc161e5790ad3e65288a2a8f1bf6d4b525c74a0220"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-retimer-s2_upper_route.json",
+    "bytes": 38512,
+    "sha256": "8197876ad52a00866d0e7173e3f2dcdbf621ce132279d51862a6259446040eee"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-retimer-s3_notch_route.json",
+    "bytes": 56534,
+    "sha256": "df1fd55ae68da429624ee541edd1e36ecc5a4225754389ede8f38812ec948ab9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06-retimer-s3_surfaces_route.json",
+    "bytes": 56307,
+    "sha256": "48249ff3e68fdd3b12ae955e229ebf09d60fb50034e9e6013e94645dcb6eaeb7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/a06.xml",
+    "bytes": 3084,
+    "sha256": "d48b76086b5fb8f3aa2ae9b402b501631f878c3abbc3babef6ffdee3d0dd7f95"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/dependencies.txt",
+    "bytes": 3697,
+    "sha256": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/helper-hashes.json",
+    "bytes": 276,
+    "sha256": "cacf561dfcc3094e79c368c0c06d252aa7cfc2be710184826310eac65e878018"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/legacy-exit-codes.txt",
+    "bytes": 35,
+    "sha256": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/legacy-metric.json",
+    "bytes": 43,
+    "sha256": "026ee03e20a9c3e470a8c6585f414685dff8cfc52bb14bb2d3d53ea05d0ef5b6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/legacy-results.txt",
+    "bytes": 195067,
+    "sha256": "2d51576fc97be19544a85209d7547a58698a01a8f9ffecfc1ba921c5b0b3eb25"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/legacy.log",
+    "bytes": 1055189,
+    "sha256": "beb2a835d322ef1dc28ab8d6b27765b586fc13cf26dfecb7d3ce13c83b1fce92"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/numerical.xml",
+    "bytes": 962,
+    "sha256": "634ada8ed619958a1a48f850dddf013d3137ed9404e751d6a046a7af598a7a6d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/optimizer-wheel.log",
+    "bytes": 16794,
+    "sha256": "a42cff9eee8c154c59a58a213613e63137fdffaf97733bc9f2783e65300ee514"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/os-packages.txt",
+    "bytes": 23293,
+    "sha256": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/qp-ellipse.json",
+    "bytes": 351,
+    "sha256": "f5320643d82f202e77084341e3d38003f7a981514a6e105a33c43da2e327da58"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/qp-projected_crossing.json",
+    "bytes": 360,
+    "sha256": "8daf527c287f2fe794a611e0bf2603446f9737355c46cd53d26f0f704b981bf2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/ros.xml",
+    "bytes": 597,
+    "sha256": "bc5d65b75728428aeb62d6dc6bb7d6ea1a8f22ab62856b2d484283b3d472f327"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/run.log",
+    "bytes": 201272,
+    "sha256": "a3da7a7d0725a9fc132d2911a669687e280252757767e8e65fd52fba4df6b390"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/source-hashes-after.json",
+    "bytes": 14327,
+    "sha256": "4bd3731da3c65064c43292a4c983dc8548d8517d1b5482ab5fe6196b0e2ad81b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/source-hashes-before.json",
+    "bytes": 14327,
+    "sha256": "4bd3731da3c65064c43292a4c983dc8548d8517d1b5482ab5fe6196b0e2ad81b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/source-identity.txt",
+    "bytes": 1062,
+    "sha256": "f3de8791186d732a6dbb14009aaa35dae2b703847c11f8bce3e5e40f023d95e9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/summary.json",
+    "bytes": 1840,
+    "sha256": "e9176cc52a07f5c2b818d4bdfbc2734d8ebcfdd88cf178f10f3ae6ab995f97a2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/w1-installed.xml",
+    "bytes": 322,
+    "sha256": "6206f92f9cba017ad74615f0fa0ab6d6e2462f8b3f86c73beadba9c06c90d12e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/w2-handoff.xml",
+    "bytes": 1648,
+    "sha256": "25c41c85b788e0b6097b56babb3e64d3f18579d3ff9637015ba48818712aba79"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/w2-installed.json",
+    "bytes": 343390,
+    "sha256": "1b76b0ba677bf5696a5a848392f8b95f95d3b974050e8e8a13a7237a675a2245"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/w2-installed.xml",
+    "bytes": 319,
+    "sha256": "9c0c420c2ddbda17481e25f7a1087dcb894cc708cde73cfe8520ce045ffd4f0f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/w2-numerical-oracle.xml",
+    "bytes": 670,
+    "sha256": "444051e3b81337dac8ce691f0127eae4f4a7980f5dff416bc4c3b481497ec97d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/w2-pipeline.json",
+    "bytes": 7465424,
+    "sha256": "f5220bf43ea4b51d3389d9deabd4bc8e4102d507fcfcadb2fa9075a389483fdb"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/w2-pipeline.xml",
+    "bytes": 1593,
+    "sha256": "7e5d71a937c2f3e4e5eb0afabb5ba5fd24877bcfde59c8f52b16592b1b4b3cc0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/corrected-full/w2-trace-lineage-oracle.json",
+    "bytes": 1934,
+    "sha256": "6e003ffceb65b829e62f830d8e771c005ddd858bb7942e0068f35f0cf4c87530"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/FINAL_ACTUAL_FUNCTIONAL_REVIEW.md",
+    "bytes": 3134,
+    "sha256": "4a7694de3fba376052b851d583594239ec3fcc3dbcaba47a599d11ff5c2282d8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/FINAL_ACTUAL_REVIEW.md",
+    "bytes": 5559,
+    "sha256": "a94cd05f7ea45ef919b1d10798ef1c14fbcf4f14c622c6717206b12fb76528f8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/PHASE_II_REMEDIATION.md",
+    "bytes": 3897,
+    "sha256": "d793f720a538780c78732194d3bcdd71a2b85b8d14709c9c2092ddba85a2f99f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/PHASE_I_REVIEW.md",
+    "bytes": 6941,
+    "sha256": "88c6745d9a0ec3f33efb4b51862e3f44fa2e59426b8f291ff59d123862d06874"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/LICENSE",
+    "bytes": 1537,
+    "sha256": "c26cae81da4508e5e249985777a33821f183223ebb74d7f8cfbf90fe7eef2fb7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/__init__.py",
+    "bytes": 8765,
+    "sha256": "b241584d2c1fc0304b0a1015ea923749d7b0800411dd406dcab7c82bf25d9fe8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/calculus/__init__.py",
+    "bytes": 162,
+    "sha256": "500802209d5899a7b24eaa4dce306509919e2332ed51930412997df5558d8eeb"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/calculus/approximation.py",
+    "bytes": 8817,
+    "sha256": "bf2ceedd823aafadceab52851eb433d369865c0707db77a6a8d62126e51a159e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/calculus/calculus.py",
+    "bytes": 112,
+    "sha256": "034812a748714b21037ee80956263709e59a945faf2bbd3561fb73ae3490cd0e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/calculus/differentiation.py",
+    "bytes": 20226,
+    "sha256": "d8be82063f31b57f628a9f7c34f6cab0bb70b518f18b9ef5c1899330715e2fdd"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/calculus/extrapolation.py",
+    "bytes": 73306,
+    "sha256": "c4cd2bbe4d83144178891d49865f98dda4bdde25bd555257ef2f481a99b30be0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/calculus/inverselaplace.py",
+    "bytes": 36056,
+    "sha256": "e7ea67f0dfedd0fb600535e2c6c5d9e31c6b8a12b6279818b157d329f0f1e200"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/calculus/odes.py",
+    "bytes": 9908,
+    "sha256": "81a1e2c3b2098ec38d35301aea2cc53d9a66720f6ec93a7c3142e719dcd3206a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/calculus/optimization.py",
+    "bytes": 32856,
+    "sha256": "6ca9d285712504e9953883a515e92c0ec602a7d7d84a66302a65c3b74cf6e8c3"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/calculus/polynomials.py",
+    "bytes": 7877,
+    "sha256": "0f5e81854fd21db562d3a2313700011d1f87efb23296774db0dde6b8f4ee158b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/calculus/quadrature.py",
+    "bytes": 42432,
+    "sha256": "9fe6afb52f04e377e857ee6daf99687e03816a2314604f0026341c588f5070a9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/ctx_base.py",
+    "bytes": 15985,
+    "sha256": "adf8e67ccc80e79c7c47f716148354c165531257d99b2c797ab28375ab92115c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/ctx_fp.py",
+    "bytes": 6572,
+    "sha256": "72d523c7f3685348855a4d397170d808bd99b4b64e956b359fa65aa37a5b1b68"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/ctx_iv.py",
+    "bytes": 17211,
+    "sha256": "b6a74cafe1837e4664d4486819e0806a3cbba50bfe456b6b56a8588df23caf88"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/ctx_mp.py",
+    "bytes": 49452,
+    "sha256": "777af8b7bc4736a485b66aac03d06dab5369cb759333ea5c336fe3782c840b16"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/ctx_mp_python.py",
+    "bytes": 37815,
+    "sha256": "de89585a8e259354a743403f21a675f35aaa1bcbb9a7119ab7fbfe2f842d9f76"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/function_docs.py",
+    "bytes": 283512,
+    "sha256": "8383cff27e882d798770bc80e74b312ba4e6a7f678fe944dfb00c4ad4f03d62e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/__init__.py",
+    "bytes": 330,
+    "sha256": "61755d86abfee8b2a6e9caf9c71b53353b6e0fdcc33ca19097c1a64b4c73db1a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/bessel.py",
+    "bytes": 37938,
+    "sha256": "7543cbbbc7eb94afaf99fdfe8ab5ffeeebf0cb0e3171cbfa1088b398867cf243"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/elliptic.py",
+    "bytes": 42237,
+    "sha256": "ab3d3254c6f895611e3930cbfc35b3e6ee5ac261883ca02cb991495e0c0724d5"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/expintegrals.py",
+    "bytes": 11644,
+    "sha256": "ef95ff31175873517f5fbddb80d88e26ac11952da1a80cdc14b97744cdad0837"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/factorials.py",
+    "bytes": 5273,
+    "sha256": "f3fea4091edee24d46c31880389bb435169d785e23036f2ac78862761bb820b9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/functions.py",
+    "bytes": 18100,
+    "sha256": "b9bd89131beacc258b926e72026ef616be9f756999654927abdff7c3d3048a02"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/hypergeometric.py",
+    "bytes": 51570,
+    "sha256": "67438c00c0b8ca52b8da7fd29da9b21559d4c7acc72f208b0a8243499d49ac76"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/orthogonal.py",
+    "bytes": 16097,
+    "sha256": "15a6e4c4a7c1a12b1e0397e55aed5adeb7bed8161a7b0f5aba0a88b13f0b68bc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/qfunctions.py",
+    "bytes": 7633,
+    "sha256": "6b710718a42dfe331de31f48efbd89cfe4c6167198f9aad6a8fbd91b3f5049ed"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/rszeta.py",
+    "bytes": 46184,
+    "sha256": "cae515a788a52320e65f21375930710c38f07c424dca92676cf4bec4f1f91e8c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/signals.py",
+    "bytes": 703,
+    "sha256": "10ba2dc10696d420e9bfe79e273399e5cdb73617da65c8fdfc691bde9b2f4b44"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/theta.py",
+    "bytes": 37320,
+    "sha256": "2a080ea1c733a0c1bafc73286a5e2810fee267848a3a8bbd24513e5b3636af73"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/zeta.py",
+    "bytes": 36410,
+    "sha256": "b9eec963b197034a17f2ad3cb10265d82491ad9ee43adf07b1fb695639d3c2b1"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/functions/zetazeros.py",
+    "bytes": 30858,
+    "sha256": "baae93572641718d8c2d7ed549d55f9f44ce928c012ccf5f5ed9f2484c1a373c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/identification.py",
+    "bytes": 29253,
+    "sha256": "eda31d9e044069e2ff31a7c350d6e61089464129251c367ca663c5b7e38b824c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/libmp/__init__.py",
+    "bytes": 3790,
+    "sha256": "5020e32d9c386eb6e495a0a64a2c4270f74b747933f2c17ffba17fc2bd1db808"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/libmp/backend.py",
+    "bytes": 3360,
+    "sha256": "dba03ca5491a1a8bf6eafaeb14d415c962792c3b4af2c977507ad82de71a4e30"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/libmp/gammazeta.py",
+    "bytes": 71469,
+    "sha256": "5ea770e8f328b300da49c6bfb0eb3e220951ba4ddf6fc73da78dccfe56dcae57"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/libmp/libelefun.py",
+    "bytes": 43861,
+    "sha256": "8e80593f814e7713df89e5aca352cfb52afa747c9da46fcb42217f6d841858c8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/libmp/libhyper.py",
+    "bytes": 36624,
+    "sha256": "27d7e674317abb6ec472cb045af06e55a01ade11633ef3cdd5281182ed5d11b7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/libmp/libintmath.py",
+    "bytes": 16688,
+    "sha256": "688453d2b91467fb1d1907f74cd08b77ea4132fb505a3b2c6ef14b7caed4d237"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/libmp/libmpc.py",
+    "bytes": 26875,
+    "sha256": "2819dd523b396154b7dbe21dddf7e50df620a5d5b53ebc7acdfa3c133e506ebb"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/libmp/libmpf.py",
+    "bytes": 45021,
+    "sha256": "be93f490d56449c6c2568668809e166ad97823b09ed1de1dcc75637d57b9eeca"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/libmp/libmpi.py",
+    "bytes": 27622,
+    "sha256": "bb4239122c24a9afb8f9d5c44e2e64eccb9ac417996ef0803c5b65f7753d605d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/math2.py",
+    "bytes": 18561,
+    "sha256": "3b90e0960f354ac5b4c1f1c3509717383f3e70268bbdb548bf2c34b159916e92"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/matrices/__init__.py",
+    "bytes": 94,
+    "sha256": "113cc60dc8986eaf5fb622b068c6c9d79108f8a3571ebcd16fe6477a186a163b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/matrices/calculus.py",
+    "bytes": 18609,
+    "sha256": "3cd46afa9da7c604fe7f30b9e0ad9d7a98bc75d85dc7a43ce86f2aa548877946"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/matrices/eigen.py",
+    "bytes": 24394,
+    "sha256": "19b0d72370a2c7311d5f1af51bceae5169009e002f77ed39326490f93b2eff99"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/matrices/eigen_symmetric.py",
+    "bytes": 58534,
+    "sha256": "14f28f790af5706630e98e9e6b7d9ad587445900cb3fa265407100d967cd2d88"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/matrices/linalg.py",
+    "bytes": 26958,
+    "sha256": "d380b78a3ccc1689bba1be5f5c10837f23cf768dc121ba08784f31d80eafa85d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/matrices/matrices.py",
+    "bytes": 32331,
+    "sha256": "a3bf04abad841d09f172c4742c1a160c419110ea0de0bda20ccd6addd42bc34a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/rational.py",
+    "bytes": 5976,
+    "sha256": "eb8779e9fbd95e7818653ee73801de151517efb789d40d11deba5f58153e992a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/usertools.py",
+    "bytes": 3029,
+    "sha256": "6be4c3c3b5d246c3dd0447dfc4ea280d5e160c57ee5e73b9f0fef975c003f3b2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/deps/mpmath/visualization.py",
+    "bytes": 10627,
+    "sha256": "a679db8dc77d02115544165abd85f9823c78cad2bf917a030e2b1847a1295e1b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/final-a06-source-hashes.json",
+    "bytes": 536,
+    "sha256": "fdf2f985a9320abbbbc2965594e2c0df8436e958fb054b2b524859daa602b29c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/final-evidence-inventory.json",
+    "bytes": 32120,
+    "sha256": "52c09868bc1c6faa89ea69cc2ebd65c42bca1e95439fdd94d67ed4f39be2c702"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/missing-identity-red/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/missing-identity-red/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/missing-identity-red/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/missing-identity-red/missing-identity-result.json",
+    "bytes": 231,
+    "sha256": "f298ec437751e0d91ae09172a97a2593ea24a8175aa1d7f0904c04a4fa8fa504"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/missing-identity-red/run.log",
+    "bytes": 1627,
+    "sha256": "c22d7ded5c027d7062ded49a1e72ee13cee893ab160b44942c302401b7f66243"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/missing-identity-red/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/missing-identity-red/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/missing-identity-red/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/missing-identity-red/source-identity.txt",
+    "bytes": 829,
+    "sha256": "401c089375ec2c03f29edb21633cf4086aa16016c26da85a7ce3958945ec86b7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/missing-identity-red/unit.xml",
+    "bytes": 1659,
+    "sha256": "250b406b18597d7dc2a487afc452145428d9b275853558c2241a8af7ff0f37f4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/oracle-run.log",
+    "bytes": 575,
+    "sha256": "5c81a6d9a98c47fc323301a905eb4337475bf3235787a91cce03dd396d07dbe4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/phase1-inventory.json",
+    "bytes": 12709,
+    "sha256": "eb2a8a651454d03e41be250abd490ca415278cf625ad0d918f99c14514f6395a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/phase1-oracle-sources/probe_a06.py",
+    "bytes": 14159,
+    "sha256": "c7653ee23ba6d1fa6e1523904af912d1ee87106995f38865b7d18e3169937446"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/phase1-oracle-sources/source-hashes.json",
+    "bytes": 289,
+    "sha256": "9d9b3f4aa17c9ce71e934afbccbe667d68501830b3f98c6d5ce6124925219dbc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/phase1-oracle-sources/test_independent_oracle.py",
+    "bytes": 432,
+    "sha256": "b4236ffa2279d30aba5e841b78c40d533b16469435ca83e39ead5aa7b5bd69d8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/phase1-oracle-sources/test_shared_metric_fault.py",
+    "bytes": 3114,
+    "sha256": "893124ddc85090b625026478f2920a57cb288c8aaa9ec46dc33e12be1bf34ce8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-mesh/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-mesh/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-mesh/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-mesh/mesh-results.json",
+    "bytes": 577,
+    "sha256": "d9356e7018581b55cc7b38ad5d105d081d8cee1bfcb1cd32762ebc75440156b4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-mesh/run.log",
+    "bytes": 179,
+    "sha256": "34c5c1bc8a161f726cf622dfe93449e43bfddc27e83449ea3878ce787dc28874"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-mesh/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-mesh/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-mesh/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-mesh/source-identity.txt",
+    "bytes": 817,
+    "sha256": "43c673a5a877c48a178b9c2cc0661ef715ea9b6363dcd5813a48733fad95c193"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-mesh/unit.xml",
+    "bytes": 341,
+    "sha256": "43bc6f55c4e79453a6f1933d6e59fd172e0fb85d99e474450fbb04888faddfe7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle/independent-oracle.json",
+    "bytes": 404247,
+    "sha256": "bccf74c256cd68679008ed41573c17b17a4877c723bc5d0901e14b288f1cdcee"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle/run.log",
+    "bytes": 382,
+    "sha256": "55920969c906b17431cd8641124016661386a865ba4f3753aef84071bcbc7c37"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle/source-identity.txt",
+    "bytes": 826,
+    "sha256": "28aeaeb73be84754af8b1f1756d82e05a3d1c75842d07bb01ea6cb3c0f3cdc34"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle/unit.xml",
+    "bytes": 352,
+    "sha256": "056301c5448c4a30c57063a5cc93bae89ea15fbb82aaba807f903c6894e8ff72"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-analytic/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-analytic/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-analytic/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-analytic/independent-oracle.json",
+    "bytes": 405743,
+    "sha256": "d471c77e2ee37a7a133ea59ebc4d895553da2fd64128eeb40a053363aa0d54bd"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-analytic/run.log",
+    "bytes": 381,
+    "sha256": "b53413e057e873b0c36e7c0c75a6a61b85c030ee6336f17984596dab125b83d1"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-analytic/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-analytic/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-analytic/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-analytic/source-identity.txt",
+    "bytes": 826,
+    "sha256": "28aeaeb73be84754af8b1f1756d82e05a3d1c75842d07bb01ea6cb3c0f3cdc34"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-analytic/unit.xml",
+    "bytes": 352,
+    "sha256": "df0747d13b9bc1daed09c44f23fb78cd326cea5987dfafbb24829a4872cc0d68"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-binary64/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-binary64/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-binary64/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-binary64/independent-oracle.json",
+    "bytes": 404246,
+    "sha256": "dee45063d8ac2e422e7fc75c45be13d82458afacf66a5a16d8416144d191e637"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-binary64/run.log",
+    "bytes": 382,
+    "sha256": "89c2e5387b05df5bf3e67df409c1f21ae340c782c6f79112f8d0380f328d6eae"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-binary64/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-binary64/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-binary64/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-binary64/source-identity.txt",
+    "bytes": 826,
+    "sha256": "28aeaeb73be84754af8b1f1756d82e05a3d1c75842d07bb01ea6cb3c0f3cdc34"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-oracle-binary64/unit.xml",
+    "bytes": 352,
+    "sha256": "e50a3e83ed45a02529e73d37a128110f2f7e3e2aae4dd8228976775a4d853cc9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-shared-kernel/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-shared-kernel/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-shared-kernel/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-shared-kernel/run.log",
+    "bytes": 179,
+    "sha256": "ba76d58c237e6c9a2fba5aa9965ec7e6f282e520ab31dfe5b631350d73dcae45"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-shared-kernel/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-shared-kernel/shared-kernel-fault.json",
+    "bytes": 526,
+    "sha256": "a38027609b3e5a8976326697f2f2b6a51187aa600f1b6b593b73f33d69a31220"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-shared-kernel/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-shared-kernel/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-shared-kernel/source-identity.txt",
+    "bytes": 824,
+    "sha256": "a9b09f8413f302bbdf747fae664d58ba1e4008a37890d09fe4bf8416a0951e85"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/pinned-shared-kernel/unit.xml",
+    "bytes": 373,
+    "sha256": "8b4aa6614bb29e013654072cdd0db2edbc6d932568977860e23328be62bfd079"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/probe_a06.py",
+    "bytes": 14540,
+    "sha256": "3e086f759d80bf25d878891eb0a896772678c8d1f244cfb9d1d88cb73c2e3162"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/probe_final_actual.py",
+    "bytes": 14065,
+    "sha256": "07c725b24fa17be286523f85ef69ae66bb05c9d8987811088c1b4411df77eb4d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed/a06-expected-curve.patch",
+    "bytes": 16332,
+    "sha256": "9e9074a5c33d205567c4f9393720d08e199b71e735584cc31d92ced48563eb0e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed/conftest.py",
+    "bytes": 479,
+    "sha256": "5f9e9919afef1ad217f573c18ea1b7785dfa541f6b8ef8cad4f776f2ba9043d0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed/route_validate_dynamics.py",
+    "bytes": 34777,
+    "sha256": "9e8f8b787f2f0468b4cfeb18860c83bc54956e698b91fd7442fd9b38aae436d2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed/test_cyclic_retime.py",
+    "bytes": 18945,
+    "sha256": "dbd9d0991d1456d74f9f4f1a7ee61eb876a6b842571fe2333398783d02c72014"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed/test_route_dynamics_oracle.py",
+    "bytes": 11708,
+    "sha256": "507fa9746bd2a691509c3cb7cd490133fb20562f6a125dc081db747dcb08d58d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed/test_route_ellipse_dynamics.py",
+    "bytes": 9705,
+    "sha256": "e7c2bab174a87e69c70073975db33de7d9734254679487ef14796edaf653ff4f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed/test_route_validate_dynamics.py",
+    "bytes": 15205,
+    "sha256": "a763dbe81a73f9ff81de8bd573127f303f75b9ed1899ad611ff9794b5140eb48"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-lint.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/a06-independent-dynamics.json",
+    "bytes": 806399,
+    "sha256": "1ea1e4ca8aba12978667319e3459847851f8b459b991e5c14680a34e5bef10fa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/a06-retimer-s0_reverse_route.json",
+    "bytes": 40226,
+    "sha256": "06f2340f55e387910a8c4bbc34ca220c932248322f8211bb9ff3b94d7fa5f491"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/a06-retimer-s0_rotated_route.json",
+    "bytes": 40092,
+    "sha256": "a49a2b022a00a4a23cbf13dc77d246eb3d1be091243c31ed4d51dc7c8288b804"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/a06-retimer-s0_route.json",
+    "bytes": 40087,
+    "sha256": "0cff131422efc79a68a97347e5934f42e41784d4b09bf6e32c976f39d9091a1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/a06-retimer-s2_lower_route.json",
+    "bytes": 37654,
+    "sha256": "a07c8bd7f8e10c127e7510cc161e5790ad3e65288a2a8f1bf6d4b525c74a0220"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/a06-retimer-s2_upper_route.json",
+    "bytes": 38512,
+    "sha256": "8197876ad52a00866d0e7173e3f2dcdbf621ce132279d51862a6259446040eee"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/a06-retimer-s3_notch_route.json",
+    "bytes": 56534,
+    "sha256": "df1fd55ae68da429624ee541edd1e36ecc5a4225754389ede8f38812ec948ab9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/a06-retimer-s3_surfaces_route.json",
+    "bytes": 56307,
+    "sha256": "48249ff3e68fdd3b12ae955e229ebf09d60fb50034e9e6013e94645dcb6eaeb7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/run.log",
+    "bytes": 2628,
+    "sha256": "0cd45f55f79dddec61502465270e1539d6a176db839447dca4408822515f989d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/source-identity.txt",
+    "bytes": 1025,
+    "sha256": "da7eae03b644ad565e400811d298daa48b21de467a330e9ed0b389c1aad8b51c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification/unit.xml",
+    "bytes": 12519,
+    "sha256": "82dbfc9dfd158c9ebcac816dee9d9e2c2256672c038ab701a07e73fd21551af8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-cycle-oracle.json",
+    "bytes": 470,
+    "sha256": "2b41652c2003da05c109623c5c2cce65b316bf50a1704e1a74b4c8e22a26f9b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-ellipse-profile.json",
+    "bytes": 19512,
+    "sha256": "b39105a345fa92ce1c8027a45c2d31ead136ddebcf9efe7621bdd32ca962712f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-ellipse-route.json",
+    "bytes": 19893,
+    "sha256": "71a88a1da6eb4482d09dad829ce73c893b4cb3e8f5e9816927600977753a4657"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-ellipse.json",
+    "bytes": 325535,
+    "sha256": "bd76d5eef3462ab697e1816329838623ffd52ee13be36e69681ed4e392cc5cd8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-independent-dynamics.json",
+    "bytes": 806399,
+    "sha256": "1ea1e4ca8aba12978667319e3459847851f8b459b991e5c14680a34e5bef10fa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-narrow-lower-cap.json",
+    "bytes": 323665,
+    "sha256": "a1c72628611f535eededa9a1910feabf2cb957dc113eebd2c1604f3c05d54737"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-retimer-s0_reverse_route.json",
+    "bytes": 40226,
+    "sha256": "06f2340f55e387910a8c4bbc34ca220c932248322f8211bb9ff3b94d7fa5f491"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-retimer-s0_rotated_route.json",
+    "bytes": 40092,
+    "sha256": "a49a2b022a00a4a23cbf13dc77d246eb3d1be091243c31ed4d51dc7c8288b804"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-retimer-s0_route.json",
+    "bytes": 40087,
+    "sha256": "0cff131422efc79a68a97347e5934f42e41784d4b09bf6e32c976f39d9091a1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-retimer-s2_lower_route.json",
+    "bytes": 37654,
+    "sha256": "a07c8bd7f8e10c127e7510cc161e5790ad3e65288a2a8f1bf6d4b525c74a0220"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-retimer-s2_upper_route.json",
+    "bytes": 38512,
+    "sha256": "8197876ad52a00866d0e7173e3f2dcdbf621ce132279d51862a6259446040eee"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-retimer-s3_notch_route.json",
+    "bytes": 56534,
+    "sha256": "df1fd55ae68da429624ee541edd1e36ecc5a4225754389ede8f38812ec948ab9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/a06-retimer-s3_surfaces_route.json",
+    "bytes": 56307,
+    "sha256": "48249ff3e68fdd3b12ae955e229ebf09d60fb50034e9e6013e94645dcb6eaeb7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/run.log",
+    "bytes": 181,
+    "sha256": "ccf88d6d844d0db25c5d3c782ecc1194fa80b826d56a563134513ca133ccc430"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/source-identity.txt",
+    "bytes": 1025,
+    "sha256": "da7eae03b644ad565e400811d298daa48b21de467a330e9ed0b389c1aad8b51c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/proposed-verification-path-corrected/unit.xml",
+    "bytes": 12705,
+    "sha256": "5a50e03fe74f72e1f4912a138512d3bb9c6c2211b3614f62137cef2b584839e5"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/DISCARDED.txt",
+    "bytes": 153,
+    "sha256": "524d36e7899defa25372f20fd29fa784566434b4ae0011ad82e749fa7ee8fa6c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-cycle-oracle.json",
+    "bytes": 470,
+    "sha256": "2b41652c2003da05c109623c5c2cce65b316bf50a1704e1a74b4c8e22a26f9b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-ellipse-profile.json",
+    "bytes": 19512,
+    "sha256": "b39105a345fa92ce1c8027a45c2d31ead136ddebcf9efe7621bdd32ca962712f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-ellipse-route.json",
+    "bytes": 19893,
+    "sha256": "71a88a1da6eb4482d09dad829ce73c893b4cb3e8f5e9816927600977753a4657"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-ellipse.json",
+    "bytes": 325535,
+    "sha256": "bd76d5eef3462ab697e1816329838623ffd52ee13be36e69681ed4e392cc5cd8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-independent-dynamics.json",
+    "bytes": 806399,
+    "sha256": "1ea1e4ca8aba12978667319e3459847851f8b459b991e5c14680a34e5bef10fa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-narrow-lower-cap.json",
+    "bytes": 323665,
+    "sha256": "a1c72628611f535eededa9a1910feabf2cb957dc113eebd2c1604f3c05d54737"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-retimer-s0_reverse_route.json",
+    "bytes": 40226,
+    "sha256": "06f2340f55e387910a8c4bbc34ca220c932248322f8211bb9ff3b94d7fa5f491"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-retimer-s0_rotated_route.json",
+    "bytes": 40092,
+    "sha256": "a49a2b022a00a4a23cbf13dc77d246eb3d1be091243c31ed4d51dc7c8288b804"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-retimer-s0_route.json",
+    "bytes": 40087,
+    "sha256": "0cff131422efc79a68a97347e5934f42e41784d4b09bf6e32c976f39d9091a1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-retimer-s2_lower_route.json",
+    "bytes": 37654,
+    "sha256": "a07c8bd7f8e10c127e7510cc161e5790ad3e65288a2a8f1bf6d4b525c74a0220"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-retimer-s2_upper_route.json",
+    "bytes": 38512,
+    "sha256": "8197876ad52a00866d0e7173e3f2dcdbf621ce132279d51862a6259446040eee"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-retimer-s3_notch_route.json",
+    "bytes": 56534,
+    "sha256": "df1fd55ae68da429624ee541edd1e36ecc5a4225754389ede8f38812ec948ab9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/a06-retimer-s3_surfaces_route.json",
+    "bytes": 56307,
+    "sha256": "48249ff3e68fdd3b12ae955e229ebf09d60fb50034e9e6013e94645dcb6eaeb7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/missing-identity-result.json",
+    "bytes": 232,
+    "sha256": "851788d7316b363b07f647bd372bae15280ff9e0c3adad3b2df5eae76588ebcc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/run.log",
+    "bytes": 181,
+    "sha256": "dcd645f9101ccc38fa50e2dfe2d89c58f40c455eaea9b9a4aade71acce59c829"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "434ca8834fec49320c43bacf4707ca58ec61e250eb3d91406c12a17b28441723"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/source-identity.txt",
+    "bytes": 1485,
+    "sha256": "f2f42dbd9d38f9d7521e50b7874e86c1c84a4dde31619001821beb5a1ee4801c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused/unit.xml",
+    "bytes": 12368,
+    "sha256": "9893dd7b310613832d393b4fc0ed0694c66b057fbe37cf79158ff7be3afc4559"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-cycle-oracle.json",
+    "bytes": 470,
+    "sha256": "2b41652c2003da05c109623c5c2cce65b316bf50a1704e1a74b4c8e22a26f9b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-ellipse-profile.json",
+    "bytes": 19512,
+    "sha256": "b39105a345fa92ce1c8027a45c2d31ead136ddebcf9efe7621bdd32ca962712f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-ellipse-route.json",
+    "bytes": 19893,
+    "sha256": "71a88a1da6eb4482d09dad829ce73c893b4cb3e8f5e9816927600977753a4657"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-ellipse.json",
+    "bytes": 325535,
+    "sha256": "bd76d5eef3462ab697e1816329838623ffd52ee13be36e69681ed4e392cc5cd8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-independent-dynamics.json",
+    "bytes": 806399,
+    "sha256": "1ea1e4ca8aba12978667319e3459847851f8b459b991e5c14680a34e5bef10fa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-narrow-lower-cap.json",
+    "bytes": 323665,
+    "sha256": "a1c72628611f535eededa9a1910feabf2cb957dc113eebd2c1604f3c05d54737"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-retimer-s0_reverse_route.json",
+    "bytes": 40226,
+    "sha256": "06f2340f55e387910a8c4bbc34ca220c932248322f8211bb9ff3b94d7fa5f491"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-retimer-s0_rotated_route.json",
+    "bytes": 40092,
+    "sha256": "a49a2b022a00a4a23cbf13dc77d246eb3d1be091243c31ed4d51dc7c8288b804"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-retimer-s0_route.json",
+    "bytes": 40087,
+    "sha256": "0cff131422efc79a68a97347e5934f42e41784d4b09bf6e32c976f39d9091a1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-retimer-s2_lower_route.json",
+    "bytes": 37654,
+    "sha256": "a07c8bd7f8e10c127e7510cc161e5790ad3e65288a2a8f1bf6d4b525c74a0220"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-retimer-s2_upper_route.json",
+    "bytes": 38512,
+    "sha256": "8197876ad52a00866d0e7173e3f2dcdbf621ce132279d51862a6259446040eee"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-retimer-s3_notch_route.json",
+    "bytes": 56534,
+    "sha256": "df1fd55ae68da429624ee541edd1e36ecc5a4225754389ede8f38812ec948ab9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/a06-retimer-s3_surfaces_route.json",
+    "bytes": 56307,
+    "sha256": "48249ff3e68fdd3b12ae955e229ebf09d60fb50034e9e6013e94645dcb6eaeb7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/missing-identity-result.json",
+    "bytes": 232,
+    "sha256": "851788d7316b363b07f647bd372bae15280ff9e0c3adad3b2df5eae76588ebcc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/run.log",
+    "bytes": 191,
+    "sha256": "0cebe2a01bd0fb56628be240458e78f9f41391e5b7e0000ba0b78c194ecfed75"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/source-hashes-before.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/source-identity.txt",
+    "bytes": 1897,
+    "sha256": "50a94245aa40f387f612a823710857f8bb69f9b1e5c1fc3984a4bbb3728b839b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-focused-frozen/unit.xml",
+    "bytes": 12368,
+    "sha256": "72d56bee5a7c6169eafcf1cf2431fb8fbee9c6b11e6dc8bff1598bdaa68ba073"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-high-precision-frozen/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-high-precision-frozen/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-high-precision-frozen/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-high-precision-frozen/independent-oracle.json",
+    "bytes": 405744,
+    "sha256": "f08b3e8513d7bcf4e1331ea7162cf92d58da634630b22d5691f82a2e471449ad"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-high-precision-frozen/run.log",
+    "bytes": 382,
+    "sha256": "bbe3dece44a36108e537db0b41169796e4d213b9254a23863dad858c088a9b20"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-high-precision-frozen/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-high-precision-frozen/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-high-precision-frozen/source-hashes-before.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-high-precision-frozen/source-identity.txt",
+    "bytes": 1667,
+    "sha256": "359d2a1efe76e6368ef139c6a3108986ed66953ad49041a4866ffc6592688b1b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/remediation-high-precision-frozen/unit.xml",
+    "bytes": 352,
+    "sha256": "6e692a092eba1ca38f8a933179817c8f0ae1e192848934f6f0e56b7a72da8ff5"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/test_expected_digest_required.py",
+    "bytes": 964,
+    "sha256": "940e7b895c687f61f30fbc4741ac49b445d208e676cb9cbce92a6a5727d7cde8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/test_final_actual.py",
+    "bytes": 614,
+    "sha256": "58fa81628a2e292574ed1834c628a29d8ca6ed00e81c960c4430e05034ebcb1c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/test_final_actual_dry.py",
+    "bytes": 595,
+    "sha256": "657616ba11e8f58131c8c585ed8aa78675cc394b6f6f034f0b50bc5895415fc2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/test_final_retained.py",
+    "bytes": 3783,
+    "sha256": "17c59d544f1935399e2debf70f5c67c5bdf9552ce1c07886f86bfc85cca5b044"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/test_independent_oracle.py",
+    "bytes": 432,
+    "sha256": "b4236ffa2279d30aba5e841b78c40d533b16469435ca83e39ead5aa7b5bd69d8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/test_runtime_mesh.py",
+    "bytes": 1305,
+    "sha256": "3a65feead9abc3222bc2dafdcce43001424e98e35ad2a75cd48727fdb597d66c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/dynamics/test_shared_metric_fault.py",
+    "bytes": 3206,
+    "sha256": "a12515d0f736b1213970ba5a2ea10c97617bd895f6e9a8e64b3da3bddb734b3f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/evidence/REPORT.md",
+    "bytes": 6651,
+    "sha256": "4c01ab93531770f2f354d120342522fe6212ba89970fef3ec8d1e3751655c6b6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/evidence/f2-code-review.md",
+    "bytes": 5158,
+    "sha256": "7ad30abbe299b232b1fec07b961d9ffd9aa9be27ea88fc81e68e262d36bc8b4b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/evidence/q-authority-remediation-review.md",
+    "bytes": 4872,
+    "sha256": "c9ec597f13d0355999d0d71f8460f534211cd103a9e90f5debb69f4dd7e5f737"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/evidence/remediation-code-review.md",
+    "bytes": 7984,
+    "sha256": "68012208d3cfd2fc82d96859f49f1d038da4ce110803119f91feb399ee28698d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/PHASE_I.md",
+    "bytes": 5604,
+    "sha256": "e4dfa672ab316ee2f3a4c64f3ae9aebaa8bcb2c37da753f8e5649d54658974c1"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/PHASE_II.md",
+    "bytes": 3131,
+    "sha256": "565c5dadc6d7026a40cab4679613e77dd2438a18f82a2a8d44afc948777bd12a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/SHARED_CAP_REVIEW.md",
+    "bytes": 4595,
+    "sha256": "0d88de5592d9808fdc6d1e34b3090cfc22aae8c1406df18d3fa38e148336d928"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/a05-geometry.json",
+    "bytes": 971765,
+    "sha256": "bfe748e7cf80874367c1666f5f851fc76edfd481bb30aaae540ea416da5e130d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/a05-wrong-deck-coincident.json",
+    "bytes": 96687,
+    "sha256": "3c0b74543a0a2219dae658ee2f8becfbbd463612ca3d6fd99ee79d0bac7a65c9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/run.log",
+    "bytes": 191,
+    "sha256": "e2615d4735d91e58a9c43d32a609d4fccdb1ba8ceed0d1cf2180cd6354ae1300"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "63f051dec38bf8e22d990dd93b909b344074c3a57752b9b74c694b95371e13a4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/source-identity.txt",
+    "bytes": 949,
+    "sha256": "07e419fefa9bfec2d1a10604d32983726d558493c804a697fcdc6b1111133926"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-green/unit.xml",
+    "bytes": 6204,
+    "sha256": "3c5ee59b95076491adbebe7419a039508d60c1e8ae4b79280c72ebe5f9b6f118"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/a05-geometry.json",
+    "bytes": 971765,
+    "sha256": "bfe748e7cf80874367c1666f5f851fc76edfd481bb30aaae540ea416da5e130d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/a05-wrong-deck-coincident.json",
+    "bytes": 96687,
+    "sha256": "3c0b74543a0a2219dae658ee2f8becfbbd463612ca3d6fd99ee79d0bac7a65c9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/run.log",
+    "bytes": 191,
+    "sha256": "88699a49310029dedfca9c5c07b75861b054b469430e436f1c5b4db7aacc3e1d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/source-identity.txt",
+    "bytes": 834,
+    "sha256": "c3f1717844b7d3b41f504a157af72d333f171f8d03290a4edca3b63bceb8187f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-proposed/unit.xml",
+    "bytes": 7404,
+    "sha256": "faf99b7f8306285cc55b3591b6a13951403cd4dc59b2d5cc4a6ffa3c59ecc5cc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-red/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-red/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-red/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-red/run.log",
+    "bytes": 1433,
+    "sha256": "8e706af42a0993baeb70432111395660bd633e50653d1522f7d6445405ab7c99"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-red/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-red/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-red/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-red/source-identity.txt",
+    "bytes": 834,
+    "sha256": "7055d13e6db59bd4056367adb05ea41fef03d053c47c000f1b5f43edcce79acb"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/authority-red/unit.xml",
+    "bytes": 1468,
+    "sha256": "ce998863691cf7942ff83ecea213bf1a4d148e52fff64d0ebc25420fd3ad8292"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/README.md",
+    "bytes": 3640,
+    "sha256": "222b058671804c220e5469ebc06f90a675d068279372b90c5f522ae20156abd9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/final-actual.log",
+    "bytes": 15339,
+    "sha256": "cef3bcf98d13ec6a604af02fe695485099ff4a273aa4d23418866df899c103b8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/final-actual.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/functional-stage-oracle-result.json",
+    "bytes": 27379,
+    "sha256": "13beb46138f9f6ee33e620563f310deda5ce1f1f88569b0650265f3b940bffa1"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/functional-stage-oracle.log",
+    "bytes": 15339,
+    "sha256": "cef3bcf98d13ec6a604af02fe695485099ff4a273aa4d23418866df899c103b8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/independent-final-oracle-result.json",
+    "bytes": 27379,
+    "sha256": "7a6016c8411dcb4efe63e8dddc328cc5a886c1ad71e6054bcdd31662884b7ba7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/independent_final_oracle.py",
+    "bytes": 15600,
+    "sha256": "373c71fd92fc5d11c5aa20ff583cd00ce559bbc5419f6c954643be20d3cb0cad"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/oracle-environment.json",
+    "bytes": 261,
+    "sha256": "42046831c0b985919489d185c1188a6f63fd48e052cb600c0bff255cb68b3bce"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/preflight-on-earlier-corrected.json",
+    "bytes": 26897,
+    "sha256": "74a42a6df64019cc68fb7a45f9373ce2b7651d62247f7016f1476eaa06d3aebf"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/preflight.log",
+    "bytes": 14867,
+    "sha256": "1f2b44566f104606ac0ea3c16fce172b748556897d83e8032718d659a6575d7c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/preflight.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/preflight1-failure.txt",
+    "bytes": 394,
+    "sha256": "c402916c74c14f9b75d050771d958a0b29616229c6205e42298ac870042a915d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/final-actual/preflight1-source.py",
+    "bytes": 13200,
+    "sha256": "1c6adb13e5b1f4512886a64b9e80ff7664ff40e80ec41b2221f5e4698ff77639"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/independent-oracle-result.json",
+    "bytes": 4281,
+    "sha256": "051923968ee921eb5e98a65767565e6aa0bfc7b822ec51067b1094084f6c0e75"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/independent-oracle.log",
+    "bytes": 2453,
+    "sha256": "a752092b4d54ce4245644647f147ce1f00b95d3caa02b0d71fa8e69b22bcddfa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/independent_oracle.py",
+    "bytes": 5734,
+    "sha256": "e6c2a1e80256514303369189c0a57bde2dfcf847573d909d3cdd2acc571a1800"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/oracle-dependency-install.log",
+    "bytes": 772,
+    "sha256": "ea0d6125d05ff49b2ab7b6a06fd0c69f6a8c748ee4710652c80deb0aaae182e1"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/proposed/SHA256SUMS.json",
+    "bytes": 198,
+    "sha256": "a32c862d6935ca2ba3d799f968830868288faf376928c5afef76a2859eb48292"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/proposed/a05-authority.patch",
+    "bytes": 18419,
+    "sha256": "04a82226ef1b727a0f9fd2d82d564be218272e92821da8d4feaa625c3f666820"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/proposed/conftest.py",
+    "bytes": 450,
+    "sha256": "7765d82df0d3796266614ea316b3bdc98a879234a61f006684e90cc79742d6ea"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/proposed/route_validate.py",
+    "bytes": 41199,
+    "sha256": "3d19294aa72dea9c3c2d66c47cbf115f83661ab360b0922d6fdf91e8cd52c651"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/proposed/test_route_validate_geometry.py",
+    "bytes": 23576,
+    "sha256": "a01ab24fdbfa973e5b5dba6421b16f94c4f35b17af1fc0bb7ef60eb1a8fb4988"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/runtime-primitives/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/runtime-primitives/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/runtime-primitives/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/runtime-primitives/run.log",
+    "bytes": 179,
+    "sha256": "e618911fbae83f4bf1b94b8c55d20a300fb7290dc14df229abddc78d48cec9fc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/runtime-primitives/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/runtime-primitives/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/runtime-primitives/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/runtime-primitives/source-identity.txt",
+    "bytes": 822,
+    "sha256": "f5e6aac4dab00766ffb9fa82fd5bfaf827efabe36c9a6edb7fbdfc84f42aec13"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/runtime-primitives/unit.xml",
+    "bytes": 720,
+    "sha256": "ab6097d411e384814150c8ecb9a28eeda78036423cbf4ab9808a937f1469bd6d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap/conftest.py",
+    "bytes": 1070,
+    "sha256": "a04a34df4cd473fb326209e13447bfceb476efcc7371fe2b550e149d899aca3d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap/test_exact_shared_cap.py",
+    "bytes": 4657,
+    "sha256": "542391619a48d3720cd063a9d76c20dc5a9a0165930b312f865917ac4752b5bb"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-final/a03-metrics.json",
+    "bytes": 801,
+    "sha256": "4f4ed0f06875424216b24608ab48dffdc1c27cdf0bbd833c8b396af4955c6765"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-final/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-final/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-final/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-final/run.log",
+    "bytes": 525,
+    "sha256": "9f40dbc07b63698668133836d761dec659a3e292260c7f616242fa2a31aaf74e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-final/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-final/source-hashes-after.json",
+    "bytes": 14324,
+    "sha256": "8ad42058cbe3ea78a519da1abb6cc9de582c81e365ba380e38f7aac71a063b7e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-final/source-hashes-before.json",
+    "bytes": 14324,
+    "sha256": "8ad42058cbe3ea78a519da1abb6cc9de582c81e365ba380e38f7aac71a063b7e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-final/source-identity.txt",
+    "bytes": 1244,
+    "sha256": "38dd2d70a07f4f41c1aad05a5e98a71a51a5485891befdffd4c591736bfb0c6f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-final/unit.xml",
+    "bytes": 12161,
+    "sha256": "60265e79c7a6af7a3d893a73016333092b116553da11a7066bcdf0f8985ec47e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-green/a03-metrics.json",
+    "bytes": 801,
+    "sha256": "4f4ed0f06875424216b24608ab48dffdc1c27cdf0bbd833c8b396af4955c6765"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-green/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-green/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-green/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-green/run.log",
+    "bytes": 261,
+    "sha256": "076a26a423f2e97c8cb532d60b4c5a28ec5bb9bf16bac6303ad93c1b81f68fa7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-green/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-green/source-hashes-after.json",
+    "bytes": 14324,
+    "sha256": "93575a47817c0a3802875bd0c81008c0af451b706fd42c0f9bfcdd524fe2ee18"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-green/source-hashes-before.json",
+    "bytes": 14324,
+    "sha256": "823feca3afba4c89e5ee58fe3e1cdc362c1d9c872ceadabdd0a7a71f115c2181"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-green/source-identity.txt",
+    "bytes": 1139,
+    "sha256": "1cdaf5c6dd855dda11d3312a5b35ab55ecafe02d4e3a3254df39f6a0b104d28f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-green/unit.xml",
+    "bytes": 12160,
+    "sha256": "7bad35fa3ddf48d57ce41c9975670070118f22b1680a7386ac0ea08f6c87525a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-proposed/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-proposed/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-proposed/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-proposed/run.log",
+    "bytes": 180,
+    "sha256": "12803743be01fc8f8136a6d17b7238dae6db4dc62624c77f79232ec06e7d707e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-proposed/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-proposed/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-proposed/source-hashes-before.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-proposed/source-identity.txt",
+    "bytes": 852,
+    "sha256": "215b439350de190a875c6a5c3b8e390295fa785b5ff0f8bb24b28ebf71c18a2a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-proposed/unit.xml",
+    "bytes": 8721,
+    "sha256": "1b2f470b12969cc5d09a896aba9037defd14c6136948148b2437f6cdf8fca328"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-red/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-red/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-red/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-red/run.log",
+    "bytes": 1288,
+    "sha256": "483c36187c6bef874f832e30f7648f40a070a1c994c409d8e9792e9dd8bc6270"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-red/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-red/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-red/source-hashes-before.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-red/source-identity.txt",
+    "bytes": 832,
+    "sha256": "b50ed963d7da67aa3e89c54dd580afc8f8d9c3a9eb003332cfa0ff5a2a773438"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/shared-cap-red/unit.xml",
+    "bytes": 1328,
+    "sha256": "dabf5adcc6412bfdc59950c53157437c4220600ba27ffd218b5a2a4447e1a5e5"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/test_adversarial_geometry.py",
+    "bytes": 4868,
+    "sha256": "4b14aed47e83dcfe3971f65fada787b9143ebdd1b2b709b0461d5d947988d2ee"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/geometry/test_geometry_authority_failing_first.py",
+    "bytes": 932,
+    "sha256": "35ba52bd28b8cf3b12de8879d732ba1e6408d47023b5c202cd5d5c9114519d88"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/baseline-launch.log",
+    "bytes": 200720,
+    "sha256": "5c539f52067960adb62f7caff67162d890fdb951756893b42da227cf2684b3ad"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/corrected-launch.log",
+    "bytes": 201272,
+    "sha256": "a3da7a7d0725a9fc132d2911a669687e280252757767e8e65fd52fba4df6b390"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/correction-ci-runs-latest.json",
+    "bytes": 26174,
+    "sha256": "25a3abd898fe09e89bf406b6e0eb6ca439b02e512026eaa79522055fd10e536f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/correction-ci-runs.json",
+    "bytes": 26174,
+    "sha256": "25a3abd898fe09e89bf406b6e0eb6ca439b02e512026eaa79522055fd10e536f"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/correction-identity.json",
+    "bytes": 1072,
+    "sha256": "96d13f95301ed20291e3f5c592dfa4a2532d5a3b5bb02d93a6882a90087349ef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/f1-artifact-transfer-error.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/f1-artifact-verification.log",
+    "bytes": 1298,
+    "sha256": "b10c3720f6d94d405781ff497d37e9507904b9dd98130d0a7f6e24ea90aec85b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/f1-ci-job.log",
+    "bytes": 301135,
+    "sha256": "1443e6deeb4763796aa4f77f2f39c90debd47b1d5da22f94dea84732f65c365c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/f1-ci-legacy-comparison.json",
+    "bytes": 962,
+    "sha256": "92c7a9482f219120c7a751970c9c15aee47f5a1326e375209e2b4777042a9419"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/f1-ci-verification.json",
+    "bytes": 427,
+    "sha256": "0572222b5ffb88fd49253b33fb856918800e2ac7db9f01dc1368b29ad07f9bbd"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/final-code-ci-runs.json",
+    "bytes": 26172,
+    "sha256": "006988ad27e8162e6d28381eeb468a2cf138646599f38ed30725010bcf44ed7c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/final-launch.log",
+    "bytes": 201843,
+    "sha256": "f0c21a8c1186596b61e6b4114f2a266c306d90c3d03761303bd9dd9d5f4c450a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/final-local-verification.json",
+    "bytes": 994,
+    "sha256": "0d67def05698a1b40039d291066a0155ad274bd4608d92b44a69ac7c3c6afa2b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/green-launch.log",
+    "bytes": 179,
+    "sha256": "00f6389afe1f8206d22e68e66224d6f2b6e11a06c62464cb7005f40bca468958"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/setup.log",
+    "bytes": 21976,
+    "sha256": "4333f7a1e5a5b7f44359811726351e090dfb593cdb641d2815038609f27e6799"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/strict-lint.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/identity/upload-checksums.log",
+    "bytes": 2327,
+    "sha256": "d92c8c9d59fcbb02e6f092c304d16d29af745444070b1331a34af21d8956280d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/INTEGRATION_REVIEW.md",
+    "bytes": 13257,
+    "sha256": "54e82ae9c2579d76d5ad44bc33741b2e44c122db267d5a2975970f8366f5b56e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/SHA256SUMS",
+    "bytes": 13765,
+    "sha256": "303646d55d90abb1233d13509c4a0ba53dc2e0bd47d99ec770add90e514c6618"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/draft-lint/run.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/run.log",
+    "bytes": 192,
+    "sha256": "73ffdd885ed4b70c9f32ebeb81dc81fe89f410b8534c2bbd824f95b75949e996"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/source-hashes-before.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/source-identity.txt",
+    "bytes": 1709,
+    "sha256": "47b2e3256e97be4ef9434946b315be33bd0c4e0e38604e7eec6490a0ba54cdb5"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/unit.xml",
+    "bytes": 3013,
+    "sha256": "6ebe2e2dcea981116c58d10d94ffd79a739a67d015cc509ba7d623295d31eabc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/w2-pipeline.json",
+    "bytes": 7465375,
+    "sha256": "bb12355741c1fe886bcb44501ac467c7f7cf550ad8427aa2027f6a3d5b447e67"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-pipeline-green/w2-trace-lineage-oracle.json",
+    "bytes": 1934,
+    "sha256": "6e003ffceb65b829e62f830d8e771c005ddd858bb7942e0068f35f0cf4c87530"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-red/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-red/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-red/handoff-missing-authority.json",
+    "bytes": 194,
+    "sha256": "7f6e733bd63b3109d31cd4448a76e5752b4ddd2c5edc2470c9dfa6df5d007642"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-red/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-red/run.log",
+    "bytes": 3426,
+    "sha256": "cedb05340ea73fbfeba2f7dfdc2e4eb617460415ba53cd9aa69dab24985c5b09"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-red/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-red/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-red/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-red/source-identity.txt",
+    "bytes": 831,
+    "sha256": "a636b7cf0f2027036b4b70b4e56ba4f8cb360479a5d559c78266369a896fa641"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/handoff-red/unit.xml",
+    "bytes": 3640,
+    "sha256": "ab87dda69e37125f1d3be25787a8dc1727df5966339b658c3d7c2d94c642a8b5"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/REVIEW.md",
+    "bytes": 7171,
+    "sha256": "ea5c6ddceb27d1faeeabcdb5cef73449475ef21e5846cdeff5f627d0baf62045"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/confirm_failure_stage.py",
+    "bytes": 1690,
+    "sha256": "e3838ad2159e2be6559d7fb70f284bd67ec7d290b3ae3e527e1da587368eafb5"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/diagnose_novel.py",
+    "bytes": 2663,
+    "sha256": "a627702e65040d64f578ba0dc0aa5154b527ebf36b007166e34ec49e753136ea"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/diagnostic/diagnostic.json",
+    "bytes": 3272,
+    "sha256": "a202963ef5ebb5cd74d8dc89cf560be775296a6b297af2e6a3eb1f02b44b2f93"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/diagnostic/exact-cap-oracle.json",
+    "bytes": 343,
+    "sha256": "9acd708924f35356d748729a8ea602a10edd32f99fd17e8a45b74ce8865cdc89"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/diagnostic/exact-cap-oracle.log",
+    "bytes": 344,
+    "sha256": "6365cb6cf428a1058dcba7f9af55bc49c9f51b30109d36e67a4883fa1677621d"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/diagnostic/failure-stage.json",
+    "bytes": 439,
+    "sha256": "0a4ddf494d62d9435e5e04c17bd2f0697fc3beaaf101d2a0a6f53be6be973db9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/diagnostic/failure-stage.log",
+    "bytes": 440,
+    "sha256": "148ea44db08fec6416c38a96c70fc529382843529cb852cf67fcdb496a3a8bce"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/diagnostic/run.log",
+    "bytes": 3273,
+    "sha256": "c83d77a2c24f88f5c170a1681e98bcf4c0120b13b74355af7a0e9318de58bf9a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/exact_cap_oracle.py",
+    "bytes": 1008,
+    "sha256": "d9b783f839929e654840518be93f6ec1a746fa59271410d14594827eb5128187"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/host_independent_oracle.py",
+    "bytes": 8225,
+    "sha256": "5737d38668c25ed7accb9adab668b5fd0cf71f2b2e71bf235db742bee00fd596"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/lint/run.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/minimal-failed-normal.json",
+    "bytes": 25576,
+    "sha256": "1ec5bb8fc8940604dd1bdd19d4e28924c0e749614cf4e069fe2feec46927f4fe"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/old_route_geometry.py",
+    "bytes": 3522,
+    "sha256": "d78a04aee15295a0c95c714067b29c5f67df0c562182b23afa50b2006cd403ce"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/proposed/novel_varying_ellipse_route.json",
+    "bytes": 20969,
+    "sha256": "742b03fa77cef8bfab9f203787ac8dd5435e479a6fddf9449ac4138e83c5a0aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/proposed/test_route_w2_novel_pipeline.py",
+    "bytes": 5827,
+    "sha256": "a29b6e9b3ae83768ac3eec4f11b18d7c9252504f20b9e9b27ca70f9a93704806"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/approved-route.json",
+    "bytes": 20969,
+    "sha256": "742b03fa77cef8bfab9f203787ac8dd5435e479a6fddf9449ac4138e83c5a0aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/generated-route-raw.json",
+    "bytes": 39676,
+    "sha256": "da7715304fd315e44cde5b414c0166ebcf8daac7ddf46ae8889b7cbc5cad6696"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/novel-report.json",
+    "bytes": 1643,
+    "sha256": "01835514726cfafb0ca2be308278dfcf2a4a6ed40faaca55367df682765d11cc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/run.log",
+    "bytes": 2423,
+    "sha256": "8b27ec8a280c6e298adbc43ce4aa51547e67030ad02595d3ee98c7d8dfe666c7"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/source-hashes-before.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/source-identity.txt",
+    "bytes": 834,
+    "sha256": "febe308e3dea8ef8ccbe3083258518869b0aee3342e56314f2af9615001bf07a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/test_novel_complete_pipeline.py",
+    "bytes": 13927,
+    "sha256": "09604473814bb9d88b1823015496ee33013441238f8d39b8da93acb0f02a002a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run1/unit.xml",
+    "bytes": 2484,
+    "sha256": "a587d18a6d50dc061a66e8382c193756998cc364775d99d2717e5b513a9aa6b4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/approved-route.json",
+    "bytes": 20969,
+    "sha256": "742b03fa77cef8bfab9f203787ac8dd5435e479a6fddf9449ac4138e83c5a0aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/generated-route-raw.json",
+    "bytes": 39676,
+    "sha256": "da7715304fd315e44cde5b414c0166ebcf8daac7ddf46ae8889b7cbc5cad6696"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/novel-report.json",
+    "bytes": 1208772,
+    "sha256": "38ad41431c36d756df8f67dd3fcc61e85d607796fff67b5fa4bbaa52cb0dddb6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/run.log",
+    "bytes": 180,
+    "sha256": "33f7f038c041844903eadf90cf33b3fc01c766a79178600c81181dc5d4369a25"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/source-hashes-after.json",
+    "bytes": 14324,
+    "sha256": "8ad42058cbe3ea78a519da1abb6cc9de582c81e365ba380e38f7aac71a063b7e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/source-hashes-before.json",
+    "bytes": 14324,
+    "sha256": "93575a47817c0a3802875bd0c81008c0af451b706fd42c0f9bfcdd524fe2ee18"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/source-identity.txt",
+    "bytes": 1264,
+    "sha256": "6d15aa7d090b1f5e887403b0b9b4bf760b4a2d15ac54f7b704a1a964cfacd2cc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/unit.xml",
+    "bytes": 565,
+    "sha256": "79553235ef729944237f59da8c87f2cf4d8d97712f9d90cf1fb1b620ee9d4b9c"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run2-corrected/w2-novel-pipeline.json",
+    "bytes": 1148958,
+    "sha256": "79d84dec8c8b55b3a72173e4ed3d66d031acde266dc1589d86701c59eeb67a15"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/approved-route.json",
+    "bytes": 20969,
+    "sha256": "742b03fa77cef8bfab9f203787ac8dd5435e479a6fddf9449ac4138e83c5a0aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/generated-route-raw.json",
+    "bytes": 39676,
+    "sha256": "da7715304fd315e44cde5b414c0166ebcf8daac7ddf46ae8889b7cbc5cad6696"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/host-independent-oracle.json",
+    "bytes": 1290,
+    "sha256": "478ec65e6cfa1cddc59b2a88c242d4a189d8e001531cc708900e757c07f8ed5b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/host-independent-oracle.log",
+    "bytes": 1291,
+    "sha256": "68f7f9e0382228f04919287a97f8c1b9b5113a24d241ac790ec18cff380b56ab"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/novel-report.json",
+    "bytes": 1208772,
+    "sha256": "216fba22d34a787863432b91245d4bbfee2b8563a4cbcb5c0fee16f5ff5a8da5"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/run.log",
+    "bytes": 180,
+    "sha256": "a082deace52e360cb4884c8429a4fc593a72d724e04ec25b63e41e0309c1df06"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/source-hashes-after.json",
+    "bytes": 14324,
+    "sha256": "8ad42058cbe3ea78a519da1abb6cc9de582c81e365ba380e38f7aac71a063b7e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/source-hashes-before.json",
+    "bytes": 14324,
+    "sha256": "8ad42058cbe3ea78a519da1abb6cc9de582c81e365ba380e38f7aac71a063b7e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/source-identity.txt",
+    "bytes": 1264,
+    "sha256": "6d15aa7d090b1f5e887403b0b9b4bf760b4a2d15ac54f7b704a1a964cfacd2cc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/unit.xml",
+    "bytes": 565,
+    "sha256": "78398ccded88c0dcb730cf0ccb806908b0e5ea31539f5a034403df48cd8cf01a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/run3-stable/w2-novel-pipeline.json",
+    "bytes": 1148958,
+    "sha256": "19e089ad66d505b1aa45a31f5142c69030a7c3a6a84a7f952c502ebae24c0dc8"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/novel/test_novel_complete_pipeline.py",
+    "bytes": 14359,
+    "sha256": "3f09550a2d39e2de9c51ed4e86855c1218afa6d4d3aa8c950aff171f3297c6f4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/integration-faults.json",
+    "bytes": 2733,
+    "sha256": "2bc529308c4bebc9cc25f0bae582a350b7a4c3a5047f9472b1ad45fb40820b31"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/integration-retimed.json",
+    "bytes": 639,
+    "sha256": "69ddc9336a27799b2bbb50773d8a30c928a8aa73e779fd8aa96f3136aec09f2b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/q-lineage-boundary.json",
+    "bytes": 5480,
+    "sha256": "fb1cbfec763a7481af0429c2844aa6e0ce64c6fc367a783d6e85ddd856d42bac"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/run.log",
+    "bytes": 2395,
+    "sha256": "67527f5337e02a6ee0988ec97a17a453926afe01b84fcbf2b3bf771ca4d1f486"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/source-identity.txt",
+    "bytes": 828,
+    "sha256": "b66d0453ee6f1191be13da03e1267d936b8c6841978fe5bc0507a00740134292"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/test_integration_adversarial.py",
+    "bytes": 13471,
+    "sha256": "51adda8c64a373818b4c07b8ff9d2ad57eac4fb683eca5a43a9c16f6973ae8f1"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1/unit.xml",
+    "bytes": 2673,
+    "sha256": "e83dc2e626ced0c9e447977765f70ae636e58b1c8e743af536de25eb52a2b11a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/integration-faults.json",
+    "bytes": 2733,
+    "sha256": "2bc529308c4bebc9cc25f0bae582a350b7a4c3a5047f9472b1ad45fb40820b31"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/integration-metamorphic.json",
+    "bytes": 5646,
+    "sha256": "43c4e56107d49fd5baaefab7e005dcc588d1eadf0707591e7310606d8529c36e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/integration-retimed.json",
+    "bytes": 639,
+    "sha256": "69ddc9336a27799b2bbb50773d8a30c928a8aa73e779fd8aa96f3136aec09f2b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/run.log",
+    "bytes": 191,
+    "sha256": "203a3fa84520ffabed0413b6917ad3c4e12ecacc12288afd4763c811dd62b0c9"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/source-hashes-after.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/source-hashes-before.json",
+    "bytes": 13517,
+    "sha256": "1f87342dd46553f9c61b6744b1a42a792fe393e2fba987ca4642202784034e03"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/source-identity.txt",
+    "bytes": 828,
+    "sha256": "b66d0453ee6f1191be13da03e1267d936b8c6841978fe5bc0507a00740134292"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase1b/unit.xml",
+    "bytes": 752,
+    "sha256": "7243cd6ad436c93880a1a46d6208d81ca98e7d2dc9ee1c4bc7754b1ab0bba64a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/integration-faults.json",
+    "bytes": 2741,
+    "sha256": "285b1eb72da31dfa67d9322619e5cb0e8af444eeac28ff1a143743b3c2cfec89"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/integration-metamorphic.json",
+    "bytes": 5646,
+    "sha256": "43c4e56107d49fd5baaefab7e005dcc588d1eadf0707591e7310606d8529c36e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/integration-retimed.json",
+    "bytes": 639,
+    "sha256": "69ddc9336a27799b2bbb50773d8a30c928a8aa73e779fd8aa96f3136aec09f2b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/run.log",
+    "bytes": 191,
+    "sha256": "63e462d08dfceefb0aec149f6f1856682d5eff3630b7c9fcf6725f1927079ac1"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/source-hashes-before.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/source-identity.txt",
+    "bytes": 1684,
+    "sha256": "16c9f33353452dc24e910dde067f0dfba01204afbe4ab6a2a16febac1e0da9e4"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-metamorphic/unit.xml",
+    "bytes": 797,
+    "sha256": "6c38e197d4aa15e27d641e81e7497584ee579201f50081d619c2101341e08b85"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-q-bound/q-lineage-boundary.json",
+    "bytes": 5488,
+    "sha256": "23d86b3a1b46d780699475db5bc6958fce158df26d6cb37692239d613e6c7fd2"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-q-bound/run.log",
+    "bytes": 846,
+    "sha256": "52db16bba5411ae5b2daa833ef5c4f2df8e9dd4296cc4fe676a4a85ef2fd63fc"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/phase2-q-bound/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/probe_q_lineage.py",
+    "bytes": 2744,
+    "sha256": "8a3691824560ee2c0616ce275be91befe4107d1e8ce696560127975eefa88367"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/proposed/probe_q_lineage_bound.py",
+    "bytes": 3006,
+    "sha256": "496b9d89d9b729482780551ef989020088eb26e82a7ed35175ac46fbf6e15cb6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/proposed/test_integration_adversarial_bound.py",
+    "bytes": 14018,
+    "sha256": "7bfef3adbe4048eee5366801a8c58896938fe5002e2bbfbf0fc3696164dc184e"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/proposed/test_route_w2_handoff.py",
+    "bytes": 6686,
+    "sha256": "73922a95a0f970112d078127243db8234fc9ce6c9dd912985aab8224660d0593"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/proposed/test_w2_installed.before.py",
+    "bytes": 2828,
+    "sha256": "7361515e6acd6da0b56a17bae1204baa82eeeffebfb2392beccc4f75c675e72b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/proposed/test_w2_installed.py",
+    "bytes": 3174,
+    "sha256": "d8d9ebe804d7e625a2553fa5edccaa8e462d5b32752a0aab32180a45ec8bf610"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/proposed/test_w2_pipeline.before.py",
+    "bytes": 4954,
+    "sha256": "57c510737a8cdae9d7b16793084007a70454e1f259be0cf9416131c599edb8bf"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/proposed/test_w2_pipeline.py",
+    "bytes": 6735,
+    "sha256": "cc9495ad4e03aaf9e53f96125e9d04599e40a017b2cda21c60f65d85404dca90"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/test_handoff_binding_regression.py",
+    "bytes": 2867,
+    "sha256": "5b8168f36e22c88a2df40939dba1af75b6d8c282f0cd312d2875a71e4c80be9b"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/test_integration_adversarial.py",
+    "bytes": 13471,
+    "sha256": "70aec742209e155c6f094a4d2231fb69f089217b499dbac12b41ee55840c51ea"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/integration/w1-preservation.json",
+    "bytes": 20734,
+    "sha256": "4ff504ee51ec673e1891587d8f3c0a7f12b868fbceed7003f974f7021cc9b3eb"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/remediation-red-replay/dependencies.txt",
+    "bytes": 1760,
+    "sha256": "e85227c014ea5d58e8f41b35815a83250748f039cf59bd96935aa2b6e552efef"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/remediation-red-replay/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/remediation-red-replay/handoff-missing-authority.json",
+    "bytes": 202,
+    "sha256": "3831b1ea63226fdef8c5c1d70119ce783bf8ead11c6b3a752a6d232db30d0c9a"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/remediation-red-replay/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/remediation-red-replay/run.log",
+    "bytes": 179,
+    "sha256": "00f6389afe1f8206d22e68e66224d6f2b6e11a06c62464cb7005f40bca468958"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/remediation-red-replay/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/remediation-red-replay/source-hashes-after.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/remediation-red-replay/source-hashes-before.json",
+    "bytes": 13909,
+    "sha256": "9c70e2309574ecf1b4fff5a6b3dab73116c9eb61155f00df3611a47e2cecb1b0"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/remediation-red-replay/source-identity.txt",
+    "bytes": 1737,
+    "sha256": "4c43d85d1cc721f26e58123577f0a4aca011835090f67e7becd7f1fa7f7fdbae"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/remediation-red-replay/unit.xml",
+    "bytes": 1085,
+    "sha256": "851a83ba2e819c2db736be544839d6dd5f25c5e512d239468e564a8a2f6b6b56"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a01.xml",
+    "bytes": 7315,
+    "sha256": "127dc0515232cadab86f64a956af84699628a397f4e733a722fe89fd7edf436b"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a02-parabola.json",
+    "bytes": 292,
+    "sha256": "0193a6686f0125d1cb8e3be044df8c56d8b85ea2f846181101cc0afe608e79b4"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a02.xml",
+    "bytes": 5804,
+    "sha256": "f5edf3bb95b30cf7ff4101223b153a8c0ad7bac62d86a70958d15fc9def1ca3a"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a03-metrics.json",
+    "bytes": 801,
+    "sha256": "4f4ed0f06875424216b24608ab48dffdc1c27cdf0bbd833c8b396af4955c6765"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a03.xml",
+    "bytes": 5090,
+    "sha256": "f04a8df913ef22581b048cbedb0bd541458db6ff0d6600dfb544f7f7efa5fb9c"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a04-candidates.json",
+    "bytes": 4514146,
+    "sha256": "3169d11fe97d593c8660279b498ba4cc1382fcda0a8b751ad95b39887210e521"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a04-origin-shift.json",
+    "bytes": 533277,
+    "sha256": "e99ea47ae049fed7d2657f7182fe70d90d2c576ce93eb8c33a8c44a781127431"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a04.xml",
+    "bytes": 2568,
+    "sha256": "26473e2a47f6a080fb739b6f6c690315032e89c5b07fdd758437cc88f19b0910"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a05-bounds-oracle.json",
+    "bytes": 3567,
+    "sha256": "9e1fa252f7b64d9851fb27f9a6a55b030d1e8f422ca8f3de3066e33f75719f5b"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a05-geometry.json",
+    "bytes": 971765,
+    "sha256": "bfe748e7cf80874367c1666f5f851fc76edfd481bb30aaae540ea416da5e130d"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a05-oracle.xml",
+    "bytes": 2285,
+    "sha256": "b72cb6ed8d68200f605c5b11be58b4aa8b0025c468a35b6dbcd6666b6bd4ba31"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a05-wrong-deck-coincident.json",
+    "bytes": 96687,
+    "sha256": "3c0b74543a0a2219dae658ee2f8becfbbd463612ca3d6fd99ee79d0bac7a65c9"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a05.xml",
+    "bytes": 6204,
+    "sha256": "93c561c2983e895f5546056bb74792d8170ac80048506f5ba2a23d1f36b54cdb"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-cycle-oracle.json",
+    "bytes": 470,
+    "sha256": "2b41652c2003da05c109623c5c2cce65b316bf50a1704e1a74b4c8e22a26f9b0"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-ellipse-profile.json",
+    "bytes": 19512,
+    "sha256": "b39105a345fa92ce1c8027a45c2d31ead136ddebcf9efe7621bdd32ca962712f"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-ellipse-route.json",
+    "bytes": 19893,
+    "sha256": "71a88a1da6eb4482d09dad829ce73c893b4cb3e8f5e9816927600977753a4657"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-ellipse.json",
+    "bytes": 325535,
+    "sha256": "bd76d5eef3462ab697e1816329838623ffd52ee13be36e69681ed4e392cc5cd8"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-ellipse.xml",
+    "bytes": 384,
+    "sha256": "aad6c801c5459934338706672d006c918208e652a88005bbf500746de8d77f9e"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-independent-dynamics.json",
+    "bytes": 806399,
+    "sha256": "1ea1e4ca8aba12978667319e3459847851f8b459b991e5c14680a34e5bef10fa"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-independent.xml",
+    "bytes": 6368,
+    "sha256": "482b6992372f368b806c5901fda41ebc81407fd909cc58ba97ac57eb7c02e7c9"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-narrow-lower-cap.json",
+    "bytes": 323665,
+    "sha256": "a1c72628611f535eededa9a1910feabf2cb957dc113eebd2c1604f3c05d54737"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-oracle.xml",
+    "bytes": 1426,
+    "sha256": "a7eb628f8efe90625c8559c715797199902f1d647524bf6b0fe4544492bdc571"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-retimer-s0_reverse_route.json",
+    "bytes": 40226,
+    "sha256": "06f2340f55e387910a8c4bbc34ca220c932248322f8211bb9ff3b94d7fa5f491"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-retimer-s0_rotated_route.json",
+    "bytes": 40092,
+    "sha256": "a49a2b022a00a4a23cbf13dc77d246eb3d1be091243c31ed4d51dc7c8288b804"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-retimer-s0_route.json",
+    "bytes": 40087,
+    "sha256": "0cff131422efc79a68a97347e5934f42e41784d4b09bf6e32c976f39d9091a1c"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-retimer-s2_lower_route.json",
+    "bytes": 37654,
+    "sha256": "a07c8bd7f8e10c127e7510cc161e5790ad3e65288a2a8f1bf6d4b525c74a0220"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-retimer-s2_upper_route.json",
+    "bytes": 38512,
+    "sha256": "8197876ad52a00866d0e7173e3f2dcdbf621ce132279d51862a6259446040eee"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-retimer-s3_notch_route.json",
+    "bytes": 56534,
+    "sha256": "df1fd55ae68da429624ee541edd1e36ecc5a4225754389ede8f38812ec948ab9"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06-retimer-s3_surfaces_route.json",
+    "bytes": 56307,
+    "sha256": "48249ff3e68fdd3b12ae955e229ebf09d60fb50034e9e6013e94645dcb6eaeb7"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/a06.xml",
+    "bytes": 3084,
+    "sha256": "66bf3b30c143c1bdc3aadd3241a8341bf04772a62592c98de616d650c6171f81"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/dependencies.txt",
+    "bytes": 3697,
+    "sha256": "6591f51e73dedab2c1a693710731948ad909a5119e008f05ec1fd883262e458a"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/helper-hashes.json",
+    "bytes": 276,
+    "sha256": "cacf561dfcc3094e79c368c0c06d252aa7cfc2be710184826310eac65e878018"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/image-id.txt",
+    "bytes": 72,
+    "sha256": "28f995f9a67e0a45ac672e1d45f041f7824d3d5caef7b4f8ffe6959538835864"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/legacy-exit-codes.txt",
+    "bytes": 35,
+    "sha256": "06e7d574c420078debf742e5da18b91bbba5edc01cf4a6d6e70583e7083e6f1d"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/legacy-metric.json",
+    "bytes": 43,
+    "sha256": "026ee03e20a9c3e470a8c6585f414685dff8cfc52bb14bb2d3d53ea05d0ef5b6"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/legacy-results.txt",
+    "bytes": 195067,
+    "sha256": "44e2fc0cb98065d0afb4e3e519c01b68f9270a8152af666a512adf791b648c26"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/legacy.log",
+    "bytes": 1055717,
+    "sha256": "02362fbc9e5be9776af6debdc7f85b3f104fb8371f8f7b860c544aad66804f62"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/numerical.xml",
+    "bytes": 962,
+    "sha256": "506585b1bcba98ef81be98687023eed4bab8308b5b158b3d34a260538b12b765"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/optimizer-wheel.log",
+    "bytes": 16794,
+    "sha256": "a42cff9eee8c154c59a58a213613e63137fdffaf97733bc9f2783e65300ee514"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/os-packages.txt",
+    "bytes": 23293,
+    "sha256": "8ff8018cfc8ff4e7b78e4d72e7f877a3458276cd85e894695a6a77d713f4e22f"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/qp-ellipse.json",
+    "bytes": 351,
+    "sha256": "f5320643d82f202e77084341e3d38003f7a981514a6e105a33c43da2e327da58"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/qp-projected_crossing.json",
+    "bytes": 360,
+    "sha256": "8daf527c287f2fe794a611e0bf2603446f9737355c46cd53d26f0f704b981bf2"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/ros.xml",
+    "bytes": 597,
+    "sha256": "ce12a9d1bf42cfa1b0d4cd4491c5ba767e09e72a82d2f2701c9ac65802443318"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/run.log",
+    "bytes": 201843,
+    "sha256": "f0c21a8c1186596b61e6b4114f2a266c306d90c3d03761303bd9dd9d5f4c450a"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/runtime-identity.json",
+    "bytes": 267,
+    "sha256": "10bf16a955f71e5dbb015954d758471f545503dbae7c913755ad6cc2a865e6f6"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/source-hashes-after.json",
+    "bytes": 14742,
+    "sha256": "c4076eb430c38cd1e1faf956f7830fbdc1a0c3d09136a7f0c8c82b1a2d6bf132"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/source-hashes-before.json",
+    "bytes": 14742,
+    "sha256": "c4076eb430c38cd1e1faf956f7830fbdc1a0c3d09136a7f0c8c82b1a2d6bf132"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/source-identity.txt",
+    "bytes": 1062,
+    "sha256": "96d13c639bdeba897d1b093616199f58106282394d84f1f40b7531f25ffaad88"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/summary.json",
+    "bytes": 2051,
+    "sha256": "d7a77e732be7c05f62cb12566cf09c3274213b2ce78cfd103b0452258c3ae215"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w1-installed.xml",
+    "bytes": 322,
+    "sha256": "9a987d8034e661d0b4bb8df9f84a8f90bb65996efd23acbb056e68db121a45de"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w2-handoff.xml",
+    "bytes": 1648,
+    "sha256": "0b27b1f22b5a7deec6fc46145cc0d960b20f5e8229866167ddcb52574fbb9ee9"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w2-installed.json",
+    "bytes": 343390,
+    "sha256": "1b76b0ba677bf5696a5a848392f8b95f95d3b974050e8e8a13a7237a675a2245"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w2-installed.xml",
+    "bytes": 319,
+    "sha256": "d6b67170d8adced01027d00e779123083f759dc40a74dacb04f8646b67da44fa"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w2-novel-pipeline.json",
+    "bytes": 1148956,
+    "sha256": "25dda4ec744eeef1c61dd84a8482723a1e2fdd23e5ba860144b922d71e7f8ddf"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w2-novel-pipeline.xml",
+    "bytes": 377,
+    "sha256": "7342b164d0614b1ba29103a6f7f676f193b9e9a42c2a84571d76bd0e9bca2f0b"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w2-numerical-oracle.xml",
+    "bytes": 670,
+    "sha256": "1b3a0cf265b2a990fe06c3f245c73c2609db44640e6e671df7f55863c26e07e4"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w2-pipeline.json",
+    "bytes": 7465623,
+    "sha256": "fb42f757f888a524be7e8912ba2bb77e9b87f584c59c26cac0e513643bc3f862"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w2-pipeline.xml",
+    "bytes": 1593,
+    "sha256": "2b81e97ae5267bd408b7c293cf90b7e4489a080b956af0ca87ed63115c20545e"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w2-shared-cap.xml",
+    "bytes": 7300,
+    "sha256": "6bd5325bf75c6868029c2cb3141a3c157b43ab4e95463516fdfeaad9e98e3f71"
+  },
+  {
+    "archive": "final-local.zip",
+    "member": "work/adversarial/final-full/w2-trace-lineage-oracle.json",
+    "bytes": 1932,
+    "sha256": "abc68ae4df97cfdb94df5b19e1be5d514fb1955416dde439c0cddbadd6391284"
+  },
+  {
+    "archive": "review-evidence.zip",
+    "member": "work/adversarial/verify_ci_artifact.py",
+    "bytes": 5972,
+    "sha256": "42ae6da0d0ad0b63ca0169afebd3ce7f1a72aad6cf3286d426dbd412e1d337dc"
+  }
+]

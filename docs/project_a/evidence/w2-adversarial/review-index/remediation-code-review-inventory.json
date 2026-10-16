@@ -1,0 +1,146 @@
+{
+  "files": {
+    "planner/global_planner/global_planner/route_validate.py": {
+      "sha256": "3d19294aa72dea9c3c2d66c47cbf115f83661ab360b0922d6fdf91e8cd52c651",
+      "bytes": 41199
+    },
+    "planner/global_planner/global_planner/route_validate_dynamics.py": {
+      "sha256": "9e8f8b787f2f0468b4cfeb18860c83bc54956e698b91fd7442fd9b38aae436d2",
+      "bytes": 34777
+    },
+    "planner/global_planner/test/test_route_validate_geometry.py": {
+      "sha256": "a01ab24fdbfa973e5b5dba6421b16f94c4f35b17af1fc0bb7ef60eb1a8fb4988",
+      "bytes": 23576
+    },
+    "planner/global_planner/test/test_route_validate_dynamics.py": {
+      "sha256": "a763dbe81a73f9ff81de8bd573127f303f75b9ed1899ad611ff9794b5140eb48",
+      "bytes": 15205
+    },
+    "planner/global_planner/test/test_cyclic_retime.py": {
+      "sha256": "dbd9d0991d1456d74f9f4f1a7ee61eb876a6b842571fe2333398783d02c72014",
+      "bytes": 18945
+    },
+    "planner/global_planner/test/test_route_dynamics_oracle.py": {
+      "sha256": "507fa9746bd2a691509c3cb7cd490133fb20562f6a125dc081db747dcb08d58d",
+      "bytes": 11708
+    },
+    "planner/global_planner/test/test_route_ellipse_dynamics.py": {
+      "sha256": "e7c2bab174a87e69c70073975db33de7d9734254679487ef14796edaf653ff4f",
+      "bytes": 9705
+    },
+    "planner/global_planner/test/test_w2_pipeline.py": {
+      "sha256": "cc9495ad4e03aaf9e53f96125e9d04599e40a017b2cda21c60f65d85404dca90",
+      "bytes": 6735
+    },
+    "scripts/project_a/tests/test_w2_installed.py": {
+      "sha256": "d8d9ebe804d7e625a2553fa5edccaa8e462d5b32752a0aab32180a45ec8bf610",
+      "bytes": 3174
+    },
+    "planner/global_planner/test/test_route_w2_handoff.py": {
+      "sha256": "73922a95a0f970112d078127243db8234fc9ce6c9dd912985aab8224660d0593",
+      "bytes": 6686
+    },
+    "planner/global_planner/test/test_route_w2_trace_oracle.py": {
+      "sha256": "6fee1b2ec1728a99d49ce1d68ca407f3ec8da73a80f7e726b2051b1659b937a6",
+      "bytes": 7413
+    },
+    "planner/global_planner/test/test_route_w2_numerical_oracle.py": {
+      "sha256": "cb30c1049e98c3c8a4132b12083857624cc4dc7b86c50c10f45ef13600ac8214",
+      "bytes": 4744
+    }
+  },
+  "unchanged_production_functions": {
+    "planner/global_planner/global_planner/route_validate.py": {
+      "unchanged": [
+        "_add",
+        "_bernstein",
+        "_coefficient_records",
+        "_cross",
+        "_derivative",
+        "_dot",
+        "_edges",
+        "_f",
+        "_inside",
+        "_multiply",
+        "_on",
+        "_point",
+        "_point_clearance2",
+        "_point_segment_distance2",
+        "_polyval",
+        "_portal_delta",
+        "_position",
+        "_rectangle",
+        "_rectangle_clearance2",
+        "_root_intervals",
+        "_simple",
+        "_sqrt",
+        "_sub",
+        "_touch",
+        "_union_polygon",
+        "_up",
+        "_validate_gates",
+        "interval_bounds"
+      ],
+      "changed": [
+        "validate_dynamics",
+        "validate_geometry"
+      ]
+    },
+    "planner/global_planner/global_planner/route_validate_dynamics.py": {
+      "unchanged": [
+        "_angle",
+        "_arc",
+        "_authority",
+        "_binary_number",
+        "_budgets",
+        "_cap",
+        "_close",
+        "_digest",
+        "_down",
+        "_edge_bounds",
+        "_f",
+        "_identities",
+        "_input_limits",
+        "_model_regions",
+        "_point_curvature",
+        "_polynomial",
+        "_profile_knots",
+        "_residuals",
+        "_up",
+        "_violates",
+        "_witness"
+      ],
+      "changed": [
+        "validate_dynamics"
+      ]
+    }
+  },
+  "existing_assertion_migrations": {
+    "planner/global_planner/test/test_route_validate_geometry.py": {
+      "nonidentical_original_assertions_after_digest_keyword_removal": []
+    },
+    "planner/global_planner/test/test_route_validate_dynamics.py": {
+      "nonidentical_original_assertions_after_digest_keyword_removal": []
+    },
+    "planner/global_planner/test/test_cyclic_retime.py": {
+      "nonidentical_original_assertions_after_digest_keyword_removal": []
+    },
+    "planner/global_planner/test/test_route_dynamics_oracle.py": {
+      "nonidentical_original_assertions_after_digest_keyword_removal": []
+    },
+    "planner/global_planner/test/test_route_ellipse_dynamics.py": {
+      "nonidentical_original_assertions_after_digest_keyword_removal": []
+    },
+    "planner/global_planner/test/test_w2_pipeline.py": {
+      "nonidentical_original_assertions_after_digest_keyword_removal": [
+        {
+          "function": "test_fresh_final_candidate_passes_both_independent_validators",
+          "old_assertion": "assert timed.profile.curve_digest == timed.metadata.curve_digest"
+        }
+      ]
+    },
+    "scripts/project_a/tests/test_w2_installed.py": {
+      "nonidentical_original_assertions_after_digest_keyword_removal": []
+    }
+  }
+}

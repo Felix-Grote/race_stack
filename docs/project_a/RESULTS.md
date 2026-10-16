@@ -1,5 +1,42 @@
 # Project A validation matrix — W0/W1/W2
 
+## Independent adversarial W2 final implementation — 2026-10-16
+
+Reviewed e852641 from exact corrected W1 9440c2c. Original F1/F2 findings and red
+runs precede separate corrections 6b778519 and 37b36ccc. Final implementation
+37b36ccc full local command `scripts/project_a/verify.sh all work/adversarial/final-full`
+exits 0 with 373 functional passes/19 groups, zero functional failures/errors/skips,
+strict scoped 99-column lint, three builds (17.3 s), ROS 4 and installed W1/W2 (1+1).
+Source manifests match before/after and all 92 exact committed source/fixture
+files; SHA256 c4076eb430c38cd1e1faf956f7830fbdc1a0c3d09136a7f0c8c82b1a2d6bf132.
+Separate legacy 372/0 errors/10 failures/2 skips exactly matches initial ten raw
+failure identities. Final retained seven-case pipeline SHA256:
+fb42f757f888a524be7e8912ba2bb77e9b87f584c59c26cac0e513643bc3f862.
+
+Exact-code push [38906194264](https://github.com/Felix-Grote/race_stack/actions/runs/38906194264)
+and PR [38906201603](https://github.com/Felix-Grote/race_stack/actions/runs/38906201603)
+SUCCESS. Push job 116990251430 / artifact 12049420387 independently downloaded;
+archive SHA256 c980acf5f5df4234914276e4de6d70818554c2285d4324634a0f650645de6aa7.
+All 373 tests, source/Git/installed hashes, same-authority seven/novel pipeline and
+exact inherited legacy failures verified from artifact, not only workflow status.
+
+New F2 exact-cap 49 + original A03 38 pass 87 / 49.36 s; new unchanged analytic ellipse
+probe+permanent full pipeline pass 2 / 31.13 s. The novel case has 129 segments,
+330 swept leaves,4 gates and 221 speed knots. Independent 80-digit Decimal/GEOS and
+true-arc oracle checks 2967 bodies/3757 dynamic points; time 13.759213225603533 s
+is inside [13.759213225499257,13.759213225707809] s. Independently checked actual
+final seven-case output covers 1541 leaves/7705 bodies/28 gates and 1267 edges/
+11403 dynamic points at both functional and retained output stages. Only 126
+RSS/time scalars differ; complete mathematical payloads are exactly identical.
+
+Full report, per-group ledger, exact commands, complete source/fixture identities,
+independent oracle scripts, preserved failed experiments and archive checksums:
+[review](W2_INDEPENDENT_ADVERSARIAL_REVIEW.md),
+[reproduction](evidence/w2-adversarial/REPRODUCE.md).
+The report-containing commit still requires its own exact-head publication CI;
+its final literal SHA/verdict is supplied by the companion publication manifest.
+This does not substitute 37b36ccc CI for a later commit or authorize PR merge.
+
 ## W2 full local, hosted A06 and literal-coverage closeout — 2026-10-16
 
 At committed **e3f94dce130cf0cee8cc0dfdbf697b57efbd7b87**, the full command

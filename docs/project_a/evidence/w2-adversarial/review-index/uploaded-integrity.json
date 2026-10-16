@@ -1,0 +1,414 @@
+{
+  "manifest_entries": 68,
+  "all_match": true,
+  "checks": [
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/legacy-identity-comparison.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/pr-artifacts.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/pr-check-rollup.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/pr-jobs.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/pr-run.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a01.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a02-parabola.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a02.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a03-metrics.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a03.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a04-candidates.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a04-origin-shift.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a04.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a05-bounds-oracle.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a05-geometry.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a05-oracle.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a05-wrong-deck-coincident.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a05.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-cycle-oracle.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-ellipse-profile.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-ellipse-route.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-ellipse.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-ellipse.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-independent-dynamics.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-independent.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-narrow-lower-cap.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-oracle.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-retimer-s0_reverse_route.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-retimer-s0_rotated_route.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-retimer-s0_route.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-retimer-s2_lower_route.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-retimer-s2_upper_route.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-retimer-s3_notch_route.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06-retimer-s3_surfaces_route.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/a06.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/dependencies.txt",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/exit-code.txt",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/helper-hashes.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/image-id.txt",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/legacy-exit-codes.txt",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/legacy-metric.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/legacy-results.txt",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/legacy.log",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/numerical.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/optimizer-wheel.log",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/os-packages.txt",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/qp-ellipse.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/qp-projected_crossing.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/ros.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/run.log",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/runtime-identity.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/source-hashes-after.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/source-hashes-before.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/source-identity.txt",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/summary.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/w1-installed.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/w2-installed.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/w2-installed.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/w2-pipeline.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact/w2-pipeline.xml",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifact.zip",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-artifacts.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-job.log",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-job.log.gz",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-jobs.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/push-run.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/retrieval.json",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "manifest": "work/adversarial/uploaded/final-ci/SHA256SUMS",
+      "file": "work/adversarial/uploaded/final-ci/summary.json",
+      "exists": true,
+      "matches": true
+    }
+  ]
+}

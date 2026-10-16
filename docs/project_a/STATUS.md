@@ -1,5 +1,31 @@
 # Project A status — 2026-10-16
 
+## Independent W2 review closeout — implementation verified, publication pending
+
+F1 P1 handoff binding and F2 P2 reversed shared-cap arithmetic are corrected in
+`6b778519de74b09a7b66be2ac89e12d687226c9d` and
+`37b36ccc1f33300ce50e6c120c886147db11b4a7`. Final isolated full verification at
+37b36ccc exits 0: **373 functional tests / 19 groups**, strict 99-column new-source
+lint, three package builds, actual ROS and installed W1/W2 pipelines all pass.
+The separate legacy aggregate is 372 tests / zero errors / the exact inherited
+10 failures / 2 skips. All 92 source/fixture/harness hashes match exact Git and
+remain stable. Exact-code push CI 38906194264 and PR CI 38906201603 both SUCCESS;
+the downloaded push artifact independently matches those results.
+
+The independently generated eighth varying-width ellipse completes three IQP
+iterations and both validators; external Decimal/GEOS/true-arc oracles check all
+actual final outputs. The five W1 repairs remain covered; only the documented
+shared-edge primitive changes, without EPS/gap-merging changes. Complete
+findings, proofs, original failures, commands, quality/resource limits and W3
+prerequisites are in [the independent review](W2_INDEPENDENT_ADVERSARIAL_REVIEW.md)
+and its [checksummed evidence](evidence/w2-adversarial/REPRODUCE.md).
+
+No final ACCEPT verdict is assigned to this future containing documentation
+commit. The final delivery/companion publication manifest records its literal
+SHA and completed exact-head push CI before a final verdict. Do not auto-merge
+PR #2 or deploy hardware. The earlier review/implementation status below is
+historical; this closeout supersedes its pending local-verification statements.
+
 **Independent W2 review: F1 handoff-binding repair implemented; final verification pending.**
 F2 additionally repairs reversed evaluation of an exact shared cap, exposed by
 an independently generated asymmetric ellipse. The original seed was continuously

@@ -1,0 +1,95 @@
+{
+  "final_implementation_sha": "37b36ccc1f33300ce50e6c120c886147db11b4a7",
+  "fixture_sha256": "742b03fa77cef8bfab9f203787ac8dd5435e479a6fddf9449ac4138e83c5a0aa",
+  "failure_stage": {
+    "geometry_calls": 2,
+    "qp_calls": 1,
+    "failing_geometry_call": 2,
+    "error": "reference outside/ambiguous connected legal interval",
+    "status": "GEOMETRY_FAILURE",
+    "completed_iteration_traces": 0,
+    "old_primitive_sha256": "d78a04aee15295a0c95c714067b29c5f67df0c562182b23afa50b2006cd403ce",
+    "actual_reviewed_source_blob": "f1899d9",
+    "interpretation": "geometry call1 is reference, geometry call2 is first damped shifted fit"
+  },
+  "runs": [
+    {
+      "path": "geometry/shared-cap-red",
+      "junit": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "1",
+        "skipped": "0",
+        "tests": "1",
+        "time": "0.052",
+        "timestamp": "2026-10-16T13:06:07.815188+00:00",
+        "hostname": "cd1a6744ff54"
+      },
+      "exit": "1",
+      "source_stable": true
+    },
+    {
+      "path": "geometry/shared-cap-final",
+      "junit": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "87",
+        "time": "49.366",
+        "timestamp": "2026-10-16T13:10:26.369141+00:00",
+        "hostname": "31a76d7bbfcb"
+      },
+      "exit": "0",
+      "source_stable": true
+    },
+    {
+      "path": "integration/novel/run3-stable",
+      "junit": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "2",
+        "time": "31.135",
+        "timestamp": "2026-10-16T13:11:29.862596+00:00",
+        "hostname": "be9d2d11bbad"
+      },
+      "exit": "0",
+      "source_stable": true
+    }
+  ],
+  "host_oracle": {
+    "production_imports": false,
+    "decimal_precision": 80,
+    "environment": {
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "numpy": "2.3.5",
+      "scipy": "1.17.0",
+      "shapely": "2.1.2",
+      "geos": "3.13.1"
+    },
+    "route_file_sha256": "742b03fa77cef8bfab9f203787ac8dd5435e479a6fddf9449ac4138e83c5a0aa",
+    "candidate_report_sha256": "216fba22d34a787863432b91245d4bbfee2b8563a4cbcb5c0fee16f5ff5a8da5",
+    "geometry_samples": 2967,
+    "model_samples": 3757,
+    "sampled_geometry_violations": [],
+    "sampled_minimum_body_boundary_clearance_m": 0.08830955971564132,
+    "sampled_maximum_abs_curvature": 0.3138067059567339,
+    "independent_quad_length_m": 46.242835799711905,
+    "independent_quad_time_s": 13.759213225603533,
+    "production_lap_time_s": 13.75921322560354,
+    "production_time_enclosure": [
+      13.759213225499257,
+      13.759213225707809
+    ],
+    "maximum_acceleration_metadata_error_mps2": 4.7406523151494184e-14,
+    "sampled_diamond_utilization_max": 0.9999921634171196,
+    "sampled_motor_utilization_max": 0.7889209381672765,
+    "sampled_lateral_utilization_max": 0.8844398884195922,
+    "sampled_steering_angle_max_rad": 0.09386536337169575,
+    "sampled_steering_rate_max_radps": 1.6160869220823628,
+    "sampled_static_cap_speed_ratio_max": 0.9999999999999999
+  },
+  "f2_reviewed_hashes_match_committed37": true
+}

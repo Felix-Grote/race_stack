@@ -1,5 +1,27 @@
 # Project A decision ledger
 
+## 2026-10-16 — Independent W2 verification and publication identity
+
+- Technical blockers F1 P1 and F2 P2 are repaired separately with original red
+  evidence retained. Final implementation 37b36ccc passes 373 functional tests,
+  strict lint/build/installed gates and exact-code push/PR CI; raw legacy ten
+  identities remain unchanged. A single intended W1 primitive repair is named
+  explicitly rather than claiming every historical source byte is unchanged.
+- Verify actual final fresh outputs with independent geometry/gate and high
+  precision dynamics oracles at both verifier stages. Preserve initial and
+  legacy-regenerated snapshots; their full mathematical payloads are identical,
+  with only resource diagnostics varying. Rehashing a changed candidate remains
+  insufficient approval: both validators require the separately retained digest.
+- Commit the self-contained report/evidence, then obtain exact-head push CI on
+  that containing commit. Record its literal SHA, report/archive/source hashes,
+  completed run/job/artifact and final verdict in a companion publication
+  manifest after CI; do not create an infinite self-referential evidence commit
+  chain or present a future/earlier SHA as tested. No final ACCEPT before that gate.
+- Preserve disclosed curvature degradation, mesh-origin variation, shared-kernel
+  dependence, unsupported physics and measured default 241 m resource rejection.
+  No retroactive quality threshold, margin/tolerance relaxation, new backend,
+  W3 implementation, auto-merge or physical deployment follows from this review.
+
 ## 2026-10-16 — Independent W2 F2: identical shared-edge arithmetic
 
 - A newly constructed varying-width ellipse has a continuously legal seed but

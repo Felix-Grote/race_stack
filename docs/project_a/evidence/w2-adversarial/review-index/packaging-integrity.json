@@ -1,0 +1,11 @@
+{
+  "all_zip_crcs_pass": true,
+  "all_paths_relative_without_traversal": true,
+  "plaintext_credential_signed_url_scan_findings": [],
+  "archive_bytes": {
+    "code-final-ci-artifact.zip": 3063106,
+    "review-evidence.zip": 11492907,
+    "final-local.zip": 3022951,
+    "final-dynamics-evidence.zip": 3214003
+  }
+}
