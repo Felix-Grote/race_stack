@@ -1,4 +1,45 @@
-# Project A validation matrix — W0
+# Project A validation matrix — W0/W1
+
+## Final corrected W1 local acceptance — 2026-10-16
+
+Corrected implementation: `becfe8fc46e7490e8857f630a37f0617f477da71`.
+All F1–F5 findings are repaired. Safe `setup.sh` and prescribed
+`verify.sh all work/remediation/validation/w1-final` exit **0** on a clean
+checkout; final documentation/evidence closeout preserves those code/test bytes.
+Independent exact-head push CI on the final containing commit is the publication
+acceptance gate, recorded by the workflow and final delivery after completion.
+
+| Gate | Final result |
+|---|---|
+| A01 / A02 / A03 | **60 / 47 / 38 passed** |
+| W0 numerical / actual ROS / installed W1 | **7 / 4 / 1 passed** |
+| Selected package build | **3 passed** |
+| Scoped flake8 / pip check | PASS |
+| Separate legacy aggregate | 157 reports, 0 errors, **10 failures / 2 skips** |
+| Fresh W0 legacy comparison | Exactly identical failing/skipped identities |
+| Installed package identity | All four modules byte-identical to source |
+| Independent final adversaries | Six groups PASS; 18 arc families, 90 inverse queries, 408 endpoint queries, 32 normal cases, exact close caps, 60 coherent boundaries |
+
+Independent maximum station residual is **9.901e-11 m** against unchanged
+1e-8 m policy; maximum length difference **3.914e-15 m**. The final probe's four
+production hashes map to committed code. All nine production/test/runner hashes
+remained unchanged through full verification. Fresh W0 also passes 7 numerical,
+4 actual ROS and three-package build, with its known 10 failures/2 skips.
+
+Read [W1_REMEDIATION_REPORT.md](W1_REMEDIATION_REPORT.md),
+[W1_NUMERICAL_ERROR_CONTROL.md](W1_NUMERICAL_ERROR_CONTROL.md) and current STATUS.
+Complete local commands, logs/JUnit, runtime/image/dependency identity, old/new
+legacy comparisons, independent probes, constant-generation verification and
+protected-source/test-preservation review:
+`evidence/w1-remediation/final-validation.zip` with its SHA256SUMS.
+Per-finding failing-first evidence remains in the sibling directories; the
+unaltered original independent review and evidence archive are retained.
+No W2/physical-system change, tolerance relaxation, test weakening, history
+rewrite or PR merge occurred. Continuous footprint and physical evidence remain
+outside W1.
+
+The following sections are historical measurements and the remediation ledger;
+this final summary supersedes their interim pending/failed-stage statements.
 
 ## Independent W1 review and reopened acceptance — 2026-10-16
 
