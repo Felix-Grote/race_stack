@@ -1,0 +1,2 @@
+colcon_test=1
+colcon_test_result=1

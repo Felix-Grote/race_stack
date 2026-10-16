@@ -1,4 +1,4 @@
-# W0 reproducible offline development
+# W0/W1 reproducible offline development
 
 Run from a recursive checkout of the named review branch, as a nonroot user with
 access to the **local** Docker socket. Setup needs HTTPS/HTTP access to GitHub,
@@ -6,7 +6,7 @@ Docker Hub, Ubuntu/ROS apt repositories and PyPI. Tests run with no network.
 No ROS or numerical package is installed on the Debian Cloud host.
 
 ```bash
-git clone --branch project-a/w0-cloud-foundation --recurse-submodules https://github.com/Felix-Grote/race_stack.git
+git clone --branch project-a/w1-geometry --recurse-submodules https://github.com/Felix-Grote/race_stack.git
 cd race_stack
 git rev-parse HEAD
 git submodule status --recursive
@@ -43,13 +43,14 @@ scripts/project_a/verify.sh ros work/ros-1
 scripts/project_a/verify.sh legacy work/legacy-1
 ```
 
-- `numerical`: seven synthetic dependency/QP/oracle/legacy-characterization checks.
+- `numerical`: A01/A02/A03 suites (48/12/18), scoped new-file flake8, and the
+  original seven W0 dependency/QP/oracle/legacy-characterization checks.
 - `ros`: isolated non-symlink colcon install of `f110_msgs`, `frenet_conversion`,
-  `global_planner`; optimizer wheel build/install; four real ROS/install tests.
+  `global_planner`; optimizer wheel build/install; four original ROS/install tests plus one installed W1 geometry/corridor test.
 - `legacy`: same build/ROS checks, then original selected colcon tests. Returns their
   failure status. No lint deletion, blanket xfail or production repair.
 - `all`: numerical + ROS checks must pass; records legacy results independently.
-  Exit zero means **W0 functional checks passed**, not that legacy lint is green.
+  Exit zero means **W0 and W1 functional checks passed**, not that legacy lint is green.
   `legacy-exit-codes.txt`, `legacy-results.txt` and `summary.json` expose the red
   baseline; CI emits a warning and uploads evidence. An early functional failure
   returns nonzero, even if later reports have not been produced.
@@ -80,9 +81,10 @@ substitute for source and dependency identities.
 using the same image/scripts and read-only token permissions. It runs for planner,
 interfaces, Frenet library and infrastructure changes. CI being configured is not
 evidence that a run has passed; consult the exact commit's run and artifacts.
-New A01–A09 tests must be explicitly added to the runner as implemented; W0's seven
-numerical tests do not cover a future compiler. If Docker becomes unavailable,
+A01/A02/A03 tests are wired explicitly into the runner. A04–A09 tests must be
+added when implemented; W1 does not cover the future solver or compiler. If Docker becomes unavailable,
 follow the execution plan's Path C and prove Humble CI before claiming validation.
 
-No A01–A09 implementation, approved course input, continuous footprint certificate,
-cyclic dynamics acceptance or physical vehicle result is delivered by W0.
+W1 implements A01–A03 only. No accepted optimized trajectory, continuous
+footprint certificate, cyclic dynamics acceptance or physical vehicle result is
+delivered. See W1_GEOMETRY.md for the supported geometry and numeric limits.

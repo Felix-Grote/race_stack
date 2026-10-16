@@ -1,0 +1,21 @@
+{
+  "finding": "f2",
+  "reviewed_baseline_commit": "133a96fd6653e4d3b16d71c38e1c70fc38585101",
+  "parent_commit_at_recording": "74cebe0b6f34ee29a1f9a9db9dc4032056b8bc2d",
+  "image": "sha256:8c9c36d25927e34e03ab3e9978bd1a1a56ab4f60a7ec57ce90c17c053c7ab8d3",
+  "runtime": {
+    "python": "3.10.12",
+    "numpy": "1.26.4",
+    "scipy": "1.11.4",
+    "ros": "humble",
+    "uid": 1000,
+    "network": "none",
+    "source_readonly": true,
+    "root_readonly": true,
+    "capabilities": []
+  },
+  "files": {
+    "planner/global_planner/global_planner/route_reference.py": "715ff501ab40fc2146f37e6fcc074134dbf2ff3464a01f7c307c23e512a5e3d3",
+    "planner/global_planner/test/test_route_reference.py": "22b021e9090055068976c37c9c5723716070905697a0e4e4a3db9a2b07977707"
+  }
+}

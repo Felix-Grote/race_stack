@@ -1,0 +1,1243 @@
+/work/build/f110_msgs/Testing/20261016-0719/Test.xml: 2 tests, 0 errors, 2 failures, 0 skipped
+- lint_cmake
+  <<< failure message
+    -- run_test.py: invoking following command in '/work/src/f110_msgs':
+     - /opt/ros/humble/bin/ament_lint_cmake --xunit-file /work/build/f110_msgs/test_results/f110_msgs/lint_cmake.xunit.xml
+    CMakeLists.txt:29: Mismatching spaces inside () after command [whitespace/mismatch]
+    CMakeLists.txt:42: Line ends in whitespace [whitespace/eol]
+    CMakeLists.txt:45: Weird indentation; use 2 spaces [whitespace/indent]
+    
+    
+    3 errors
+    -- run_test.py: return code 1
+    -- run_test.py: verify result file '/work/build/f110_msgs/test_results/f110_msgs/lint_cmake.xunit.xml'
+  >>>
+- xmllint
+  <<< failure message
+    -- run_test.py: invoking following command in '/work/src/f110_msgs':
+     - /opt/ros/humble/bin/ament_xmllint --xunit-file /work/build/f110_msgs/test_results/f110_msgs/xmllint.xunit.xml
+    File 'package.xml' is invalid:
+    error : unreachable network
+    warning: failed to load external entity "http://download.ros.org/schema/package_format3.xsd"
+    Schemas parser error : Failed to locate the main schema resource at 'http://download.ros.org/schema/package_format3.xsd'.
+    WXS schema http://download.ros.org/schema/package_format3.xsd failed to compile
+    
+    1 files are invalid
+    -- run_test.py: return code 1
+    -- run_test.py: verify result file '/work/build/f110_msgs/test_results/f110_msgs/xmllint.xunit.xml'
+  >>>
+/work/build/f110_msgs/test_results/f110_msgs/lint_cmake.xunit.xml: 3 tests, 0 errors, 3 failures, 0 skipped
+- f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)
+  <<< failure message
+    Mismatching spaces inside () after command
+  >>>
+- f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)
+  <<< failure message
+    Line ends in whitespace
+  >>>
+- f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)
+  <<< failure message
+    Weird indentation; use 2 spaces
+  >>>
+/work/build/f110_msgs/test_results/f110_msgs/xmllint.xunit.xml: 1 test, 0 errors, 1 failure, 0 skipped
+- f110_msgs.xmllint package.xml
+  <<< failure message
+    Diff with 323 lines
+  >>>
+/work/build/frenet_conversion/pytest.xml: 3 tests, 0 errors, 2 failures, 1 skipped
+- frenet_conversion.test.test_flake8 test_flake8
+  <<< failure message
+    AssertionError: Found 49 code style errors / warnings:
+      ./frenet_conversion/frenet_converter_demo_node.py:21:53: E231 missing whitespace after ','
+      ./frenet_conversion/frenet_converter_demo_node.py:21:55: E231 missing whitespace after ','
+      ./frenet_conversion/frenet_converter_demo_node.py:21:57: E231 missing whitespace after ','
+      ./frenet_conversion/frenet_converter_demo_node.py:21:61: E231 missing whitespace after ','
+      ./frenet_conversion/frenet_converter_demo_node.py:21:73: E231 missing whitespace after ','
+      ./frenet_conversion/frenet_converter_demo_node.py:21:75: E231 missing whitespace after ','
+      ./frenet_conversion/frenet_converter_demo_node.py:21:77: E231 missing whitespace after ','
+      ./frenet_conversion/frenet_converter_demo_node.py:31:41: E231 missing whitespace after ','
+      ./frenet_conversion/frenet_converter_demo_node.py:32:23: E231 missing whitespace after ','
+      ./frenet_conversion/frenet_converter_demo_node.py:33:23: E231 missing whitespace after ','
+      ./frenet_conversion/__init__.py:1:1: F401 'frenet_conversion.frenet_converter' imported but unused
+      ./frenet_conversion/__init__.py:1:47: W292 no newline at end of file
+      ./frenet_conversion/frenet_converter.py:5:1: E302 expected 2 blank lines, found 1
+      ./frenet_conversion/frenet_converter.py:14:40: E261 at least two spaces before inline comment
+      ./frenet_conversion/frenet_converter.py:22:22: E222 multiple spaces after operator
+      ./frenet_conversion/frenet_converter.py:23:22: E222 multiple spaces after operator
+      ./frenet_conversion/frenet_converter.py:28:65: W291 trailing whitespace
+      ./frenet_conversion/frenet_converter.py:35:58: E261 at least two spaces before inline comment
+      ./frenet_conversion/frenet_converter.py:35:59: E262 inline comment should start with '# '
+      ./frenet_conversion/frenet_converter.py:52:100: E501 line too long (104 > 99 characters)
+      ./frenet_conversion/frenet_converter.py:53:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:57:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:62:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:67:100: E501 line too long (102 > 99 characters)
+      ./frenet_conversion/frenet_converter.py:71:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:77:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:81:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:93:5: E303 too many blank lines (2)
+      ./frenet_conversion/frenet_converter.py:97:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:103:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:111:38: E228 missing whitespace around modulo operator
+      ./frenet_conversion/frenet_converter.py:113:13: E265 block comment should start with '# '
+      ./frenet_conversion/frenet_converter.py:113:100: E501 line too long (113 > 99 characters)
+      ./frenet_conversion/frenet_converter.py:114:100: E501 line too long (145 > 99 characters)
+      ./frenet_conversion/frenet_converter.py:134:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:142:75: W291 trailing whitespace
+      ./frenet_conversion/frenet_converter.py:150:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:153:83: W291 trailing whitespace
+      ./frenet_conversion/frenet_converter.py:154:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:155:14: W291 trailing whitespace
+      ./frenet_conversion/frenet_converter.py:162:14: E228 missing whitespace around modulo operator
+      ./frenet_conversion/frenet_converter.py:165:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:167:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:169:5: E303 too many blank lines (2)
+      ./frenet_conversion/frenet_converter.py:172:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:176:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:186:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:188:1: W293 blank line contains whitespace
+      ./frenet_conversion/frenet_converter.py:190:1: W391 blank line at end of file
+    assert 1 == 0
+  >>>
+- frenet_conversion.test.test_pep257 test_pep257
+  <<< failure message
+    AssertionError: Found code style errors / warnings
+    assert 1 == 0
+  >>>
+/work/build/global_planner/pytest.xml: 69 tests, 0 errors, 2 failures, 1 skipped
+- global_planner.test.test_flake8 test_flake8
+  <<< failure message
+    AssertionError: Found 1124 code style errors / warnings:
+      ./global_planner/global_planner_node.py:11:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:12:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:14:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:15:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:16:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:17:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:18:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:19:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:20:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:22:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:23:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:24:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:25:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:26:1: E402 module level import not at top of file
+      ./global_planner/global_planner_node.py:40:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:51:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:52:9: E303 too many blank lines (2)
+      ./global_planner/global_planner_node.py:55:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_planner_node.py:56:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:58:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_planner_node.py:59:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_planner_node.py:60:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_planner_node.py:64:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:66:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:67:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:68:5: E303 too many blank lines (2)
+      ./global_planner/global_planner_node.py:77:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:92:100: E501 line too long (123 > 99 characters)
+      ./global_planner/global_planner_node.py:107:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:121:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_planner_node.py:122:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_planner_node.py:124:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_planner_node.py:125:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_planner_node.py:129:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_planner_node.py:140:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_planner_node.py:141:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_planner_node.py:142:25: E127 continuation line over-indented for visual indent
+      ./global_planner/global_planner_node.py:143:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_planner_node.py:144:25: E127 continuation line over-indented for visual indent
+      ./global_planner/global_planner_node.py:149:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:168:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_planner_node.py:178:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:180:9: E303 too many blank lines (2)
+      ./global_planner/global_planner_node.py:180:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_planner_node.py:182:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_planner_node.py:217:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_planner_node.py:220:100: E501 line too long (143 > 99 characters)
+      ./global_planner/global_planner_node.py:223:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_planner_node.py:228:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_planner_node.py:245:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_planner_node.py:246:84: E127 continuation line over-indented for visual indent
+      ./global_planner/global_planner_node.py:246:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_planner_node.py:247:84: E127 continuation line over-indented for visual indent
+      ./global_planner/global_planner_node.py:247:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_planner_node.py:248:84: E127 continuation line over-indented for visual indent
+      ./global_planner/global_planner_node.py:248:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_planner_node.py:254:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_planner_node.py:256:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_planner_node.py:258:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_planner_node.py:260:100: E501 line too long (121 > 99 characters)
+      ./global_planner/global_planner_node.py:265:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_planner_node.py:280:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_planner_node.py:283:100: E501 line too long (143 > 99 characters)
+      ./global_planner/global_planner_node.py:286:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_planner_node.py:290:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_planner_node.py:305:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_planner_node.py:306:82: E127 continuation line over-indented for visual indent
+      ./global_planner/global_planner_node.py:306:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_planner_node.py:307:82: E127 continuation line over-indented for visual indent
+      ./global_planner/global_planner_node.py:308:82: E127 continuation line over-indented for visual indent
+      ./global_planner/global_planner_node.py:308:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_planner_node.py:309:82: E127 continuation line over-indented for visual indent
+      ./global_planner/global_planner_node.py:318:29: E127 continuation line over-indented for visual indent
+      ./global_planner/global_planner_node.py:334:1: E302 expected 2 blank lines, found 1
+      ./global_planner/global_planner_node.py:334:50: W291 trailing whitespace
+      ./global_planner/global_planner_node.py:335:25: E128 continuation line under-indented for visual indent
+      ./global_planner/global_planner_node.py:336:25: E128 continuation line under-indented for visual indent
+      ./global_planner/global_planner_node.py:337:25: E128 continuation line under-indented for visual indent
+      ./global_planner/global_planner_node.py:337:32: E251 unexpected spaces around keyword / parameter equals
+      ./global_planner/global_planner_node.py:337:34: E251 unexpected spaces around keyword / parameter equals
+      ./global_planner/global_planner_node.py:338:25: E128 continuation line under-indented for visual indent
+      ./global_planner/global_planner_node.py:343:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_planner_node.py:344:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_planner_node.py:346:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_planner_node.py:350:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_planner_node.py:357:1: W293 blank line contains whitespace
+      ./global_planner/global_planner_node.py:367:1: E305 expected 2 blank lines after class or function definition, found 1
+      ./global_planner/global_planner_node.py:368:11: W292 no newline at end of file
+      ./global_planner/global_planner_utils.py:20:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_planner_utils.py:22:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_planner_utils.py:29:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_planner_utils.py:30:100: E501 line too long (121 > 99 characters)
+      ./global_planner/global_planner_utils.py:31:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_planner_utils.py:46:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_planner_utils.py:54:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_planner_utils.py:111:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_planner_utils.py:112:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_planner_utils.py:113:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_planner_utils.py:164:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_planner_utils.py:257:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_planner_utils.py:264:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_planner_utils.py:265:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_planner_utils.py:373:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_planner_utils.py:375:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_planner_utils.py:378:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_planner_utils.py:392:19: F541 f-string is missing placeholders
+      ./global_planner/global_planner_utils.py:447:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_planner_utils.py:470:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_planner_utils.py:471:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:12:1: E302 expected 2 blank lines, found 1
+      ./global_planner/global_trajectory_publisher.py:14:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:17:100: E501 line too long (139 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:22:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:23:1: W293 blank line contains whitespace
+      ./global_planner/global_trajectory_publisher.py:25:9: E303 too many blank lines (2)
+      ./global_planner/global_trajectory_publisher.py:25:9: E265 block comment should start with '# '
+      ./global_planner/global_trajectory_publisher.py:30:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:34:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:36:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:39:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:41:100: E501 line too long (123 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:44:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:46:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:49:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:51:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:61:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:80:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:81:1: W293 blank line contains whitespace
+      ./global_planner/global_trajectory_publisher.py:84:1: W293 blank line contains whitespace
+      ./global_planner/global_trajectory_publisher.py:123:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:125:1: W293 blank line contains whitespace
+      ./global_planner/global_trajectory_publisher.py:130:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:132:1: W293 blank line contains whitespace
+      ./global_planner/global_trajectory_publisher.py:137:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:139:1: W293 blank line contains whitespace
+      ./global_planner/global_trajectory_publisher.py:141:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:143:1: W293 blank line contains whitespace
+      ./global_planner/global_trajectory_publisher.py:149:1: W293 blank line contains whitespace
+      ./global_planner/global_trajectory_publisher.py:151:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_trajectory_publisher.py:154:1: W293 blank line contains whitespace
+      ./global_planner/global_trajectory_publisher.py:156:1: E303 too many blank lines (3)
+      ./global_planner/global_trajectory_publisher.py:163:1: E305 expected 2 blank lines after class or function definition, found 1
+      ./global_planner/mapping_node.py:13:1: E402 module level import not at top of file
+      ./global_planner/mapping_node.py:14:1: E402 module level import not at top of file
+      ./global_planner/mapping_node.py:17:1: E402 module level import not at top of file
+      ./global_planner/mapping_node.py:18:1: E402 module level import not at top of file
+      ./global_planner/mapping_node.py:19:1: E402 module level import not at top of file
+      ./global_planner/mapping_node.py:20:1: E402 module level import not at top of file
+      ./global_planner/mapping_node.py:21:1: E402 module level import not at top of file
+      ./global_planner/mapping_node.py:22:1: E402 module level import not at top of file
+      ./global_planner/mapping_node.py:23:1: E402 module level import not at top of file
+      ./global_planner/mapping_node.py:25:1: E402 module level import not at top of file
+      ./global_planner/mapping_node.py:29:1: E303 too many blank lines (3)
+      ./global_planner/mapping_node.py:40:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:54:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:56:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:59:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:66:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:71:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:80:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:83:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:90:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:132:100: E501 line too long (104 > 99 characters)
+      ./global_planner/mapping_node.py:138:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:160:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:162:88: W291 trailing whitespace
+      ./global_planner/mapping_node.py:174:100: E501 line too long (109 > 99 characters)
+      ./global_planner/mapping_node.py:176:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:179:100: E501 line too long (160 > 99 characters)
+      ./global_planner/mapping_node.py:180:100: E501 line too long (155 > 99 characters)
+      ./global_planner/mapping_node.py:189:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:198:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:201:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:211:100: E501 line too long (111 > 99 characters)
+      ./global_planner/mapping_node.py:218:100: E501 line too long (102 > 99 characters)
+      ./global_planner/mapping_node.py:222:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:230:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:231:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:232:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:234:5: E303 too many blank lines (4)
+      ./global_planner/mapping_node.py:236:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:240:1: E302 expected 2 blank lines, found 1
+      ./global_planner/mapping_node.py:247:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:257:5: E125 continuation line with same indent as next logical line
+      ./global_planner/mapping_node.py:267:38: W291 trailing whitespace
+      ./global_planner/mapping_node.py:273:1: E302 expected 2 blank lines, found 1
+      ./global_planner/mapping_node.py:275:1: W293 blank line contains whitespace
+      ./global_planner/mapping_node.py:284:11: W292 no newline at end of file
+      ./global_planner/readwrite_global_waypoints.py:70:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:19:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:24:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:27:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:28:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:30:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:32:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:42:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:57:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:64:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:67:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:70:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:88:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:92:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:114:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:127:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:129:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:132:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:136:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:145:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_gen_frictionmap.py:163:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:22:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:25:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:28:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:30:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:32:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:36:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:38:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:40:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:46:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:48:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:50:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:51:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:52:53: E116 unexpected indentation (comment)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:54:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:61:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:62:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:64:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:65:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:66:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:67:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:68:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:76:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:77:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:80:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:82:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:85:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:91:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:92:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:96:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:117:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:121:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:131:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:139:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:151:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:152:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:155:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:181:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:182:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:183:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:188:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:189:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:193:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:194:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:198:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:207:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:239:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:250:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:253:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:256:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:293:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:295:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:316:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:322:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:354:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:356:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:358:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:360:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:361:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:368:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:371:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:379:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:390:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:439:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:446:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:450:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:499:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:519:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:537:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:551:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:557:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:565:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:568:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:571:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/main_globaltraj.py:572:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/setup.py:9:8: W292 no newline at end of file
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/__init__.py:1:1: F401 'global_racetrajectory_optimization.trajectory_optimizer' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:16:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:18:4: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:19:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:20:1: E302 expected 2 blank lines, found 1
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:31:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:37:100: E501 line too long (140 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:44:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:46:100: E501 line too long (122 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:48:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:52:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:54:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:55:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:56:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:59:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:62:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:64:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:66:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:67:100: E501 line too long (123 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:68:57: E116 unexpected indentation (comment)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:70:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:71:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:73:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:74:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:77:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:78:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:85:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:86:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:87:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:90:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:92:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:95:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:102:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:104:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:105:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:107:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:122:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:127:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:130:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:132:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:140:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:143:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:144:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:147:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:158:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:165:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:173:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:174:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:175:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:180:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:181:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:185:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:190:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:198:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:199:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:220:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:231:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:241:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:244:100: E501 line too long (121 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:247:100: E501 line too long (126 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:289:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:289:104: E251 unexpected spaces around keyword / parameter equals
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:289:106: E251 unexpected spaces around keyword / parameter equals
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:294:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:296:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:317:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:323:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:330:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:355:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:357:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:359:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:361:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:362:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:364:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:369:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:372:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:380:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:391:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:449:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:456:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:460:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:486:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:494:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:504:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:509:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:526:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:529:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:547:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:556:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:559:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:560:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:562:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:563:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/trajectory_optimizer.py:567:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/__init__.py:1:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/__init__.py:1:69: W292 no newline at end of file
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:4:1: F401 'matplotlib.pyplot as plt' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:22:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:27:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:35:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:54:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:62:100: E501 line too long (122 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:63:100: E501 line too long (122 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:81:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:84:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:101:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:107:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:18:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:19:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:23:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:27:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:32:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:83:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:89:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:15:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:16:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:20:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:30:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:58:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:59:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:60:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:61:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:69:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:1:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.interp_track' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:2:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.calc_min_bound_dists' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:3:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.check_traj' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:4:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.export_traj_race' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:5:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.export_traj_ltpl' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:6:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.import_track' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:7:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.result_plots' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:8:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.prep_track' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py:21:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py:93:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py:111:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py:156:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/import_track.py:18:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/import_track.py:68:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/import_track.py:73:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_race.py:13:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_race.py:17:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_race.py:44:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py:15:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py:23:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py:35:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py:52:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:22:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:28:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:29:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:30:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:31:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:46:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:63:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:64:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:65:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:66:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:67:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:74:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:77:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:81:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:86:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:89:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:93:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:102:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:104:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:109:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:112:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:124:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:129:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:132:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:136:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:142:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/__init__.py:1:1: F401 'global_racetrajectory_optimization.frictionmap.src' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:16:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:16:116: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:25:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:30:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:36:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:40:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:42:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:46:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:71:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:113:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:17:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:17:119: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:27:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:28:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:32:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:33:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:39:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:44:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:46:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:50:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:81:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:83:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:102:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:114:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:141:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:142:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:158:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/__init__.py:1:1: F401 'global_racetrajectory_optimization.frictionmap.src.reftrack_functions' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/__init__.py:2:1: F401 'global_racetrajectory_optimization.frictionmap.src.plot_frictionmap_data' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/__init__.py:3:1: F401 'global_racetrajectory_optimization.frictionmap.src.plot_frictionmap_grid' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:23:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:24:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:42:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:49:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:51:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:64:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:68:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:71:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:72:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:76:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:77:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:85:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:158:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/__init__.py:1:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/__init__.py:2:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:28:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:29:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:30:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:31:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:32:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:37:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:43:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:52:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:54:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:56:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:58:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:63:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:70:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:71:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:82:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:101:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:126:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:140:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:169:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:179:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:218:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:221:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:224:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:227:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:248:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:281:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:346:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:349:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:352:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:355:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:358:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:359:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:360:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:361:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:368:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:371:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:379:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:417:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:425:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:428:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:429:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:435:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:437:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:479:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:492:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:501:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:502:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:505:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:510:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:537:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:667:32: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:670:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:724:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:732:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:763:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:767:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:776:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:777:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:864:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:897:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:904:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:924:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:929:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:976:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:996:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:1025:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:21:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:26:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:30:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:43:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:63:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:64:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:75:22: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:78:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:95:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:96:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:97:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:98:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:107:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:129:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:26:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:43:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:65:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:67:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:87:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:94:23: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:108:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:132:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:152:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:162:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:177:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:182:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:248:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:294:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:312:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:325:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:326:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:327:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:328:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:372:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:377:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:391:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:408:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:422:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:428:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:441:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:481:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:1:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.opt_mintime' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:2:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.result_plots_mintime' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:3:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.export_mintime_solution' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:4:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.approx_friction_map' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:5:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.extract_friction_coeffs' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:6:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.friction_map_interface' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:7:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.friction_map_plot' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:12:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:15:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:21:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:29:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:36:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:48:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:52:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:60:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:72:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:23:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:24:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:25:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:29:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:49:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:69:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:90:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:117:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:123:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:28:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:37:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:70:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:76:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:111:100: E501 line too long (122 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:114:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:122:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:24:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:25:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:25:117: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:26:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:26:118: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:27:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:27:119: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:32:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:36:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:42:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:43:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:45:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:46:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:50:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:92:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:152:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:178:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/__init__.py:1:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src.src' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:35:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:83:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:114:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:118:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:129:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:133:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:134:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:137:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:148:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:149:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:234:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:247:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:280:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:282:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:40:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:93:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:136:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:137:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:161:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:178:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:209:100: E501 line too long (39547 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:236:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:245:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:261:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py:1:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src.src.Battery' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py:2:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src.src.EMachine' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py:3:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src.src.Inverter' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py:4:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src.src.Radiators' imported but unused
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:35:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:86:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:130:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:139:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:144:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:159:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:171:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:172:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:173:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:186:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:32:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:76:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:100:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:105:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:108:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:121:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:122:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/build/lib/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:151:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/__init__.py:1:1: F401 'global_racetrajectory_optimization.trajectory_optimizer' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:16:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:18:4: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:19:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:20:1: E302 expected 2 blank lines, found 1
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:31:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:37:100: E501 line too long (140 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:44:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:46:100: E501 line too long (122 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:48:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:52:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:54:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:55:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:56:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:59:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:62:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:64:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:66:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:67:100: E501 line too long (123 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:68:57: E116 unexpected indentation (comment)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:70:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:71:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:73:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:74:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:77:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:78:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:85:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:86:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:87:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:90:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:92:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:95:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:102:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:104:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:105:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:107:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:122:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:127:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:130:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:132:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:140:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:143:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:144:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:147:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:158:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:165:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:173:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:174:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:175:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:180:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:181:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:185:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:190:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:198:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:199:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:220:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:231:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:241:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:244:100: E501 line too long (121 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:247:100: E501 line too long (126 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:289:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:289:104: E251 unexpected spaces around keyword / parameter equals
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:289:106: E251 unexpected spaces around keyword / parameter equals
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:294:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:296:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:317:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:323:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:330:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:355:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:357:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:359:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:361:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:362:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:364:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:369:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:372:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:380:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:391:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:449:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:456:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:460:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:486:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:494:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:504:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:509:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:526:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:529:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:547:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:556:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:559:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:560:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:562:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:563:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/trajectory_optimizer.py:567:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/__init__.py:1:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/__init__.py:1:69: W292 no newline at end of file
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:4:1: F401 'matplotlib.pyplot as plt' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:22:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:27:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:35:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:54:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:62:100: E501 line too long (122 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:63:100: E501 line too long (122 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:81:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:84:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:101:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/prep_track.py:107:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:18:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:19:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:23:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:27:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:32:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:83:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_ltpl.py:89:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:15:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:16:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:20:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:30:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:58:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:59:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:60:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:61:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/calc_min_bound_dists.py:69:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:1:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.interp_track' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:2:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.calc_min_bound_dists' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:3:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.check_traj' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:4:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.export_traj_race' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:5:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.export_traj_ltpl' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:6:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.import_track' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:7:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.result_plots' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/__init__.py:8:1: F401 'global_racetrajectory_optimization.helper_funcs_glob.src.prep_track' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py:21:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py:93:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py:111:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/result_plots.py:156:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/import_track.py:18:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/import_track.py:68:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/import_track.py:73:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_race.py:13:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_race.py:17:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/export_traj_race.py:44:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py:15:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py:23:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py:35:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/interp_track.py:52:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:22:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:28:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:29:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:30:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:31:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:46:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:63:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:64:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:65:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:66:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:67:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:74:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:77:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:81:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:86:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:89:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:93:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:102:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:104:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:109:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:112:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:124:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:129:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:132:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:136:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/helper_funcs_glob/src/check_traj.py:142:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/__init__.py:1:1: F401 'global_racetrajectory_optimization.frictionmap.src' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:16:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:16:116: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:25:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:30:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:36:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:40:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:42:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:46:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:71:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_grid.py:113:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:17:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:17:119: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:27:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:28:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:32:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:33:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:39:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:44:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:46:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:50:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:81:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:83:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:102:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:114:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:141:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:142:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/plot_frictionmap_data.py:158:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/__init__.py:1:1: F401 'global_racetrajectory_optimization.frictionmap.src.reftrack_functions' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/__init__.py:2:1: F401 'global_racetrajectory_optimization.frictionmap.src.plot_frictionmap_data' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/__init__.py:3:1: F401 'global_racetrajectory_optimization.frictionmap.src.plot_frictionmap_grid' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:23:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:24:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:42:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:49:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:51:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:64:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:68:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:71:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:72:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:76:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:77:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:85:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/frictionmap/src/reftrack_functions.py:158:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/__init__.py:1:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/__init__.py:2:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:28:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:29:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:30:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:31:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:32:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:37:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:43:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:52:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:54:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:56:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:58:100: E501 line too long (115 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:63:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:70:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:71:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:82:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:101:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:126:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:140:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:169:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:179:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:218:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:221:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:224:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:227:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:248:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:281:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:346:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:349:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:352:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:355:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:358:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:359:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:360:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:361:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:368:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:371:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:379:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:417:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:425:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:428:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:429:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:435:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:437:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:479:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:492:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:501:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:502:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:505:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:510:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:537:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:667:32: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:670:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:724:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:732:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:763:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:767:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:776:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:777:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:864:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:897:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:904:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:924:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:929:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:976:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:996:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/opt_mintime.py:1025:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:21:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:26:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:30:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:43:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:63:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:64:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:75:22: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:78:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:95:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:96:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:97:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:98:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:107:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/extract_friction_coeffs.py:129:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:26:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:43:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:65:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:67:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:87:1: W293 blank line contains whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:94:23: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:108:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:132:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:152:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:162:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:177:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:182:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:248:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:294:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:312:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:325:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:326:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:327:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:328:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:372:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:377:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:391:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:408:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:422:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:428:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:441:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/result_plots_mintime.py:481:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:1:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.opt_mintime' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:2:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.result_plots_mintime' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:3:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.export_mintime_solution' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:4:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.approx_friction_map' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:5:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.extract_friction_coeffs' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:6:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.friction_map_interface' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/__init__.py:7:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.src.friction_map_plot' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:12:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:15:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:21:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:29:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:36:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:48:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:52:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:60:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_interface.py:72:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:23:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:24:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:25:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:29:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:49:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:69:100: E501 line too long (105 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:90:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:117:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/friction_map_plot.py:123:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:28:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:37:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:70:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:76:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:111:100: E501 line too long (122 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:114:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/export_mintime_solution.py:122:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:24:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:25:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:25:117: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:26:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:26:118: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:27:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:27:119: W291 trailing whitespace
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:32:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:36:100: E501 line too long (109 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:42:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:43:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:45:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:46:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:50:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:92:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:152:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/src/approx_friction_map.py:178:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/__init__.py:1:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src.src' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:35:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:83:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:114:100: E501 line too long (114 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:118:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:129:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:133:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:134:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:137:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:148:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:149:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:234:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:247:100: E501 line too long (117 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:280:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/EMachine.py:282:100: E501 line too long (111 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:40:100: E501 line too long (118 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:93:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:136:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:137:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:161:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:178:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:209:100: E501 line too long (39547 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:236:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:245:100: E501 line too long (110 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Battery.py:261:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py:1:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src.src.Battery' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py:2:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src.src.EMachine' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py:3:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src.src.Inverter' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/__init__.py:4:1: F401 'global_racetrajectory_optimization.opt_mintime_traj.powertrain_src.src.Radiators' imported but unused
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:35:100: E501 line too long (120 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:86:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:130:100: E501 line too long (104 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:139:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:144:100: E501 line too long (112 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:159:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:171:100: E501 line too long (116 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:172:100: E501 line too long (113 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:173:100: E501 line too long (101 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Radiators.py:186:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:32:100: E501 line too long (119 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:76:100: E501 line too long (103 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:100:100: E501 line too long (102 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:105:100: E501 line too long (107 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:108:100: E501 line too long (106 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:121:100: E501 line too long (100 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:122:100: E501 line too long (108 > 99 characters)
+      ./global_planner/global_racetrajectory_optimization/global_racetrajectory_optimization/opt_mintime_traj/powertrain_src/src/Inverter.py:151:100: E501 line too long (100 > 99 characters)
+    assert 1 == 0
+  >>>
+- global_planner.test.test_pep257 test_pep257
+  <<< failure message
+    AssertionError: Found code style errors / warnings
+    assert 1 == 0
+  >>>
+
+Summary: 78 tests, 0 errors, 10 failures, 2 skipped

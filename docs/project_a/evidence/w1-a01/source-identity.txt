@@ -1,0 +1,26 @@
+6370d0436aabd011d1b885fe1f500644b957b536
+ M scripts/project_a/container_verify.sh
+?? docs/project_a/W1_GEOMETRY.md
+?? planner/global_planner/global_planner/_route_geometry.py
+?? planner/global_planner/global_planner/route_input.py
+?? planner/global_planner/test/fixtures/
+?? planner/global_planner/test/test_route_input.py
+ f8f8c9d4781d44a2959bae013f276410cb4e9da0 base_system/f110_simulator/f1tenth_gym (f8f8c9d)
+ 163020c0b631a5bdd9ddc59e6132337cec04cc27 base_system/f110_simulator/f1tenth_gym_ros (heads/humble)
+ 5d6490fc6426deb1254198020133a85c0614f183 base_system/f1tenth_system (v2.0.0-beta-22-g5d6490f)
+ ed4eac7284d13cae66628688e6fd32e585a96a62 base_system/f1tenth_system/ackermann_mux (heads/foxy-devel)
+ 09938461991ec2260ddab6db8ac962f46d205669 base_system/f1tenth_system/teleop_tools (heads/foxy-devel)
+ b1b38ecfefec7200d5bcb243f115af1d795b3766 planner/global_planner/global_planner/global_racetrajectory_optimization (remotes/origin/pip_package)
+ 2fd19be756544693752d3e5b36c128e6157e4bd3 sensors/vesc (1.2.0-5-g2fd19be)
+Linux x86_64
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+NAME="Debian GNU/Linux"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+DEBIAN_VERSION_FULL=13.6
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+Python 3.12.14

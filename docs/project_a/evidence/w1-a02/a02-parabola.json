@@ -1,0 +1,8 @@
+{
+  "exact_length_m": 1.4789428575445975,
+  "integrated_length_m": 1.4789428575445973,
+  "max_inverse_station_residual_m": 1.2471490506982263e-10,
+  "max_linear_fraction_station_error_m": 0.1670177992500138,
+  "station_acceptance_m": 1e-08,
+  "quad_estimated_error_m": 1.364128191450888e-13
+}

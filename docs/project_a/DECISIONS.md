@@ -1,5 +1,87 @@
 # Project A decision ledger
 
+## 2026-10-16 — Independent review and authorized W1 remediation
+
+- The independent review of exact CI-tested `133a96fd` supersedes the earlier
+  self-review acceptance: two P1 and three P2 findings are reproducible.
+  Preserve the original report and complete hashed reproductions as historical
+  evidence; do not rewrite the report to imply the original source was correct.
+- The user explicitly lifted read-only restrictions and authorized incremental
+  commits and normal pushes to `project-a/w1-geometry`, PR #1. Recheck remote head
+  before pushing; never force-push, merge, or overwrite concurrent work.
+- Repair original A01–A03 contracts with failing regressions and pinned Humble
+  evidence. Do not loosen tolerances, infer connectivity, inflate widths, or
+  introduce W2/physical-system implementation. Independent final exact-head CI
+  and a new adversarial examination are required before restoring acceptance.
+
+### F5 — Dimensionally consistent gate direction
+
+Divide the gate/travel cross product by nonzero gate length before comparing
+with the original 1e-9 m uncertainty threshold. The result is signed normal
+travel in metres, so harmless collinear seed subdivision cannot be mistaken
+for reversed/tangent direction merely because the gate is narrow. Keep all
+nondegenerate/endcap/topology checks and EPS unchanged. The failing-first
+regressions include rigid motions and geometric scaling, not just one fixture.
+
+### F1 — Preserve open-interior contact topology
+
+Union genuinely overlapping open normal intervals, but preserve a boundary-only
+contact as a cut. A touching join is permitted only at an explicitly supplied
+shared portal gate; support-mask intersections receive no such exemption.
+Selecting the origin-containing interval then naturally stops at the first
+tangent legal-side contact. Keep original occurrence ownership, 1e-9 m inward
+allowance and full-width chart checks unchanged. This repairs A03's sampled
+interval guarantee; A05 still owns continuous spline/footprint validation.
+
+### F2 — Bound quadrature independently of its sampled values
+
+Replace QUADPACK's self-reported estimate with Gauss32 plus a conservative
+analytic derivative-remainder bound from quadratic derivative Bezier boxes.
+Heap refinement subdivides the largest unresolved bound; speed-squared extrema
+only accelerate partitioning and cannot authorize acceptance. Include explicit
+binary64 coefficient-evaluation/positive-sum allowances, reject unresolved boxes,
+nonfinite bounds, floating-point resolution limits and exhausted panel/depth
+budgets. Keep arc_abs=1e-10 m, station_abs=1e-8 m, default quad_limit=100 and all
+other policy values unchanged. quad_limit now caps live Gauss panels; existing
+regularity_depth also caps their subdivision. No arc table or second curve is
+introduced. A 256-panel policy is stated explicitly for the largest new stress
+cases; default-budget exhaustion is itself tested as fail-closed behavior.
+
+### F4 — One endpoint identity and directed half-open rounding
+
+Exact `(segment,0/1)` stations return the canonical cumulative knot, rather than
+re-adding a length with different rounding. If negative modulo rounds to L, use
+the representable predecessor of L so the preceding owner is preserved. After
+bisecting progress, clamp only a local subtraction overshoot bounded by four lap
+ulps; never select a different occurrence by a broad tolerance snap. All original
+finite-progress and floating-resolution rejection policies remain unchanged.
+
+### F3 — Preserve known semantic lineage instead of recovering it
+
+Evaluate known q anchors at their exact source segment/t and derive metric s;
+ordinary metric samples still use the inverse. Compare caps in ordered global q
+without a blanket EPS shift. Preserve distinct nearby semantic events even if
+they are closer than station_abs; explicitly reject unrepresentable global or
+metric ordering rather than merge events. Refits and normal queries validate
+every supplied field against the coefficient authority. When ordinary inverse
+rounding reaches an upper q endpoint, use directed representable half-open q
+within that source segment, and require its declared owner to agree. This fixes
+the additional independently observed adjacent-owner disagreement without broad
+snapping or any nearest-XY inference. Unsupported tiny interpolation edges may
+still fail under the existing A02 policy rather than silently dropping events.
+
+### F2 follow-up — Explicit rounding accounting and reproducible Gauss constants
+
+Do not alter existing negative geometry fixtures to bypass a numerical rejection.
+Preserve their two tight-budget segments as failing-first reference regressions.
+Replace runtime Gauss eigensolve constants with correctly rounded roots/weights
+generated at 100 decimal digits, retaining the generator and moment evidence.
+Use a derived 32-eps*S*h quadrature-value evaluation allowance with headroom over
+the Horner/mapped-node/hypot/positive-sum operation count; retain the separate
+128-eps geometric boxes and derivative-bound inflation. Keep every policy
+tolerance/resource default unchanged. This removes an overconservative arithmetic
+floor while retaining independent remainder control and original A03 assertions.
+
 ## 2026-10-16 — W0 environment and ownership
 
 1. **Path D selected by execution**, not assumption. Host Debian 13/Python 3.12 has
@@ -47,3 +129,76 @@
     requesting routine confirmation or implying that an upstream PR exists.
     CI ZIP retrieval also returned 403, while CI job logs and metadata were
     accessible; preserve those exact logs and do not infer missing artifact data.
+
+## 2026-10-16 — A01 selected input contract
+
+- User-required W0 HEAD takes precedence over the historical rebase instruction.
+  Start `project-a/w1-geometry` at `6370d0436aabd011d1b885fe1f500644b957b536`.
+- v1 supports simple local ribbons, shared directed end caps and explicit portal
+  support/progress brackets. Connectors require their own occurrence. Reject holes,
+  alternate graph fields and disconnected cap contracts instead of guessing edges.
+- Portal support is a restriction on adjacent original legal regions, never an
+  additive polygon that could inflate legality. A03 will enforce this intersection.
+- Use private planar predicates, no new geometry dependency/framework. Coordinate
+  range <=1e5 m, distance ambiguity 1e-9 m; later charts may reject valid input.
+- Canonical binary64/NFC/integral/-0 normalization and frozen tuples are documented
+  in W1_GEOMETRY.md. Physical provenance/coverage remains a separate input identity.
+- Legacy colcon discovers the new functional tests too: aggregate count grows;
+  compare failure identities and scoped new-file lint, not just total count.
+
+## 2026-10-16 — A02 metric authority
+
+- Use SciPy periodic interpolation only to obtain exact stored normalized cubic
+  coefficients. Load/reconstruct from those coefficients without a refit.
+- Allocate 1e-10 m estimated integration error across the entire lap, use
+  compensated cumulative sums, and enforce 1e-8 m inverse residual. QUADPACK
+  estimates are numerical control, not a formal interval/continuous legal proof.
+- Conservative derivative Bézier boxes reject zero/uncertain derivative or
+  exhausted budgets. All joins/seam check XY, unit tangent and signed curvature
+  at 1e-8; normalized parameter derivative magnitudes may differ.
+- Owners are explicit per ordered segment. Pure `sample/locate/window` has no
+  mutable closest index/history. Unresolvable huge progress is rejected.
+- Independent tests use analytic integration, fixed Gaussian quadrature, complete
+  elliptic integral and independent polynomial differentiation. Preserve the W0
+  legacy metric-defect characterization alongside the new inverse regression.
+- Add explicit NumPy/SciPy ROS package dependencies and a separate installed pure
+  module check; preserve the original four W0 ROS tests and all entry points.
+
+## 2026-10-16 — A03 original ownership and progress
+
+- q is inherited piecewise original seed metric. Repeated resampling inserts
+  occurrence, cap and portal bracket anchors; refits must retain those anchors
+  and source segment/t/q. Never infer correspondence from XY.
+- Re-intersect current normals with original owner; only an explicitly active
+  adjacent portal permits a union, clipped by support. Shared cap removal is
+  specific to that portal. Support is never additive legal area.
+- Use only the connected normal interval containing the reference. Disconnected
+  intervals, unlike a continuous legal union at a declared cap, cannot bridge gaps.
+  Inset widths by 1e-9 m, require full chart Jacobian >=.05; reject rather than
+  narrow an invalid chart or inflate a legal corridor.
+- Polynomial gate intersections prove local directed portal passage within q
+  brackets. q alone is not passage evidence. Full continuous final-curve and
+  footprint validity remain A05, deliberately not implemented here.
+- Bound same-occurrence normal-pair checks to 1000000 comparisons. Unrelated
+  deck/occurrence normals are not globally rejected; their overlap is legal input.
+- A notch oracle initially compared a fitted normal to its analytic generating
+  normal at 2e-9 m. The observed ~2.2e-8 m difference was interpolation, not arc
+  or intersection error. Correct the oracle to independent ray/edge linear solves
+  on the actual fitted normal; keep 2e-9 m intersection tolerance and separately
+  declare 1e-6 m generating-geometry approximation. No production tolerance changed.
+
+## 2026-10-16 — W1 final adversarial hardening
+
+Self-review added explicit numeric type validation, seed ownership-cap recrossing
+rejection, translation-stable compensated polygon area, stationary-value checks
+for potentially hidden tangent gate roots, and rejection of endpoint ambiguity.
+Eight A01 and two A03 regressions were added. Identical XY/heading repeated
+visits remain distinct by supplied ordered progress. No tolerance was weakened.
+See W1_SELF_REVIEW.md. CI now triggers on Project A documentation too, so final
+closeout commits receive actual exact-HEAD validation; artifact names cover W1.
+
+Closeout adds direct cap-recrossing and gate-endpoint regressions; production code
+is unchanged from `129c281`. Final local counts 48/12/18; fresh clone and push CI
+at `129c281` pass with 47/12/17 plus unchanged W0/install checks. Retain those
+source/test identities separately. The W1 draft PR targets the fork's W0 branch
+because the foundation has not yet been merged upstream; PR creation succeeded.
