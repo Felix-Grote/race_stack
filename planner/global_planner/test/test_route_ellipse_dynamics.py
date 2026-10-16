@@ -14,7 +14,7 @@ import pytest
 from scipy.special import ellipe
 
 from global_planner.cyclic_retime import (DynamicsModel, ModelRegion, RegionLimits,
-                                          RetimePolicy, retime)
+                                          RetimePolicy, curve_digest, retime)
 from global_planner.route_corridor import seed_curve
 from global_planner.route_input import load_route, validate_route
 from global_planner.route_validate_dynamics import validate_dynamics
@@ -74,7 +74,9 @@ def test_simple_closed_ellipse_retimes_with_independent_metric_and_lateral_oracl
     policy = RetimePolicy()
     result = retime(ordered, model, spacing_m=.47, policy=policy)
     assert result.status == 'CANDIDATE', result.message
-    report = validate_dynamics(ordered, result.profile, model, metadata=result.metadata)
+    report = validate_dynamics(
+        ordered, result.profile, model, metadata=result.metadata,
+        expected_curve_digest=curve_digest(ordered))
     assert report.status == 'PASS', report.reason
     knots = result.profile.knots
     assert report.edges[-1].closing and len(report.edges) == len(knots)

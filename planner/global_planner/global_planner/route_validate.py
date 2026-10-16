@@ -8,7 +8,7 @@ No sampling density, optimizer width, solver flag or approximate polynomial root
 can authorize PASS. Physical contact, 3D clearance and tracking are not covered.
 """
 from bisect import bisect_right
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from fractions import Fraction
 import math
 
@@ -20,12 +20,14 @@ class BoundUncertain(ValueError):
     """An interval cannot be enclosed under this supported numerical model."""
 
 
-def validate_dynamics(ordered, profile, model, policy=None, metadata=None):
+def validate_dynamics(ordered, profile, model, policy=None, metadata=None, *,
+                      expected_curve_digest=None):
     """Independently check cyclic dynamics; import lazily to keep geometry pure."""
     from .route_validate_dynamics import DynamicsValidationPolicy, validate_dynamics as check
     if policy is None:
         policy = DynamicsValidationPolicy()
-    return check(ordered, profile, model, policy=policy, metadata=metadata)
+    return check(ordered, profile, model, policy=policy, metadata=metadata,
+                 expected_curve_digest=expected_curve_digest)
 
 
 def _f(x):
@@ -384,6 +386,7 @@ class ValidationReport:
                           'atan2 absolute error <=4 binary64 eps radians',
                           'join tolerance is a numerical software allowance',
                           'no physical obstacle/contact/3D/tracking certificate')
+    curve_digest: str = ''
 
 
 class _Stop(Exception):
@@ -549,20 +552,29 @@ def _validate_gates(curve, q, route, ends, policy):
     return tuple(reports)
 
 
-def validate_geometry(candidate, approved_route, footprint, policy=GeometryValidationPolicy()):
+def validate_geometry(candidate, approved_route, footprint, policy=GeometryValidationPolicy(), *,
+                      expected_curve_digest=None):
     """Validate actual coefficients against separately supplied original authority.
 
     PASS means planar legal geometry and the supplied reference-aligned body plus
     margin only. Missing required physical coverage, unsupported holes/union
     topology and exhausted bounds give INCONCLUSIVE, never an accepted artifact.
+    The caller must retain expected_curve_digest at a trusted handoff before
+    receiving mutable intermediates; hashing the received candidate is not an
+    independent authority and cannot prove historical q inheritance.
     """
     import hashlib
     import json
 
-    certificates, gates, digest, coefficient_digest = [], (), '', ''
+    certificates, gates, digest, coefficient_digest, identity = [], (), '', '', ''
     try:
         if type(footprint) is not Footprint or type(policy) is not GeometryValidationPolicy:
             raise _Stop('FAIL', 'invalid independent footprint or validation policy')
+        if expected_curve_digest is None:
+            raise _Stop('INCONCLUSIVE', 'missing independently retained complete curve authority')
+        if (type(expected_curve_digest) is not str or len(expected_curve_digest) != 64 or
+                any(c not in '0123456789abcdef' for c in expected_curve_digest)):
+            raise _Stop('FAIL', 'malformed independently retained complete curve digest')
         if (not isinstance(approved_route.encoded, bytes) or
                 len(approved_route.encoded) > policy.max_route_bytes or
                 len(candidate.curve.segments) > policy.max_segments):
@@ -621,6 +633,17 @@ def validate_geometry(candidate, approved_route, footprint, policy=GeometryValid
             expected = route.occurrences[j]
             if q[i + 1] > ends[j + 1] or owner != (expected.id, expected.surface_id):
                 raise _Stop('FAIL', 'incorrect occurrence/surface owner or interval crossing')
+        # The caller retains this authority before intermediate mutation. Rehash
+        # every actual field independently; a self-consistent candidate/profile
+        # digest cannot establish historical q inheritance or approve a new curve.
+        authority = {'coefficients': curve.coefficients, 'owners': curve.owners,
+                     'q': candidate.q, 'route_digest': route.digest,
+                     'numeric_policy': asdict(candidate.curve.policy)}
+        identity = hashlib.sha256(json.dumps(
+            authority, sort_keys=True, separators=(',', ':'), allow_nan=False
+        ).encode('utf-8')).hexdigest()
+        if identity != expected_curve_digest:
+            raise _Stop('FAIL', 'complete curve differs from independently retained authority')
         if policy.require_physical_coverage:
             raise _Stop('INCONCLUSIVE',
                         'unsupported required physical obstacle/contact/3D coverage')
@@ -795,17 +818,21 @@ def validate_geometry(candidate, approved_route, footprint, policy=GeometryValid
                                 (i, float(lo), float(hi)))
                 stack.extend(((i, lo, midpoint, depth + 1), (i, midpoint, hi, depth + 1)))
         return ValidationReport('PASS', 'continuous planar geometry and swept footprint certified',
-                                tuple(certificates), gates, (), digest, coefficient_digest)
+                                tuple(certificates), gates, (), digest, coefficient_digest,
+                                curve_digest=identity)
     except _Stop as exc:
         return ValidationReport(exc.status, exc.reason, tuple(certificates), gates,
-                                exc.interval, digest, coefficient_digest)
+                                exc.interval, digest, coefficient_digest, curve_digest=identity)
     except GeometryError as exc:
         status = 'INCONCLUSIVE' if 'budget' in str(exc) or 'uncertain' in str(exc) else 'FAIL'
         return ValidationReport(status, 'independent coefficient reconstruction: ' + str(exc),
-                                tuple(certificates), gates, (), digest, coefficient_digest)
+                                tuple(certificates), gates, (), digest, coefficient_digest,
+                                curve_digest=identity)
     except BoundUncertain as exc:
         return ValidationReport('INCONCLUSIVE', 'unsupported numerical bound: ' + str(exc),
-                                tuple(certificates), gates, (), digest, coefficient_digest)
+                                tuple(certificates), gates, (), digest, coefficient_digest,
+                                curve_digest=identity)
     except (AttributeError, TypeError, ValueError, IndexError, KeyError, OverflowError) as exc:
         return ValidationReport('FAIL', 'malformed candidate/authority: ' + str(exc),
-                                tuple(certificates), gates, (), digest, coefficient_digest)
+                                tuple(certificates), gates, (), digest, coefficient_digest,
+                                curve_digest=identity)

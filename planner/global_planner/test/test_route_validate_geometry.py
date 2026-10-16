@@ -11,6 +11,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from global_planner.cyclic_retime import curve_digest
 from global_planner.route_corridor import OrderedCurve
 from global_planner.route_input import load_route, validate_route
 from global_planner.route_reference import Curve, NumericPolicy
@@ -43,7 +44,8 @@ def candidates():
 
 @pytest.fixture(scope='module')
 def reports(candidates):
-    result = {name: validate_geometry(candidate, candidate.route, BODY)
+    result = {name: validate_geometry(candidate, candidate.route, BODY,
+                                      expected_curve_digest=curve_digest(candidate))
               for name, candidate in candidates.items()}
     Path('/work/a05-geometry.json').write_text(json.dumps({
         'scope': 'SYNTHETIC PLANAR SOFTWARE ONLY; no physical evidence',
@@ -60,6 +62,7 @@ def test_actual_whole_lap_candidates_have_independent_swept_certificates(
     assert report.status == 'PASS', (name, report.reason, report.offending_interval)
     assert report.route_sha256 == candidate.route.digest
     assert report.coefficients_sha256
+    assert report.curve_digest == curve_digest(candidate)
     assert len(report.gates) == len(candidate.route.portals)
     assert {c.occurrence_id for c in report.intervals} == {
         o.id for o in candidate.route.occurrences}
@@ -97,6 +100,38 @@ def _fake(candidate, **changes):
     return SimpleNamespace(**values)
 
 
+def test_missing_or_malformed_independent_curve_authority_cannot_grant_pass(candidates):
+    base = candidates['s0_route']
+    missing = validate_geometry(base, base.route, BODY)
+    assert missing.status == 'INCONCLUSIVE' and 'authority' in missing.reason
+    for digest in (True, 64, '', '0' * 63, 'A' * 64, 'x' * 64):
+        report = validate_geometry(base, base.route, BODY, expected_curve_digest=digest)
+        assert report.status == 'FAIL' and 'digest' in report.reason
+    mismatch = validate_geometry(base, base.route, BODY, expected_curve_digest='0' * 64)
+    assert mismatch.status == 'FAIL' and 'authority' in mismatch.reason
+    assert mismatch.curve_digest == curve_digest(base)
+
+
+def test_monotone_internal_q_forgery_cannot_replace_retained_curve_authority(
+        candidates, monkeypatch):
+    import global_planner.cyclic_retime as retimer
+
+    base = candidates['s0_route']
+    retained = curve_digest(base)
+    q = list(base.q)
+    q[10] = (q[10] + q[11]) / 2
+    forged = OrderedCurve(base.route, base.curve, q)
+    actual_digest = curve_digest(forged)
+    assert actual_digest != retained
+    assert forged.curve.coefficients == base.curve.coefficients
+    assert forged.curve.owners == base.curve.owners
+    # A correlated optimizer identity helper cannot authorize the mutation.
+    monkeypatch.setattr(retimer, 'curve_digest', lambda _: retained)
+    report = validate_geometry(forged, base.route, BODY, expected_curve_digest=retained)
+    assert report.status == 'FAIL' and 'authority' in report.reason
+    assert report.curve_digest == actual_digest
+
+
 def test_solver_flags_widths_and_untrusted_metadata_cannot_authorize_acceptance(
         candidates, reports):
     base = candidates['s0_route']
@@ -105,7 +140,8 @@ def test_solver_flags_widths_and_untrusted_metadata_cannot_authorize_acceptance(
     poisoned.corridors = ((float('inf'), -1e30),)
     poisoned.heading = (float('nan'),)
     poisoned.curvature = (0.,)
-    actual = validate_geometry(poisoned, base.route, BODY)
+    actual = validate_geometry(poisoned, base.route, BODY,
+                               expected_curve_digest=curve_digest(base))
     assert actual == reports['s0_route']
 
 
@@ -115,7 +151,8 @@ def test_forged_route_record_retaining_canonical_digest_is_rejected(candidates):
     forged = replace(base.route, occurrences=(occurrence,) + base.route.occurrences[1:])
     assert forged.digest == base.route.digest
     for candidate, approved in ((_fake(base, route=forged), base.route), (base, forged)):
-        report = validate_geometry(candidate, approved, BODY)
+        report = validate_geometry(candidate, approved, BODY,
+                                   expected_curve_digest=curve_digest(base))
         assert report.status == 'FAIL' and 'authority' in report.reason
 
 
@@ -123,10 +160,12 @@ def test_stale_curve_metadata_and_relaxed_candidate_numeric_policy_are_rejected(
     base = candidates['s0_route']
     corrupt = copy.deepcopy(base.curve)
     object.__setattr__(corrupt, 'cumulative', tuple(x * 2 for x in corrupt.cumulative))
-    assert validate_geometry(_fake(base, curve=corrupt), base.route, BODY).status == 'FAIL'
+    assert validate_geometry(_fake(base, curve=corrupt), base.route, BODY,
+                             expected_curve_digest=curve_digest(base)).status == 'FAIL'
     relaxed = copy.deepcopy(base.curve)
     object.__setattr__(relaxed, 'policy', replace(NumericPolicy(), join_abs=10.))
-    report = validate_geometry(_fake(base, curve=relaxed), base.route, BODY)
+    report = validate_geometry(_fake(base, curve=relaxed), base.route, BODY,
+                               expected_curve_digest=curve_digest(base))
     assert report.status == 'FAIL' and 'policy' in report.reason
 
 
@@ -146,7 +185,7 @@ def test_corrupt_q_and_declared_owners_fail_independently(kind, candidates):
         owners[0] = ('o2', owners[0][1]) if kind == 'owner' else (owners[0][0], 'other-deck')
         object.__setattr__(curve, 'owners', tuple(owners))
         bad = _fake(base, curve=curve)
-    report = validate_geometry(bad, base.route, BODY)
+    report = validate_geometry(bad, base.route, BODY, expected_curve_digest=curve_digest(base))
     assert report.status == 'FAIL' and ('q lineage' in report.reason or 'owner' in report.reason)
 
 
@@ -164,7 +203,8 @@ def test_exact_coefficients_reconstructed_instead_of_trusting_existing_curve(kin
     forged_curve = SimpleNamespace(
         coefficients=coefficients, owners=base.curve.owners,
         policy=base.curve.policy, segments=base.curve.segments)
-    report = validate_geometry(_fake(base, curve=forged_curve), base.route, BODY)
+    report = validate_geometry(_fake(base, curve=forged_curve), base.route, BODY,
+                               expected_curve_digest=curve_digest(base))
     assert report.status in ('FAIL', 'INCONCLUSIVE')
     assert 'coefficient reconstruction' in report.reason
 
@@ -176,23 +216,27 @@ def test_exact_coefficients_reconstructed_instead_of_trusting_existing_curve(kin
 ])
 def test_all_resource_exhaustion_is_explicitly_inconclusive(policy, candidates):
     base = candidates['s0_route']
-    report = validate_geometry(base, base.route, BODY, policy)
+    report = validate_geometry(base, base.route, BODY, policy,
+                               expected_curve_digest=curve_digest(base))
     assert report.status == 'INCONCLUSIVE' and 'budget' in report.reason
 
 
 def test_required_physical_coverage_cannot_be_invented(candidates):
     base = candidates['s0_route']
     report = validate_geometry(
-        base, base.route, BODY, GeometryValidationPolicy(require_physical_coverage=True))
+        base, base.route, BODY, GeometryValidationPolicy(require_physical_coverage=True),
+        expected_curve_digest=curve_digest(base))
     assert report.status == 'INCONCLUSIVE' and 'physical' in report.reason
 
 
 def test_actual_rectangle_overhang_and_independent_curvature_limit_reject(candidates):
     base = candidates['s0_route']
-    overhang = validate_geometry(base, base.route, Footprint(4., 4., .12, .01))
+    overhang = validate_geometry(base, base.route, Footprint(4., 4., .12, .01),
+                                 expected_curve_digest=curve_digest(base))
     assert overhang.status == 'FAIL' and 'rectangle' in overhang.reason
     curvature = validate_geometry(
-        base, base.route, BODY, GeometryValidationPolicy(max_curvature=.01))
+        base, base.route, BODY, GeometryValidationPolicy(max_curvature=.01),
+        expected_curve_digest=curve_digest(base))
     assert curvature.status == 'FAIL' and 'interior curvature' in curvature.reason
 
 
@@ -236,7 +280,7 @@ def test_holes_are_never_silently_filled(candidates):
     payload = base.route.payload
     payload['occurrences'][0]['holes'] = [[[5.9, .01], [6.1, .01], [6.1, .1], [5.9, .1]]]
     forged = SimpleNamespace(encoded=json.dumps(payload).encode(), payload=payload)
-    report = validate_geometry(base, forged, BODY)
+    report = validate_geometry(base, forged, BODY, expected_curve_digest=curve_digest(base))
     assert report.status == 'FAIL' and 'geometry' in report.reason
 
 
@@ -253,7 +297,9 @@ def test_nonexact_cap_gap_cannot_be_removed_by_shared_endcap_annotation(candidat
     route = validate_route(payload)
     # The resulting q differs slightly, so use its seed (factory-valid) curve.
     from global_planner.route_corridor import seed_curve
-    report = validate_geometry(seed_curve(route), route, BODY)
+    candidate = seed_curve(route)
+    report = validate_geometry(candidate, route, BODY,
+                               expected_curve_digest=curve_digest(candidate))
     assert report.status == 'INCONCLUSIVE' and 'nonexact shared endcap' in report.reason
 
 
@@ -267,7 +313,8 @@ def test_initialization_zone_and_heading_are_validated_on_final_curve(candidates
             payload['initialization']['heading_interval_rad'] = [-.1, .1]
         route = validate_route(payload)
         candidate = OrderedCurve(route, base.curve, base.q)
-        report = validate_geometry(candidate, route, BODY)
+        report = validate_geometry(candidate, route, BODY,
+                                   expected_curve_digest=curve_digest(candidate))
         assert report.status == 'FAIL' and 'initialization' in report.reason
 
 
@@ -330,7 +377,8 @@ def test_full_validator_rejects_original_notch_between_legal_solver_knots(
         rectangle, _ = validator._rectangle(coefficient, Fraction(1, 2), BODY, bounds)
         assert all(validator._inside(p, polygon) for p in rectangle)
         assert validator._rectangle_clearance2(rectangle, polygon) is None
-    report = validate_geometry(candidate, candidate.route, BODY)
+    report = validate_geometry(candidate, candidate.route, BODY,
+                               expected_curve_digest=curve_digest(candidate))
     assert report.status == 'FAIL', (report.status, report.reason, report.offending_interval)
     assert 'rectangle' in report.reason
 
@@ -349,7 +397,8 @@ def test_interior_curvature_peak_fails_even_when_every_coefficient_knot_passes(c
     assert not any(above(c, Fraction(t)) for c in base.curve.coefficients for t in (0, 1))
     assert above(base.curve.coefficients[69], Fraction(25, 32))
     report = validate_geometry(
-        base, base.route, BODY, GeometryValidationPolicy(max_curvature=float(limit)))
+        base, base.route, BODY, GeometryValidationPolicy(max_curvature=float(limit)),
+        expected_curve_digest=curve_digest(base))
     assert report.status == 'FAIL' and 'interior curvature' in report.reason
 
 
@@ -358,7 +407,8 @@ def test_actual_gate_phase_cannot_be_supplied_by_q_labels_alone(candidates):
     rotated = tuple((tuple(-x for x in c[1]), c[0]) for c in base.curve.coefficients)
     curve = Curve(rotated, base.curve.owners)
     candidate = OrderedCurve(base.route, curve, base.q)
-    report = validate_geometry(candidate, base.route, BODY)
+    report = validate_geometry(candidate, base.route, BODY,
+                               expected_curve_digest=curve_digest(candidate))
     assert report.status == 'FAIL' and 'gate' in report.reason
 
 
@@ -367,7 +417,8 @@ def test_forged_tensor_count_cannot_bypass_preprocessing_resource_guard(candidat
     curve = SimpleNamespace(coefficients=base.curve.coefficients * 2,
                             owners=base.curve.owners, segments=base.curve.segments,
                             policy=base.curve.policy)
-    report = validate_geometry(_fake(base, curve=curve), base.route, BODY)
+    report = validate_geometry(_fake(base, curve=curve), base.route, BODY,
+                               expected_curve_digest=curve_digest(base))
     assert report.status == 'FAIL' and 'resource shape' in report.reason
 
 
@@ -401,7 +452,8 @@ def test_coincident_bridge_deck_cannot_be_legalized_by_optimizer_claims(candidat
         route=base.route, curve=curve, q=base.q, success=True, solver_success=True,
         status='SUCCESS', clearance_m=1e6,
         corridors=(SimpleNamespace(lower=-1e6, upper=1e6),))
-    report = validate_geometry(forged, base.route, BODY)
+    report = validate_geometry(forged, base.route, BODY,
+                               expected_curve_digest=curve_digest(base))
     assert report.status == 'FAIL' and 'owner' in report.reason
     Path('/work/a05-wrong-deck-coincident.json').write_text(json.dumps({
         'route_sha256': base.route.digest, 'segment': index,

@@ -21,11 +21,13 @@ if [[ "$mode" == all || "$mode" == numerical ]]; then
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_iqp_route_adapter.py --junitxml=/work/a04.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_validate_geometry.py --junitxml=/work/a05.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_validate_bounds_oracle.py --junitxml=/work/a05-oracle.xml
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_w2_numerical_oracle.py --junitxml=/work/w2-numerical-oracle.xml
   python -m flake8 --max-line-length=99 /src/planner/global_planner/global_planner/cyclic_retime.py /src/planner/global_planner/test/test_cyclic_retime.py /src/planner/global_planner/test/test_w2_pipeline.py /src/scripts/project_a/tests/test_w2_installed.py /src/scripts/project_a/source_manifest.py
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_cyclic_retime.py --junitxml=/work/a06.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_validate_dynamics.py --junitxml=/work/a06-independent.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_dynamics_oracle.py --junitxml=/work/a06-oracle.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_ellipse_dynamics.py --junitxml=/work/a06-ellipse.xml
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_w2_handoff.py --junitxml=/work/w2-handoff.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_w2_pipeline.py --junitxml=/work/w2-pipeline.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_numerical.py --junitxml=/work/numerical.xml
 fi
@@ -70,7 +72,8 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 out = {'scope': 'W0_THROUGH_A06', 'legal_planner_acceptance': 'SYNTHETIC_PLANAR_W2'}
 for kind in ('numerical', 'ros', 'a01', 'a02', 'a03', 'a04', 'a05', 'a05-oracle',
-             'a06', 'a06-independent', 'a06-oracle', 'a06-ellipse', 'w2-pipeline', 'w1-installed',
+             'a06', 'a06-independent', 'a06-oracle', 'a06-ellipse', 'w2-handoff',
+             'w2-numerical-oracle', 'w2-pipeline', 'w1-installed',
              'w2-installed'):
     path = Path('/work', kind + '.xml')
     if path.exists():

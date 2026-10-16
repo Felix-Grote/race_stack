@@ -22,9 +22,10 @@ def test_installed_w2_pipeline():
     route = load_route('/src/planner/global_planner/test/fixtures/project_a/s0_route.json')
     numerical = optimizer.optimize(route)
     assert numerical.status == 'CANDIDATE', numerical.reason
+    expected = retimer.curve_digest(numerical.ordered)
     ordered = numerical.ordered
     body = geometry.Footprint(front_m=.10, rear_m=.10, width_m=.12, margin_m=.01)
-    geometric = geometry.validate_geometry(ordered, route, body)
+    geometric = geometry.validate_geometry(ordered, route, body, expected_curve_digest=expected)
     assert geometric.status == 'PASS', geometric.reason
     limits = retimer.RegionLimits(
         speed_min_mps=.05, speed_max_mps=3., ax_pos_mps2=2., ax_neg_mps2=3.,
@@ -36,11 +37,14 @@ def test_installed_w2_pipeline():
         provenance='Synthetic planar model; no physical calibration or vehicle claim')
     timed = retimer.retime(ordered, model)
     assert timed.status == 'CANDIDATE', timed.message
-    dynamic = geometry.validate_dynamics(ordered, timed.profile, model, metadata=timed.metadata)
+    dynamic = geometry.validate_dynamics(ordered, timed.profile, model, metadata=timed.metadata,
+                                         expected_curve_digest=expected)
     assert dynamic.status == 'PASS', dynamic
+    assert geometric.curve_digest == dynamic.curve_digest == expected
+    assert timed.profile.curve_digest == timed.metadata.curve_digest == expected
     Path('/work/w2-installed.json').write_text(json.dumps({
         'scope': 'Installed numerical software acceptance; no W3 artifact/export claim',
-        'modules': identities, 'route_sha256': route.digest,
+        'modules': identities, 'route_sha256': route.digest, 'expected_curve_digest': expected,
         'coefficients': ordered.curve.coefficients, 'q': ordered.q,
         'owners': ordered.curve.owners, 'footprint': asdict(body), 'model': asdict(model),
         'solver_policy': asdict(numerical.policy), 'iterations': len(numerical.traces),

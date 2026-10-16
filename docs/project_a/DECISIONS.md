@@ -1,5 +1,27 @@
 # Project A decision ledger
 
+## 2026-10-16 — Independent W2 review: bind the final authority at handoff
+
+- A monotone within-occurrence q alteration can move a seed-local speed cap
+  while preserving coefficients and all self-hashes. The original checkers
+  certify the altered supplied authority; they cannot infer its ancestry.
+- Under the explicit adversarial intermediate-tampering requirement, require
+  `expected_curve_digest` as a separate trusted input for any geometry/dynamics
+  PASS. Capture it immediately at the audited A04 return, before downstream
+  operations; never copy it from a profile or recompute it from received data.
+- Each checker independently hashes actual coefficients, q, owners, approved
+  route and numerical policy. Missing approval is INCONCLUSIVE; malformed or
+  mismatched approval FAIL. Both full report identities must equal the same
+  frozen expectation. Preserve every existing mathematical check and tolerance.
+- This is an explicit approval boundary, not a hash-based proof of historical
+  inheritance. Audit actual A04 histories separately with a distinct cyclic
+  spline system. Caller-approved custom initial curves, models, footprints and
+  validation policies remain trusted inputs; W3 must preserve these identities.
+- Keep original red experiments and shared-kernel fault injections. A simulated
+  1% common arc error demonstrates correlated retimer/checker failure, not a
+  discovered defect in the actual bounded kernel. Retain external analytic and
+  high-precision controls rather than claiming complete checker independence.
+
 ## 2026-10-16 — W2 complete verification and literal regression coverage
 
 - Full local and exact A06 hosted verification pass 296 functional tests, actual

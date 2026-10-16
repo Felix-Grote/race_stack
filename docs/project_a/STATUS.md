@@ -1,5 +1,16 @@
 # Project A status — 2026-10-16
 
+**Independent W2 review: F1 handoff-binding repair implemented; final verification pending.**
+The independently reviewed initial head is `e852641849b2497efea51dfca5ead38ad4476235`.
+The coordinated q/profile rehash reproducer and original failing tests are
+preserved in `W2_INDEPENDENT_ADVERSARIAL_FINDINGS.md` and its evidence archive.
+Both validators now require a separately retained complete curve authority;
+actual source and installed pipelines carry the same approval through both
+checks. Fresh seven-case lineage replay uses a different spline system.
+The original 299-test full baseline and five corrected replay/oracle tests pass;
+final complete local and exact-head hosted verification remain release gates.
+The historical implementation record below is retained, not a final review verdict.
+
 **W2 A04–A06 IMPLEMENTED. LOCAL/FULL/INSTALLED ACCEPTANCE PASS. A07–A09 PENDING.**
 
 The current authorized work is W2 A04–A06 on `project-a/w2-optimization`, created

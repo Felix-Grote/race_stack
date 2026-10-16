@@ -50,7 +50,9 @@ def timed_candidates():
         model = model_for(ordered.route)
         timed = retime(ordered, model)
         assert timed.status == 'CANDIDATE', (name, timed.message)
-        report = validate_dynamics(ordered, timed.profile, model, metadata=timed.metadata)
+        report = validate_dynamics(
+            ordered, timed.profile, model, metadata=timed.metadata,
+            expected_curve_digest=curve_digest(ordered))
         assert report.status == 'PASS', (name, report.reason, report.offending_edge)
         result[name] = ordered, model, timed, report
         evidence[name] = asdict(report)
@@ -87,8 +89,9 @@ def test_stale_exported_fields_are_rejected(field, timed_candidates):
     else:
         original = getattr(timed.metadata, field)
         value = (original[0] + .1,) + original[1:]
-    report = validate_dynamics(ordered, timed.profile, model,
-                               metadata=replace(timed.metadata, **{field: value}))
+    report = validate_dynamics(
+        ordered, timed.profile, model, metadata=replace(timed.metadata, **{field: value}),
+        expected_curve_digest=curve_digest(ordered))
     assert report.status == 'FAIL' and 'metadata' in report.reason or (
         report.status == 'FAIL' and 'exported' in report.reason)
 
@@ -119,7 +122,9 @@ def test_complete_closing_edge_rejects_an_open_lap_acceleration_solution():
     # Every open edge has a=1; the last-to-first edge requires excessive braking.
     for i, segment in enumerate(ordered.curve.segments[:-1]):
         assert (values[i + 1] - values[i]) / (2 * segment.length) == pytest.approx(1.)
-    report = validate_dynamics(ordered, profile, model)
+    report = validate_dynamics(
+        ordered, profile, model,
+        expected_curve_digest=curve_digest(ordered))
     assert report.status == 'FAIL' and report.offending_edge == len(values) - 1
     assert 'dynamic constraint' in report.reason
 
@@ -132,7 +137,9 @@ def test_actual_interior_lateral_violation_despite_valid_knot_curvature():
     for coefficient in ordered.curve.coefficients:
         squared, _, _, _ = checker._point_curvature(coefficient, Fraction(0))
         assert squared * 16 < Fraction(model.regions[0].limits.ay_mps2) ** 2
-    report = validate_dynamics(ordered, profile, model)
+    report = validate_dynamics(
+        ordered, profile, model,
+        expected_curve_digest=curve_digest(ordered))
     assert report.status == 'FAIL' and 'continuous dynamic' in report.reason
 
 
@@ -141,7 +148,9 @@ def test_zero_negative_nonfinite_speed_cannot_be_accepted(value, timed_candidate
     ordered, model, timed, _ = timed_candidates['s0_route']
     knots = list(timed.profile.knots)
     knots[0] = replace(knots[0], u=value)
-    report = validate_dynamics(ordered, replace(timed.profile, knots=knots), model)
+    report = validate_dynamics(
+        ordered, replace(timed.profile, knots=knots), model,
+        expected_curve_digest=curve_digest(ordered))
     assert report.status == 'FAIL'
 
 
@@ -152,19 +161,28 @@ def test_stale_profile_identity_time_and_missing_coefficient_boundary_fail(timed
                 replace(timed.profile, lap_time_s=timed.profile.lap_time_s + 1.),
                 replace(timed.profile, knots=timed.profile.knots[1:])]
     for profile in profiles:
-        assert validate_dynamics(ordered, profile, model).status == 'FAIL'
+        assert validate_dynamics(
+            ordered, profile, model,
+            expected_curve_digest=curve_digest(ordered)).status == 'FAIL'
 
 
 def test_absent_wrong_surface_and_tampered_model_provenance_fail_closed(timed_candidates):
     ordered, model, timed, _ = timed_candidates['s0_route']
-    assert validate_dynamics(ordered, timed.profile, None).status == 'UNSUPPORTED'
+    assert validate_dynamics(
+        ordered, timed.profile, None,
+        expected_curve_digest=curve_digest(ordered)).status == 'UNSUPPORTED'
     wrong = replace(model, regions=(replace(model.regions[0], surface_id='wrong-deck'),) +
                     model.regions[1:])
-    assert validate_dynamics(ordered, timed.profile, wrong).status == 'UNSUPPORTED'
+    assert validate_dynamics(
+        ordered, timed.profile, wrong,
+        expected_curve_digest=curve_digest(ordered)).status == 'UNSUPPORTED'
     changed = replace(model, provenance='changed declared model')
-    assert validate_dynamics(ordered, timed.profile, changed).status == 'FAIL'
-    missing = validate_dynamics(ordered, timed.profile, model,
-                                DynamicsValidationPolicy(require_steering=True))
+    assert validate_dynamics(
+        ordered, timed.profile, changed,
+        expected_curve_digest=curve_digest(ordered)).status == 'FAIL'
+    missing = validate_dynamics(
+        ordered, timed.profile, model, DynamicsValidationPolicy(require_steering=True),
+        expected_curve_digest=curve_digest(ordered))
     assert missing.status == 'UNSUPPORTED'
 
 
@@ -173,11 +191,14 @@ def test_actual_steering_model_is_checked_including_between_nodes(timed_candidat
     supplied = replace(model, steering=SteeringLimits(.3, .7, 3.))
     timed = retime(ordered, supplied)
     assert timed.status == 'CANDIDATE', timed.message
-    assert validate_dynamics(ordered, timed.profile, supplied,
-                             metadata=timed.metadata).status == 'PASS'
+    assert validate_dynamics(
+        ordered, timed.profile, supplied, metadata=timed.metadata,
+        expected_curve_digest=curve_digest(ordered)).status == 'PASS'
     constrained = replace(model, steering=SteeringLimits(.3, .001, 3.))
     profile = profile_for(ordered, constrained, [1.] * len(ordered.curve.segments))
-    report = validate_dynamics(ordered, profile, constrained)
+    report = validate_dynamics(
+        ordered, profile, constrained,
+        expected_curve_digest=curve_digest(ordered))
     assert report.status == 'FAIL' and 'dynamic constraint' in report.reason
 
 
@@ -188,7 +209,9 @@ def test_steering_rate_rejects_when_every_steering_angle_is_legal():
         squared, _, _, _ = checker._point_curvature(coefficient, Fraction(0))
         assert math.atan(.3 * math.sqrt(float(squared))) < .7
     profile = profile_for(ordered, model, [1.] * len(ordered.curve.segments))
-    report = validate_dynamics(ordered, profile, model)
+    report = validate_dynamics(
+        ordered, profile, model,
+        expected_curve_digest=curve_digest(ordered))
     assert report.status == 'FAIL' and 'dynamic constraint' in report.reason
 
 
@@ -200,7 +223,9 @@ def test_upper_deck_model_restriction_cannot_be_borrowed_from_other_surface():
                     for region in original.regions)
     model = replace(original, regions=regions)
     profile = profile_for(ordered, model, [1.] * len(ordered.curve.segments))
-    report = validate_dynamics(ordered, profile, model)
+    report = validate_dynamics(
+        ordered, profile, model,
+        expected_curve_digest=curve_digest(ordered))
     assert report.status == 'FAIL' and 'model speed' in report.reason
 
 
@@ -217,7 +242,9 @@ def test_motor_drag_and_combined_envelope_are_independently_rejected(term):
         assert max(math.sqrt(float(checker._point_curvature(c, Fraction(0))[0])) * 4
                    for c in ordered.curve.coefficients) < 1.  # Lateral term passes.
     profile = profile_for(ordered, model, [4.] * len(ordered.curve.segments))
-    report = validate_dynamics(ordered, profile, model)
+    report = validate_dynamics(
+        ordered, profile, model,
+        expected_curve_digest=curve_digest(ordered))
     assert report.status == 'FAIL' and 'dynamic constraint' in report.reason
 
 
@@ -227,18 +254,24 @@ def test_motor_drag_and_combined_envelope_are_independently_rejected(term):
     DynamicsValidationPolicy(max_text_bytes=0), DynamicsValidationPolicy(wall_seconds=1e-12)])
 def test_independent_resource_limits_return_inconclusive(policy, timed_candidates):
     ordered, model, timed, _ = timed_candidates['s0_route']
-    assert validate_dynamics(ordered, timed.profile, model, policy).status == 'INCONCLUSIVE'
+    assert validate_dynamics(
+        ordered, timed.profile, model, policy,
+        expected_curve_digest=curve_digest(ordered)).status == 'INCONCLUSIVE'
 
 
 def test_fraction_external_anchor_and_forged_metric_records_are_rejected(timed_candidates):
     ordered, model, timed, _ = timed_candidates['s0_route']
     knots = (replace(timed.profile.knots[0], t=Fraction(0)),) + timed.profile.knots[1:]
-    assert validate_dynamics(ordered, replace(timed.profile, knots=knots), model).status == 'FAIL'
+    assert validate_dynamics(
+        ordered, replace(timed.profile, knots=knots), model,
+        expected_curve_digest=curve_digest(ordered)).status == 'FAIL'
     corrupt = copy.deepcopy(ordered.curve)
     object.__setattr__(corrupt, 'cumulative', tuple(x * 2 for x in corrupt.cumulative))
     forged = copy.copy(ordered)
     object.__setattr__(forged, 'curve', corrupt)
-    assert validate_dynamics(forged, timed.profile, model).status == 'FAIL'
+    assert validate_dynamics(
+        forged, timed.profile, model,
+        expected_curve_digest=curve_digest(ordered)).status == 'FAIL'
 
 
 def test_unrepresentable_bounds_are_uncertainty_and_subnormal_sqrt_is_enclosed():
@@ -256,3 +289,24 @@ def test_policy_rejects_boolean_and_nonfinite_terms():
                     {'metadata_abs': math.inf}, {'require_steering': 1}):
         with pytest.raises(ValueError):
             DynamicsValidationPolicy(**changes)
+
+
+def test_final_curve_handoff_digest_is_required_and_checked_independently():
+    ordered = load_candidate()
+    expected = curve_digest(ordered)  # Capture trusted fixture before the handoff.
+    model = model_for(ordered.route)
+    profile = profile_for(ordered, model, [1.] * len(ordered.curve.segments))
+    missing = validate_dynamics(ordered, profile, model)
+    assert missing.status == 'INCONCLUSIVE' and 'independently expected' in missing.reason
+    mismatched = validate_dynamics(
+        ordered, profile, model, expected_curve_digest='0' * 64)
+    assert mismatched.status == 'FAIL' and 'digest mismatch' in mismatched.reason
+    accepted = validate_dynamics(
+        ordered, profile, model, expected_curve_digest=expected)
+    assert accepted.status == 'PASS', accepted.reason
+
+
+@pytest.mark.parametrize('expected', [True, 1, '', '0' * 63, 'g' * 64, 'A' * 64])
+def test_malformed_expected_identity_fails_before_reconstructing_candidate(expected):
+    report = validate_dynamics(None, None, None, expected_curve_digest=expected)
+    assert report.status == 'FAIL' and 'malformed independently expected' in report.reason

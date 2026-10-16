@@ -76,7 +76,9 @@ def test_constant_model_speed_is_exact_global_lp_optimum_and_time():
     assert math.fsum(ds) == pytest.approx(length, abs=1e-12)
     assert {(k.segment, k.t) for k in result.profile.knots}.issuperset(
         {(i, 0.) for i in range(len(ordered.curve.segments))})
-    accepted = validate_dynamics(ordered, result.profile, dynamics, metadata=result.metadata)
+    accepted = validate_dynamics(
+        ordered, result.profile, dynamics, metadata=result.metadata,
+        expected_curve_digest=retimer.curve_digest(ordered))
     assert accepted.status == 'PASS', accepted.reason
 
 
@@ -93,7 +95,9 @@ def test_drag_motor_cycle_has_known_integrated_optimum():
     _, _, length = physical_mesh(ordered, result.profile)
     assert result.objective == pytest.approx(2 * length, abs=1e-6)
     assert result.profile.lap_time_s == pytest.approx(length / math.sqrt(2), abs=1e-7)
-    accepted = validate_dynamics(ordered, result.profile, dynamics, metadata=result.metadata)
+    accepted = validate_dynamics(
+        ordered, result.profile, dynamics, metadata=result.metadata,
+        expected_curve_digest=retimer.curve_digest(ordered))
     assert accepted.status == 'PASS', accepted.reason
 
 
@@ -113,7 +117,9 @@ def test_open_chain_feasible_profile_is_rejected_only_on_closing_edge():
     time = math.fsum(2 * distance / (math.sqrt(a) + math.sqrt(b))
                      for distance, a, b in zip(ds, u, np.roll(u, -1)))
     profile = replace(solved.profile, knots=knots, lap_time_s=time)
-    rejected = validate_dynamics(ordered, profile, dynamics)
+    rejected = validate_dynamics(
+        ordered, profile, dynamics,
+        expected_curve_digest=retimer.curve_digest(ordered))
     assert rejected.status == 'FAIL', rejected.reason
     assert rejected.offending_edge == len(knots) - 1
     assert len(rejected.edges) == len(knots) - 1

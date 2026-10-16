@@ -545,12 +545,15 @@ def _close(observed, expected, policy):
     return abs(value - expected) <= policy.metadata_abs + policy.metadata_rel * abs(expected)
 
 
-def validate_dynamics(ordered, profile, model, policy=DynamicsValidationPolicy(), metadata=None):
+def validate_dynamics(ordered, profile, model, policy=DynamicsValidationPolicy(), metadata=None,
+                      *, expected_curve_digest=None):
     """Reconstruct and certify the complete supported cyclic planar profile.
 
     The phase-boundary deadline is cooperative; numeric kernel/size/depth budgets
     also bound work. Reported time enclosures propagate every local arc allowance,
     rather than equating nominal metadata consistency with true-time accuracy.
+    The expected digest must be captured from the trusted final A04 result before
+    an untrusted handoff; it binds coefficients and q, not optimizer history.
     """
     certificates, worst = [], {}
     identity, model_identity = '', ''
@@ -571,10 +574,17 @@ def validate_dynamics(ordered, profile, model, policy=DynamicsValidationPolicy()
         if type(policy) is not DynamicsValidationPolicy:
             raise _Stop('FAIL', 'invalid independent dynamics policy')
         check()
+        if expected_curve_digest is None:
+            raise _Stop('INCONCLUSIVE', 'missing independently expected final-curve digest')
+        if (type(expected_curve_digest) is not str or len(expected_curve_digest) != 64 or
+                any(value not in '0123456789abcdef' for value in expected_curve_digest)):
+            raise _Stop('FAIL', 'malformed independently expected final-curve digest')
         _input_limits(profile, model, metadata, policy)
         route, curve, q, ends = _authority(ordered, policy)
         regions = _model_regions(model, route, policy)
         identity, model_identity = _identities(ordered, model)
+        if identity != expected_curve_digest:
+            raise _Stop('FAIL', 'independently expected final-curve authority digest mismatch')
         knots = _profile_knots(profile, curve, policy)
         if profile.curve_digest != identity or profile.model_digest != model_identity:
             raise _Stop('FAIL', 'profile curve/model provenance digest mismatch')

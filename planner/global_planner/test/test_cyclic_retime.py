@@ -14,7 +14,7 @@ import pytest
 import global_planner.cyclic_retime as timing
 from global_planner.cyclic_retime import (
     DynamicsError, DynamicsModel, ModelRegion, RegionLimits, RetimePolicy,
-    SteeringLimits, limits_from_tables, retime)
+    SteeringLimits, curve_digest, limits_from_tables, retime)
 from global_planner.route_corridor import (
     OrderedCurve, _sample_at_q, normal_interval, seed_curve)
 from global_planner.route_input import load_route, validate_route
@@ -320,7 +320,9 @@ def test_narrow_legal_notch_lower_cap_retimes_and_brakes_before_the_restriction(
     model = synthetic_model(route)
     result = retime(ordered, model, spacing_m=.57)
     assert result.status == 'CANDIDATE', result.message
-    checked = validate_dynamics(ordered, result.profile, model, metadata=result.metadata)
+    checked = validate_dynamics(
+        ordered, result.profile, model, metadata=result.metadata,
+        expected_curve_digest=curve_digest(ordered))
     assert checked.status == 'PASS', (checked.reason, checked.offending_edge)
     restricted, upstream = [], []
     knots = result.profile.knots

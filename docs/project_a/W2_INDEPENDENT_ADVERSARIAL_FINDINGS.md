@@ -11,7 +11,7 @@ The final remediation report supersedes its acceptance state, not its evidence.
 `route_validate.py:554–635` reconstructs coefficients, route and q, checking
 monotonicity, exact occurrence anchors and owners. The original geometry API
 has a separately approved route but no separately approved final q authority.
-`route_validate_dynamics.py:586–591` compares a profile digest against a digest
+`route_validate_dynamics.py:575–580` compares a profile digest against a digest
 computed from the candidate's own coefficients/q. That establishes consistency
 with the supplied q map; it cannot establish that this is the map approved at
 the optimizer handoff.

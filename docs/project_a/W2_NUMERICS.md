@@ -13,6 +13,19 @@ explicit failure with no usable curve. It solves the complete selected lap in
 one QP per iteration, including closure. Only independent A05/A06 checks on that
 same final coefficient authority can establish W2 acceptance.
 
+Independent acceptance additionally requires `expected_curve_digest`, captured
+once from the trusted A04 return before downstream processing. Both validators
+recompute the complete coefficient/q/owner/route/numerical-policy identity and
+require the same separately retained expectation. Missing expectation is
+INCONCLUSIVE; malformed or mismatched expectation is FAIL. A profile's own digest
+cannot provide this approval. Both PASS reports expose the full curve digest,
+which the complete source and installed pipelines compare with that frozen
+expectation. This closes post-A04 coordinated q-map/profile rehashing; it does
+not reconstruct or authenticate arbitrary optimization history from a hash.
+Original-seed inheritance is separately audited using complete A04 traces and
+an independent periodic-spline system in the fresh seven-case pipeline tests.
+Custom initial curve/q inputs remain separately approved caller inputs.
+
 Each mesh carries the W1 monotone seed coordinate q, source segment/t and
 occurrence/surface. Equal **metric** resampling preserves exact cap, occurrence
 and portal-support anchors. These anchors make the mesh nonuniform. The existing
