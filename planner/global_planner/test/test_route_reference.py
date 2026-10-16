@@ -265,3 +265,29 @@ def test_negative_seam_progress_retains_preceding_side():
     for progress in (0., curve.length, -curve.length, 2 * curve.length, -2 * curve.length):
         assert curve.locate(progress) == (0, 0.)
         assert curve.sample(progress).occurrence_id == 'o0'
+
+
+@pytest.mark.parametrize('coeff,arc_abs', [
+    (((5.1795388483999165, 3.7932499031384594, 6.9057116272279515, -5.942394433987669),
+      (3.0285932049733524, 3.0469450622637693, 4.6774913219018215, -4.024448921185774)),
+     9.433962264150944e-13),
+    (((.015817406294202883, -.516385536985048, .6436466822152045, -.22306248445850765),
+      (5.945006817448428, -.07679683381650176, .15033452309391476, -.06353892867867572)),
+     1.3089005235602096e-13),
+])
+def test_tight_segment_budgets_preserve_existing_corridor_candidates(coeff, arc_abs):
+    segment = CubicSegment(coeff, NumericPolicy(arc_abs=arc_abs))
+    # Different fixed rules test actual error without the production bounds.
+    coarse, fine = gauss_arc(coeff, n=512), gauss_arc(coeff, n=1024)
+    assert abs(coarse - fine) < arc_abs / 8
+    assert abs(segment.length - fine) <= segment.arc_error + arc_abs / 8
+    assert segment.arc_error <= arc_abs
+
+
+def test_fixed_gauss_rule_polynomial_moments():
+    from global_planner.route_reference import _GAUSS
+    assert len(_GAUSS) == 32
+    assert all(0 < x < 1 and weight > 0 for x, weight in _GAUSS)
+    for degree in range(64):
+        value = math.fsum(weight * x ** degree for x, weight in _GAUSS)
+        assert abs(value - 1 / (degree + 1)) < 2 * np.finfo(float).eps

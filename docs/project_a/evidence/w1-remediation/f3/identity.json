@@ -1,7 +1,7 @@
 {
   "finding": "f3",
   "reviewed_baseline_commit": "133a96fd6653e4d3b16d71c38e1c70fc38585101",
-  "parent_commit_at_recording": "27d9c350001f26e78a924ce88886ee837bae9c9a",
+  "parent_commit_at_recording": "f3edd0d1dc41461f3788af6456b90dd9b7c3f103",
   "image": "sha256:8c9c36d25927e34e03ab3e9978bd1a1a56ab4f60a7ec57ce90c17c053c7ab8d3",
   "runtime": {
     "python": "3.10.12",

@@ -87,8 +87,28 @@ def _regularity(coeff, policy):
 
 
 _GAUSS_ORDER = 32
-_GAUSS = tuple((float((x + 1) / 2), float(w / 2))
-               for x, w in zip(*np.polynomial.legendre.leggauss(_GAUSS_ORDER)))
+# Correctly rounded positive roots/weights from a 100-digit Legendre recurrence.
+# Fixed constants avoid a platform-dependent eigensolve in the error model.
+_GAUSS_POSITIVE = (
+    (0.04830766568773832, 0.0965400885147278),
+    (0.1444719615827965, 0.09563872007927486),
+    (0.23928736225213706, 0.09384439908080457),
+    (0.33186860228212767, 0.09117387869576389),
+    (0.42135127613063533, 0.08765209300440381),
+    (0.5068999089322294, 0.08331192422694675),
+    (0.5877157572407623, 0.07819389578707031),
+    (0.6630442669302152, 0.0723457941088485),
+    (0.7321821187402897, 0.06582222277636185),
+    (0.7944837959679424, 0.058684093478535544),
+    (0.84936761373257, 0.050998059262376175),
+    (0.8963211557660521, 0.04283589802222668),
+    (0.9349060759377397, 0.03427386291302143),
+    (0.9647622555875064, 0.02539206530926206),
+    (0.9856115115452684, 0.01627439473090567),
+    (0.9972638618494816, 0.007018610009470096),
+)
+_GAUSS = tuple(((1 + sign * x) / 2, w / 2)
+               for x, w in _GAUSS_POSITIVE for sign in (-1, 1))
 # On [0,1], Gauss n-point error <= (n!)^4 / ((2n+1)*((2n)!)^2)
 # times sup |f^(2n)/(2n)!|.
 _GAUSS_ERROR = (math.factorial(_GAUSS_ORDER) ** 4 /
@@ -106,8 +126,10 @@ def _arc_panel(coeff, lo, hi):
     an upper bound for |f^(k)/k!|. Gauss' analytic remainder then bounds
     the integral without using a difference between numerical rules.
 
-    Positive bound arithmetic is inflated; the separate 128-eps allowance
-    covers coefficient evaluation, nodes/weights and positive summation.
+    Positive bound arithmetic is inflated. The separate 32-eps evaluation
+    allowance covers <=6-eps Horner evaluation, <=6-eps parameter/node
+    error, <=2-eps hypot and <=4-eps weights/products/sums, with headroom.
+    The roots/weights above are rounded constants, not a runtime eigensolve.
     Boxes containing zero and nonfinite bounds request subdivision.
     """
     h = hi - lo
@@ -142,7 +164,7 @@ def _arc_panel(coeff, lo, hi):
         if not math.isfinite(f[-1]):
             return 0., math.inf
     remainder = h * _GAUSS_ERROR * f[2 * _GAUSS_ORDER] * inflate
-    error = remainder + 128 * eps * scale * h
+    error = remainder + 32 * eps * scale * h
     if not math.isfinite(error):
         return 0., math.inf
     value = h * math.fsum(weight * math.hypot(*_eval(coeff, lo + h * node, 1))

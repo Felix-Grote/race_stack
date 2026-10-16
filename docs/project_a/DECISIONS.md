@@ -70,6 +70,18 @@ the additional independently observed adjacent-owner disagreement without broad
 snapping or any nearest-XY inference. Unsupported tiny interpolation edges may
 still fail under the existing A02 policy rather than silently dropping events.
 
+### F2 follow-up — Explicit rounding accounting and reproducible Gauss constants
+
+Do not alter existing negative geometry fixtures to bypass a numerical rejection.
+Preserve their two tight-budget segments as failing-first reference regressions.
+Replace runtime Gauss eigensolve constants with correctly rounded roots/weights
+generated at 100 decimal digits, retaining the generator and moment evidence.
+Use a derived 32-eps*S*h quadrature-value evaluation allowance with headroom over
+the Horner/mapped-node/hypot/positive-sum operation count; retain the separate
+128-eps geometric boxes and derivative-bound inflation. Keep every policy
+tolerance/resource default unchanged. This removes an overconservative arithmetic
+floor while retaining independent remainder control and original A03 assertions.
+
 ## 2026-10-16 — W0 environment and ownership
 
 1. **Path D selected by execution**, not assumption. Host Debian 13/Python 3.12 has

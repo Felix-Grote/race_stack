@@ -46,7 +46,13 @@ this current remediation status supersedes its acceptance claims.
   A03 is **36 passed / 2 deselected** while the final integration-roundoff
   follow-up restores those two unchanged negative fixtures. Evidence:
   `evidence/w1-remediation/f3`.
-- Final combined numerical/geometry verification remains in progress;
+- The F2 arithmetic follow-up uses fixed correctly rounded Gauss32 constants
+  and a derived 32-eps value-evaluation allowance (128-eps box/bound inflation
+  unchanged). All **47 A02** and **38 A03** tests now pass, including both
+  unchanged negative candidates; original geometry assertions are preserved.
+  The two tight-budget failures were preserved as new regression-first cases.
+  Evidence and constant-generation records: `evidence/w1-remediation/f2-roundoff`.
+- Final combined/build/install numerical/geometry verification remains in progress;
   no final acceptance or final CI claim yet.
 
 ## Source and review route

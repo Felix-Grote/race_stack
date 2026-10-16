@@ -1,0 +1,39 @@
+F2 follow-up: bounded evaluation arithmetic and fixed Gauss32 constants
+
+The previous128*eps*coefficient_scale evaluation allowance was deliberately broad,
+but it exceeded the entire per-segment policy budget on two pre-existing A03
+negative-candidate constructions, so those tests could not reach their intended
+chart checks. No tolerance or resource limit is changed. The separate128eps
+Bezier-box and positive derivative-bound arithmetic inflation remains unchanged.
+
+The Gauss32 roots/weights are now correctly rounded fixed binary64 constants.
+The retained generator evaluates Legendre recurrence/Newton roots and weights at
+100 Decimal digits; its full decimal records and degree0..63 moment checks are
+retained. This removes numerical uncertainty from a runtime numpy eigensolve.
+Positive roots/weights are mirrored to[0,1]; power-of-two weight scaling is exact.
+
+Let S=|c1|+2|c2|+3|c3|, where |.| denotes Euclidean vector norm. Under the declared
+usual binary64 model with correctly rounded basic arithmetic and <=2eps hypot:
+
+* Horner derivative evaluation uses at most6eps*S absolute error to first order
+  (the multiplication by2 is exact; multiplication/addition chain has at most5
+  other rounded operations;6 provides headroom).
+* Correctly rounded roots and the[0,1] map, then lo+(hi-lo)*node, give at most
+  3eps absolute parameter error. Since |d_t'|<=2*S, its contribution is<=6eps*S.
+* Hypot contributes<=2eps*S.
+* Correctly rounded weights, weight*speed, positive math.fsum and final h product
+  contribute<=4eps*S after multiplication byh.
+
+Their first-order total<=18eps*S*h is covered by32eps*S*h, leaving14eps of
+headroom for higher-order terms and scale evaluation. The final sum of panel
+values still has its separate4eps*abs(value) allowance. This is an explicit
+software arithmetic model, not a machine-checked IEEE or physical certificate.
+The analytic Gauss remainder, nonzero-derivative boxes and feature refinement
+remain separate from this numerical evaluation allowance.
+
+Regression-first evidence: two tight-budget coefficients copied from unchanged
+A03 tests fail before the follow-up (f2-followup-red.xml/log). New reference tests
+require their construction and independent512/1024-point Gaussian agreement;
+existing A03 tests stay unchanged. A fixed Gauss degree0..63 moment regression
+checks the production constants. Full reference+two original A03 candidate
+checks and independent adversarial replay provide the final verification.

@@ -89,6 +89,24 @@ source/corridor owner checks around occurrence boundaries on five fixtures.
 Raw failing/green/lint logs, original two integration failures and source hashes
 are retained in `evidence/w1-remediation/f3`; combined verification follows.
 
+### F2 arithmetic follow-up and complete focused suites
+
+The broad initial 128-eps value-evaluation allowance exceeded tight per-segment
+budgets in two unchanged extreme A03 negative candidates. Their exact segments
+were captured and two reference regressions failed before the follow-up.
+Correctly rounded fixed Gauss32 roots/weights plus an operation-count-derived
+32-eps*S*h value allowance restore those cases; the separate 128-eps Bezier box
+and positive bound inflation are unchanged. No tolerance, resource default,
+input requirement or existing test assertion changed.
+
+Pinned combined run: **49 passed / 36 deselected** (all **47 A02**, including
+degree0..63 moment and two tight-budget regressions, plus the two unchanged A03
+negative cases). Separate full A03 run: **38 passed**. Scoped flake8 passes.
+Generation script, 100-digit decimal roots/weights and moment records, arithmetic
+derivation, red/green JUnit/logs and source hashes:
+`evidence/w1-remediation/f2-roundoff`. Final A03 log is also retained in
+`evidence/w1-remediation/f3`. Full W0/W1 build/install/legacy comparison follows.
+
 Tested source base: `67981ed7964a6d35e1da48f0c22bbd9f6d123d5e`, with W0 changes
 identified by [implementation SHA-256 manifest](evidence/implementation-files.json).
 No production source or gitlink changes. Final clean-clone verification follows in
