@@ -1,0 +1,12 @@
+2b441b58a75b9e1b1f2c4cf3746c128dd92099390fa9b35f06f3ade1fb0083cb  docs/project_a/evidence/w1-remediation/f3/f3-arc-failure-capture.log.gz
+cf8e8b1c93209e0a95f03f121c717e764e8aeada2d7b0a8c5b08760f034857f8  docs/project_a/evidence/w1-remediation/f3/f3-boundary-red.log.gz
+f61f27bd17de546264aa58f40f3aafaac7021e0ef69c17f6b1b4cd7664a037ec  docs/project_a/evidence/w1-remediation/f3/f3-flake8.log.gz
+4a2acb3d1c185ece15d4be125825845e0063357ebcc6d5d2f4e3833c37d19f44  docs/project_a/evidence/w1-remediation/f3/f3-green-initial.log.gz
+ad05749af0503a0c5a6df233abd1caa4ea3dd7c7a83432161a02fb71be2767af  docs/project_a/evidence/w1-remediation/f3/f3-green.log.gz
+886e735d008cf0b0d8f627fc27d000a14302ca30bc9f41a827b6ef5b10811f6d  docs/project_a/evidence/w1-remediation/f3/f3-owned-green.log.gz
+20fe69473294210f9277e1b2e058afc954a77f8b0ee6b035cb2a262baab9a181  docs/project_a/evidence/w1-remediation/f3/f3-owner-red.log.gz
+fd0c53d089555c1e9953a97f26e1427aa670e93274d4fba459de2ee076f1d6b6  docs/project_a/evidence/w1-remediation/f3/f3-red.log.gz
+5f706d98e6e3bdee9508cce213a4accb39fc77aceb7e736108127bb66f0c2f74  docs/project_a/evidence/w1-remediation/f3/f3-resolution-red.log.gz
+ccd4730b9a3cb724361ae7fdb650f38299285ef49386d8ff328c0ffe24bafa46  docs/project_a/evidence/w1-remediation/f3/f3-seam-red.log.gz
+81769dfa641102380757f7d7948cb7e9fb49b14a7f8f02d2e00d37ab343acc9f  docs/project_a/evidence/w1-remediation/f3/f3-tests.pending
+05447236ecc33520b0604e388a6a93e4674491e4b9660ee3843c2379a79a6aa2  docs/project_a/evidence/w1-remediation/f3/identity.json

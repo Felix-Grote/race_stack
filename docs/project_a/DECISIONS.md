@@ -56,6 +56,20 @@ bisecting progress, clamp only a local subtraction overshoot bounded by four lap
 ulps; never select a different occurrence by a broad tolerance snap. All original
 finite-progress and floating-resolution rejection policies remain unchanged.
 
+### F3 — Preserve known semantic lineage instead of recovering it
+
+Evaluate known q anchors at their exact source segment/t and derive metric s;
+ordinary metric samples still use the inverse. Compare caps in ordered global q
+without a blanket EPS shift. Preserve distinct nearby semantic events even if
+they are closer than station_abs; explicitly reject unrepresentable global or
+metric ordering rather than merge events. Refits and normal queries validate
+every supplied field against the coefficient authority. When ordinary inverse
+rounding reaches an upper q endpoint, use directed representable half-open q
+within that source segment, and require its declared owner to agree. This fixes
+the additional independently observed adjacent-owner disagreement without broad
+snapping or any nearest-XY inference. Unsupported tiny interpolation edges may
+still fail under the existing A02 policy rather than silently dropping events.
+
 ## 2026-10-16 — W0 environment and ownership
 
 1. **Path D selected by execution**, not assumption. Host Debian 13/Python 3.12 has

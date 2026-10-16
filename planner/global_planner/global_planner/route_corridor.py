@@ -7,7 +7,7 @@ import numpy as np
 
 from ._route_geometry import (EPS, cross, distance, dot, inside, line_intervals,
                               on_segment, segments_touch, sub)
-from .route_reference import Curve, NumericPolicy
+from .route_reference import Curve, NumericPolicy, _frame
 
 
 class CorridorError(ValueError):
@@ -60,14 +60,18 @@ class OrderedCurve:
             raise CorridorError('invalid lineage anchor')
         return (1 - t) * self.q[segment] + t * self.q[segment + 1]
 
-    def station_at_q(self, q):
-        """Transport a seed/cap/gate anchor through the monotone lineage map."""
+    def _parameter_at_q(self, q):
         if not math.isfinite(q) or not 0 <= q <= self.period:
             raise CorridorError('anchor q outside selected lap')
         if q == self.period:
-            return self.curve.length
+            return len(self.q) - 2, 1.
         i = min(bisect_right(self.q, q) - 1, len(self.q) - 2)
         t = (q - self.q[i]) / (self.q[i + 1] - self.q[i])
+        return i, t
+
+    def station_at_q(self, q):
+        """Transport a seed/cap/gate anchor through the monotone lineage map."""
+        i, t = self._parameter_at_q(q)
         return self.curve.station(i, t)
 
 
@@ -102,16 +106,50 @@ class OrderedSample:
     cap_mps: float
 
 
-def _sample(ordered, s):
-    v = ordered.curve.sample(s)
-    q = ordered.progress(v.segment, v.t)
+def _cap_positions(occurrence, start, end):
+    positions = tuple(start + x[0] for x in occurrence.caps)
+    if positions[-1] >= end or any(a >= b for a, b in zip(positions, positions[1:])):
+        raise CorridorError('cap anchors exceed progress resolution')
+    return positions
+
+
+def _sample_parameter(ordered, s, segment, t, q):
+    """Evaluate the coefficient authority while retaining supplied source lineage."""
+    cubic = ordered.curve.segments[segment]
+    tangent, curvature = _frame(cubic, t)
     ends = _layout(ordered.route)
     i = min(bisect_right(ends, q) - 1, len(ordered.route.occurrences) - 1)
     o = ordered.route.occurrences[i]
-    local = q - ends[i]
-    cap = o.caps[max(0, bisect_right([x[0] for x in o.caps], local + EPS) - 1)][1]
-    return OrderedSample(v.s, v.segment, v.t, q, v.xy, v.tangent, v.curvature,
+    if ordered.curve.owners[segment] != (o.id, o.surface_id):
+        raise CorridorError('inherited progress disagrees with source segment owner')
+    caps = _cap_positions(o, ends[i], ends[i + 1])
+    cap = o.caps[max(0, bisect_right(caps, q) - 1)][1]
+    return OrderedSample(s, segment, t, q, cubic.evaluate(t), tangent, curvature,
                          o.id, o.surface_id, cap)
+
+
+def _sample(ordered, s):
+    segment, t = ordered.curve.locate(s)
+    # A valid inverse may round t to 1 just before a knot. Keep the source
+    # segment's half-open lineage interval; exact semantic knots use _sample_at_q.
+    q = max(ordered.q[segment], min(ordered.progress(segment, t),
+            math.nextafter(ordered.q[segment + 1], ordered.q[segment])))
+    return _sample_parameter(ordered, ordered.curve.wrap(s), segment, t, q)
+
+
+def _sample_at_q(ordered, q):
+    """Evaluate known semantic q directly, without a metric inverse roundtrip."""
+    if not math.isfinite(q) or not 0 <= q < ordered.period:
+        raise CorridorError('sample q outside half-open selected lap')
+    segment, t = ordered._parameter_at_q(q)
+    return _sample_parameter(ordered, ordered.curve.station(segment, t), segment, t, q)
+
+
+def _validate_sample(ordered, sample):
+    # Exact semantic anchors use known q; ordinary metric samples retain the
+    # inverse kernel's source segment and bounded endpoint rounding convention.
+    if sample != _sample_at_q(ordered, sample.q) and sample != _sample(ordered, sample.s):
+        raise CorridorError('stale/corrupt sample or illegal ownership change')
 
 
 def resample_ordered(ordered, spacing):
@@ -125,19 +163,25 @@ def resample_ordered(ordered, spacing):
     anchors = {0.}
     for i, o in enumerate(ordered.route.occurrences):
         anchors.add(ends[i])
-        anchors.update(ends[i] + c[0] for c in o.caps)
-        anchors.add(ends[i + 1] - ordered.route.portals[i].before)
-        anchors.add((ends[i + 1] + ordered.route.portals[i].after) % ordered.period)
+        anchors.update(_cap_positions(o, ends[i], ends[i + 1]))
+        target = (i + 1) % len(ordered.route.occurrences)
+        before = ends[i + 1] - ordered.route.portals[i].before
+        after = ends[target] + ordered.route.portals[i].after
+        if not ends[i] < before < ends[i + 1] or not ends[target] < after < ends[target + 1]:
+            raise CorridorError('portal anchors exceed progress resolution')
+        anchors.update((before, after))
     # Preserve anchors exactly; discard a uniform station numerically indistinguishable
     # from an anchor rather than losing semantic events during a tolerance merge.
-    anchored = sorted(ordered.station_at_q(q) for q in anchors)
-    stations = anchored + [ordered.curve.length * i / count for i in range(count)
-                           if all(abs(ordered.curve.length * i / count - s) >
-                                  ordered.curve.policy.station_abs for s in anchored)]
-    stations.sort()
-    if len(stations) > ordered.curve.policy.max_samples:
+    anchored = tuple(_sample_at_q(ordered, q) for q in sorted(anchors))
+    stations = [ordered.curve.length * i / count for i in range(count)
+                if all(abs(ordered.curve.length * i / count - v.s) >
+                       ordered.curve.policy.station_abs for v in anchored)]
+    if len(stations) + len(anchored) > ordered.curve.policy.max_samples:
         raise CorridorError('resampling anchor budget exhausted')
-    result = tuple(_sample(ordered, s) for s in stations)
+    result = tuple(sorted(anchored + tuple(_sample(ordered, s) for s in stations),
+                          key=lambda v: v.s))
+    if any(a.s >= b.s for a, b in zip(result, result[1:])):
+        raise CorridorError('sample anchors exceed metric station resolution')
     if any(a.q >= b.q for a, b in zip(result, result[1:])):
         raise CorridorError('resampling reversed progress')
     return result
@@ -149,8 +193,7 @@ def refit_ordered(ordered, samples, xy):
     if len(samples) != len(xy) or not samples:
         raise CorridorError('shifted knot/lineage size mismatch')
     for v in samples:
-        if abs(ordered.progress(v.segment, v.t) - v.q) > EPS:
-            raise CorridorError('corrupt inherited source segment/t/q')
+        _validate_sample(ordered, v)
     q = tuple(v.q for v in samples) + (ordered.period,)
     owners = tuple((v.occurrence_id, v.surface_id) for v in samples)
     return OrderedCurve(ordered.route,
@@ -239,9 +282,7 @@ def normal_interval(ordered, sample, chart_min=.05):
     """Intersect only declared original ownership or explicit adjacent support."""
     if not math.isfinite(chart_min) or not 0 < chart_min < 1:
         raise CorridorError('invalid local chart threshold')
-    expected = _sample(ordered, sample.s)
-    if sample != expected:
-        raise CorridorError('stale/corrupt sample or illegal ownership change')
+    _validate_sample(ordered, sample)
     ends = _layout(ordered.route)
     i = min(bisect_right(ends, sample.q) - 1, len(ends) - 2)
     o = ordered.route.occurrences[i]

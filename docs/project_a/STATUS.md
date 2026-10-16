@@ -37,7 +37,16 @@ this current remediation status supersedes its acceptance claims.
   domain; bounded prefix-subtraction roundoff does not change the selected owner.
   Five new endpoint regressions failed before repair and now pass. Evidence:
   `evidence/w1-remediation/f4`.
-- F3 and final combined numerical/geometry verification remain in progress;
+- **F3 repaired:** known q/cap/occurrence/portal anchors are evaluated directly
+  from source segment/t; no approximate metric inversion reclassifies events.
+  Distinct close caps retain exact right-hand values; unrepresentable event
+  ordering rejects. Ordinary samples retain their source segment owner at
+  floating boundaries. Strict frame/lineage validation also protects refits.
+  New failing-first cases and independent event/boundary controls pass; scoped
+  A03 is **36 passed / 2 deselected** while the final integration-roundoff
+  follow-up restores those two unchanged negative fixtures. Evidence:
+  `evidence/w1-remediation/f3`.
+- Final combined numerical/geometry verification remains in progress;
   no final acceptance or final CI claim yet.
 
 ## Source and review route

@@ -72,6 +72,23 @@ are normalized; distinct nearby stations are not broadly snapped across owners.
 Raw red/green JUnit, logs and source hashes: `evidence/w1-remediation/f4`.
 Full combined A02/A03 verification follows after the remaining anchor work.
 
+### F3 exact semantic anchors and coherent source ownership
+
+Before implementation, the reparameterized cap cases and close-event case
+failed (3 tests); additional failing-first controls cover unrepresentable global
+anchors, the periodic seam and the independently reproduced source-owner
+mismatch at a nextafter boundary. All six new cases pass. Scoped A03 is
+**36 passed / 2 deselected**; the two unchanged existing extreme negative
+candidates currently reach the new conservative integration roundoff floor
+before their geometry assertions, and the separate F2 follow-up addresses
+that resource/allowance issue rather than weakening those tests.
+
+Independent checks pass: exact cap events only .4e-9 m and 2.1e-9 m apart,
+forged metadata rejection, original accepted 163-sample preparation, and 60
+source/corridor owner checks around occurrence boundaries on five fixtures.
+Raw failing/green/lint logs, original two integration failures and source hashes
+are retained in `evidence/w1-remediation/f3`; combined verification follows.
+
 Tested source base: `67981ed7964a6d35e1da48f0c22bbd9f6d123d5e`, with W0 changes
 identified by [implementation SHA-256 manifest](evidence/implementation-files.json).
 No production source or gitlink changes. Final clean-clone verification follows in

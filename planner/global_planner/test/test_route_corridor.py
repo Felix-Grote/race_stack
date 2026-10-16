@@ -11,7 +11,7 @@ from global_planner.route_corridor import (CorridorError, OrderedCurve, _normal_
                                            normal_interval, portal_crossings, prepare_route,
                                            refit_ordered, resample_ordered, seed_curve)
 from global_planner.route_input import Occurrence, load_route, validate_route
-from global_planner.route_reference import Curve
+from global_planner.route_reference import Curve, GeometryError
 
 FIX = Path(__file__).parent / 'fixtures' / 'project_a'
 
@@ -361,3 +361,112 @@ def test_only_declared_shared_cap_can_join_touching_owned_intervals():
                     left=((-2, 3), (2, 3)), right=((-2, 1), (2, 1)))
     lo, hi = _normal_geometry((below, above), (1, 0), (1, 0), support, (gate,))
     assert (lo, hi) == pytest.approx((-1, 1), abs=2e-9)
+
+
+def _nonuniform_circle(r):
+    """A legal circle-shaped candidate with slow inherited progress near its middle."""
+    original = seed_curve(r)
+    points = []
+    for i, q in enumerate(original.q[:-1]):
+        if q < r.occurrences[0].length:
+            t = q / r.occurrences[0].length
+            theta = math.pi / 2 * (t + .99 * math.sin(2 * math.pi * t) / (2 * math.pi))
+            points.append((6 * math.cos(theta), 6 * math.sin(theta)))
+        else:
+            points.append(original.curve.segments[i].evaluate(0))
+    return OrderedCurve(r, Curve.interpolate(points, original.q, original.curve.owners),
+                        original.q)
+
+
+@pytest.mark.parametrize('spacing', [.25, .37])
+def test_semantic_cap_anchors_bypass_metric_inverse_roundtrip(spacing):
+    """An exact event retains q and its right-hand cap even with a slow derivative."""
+    q = 4.805954193927142
+    raw = route().payload
+    raw['occurrences'][0]['caps'].append({'at_m': q, 'max_speed_mps': 1})
+    r = validate_route(raw)
+    original = _nonuniform_circle(r)
+    prepared = prepare_route(r, spacing=spacing, ordered=original)
+    anchor = min(prepared.samples, key=lambda v: abs(v.q - q))
+    assert anchor.q == q
+    assert anchor.cap_mps == 1
+    normal_interval(original, anchor)
+    rebuilt = refit_ordered(original, prepared.samples, [v.xy for v in prepared.samples])
+    again = resample_ordered(rebuilt, spacing / 2)
+    assert any(v.q == q and v.cap_mps == 1 for v in again)
+    for bad in (replace(anchor, q=q + 1e-9), replace(anchor, cap_mps=4),
+                replace(anchor, occurrence_id='o2', surface_id='other'),
+                replace(anchor, s=anchor.s + 1e-9), replace(anchor, t=anchor.t + 1e-9)):
+        with pytest.raises(CorridorError):
+            normal_interval(original, bad)
+
+
+def test_distinct_close_semantic_caps_are_not_coalesced_or_preapplied():
+    """Physical inverse tolerance must neither merge events nor advance their values."""
+    q = 4.805954193927142
+    caps = [(q, 1), (q + .4e-9, 2), (q + 2.1e-9, 3)]
+    raw = route().payload
+    raw['occurrences'][0]['caps'].extend(
+        {'at_m': x, 'max_speed_mps': cap} for x, cap in caps)
+    ordered = _nonuniform_circle(validate_route(raw))
+    samples = resample_ordered(ordered, .25)
+    for q, cap in caps:
+        anchor = next(v for v in samples if v.q == q)
+        assert anchor.cap_mps == cap
+        normal_interval(ordered, anchor)
+    # These physical gaps are below the existing interpolation/regularity
+    # resolution. A refit must preserve them or explicitly reject, never merge.
+    try:
+        rebuilt = refit_ordered(ordered, samples, [v.xy for v in samples])
+    except GeometryError:
+        return
+    samples = resample_ordered(rebuilt, .37)
+    for q, cap in caps:
+        assert any(v.q == q and v.cap_mps == cap for v in samples)
+
+
+def test_unrepresentable_global_cap_anchors_fail_explicitly():
+    """Distinct local events lost by binary64 global addition are unsupported."""
+    raw = route().payload
+    raw['occurrences'][1]['caps'].append({'at_m': 1e-20, 'max_speed_mps': 1})
+    ordered = seed_curve(validate_route(raw))
+    with pytest.raises(CorridorError, match='cap anchors.*resolution'):
+        resample_ordered(ordered, .25)
+
+
+def test_metric_seam_samples_and_exact_portal_anchors_share_ownership():
+    """Endpoint inverse rounding remains valid without changing semantic anchors."""
+    from global_planner.route_corridor import _sample
+    ordered = seed_curve(route())
+    for s in (np.nextafter(ordered.curve.length, 0.), ordered.curve.length - 1e-12,
+              -1e-12, 0., ordered.curve.length):
+        v = _sample(ordered, s)
+        c = normal_interval(ordered, v)
+        assert (c.occurrence_id, c.surface_id, c.q) == (v.occurrence_id, v.surface_id, v.q)
+        assert c.portal_id == ordered.route.portals[-1].id
+    ends = [0.]
+    for o in ordered.route.occurrences:
+        ends.append(ends[-1] + o.length)
+    samples = resample_ordered(ordered, .37)
+    anchor_qs = {v.q for v in samples}
+    for i, portal in enumerate(ordered.route.portals):
+        assert ends[i] in anchor_qs
+        assert ends[i + 1] - portal.before in anchor_qs
+        assert ends[(i + 1) % len(ordered.route.occurrences)] + portal.after in anchor_qs
+
+
+def test_metric_occurrence_boundaries_keep_the_selected_source_owner():
+    """A last-bit t=1 inverse result cannot advance to the following owner."""
+    from global_planner.route_corridor import _sample
+    ordered = seed_curve(route())
+    boundaries = [ordered.curve.cumulative[i] for i in range(1, len(ordered.q) - 1)
+                  if ordered.curve.owners[i] != ordered.curve.owners[i - 1]]
+    for boundary in boundaries:
+        for s in (np.nextafter(boundary, -math.inf), boundary,
+                  np.nextafter(boundary, math.inf)):
+            reference = ordered.curve.sample(float(s))
+            v = _sample(ordered, float(s))
+            owner = (reference.occurrence_id, reference.surface_id)
+            assert (v.occurrence_id, v.surface_id) == owner
+            assert ordered.q[v.segment] <= v.q < ordered.q[v.segment + 1]
+            normal_interval(ordered, v)

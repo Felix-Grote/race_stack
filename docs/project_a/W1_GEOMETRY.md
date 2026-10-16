@@ -28,6 +28,8 @@ where the union of those two original ribbons may be consulted; it is **never**
 additional legal area. `before_m` / `after_m` delimit its inherited progress
 bracket. Arbitrary disconnected connector geometry is rejected; a connector must
 be a separately declared occurrence with its own borders and two portals.
+Gate direction compares signed travel normal to the gate in metres with the
+unchanged EPS, so collinear seed subdivision and gate width do not alter direction.
 
 `gate_sequence` lists those portal IDs in cyclic order; `finish` is the closing
 portal. Initialization declares the first occurrence, a bounded local seed
@@ -102,8 +104,12 @@ metric s. `resample_ordered` uses A02 inverse arc and inherits q by segment/t;
 it adds exact occurrence, cap and portal bracket anchors. `refit_ordered` accepts
 shifted ordered knots plus those source records, checks source lineage and
 occurrence anchors, and interpolates with the inherited monotone q. No XY
-projection occurs. Cap values use the inherited local seed metric (right-hand
-knots with a 1e-9 m annotation allowance).
+projection occurs. Known semantic anchors retain exact q/source segment/t and
+derive s directly, avoiding an inverse roundtrip. Cap comparisons use strict
+right-hand global q without EPS smearing. Distinct close events remain distinct;
+unrepresentable global/metric ordering rejects instead of silently coalescing.
+Ordinary metric samples retain their source segment owner through directed
+half-open q rounding. Refits and normal queries check complete sample integrity.
 
 `prepare_route` checks actual polynomial/gate intersections in the inherited
 portal brackets, requires unique forward crossings and ordered gates, resamples,
@@ -111,6 +117,8 @@ and computes `Corridor` records. At each sample, intersect the full normal line
 with the original owning polygon. Use only the connected interval containing the
 reference; disjoint intervals are never bridged. Signed a is left-positive;
 TUM alpha=-a, `[x,y,right,left]` uses `right=-lower`, `left=upper`.
+Touching open interiors at a tangent legal-side vertex remain separate cuts;
+only an explicitly declared shared portal gate can remove a touching separator.
 
 Adjacent ownership is consulted only inside both the declared q bracket and
 portal support polygon. The permitted interval is `(original source UNION
