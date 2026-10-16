@@ -86,3 +86,8 @@ The S6 result is a full approximately 240 m synthetic variable-curvature course,
 with disclosed mesh failures and coarse-mesh alternatives. It does not establish
 performance on every tighter or more complex course, physical-car readiness,
 minimum curvature or minimum lap time.
+
+The legacy map text carries informational H. The original nine-group reader does
+not authenticate that text or bind waypoint arrays to a certificate. Wpnt fields
+carry no trusted H, occurrence/surface lineage or per-waypoint time. Retain the
+independent artifact and trust channel for downstream acceptance.

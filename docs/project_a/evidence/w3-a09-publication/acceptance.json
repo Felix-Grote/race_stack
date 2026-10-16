@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "scope": "Offline synthetic planar software acceptance; independent W3 adversarial review required",
+  "source_commit": "531667abc0ad38236ec46825a544a3644c324b4f",
+  "source_dirty": false,
+  "baseline": {
+    "accepted_w2": "fe53365f86d660b4f6d4389925f9810cf33d41b3",
+    "actual_merge": "9fae5faed6ca62e0c943b6290babc50638477d9b"
+  },
+  "checkpoints": {
+    "A07": "0c2d7c35fc50051a2ae96b9260de636610e280f4",
+    "A08": "6a3295753235889389be1374ce1195435afb7b74",
+    "A09": "531667abc0ad38236ec46825a544a3644c324b4f"
+  },
+  "fresh_local": {
+    "command": "scripts/project_a/fresh_verify.sh 531667abc0ad38236ec46825a544a3644c324b4f work/w3/a09-fresh",
+    "wrapper_exit_code": 0,
+    "setup_exit_code": 0,
+    "verification_exit_code": 0,
+    "source_free_exit_code": 0,
+    "source_free_junit_time_s": 761.19,
+    "source_manifest_entries": 138,
+    "protected_existing_blobs_unchanged": 95,
+    "recursive_gitlinks_unchanged": 7
+  },
+  "hosted": {
+    "run_id": 38926539747,
+    "job_id": 117059404665,
+    "conclusion": "success",
+    "url": "https://github.com/Felix-Grote/race_stack/actions/runs/38926539747",
+    "artifact": {
+      "id": 12058569297,
+      "size_bytes": 9275421,
+      "sha256": "764a255ec0cad9456805e1480f9b30dab81823393a4f05014821b4c059f62595"
+    },
+    "independently_downloaded_and_audited_before_workspace_outage": true
+  },
+  "functional": {
+    "tests": 552,
+    "groups": 27,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "source_free_junit_tests": 4,
+    "source_free_scenario_subcases": 9,
+    "selected_package_builds": 3
+  },
+  "legacy": {
+    "tests": 541,
+    "errors": 0,
+    "exact_inherited_failures": 10,
+    "exact_inherited_skips": 2,
+    "raw_style_diagnostics": 1173,
+    "new_diagnostic_identities": 0,
+    "removed_diagnostic_identities": 0
+  },
+  "runtime": {
+    "source_and_build_absent": true,
+    "network": "none",
+    "uid": "nonroot",
+    "read_only_root": true,
+    "cap_eff": 0,
+    "no_new_privileges": 1,
+    "home_override": false,
+    "all_nine_reader_cdr_round_trips": "PASS"
+  },
+  "scenario_artifacts": [
+    {
+      "case": "s0_route",
+      "status": "PASS",
+      "H": "f2e283fd673c735a956350e3b73236420e5a353067f2f1b8a54b28ee533b85be",
+      "local_and_hosted_H_equal": true
+    },
+    {
+      "case": "s0_reverse_route",
+      "status": "PASS",
+      "H": "c255aeed5e176c2e3eac04d3e6374ff3a439f17887bfa5ed9edd2843f12d5720",
+      "local_and_hosted_H_equal": true
+    },
+    {
+      "case": "s0_rotated_route",
+      "status": "PASS",
+      "H": "316c03a11182dc29e6ecefa2e323ce9393b7b458a4d778c58180cf445dd1b8e5",
+      "local_and_hosted_H_equal": true
+    },
+    {
+      "case": "s2_upper_route",
+      "status": "PASS",
+      "H": "96b54ad55324aba67adf8b434d68865a67bd59824ce40da671ac8de1cb30f62f",
+      "local_and_hosted_H_equal": true
+    },
+    {
+      "case": "s2_lower_route",
+      "status": "PASS",
+      "H": "bd6326711ab1a7ec163fe6e897e5d88e732c8ab80b365dbceea03ce09d803de7",
+      "local_and_hosted_H_equal": true
+    },
+    {
+      "case": "s3_surfaces_route",
+      "status": "PASS",
+      "H": "07489075eb947278ec256ccddfd97d379a306db887dc34302527e081ea9cc69e",
+      "local_and_hosted_H_equal": true
+    },
+    {
+      "case": "s3_notch_route",
+      "status": "PASS",
+      "H": "a7dfc23c2b187782ee867a6919725cde32ce94502757926240961fbd3c69c60d",
+      "local_and_hosted_H_equal": true
+    },
+    {
+      "case": "s4_repeated_route",
+      "status": "PASS",
+      "H": "4a4e0e33c69936391a7b1c0c6f5bf0f5bfc9f269d721e13507658c2bfa19e1c0",
+      "local_and_hosted_H_equal": true
+    },
+    {
+      "case": "s6_competition_route",
+      "status": "PASS",
+      "H": "5cd2661ee51cb124b7ed02ac8d32570da61cc1467a125119fda7d020f27544dd",
+      "local_and_hosted_H_equal": true
+    }
+  ],
+  "curve_authorities": {
+    "s0": "f77eb66f8058dea5f99f3cfc85d580f664da853e4b0a455ca0c562b5786e8599",
+    "s6": "5246eda31c757ae728c7ba9deb03a40569590dd296a941aaacbaf15af2ac58da"
+  },
+  "local_bundle": {
+    "publication_status": "UNPUBLISHED: managed executor disconnected before git add/commit",
+    "verified_file_hashes": 530,
+    "ledger_sha256": "4e1629470acd36e6e7d35169f1ec069656d43a3e04f2fc9ebccbabf9f6e0f25a",
+    "scope_audit_sha256": "1e586ac167267f4cb3a589c5e05dbadd7135f75987a9c00a985715c0ac2c1e7d",
+    "not_a_claim_that_local_files_are_committed": true
+  },
+  "trust": "H values come from controlled compile receipts audited before transport. Artifact self-hash/stored PASS is not approval. Load with the externally trusted expected H and independently selected supported context. These H values bind candidate531667 build provenance, not a later containing commit.",
+  "remaining_gate": "Final containing-head CI must be recorded externally in PR3; separate independent adversarial review has direct remediation authority."
+}

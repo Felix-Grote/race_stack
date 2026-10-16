@@ -162,8 +162,13 @@ The exporter projects the accepted reference directly into unchanged
 `f110_msgs/Wpnt` and `WpntArray`. It retains true s, signed curvature, original
 owned signed-normal side distances (including the existing 1e-9 m inward chart
 allowance), main cyclic speed/acceleration and the correctly rounded Float32
-main lap time. It adds a terminal seam duplicate with unwrapped s=L and time=T.
+main lap time. It adds a terminal seam duplicate with unwrapped s=L.
+The internal audit sample also has time=T; the existing Wpnt message has no
+per-waypoint time field.
 Nominal sampling also retains semantic/profile events; actual s remains authoritative.
+Map text includes informational H; the original reader does not authenticate it
+or bind received waypoint arrays to a certificate. Consumers still need external
+trusted H and validated artifact replay.
 It uses the actual nine-group legacy writer, reader and generated CDR serializer
 in a private export stage before no-replace publication. Unavailable centerline
 and shortest-path groups are explicitly empty and described as unavailable.

@@ -1,13 +1,39 @@
 # W3 current evidence
 
-The A09 implementation candidate is prepared for fresh exact-commit verification.
-Corrected exploratory installed acceptance passes 3 tests / 21 CLI processes /
-15 negative controls in a separate source-free container; the retained prefix
-accurately records the original dirty A07 snapshot rather than a release commit.
-Three fresh-candidate guard tests pass after moving executable test fixtures off
-the noexec /tmp mount. The original failed attempt remains evidence. Neither
-preflight substitutes for the pending clean recursive checkout and nine-case
-source-free acceptance. [Runbook](W3_RUNTIME.md).
+Clean A09 candidate `531667abc0ad38236ec46825a544a3644c324b4f` completes
+`scripts/project_a/fresh_verify.sh 531667abc0ad38236ec46825a544a3644c324b4f work/w3/a09-fresh`
+with wrapper, setup, full verification and separate source-free runtime exit zero.
+**552 functional tests / 27 groups / no failures/errors/skips**; three ordinary
+selected-package builds; all nine installed synthetic scenarios PASS. The
+source-free JUnit has four tests containing the nine-case campaign, not nine
+additional tests to add again. Its runtime took 761.19 s in the local fresh run.
+
+Exact candidate [push CI 38926539747](https://github.com/Felix-Grote/race_stack/actions/runs/38926539747)
+also succeeds. Root independently downloaded the 9,275,421-byte artifact,
+verified SHA256 `764a255ec0cad9456805e1480f9b30dab81823393a4f05014821b4c059f62595`,
+and checked the reports, all nine H identities, preserved source manifests and
+inherited failures. Local/hosted H identities match for every installed case.
+Legacy is **541 / zero errors / exact 10 inherited failures / 2 inherited skips**,
+with all 1,173 raw style diagnostics unchanged.
+
+The controlled installed S0 artifact H is
+`f2e283fd673c735a956350e3b73236420e5a353067f2f1b8a54b28ee533b85be`;
+S6 H is `5cd2661ee51cb124b7ed02ac8d32570da61cc1467a125119fda7d020f27544dd`.
+These identities belong to the exact 531667 candidate/build provenance; a later
+build manifest changes H even when mathematical coefficients remain identical.
+S6 C remains `5246eda31c757ae728c7ba9deb03a40569590dd296a941aaacbaf15af2ac58da`.
+Installed S6 export has 1,437 waypoints, length 240.85606913925082 m and model time
+68.00978787597403 s. Its compile-only wall time 84.782 s, reported CPU 84.860 s,
+parent peak RSS 168,890,368 bytes and QP-child maximum 278,847,488 bytes are
+separate from the whole-path benchmark measurements below.
+
+The corrected exploratory preflight remains distinct: 3 installed tests,
+21 CLI processes and 15 negative controls against an accurately recorded dirty
+A07 prefix. Three fresh-clone guard regressions pass after correcting the
+noexec /tmp test invocation; the red attempt is retained locally. Earlier
+unsupported-filename rejection is not credited as content-validation evidence.
+[Published receipt and raw hosted evidence](evidence/w3-a09-publication/README.md)
+state the larger local bundle's publication limitation. [Runbook](W3_RUNTIME.md).
 
 A07 commit `0c2d7c35fc50051a2ae96b9260de636610e280f4` passes exact-head push
 [CI 38918290086](https://github.com/Felix-Grote/race_stack/actions/runs/38918290086):
@@ -45,8 +71,9 @@ reaped numerical children: whole-worker CPU is **130.628536 / 124.494186 s**
 These replay wall times are explicitly non-isolated. The original 96-attempt
 outcome matrix and isolated wall measurements remain separate.
 
-A09 fresh recursive exact-candidate/source-free verification and final exact-head
-CI remain pending. Separate independent W3 adversarial review is required.
+A09 fresh recursive exact-candidate/source-free verification and candidate push CI
+pass. The later documentation-containing head requires its own exact-head CI,
+recorded in PR #3. Separate independent W3 adversarial review remains required.
 
 # Project A validation matrix — W0/W1/W2
 
