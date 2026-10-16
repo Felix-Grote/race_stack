@@ -1,5 +1,30 @@
 # Project A decision ledger
 
+## 2026-10-16 — W2 A05 independent continuous planar acceptance
+
+- Rebuild separately supplied approved route and actual coefficient metadata;
+  reject forged records, candidate-selected numeric policies and stale views.
+  Exact q anchors/owners and all applicable gate roots are checked independently.
+- Use exact rational polynomial/Bernstein/polygon arithmetic, scaled outward
+  square roots and declared midpoint-frame error bounds. Review found and fixed
+  squared underflow/subnormal conversion and unrepresentable ratio handling;
+  uncertainty never grants PASS. No sampled extremum authorizes acceptance.
+- Certify full rectangle/disc sweeps against original owned polygons. Explicit
+  adjacent exact shared caps may be removed only for simple original unions,
+  further restricted by support. Reject overlapping progress support, holes and
+  ambiguous topology rather than infer connectivity or add area.
+- Keep the user-required PASS/FAIL/INCONCLUSIVE outcomes. Missing required
+  physical coverage is INCONCLUSIVE; planar software certificates exclude 3D,
+  contact, obstacles and tracking guarantees.
+- Retain a small hash-checked exact A04 coefficient fixture derived verbatim
+  from committed checkpoint 604ad5d for independent geometry regressions. Final
+  integrated W2 tests will rerun fresh optimization and both validators; the
+  fixture is a numerical input, not a published accepted reference artifact.
+- Final 50-case frozen run and two independent reviews pass. First-run fixture
+  endpoint-on-cap error and subsequent corrections/evidence are retained; the
+  original W0/W1 tests, tolerances and pins are unchanged. Independent 44-knot
+  adversary proves legal nodal bodies cannot substitute for continuous checking.
+
 ## 2026-10-16 — W2 A04 bounded original-border adapter
 
 - Start exactly at user-required corrected W1 `9440c2ce68e3dee549de7efacff1cf723fe830df`

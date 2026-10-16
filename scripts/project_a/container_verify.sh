@@ -19,6 +19,8 @@ if [[ "$mode" == all || "$mode" == numerical ]]; then
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_corridor.py --junitxml=/work/a03.xml
   python -m flake8 --max-line-length=99 /src/planner/global_planner/test/test_iqp_route_adapter.py
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_iqp_route_adapter.py --junitxml=/work/a04.xml
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_validate_geometry.py --junitxml=/work/a05.xml
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_validate_bounds_oracle.py --junitxml=/work/a05-oracle.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_numerical.py --junitxml=/work/numerical.xml
 fi
 if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
@@ -59,8 +61,9 @@ python - <<'PY_SUMMARY'
 import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
-out = {'scope': 'W0_THROUGH_A04', 'legal_planner_acceptance': 'A05_A06_PENDING'}
-for kind in ('numerical', 'ros', 'a01', 'a02', 'a03', 'a04', 'w1-installed'):
+out = {'scope': 'W0_THROUGH_A05', 'legal_planner_acceptance': 'A06_PENDING'}
+for kind in ('numerical', 'ros', 'a01', 'a02', 'a03', 'a04', 'a05', 'a05-oracle',
+             'w1-installed'):
     path = Path('/work', kind + '.xml')
     if path.exists():
         suite = ET.parse(path).getroot().find('testsuite')

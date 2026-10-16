@@ -1,5 +1,44 @@
 # Project A validation matrix — W0/W1/W2
 
+## W2 A05 local checkpoint — 2026-10-16
+
+`scripts/project_a/unit.sh work/w2/a05-final planner/global_planner/test/test_route_validate_geometry.py planner/global_planner/test/test_route_validate_bounds_oracle.py`
+exits **0: 50 passed in 103.41 s**. Production, tests, complete fixtures, helper
+and Compose hashes are unchanged before/after. Scoped lint passes. Two
+independent reviewers accept the exact-input planar certificate implementation.
+
+All seven actual A04 candidates PASS continuous geometry and swept-rectangle
+containment with the original .01 m margin, independent 1/m curvature limit and
+four actual directed gates each. Certificate leaves **164–269**, certified
+curvature upper maxima **0.2125–0.4535/m**, minimum certificate slack across
+the campaign **8.9498e-5 m** beyond motion, margin and numerical allowances.
+Both enclosing-disc and full-rectangle curvature sweep methods are exercised;
+every coefficient interval is covered without gaps, including the periodic seam.
+
+Adversaries include actual between-node reference/rectangle-edge exits despite
+legal solver-node bodies; an interior curvature peak despite legal nodal values;
+wrongly phased actual gate passage; forged authority/owners/q/policies; stale
+curve metadata; degenerate/seam corruption; holes, nonexact shared caps and
+resource/required physical-coverage uncertainty. Thirteen separate high-precision
+oracles check whole-interval derivative, curvature and curvature-rate bounds,
+cancellation, transforms/scales, subnormal conversion and overflow behavior.
+
+Independent pinned S3 hidden-footprint reproducer: **1 passed in 5.07 s**,
+exit 0, all **44 nodal bodies legal**, continuous actual exit correctly FAIL.
+Full negative route, coefficients/q/body, command and report are retained.
+First frozen main run had **44 passes / 1 test-fixture failure**; corrected cap
+placement preserves the notch. Second run **49 passed**; final adds input-size
+hardening and explicit nodal-body controls. No old acceptance gate changed.
+
+Exact A04 checkpoint push CI at **604ad5d**, run **38885077894**, is SUCCESS;
+retrieved logs show 60/47/38 + 18 + 7/4/1 passes and three builds. Separate legacy
+aggregate grows to 175 reports with the same 10 failures / 2 skips.
+See [A04 hosted logs](evidence/w2-a04-ci/SHA256SUMS),
+[A05 evidence/review](evidence/w2-a05/SHA256SUMS),
+[independent reproducer](evidence/w2-a05-independent/SHA256SUMS) and
+[numerical contract](W2_NUMERICS.md). A06/combined trajectory acceptance remains
+pending. These are synthetic planar software results, without physical evidence.
+
 ## W2 A04 local checkpoint — 2026-10-16
 
 Base is exactly corrected W1 `9440c2ce68e3dee549de7efacff1cf723fe830df`.

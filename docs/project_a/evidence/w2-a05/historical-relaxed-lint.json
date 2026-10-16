@@ -1,0 +1,15 @@
+{
+  "command": "PROJECT_A_OUTPUT=/workspace/race_stack/work/w2/a05-lint PROJECT_A_UID=1000 PROJECT_A_GID=1000 docker --host=unix:///var/run/docker.sock compose -p project-a-a05-lint -f docker-compose.test.yaml run --rm -T --entrypoint /bin/bash test -c 'python -m flake8 --ignore=E501,W503,W504 /src/planner/global_planner/global_planner/route_validate.py /src/planner/global_planner/test/test_route_validate_geometry.py /src/planner/global_planner/test/test_route_validate_bounds_oracle.py'",
+  "exit_code": 0,
+  "provenance_note": "The isolated command returned exit0 with empty output. Lint-specific before/after hashes were not captured. source_hashes_at_recording identify the final frozen source; while the lint launcher was active, an existing2x4shape check was moved beforeFractionconversion without changing lint-relevant formatting. The later final50case unit run independently checked stable before/after source hashes.",
+  "source_hashes_at_recording": {
+    "planner/global_planner/global_planner/route_validate.py": "f5e392930f55fe534df2de2fe0a8acfda2928903dfa5e5ecc6e52df248693478",
+    "planner/global_planner/test/test_route_validate_bounds_oracle.py": "357c5490d49a7150755e32f02afb3d6821b9e91781984a898927bcd1a653fb15",
+    "planner/global_planner/test/test_route_validate_geometry.py": "af429966e7c0419dfcb83a0c3d6b73affc76ec93d88794d551f53465e8c09e4c"
+  },
+  "status": "PASS",
+  "stderr": "",
+  "stdout": "",
+  "tool_completion_chunk": "99d8af",
+  "tool_session_id": 86244
+}

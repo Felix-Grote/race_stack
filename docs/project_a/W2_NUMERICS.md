@@ -59,6 +59,65 @@ limitation rather than hiding it. Unweighted sums over different meshes are not
 comparable curvature energies; any measured energy comparison must integrate
 the actual coefficients and remains a diagnostic, not a continuous certificate.
 
+## A05: independent continuous planar certificate
+
+`route_validate.validate_geometry` consumes actual final coefficients/q, a
+separately supplied approved route, an explicit footprint and an independently
+specified policy. It never reads optimizer widths, success flags, sampled
+headings or stored legality estimates. It rebuilds the approved records and
+coefficient-derived metadata, rejects forged route records even when their
+encoded digest is unchanged, and verifies exact occurrence anchors/ownership.
+All joins and the periodic seam retain W1's independently supplied numerical
+policy. Route/candidate acceptance runs in the pinned Python 3.10 environment:
+Python 3.12 changed floating-point `sum`, which can change derived seed anchors
+by a few ulps. No anchor tolerance is enlarged to hide a runtime mismatch.
+
+Binary64 input coefficients/vertices are interpreted as exact real values.
+Polynomial products, derivatives, power-to-Bernstein conversion, polygon
+orientation/intersections and squared point/segment distances use rational
+arithmetic. Conversion of a squared rational to its square root scales the
+rational first; converting a tiny squared value directly to binary64 would
+underflow and produce an unsafe bound. Finite conversions round outwards;
+unrepresentable bounds raise uncertainty. The stated elementary-function model
+and midpoint normalization allowance are part of the certificate assumptions.
+
+For `d=r'`, `c=cross(d,d')` and `g=d.d`, exact Bernstein boxes give a positive
+lower bound `g_min` and upper derivative speed `V`. They bound
+`|kappa| <= max|c|/g_min^(3/2)` and
+`|d kappa/ds| <= max|2*c'*g - 3*c*g'|/(2*g_min^3)` on the complete interval.
+A box containing zero requires subdivision or INCONCLUSIVE. These bounds
+include interior extrema; sampled endpoint curvature cannot authorize PASS.
+
+At an interval midpoint, exact polygon tests establish containment and minimum
+clearance of the complete reference-aligned rectangle, checking corners, every
+edge and polygon-boundary components inside the body. For parameter span `dt`,
+the metric displacement from the midpoint is bounded by `h=V*dt/2`. With maximum
+body radius `R` and certified curvature `K`, each body point moves at most
+`(1+R*K)*h`; the certificate requires midpoint body clearance greater than this
+bound plus the supplied margin and numerical allowance. A cheaper enclosing
+disc certificate instead requires center clearance greater than `R+h` plus
+margin/allowance. Both are sufficient whole-interval guarantees. Dense samples
+and high-precision oracles are regression controls only.
+
+The driver splits at every cubic, occurrence, initialization and portal-support
+boundary and records exact rational leaf endpoints. Only explicitly adjacent
+original ribbons with an **exact** shared cap and a simple stitched union may
+remove that cap; the support polygon further restricts the union. Unsupported
+holes, uncertain/nonexact cap joins and unsupported union topology cannot add
+legal area. Independent Bernstein sign-variation isolation checks all applicable
+owner/gate roots, including out-of-bracket and reverse passage. Only exact
+adjacent coefficient endpoints can coalesce, never merely nearby roots. Projected
+crossings on unrelated surfaces remain separate. Initialization zone/heading
+applicability is checked on the final curve.
+
+Default resources: depth 24 / 50,000 continuous intervals, gate depth 52 /
+20,000 root boxes, 2,048 coefficient segments, 2 MiB encoded route, 512 vertices
+per original polygon and 2,000,000 preprocessing polygon-pair work units,
+including stitched unions. Size checks precede expensive reconstruction. The
+curvature limit is independently supplied (1/m for the synthetic campaign).
+Outcomes are PASS, demonstrated FAIL, or INCONCLUSIVE for unsupported numerical
+or geometric cases and exhausted resources. No partial certificate grants PASS.
+
 ## Synthetic acceptance inputs
 
 The planned W2 integration footprint is an explicitly supplied rectangle with

@@ -1,6 +1,6 @@
 # Project A status — 2026-10-16
 
-**W2 IN PROGRESS. A04 LOCAL ACCEPTANCE PASS. A05–A09 PENDING.**
+**W2 IN PROGRESS. A04/A05 LOCAL ACCEPTANCE PASS. A06–A09 PENDING.**
 
 The current authorized work is W2 A04–A06 on `project-a/w2-optimization`, created
 directly at corrected W1 commit
@@ -24,13 +24,29 @@ exits **0: 18 passed**. New-file lint passes and independent adversarial review
 accepts the stated numerical-candidate scope. Seven fixtures converge in three
 iterations each; maximum observed QP primal violation is **3.45e-15**.
 [A04 evidence and review](evidence/w2-a04/SHA256SUMS).
+Checkpoint **`604ad5da4cefd2ce5f052a4e71d30d5b5467bd27`** is pushed; exact-head
+[push CI 38885077894](https://github.com/Felix-Grote/race_stack/actions/runs/38885077894)
+is **SUCCESS**. Retrieved full logs confirm 60/47/38 + 18 A04 + 7/4/1 passing
+tests, three package builds and unchanged legacy failure identities (175 reports,
+10 failures / 2 skips). [Hosted evidence](evidence/w2-a04-ci/SHA256SUMS).
 It returns numerical candidates only. Read [W2 numerical contracts](W2_NUMERICS.md)
 for resource/tolerance policy and the measured local-surrogate limitation; actual
 curvature energy improvement or global optimality is not established.
 
-Next: implement A05 continuous geometry
-and full-footprint validation and A06 cyclic speed/independent dynamics. No W2
-accepted trajectory, immutable artifact, physical clearance or vehicle result is
+Independent A05 continuous geometry and swept-footprint validation now passes
+**50 tests in 103.41 s**, exit 0, frozen production/fixture/harness hashes. All
+seven actual A04 coefficient candidates receive **PASS**, with **164–269**
+continuous certificate leaves and four independently isolated directed gates
+each. Exact rational bounds and full-rectangle/disc sweep proofs cover interiors,
+every join and the seam. Two independent reviewers accept the planar scope.
+[A05 evidence/review](evidence/w2-a05/SHA256SUMS).
+
+An independent 44-knot S3 adversary has every nodal footprint legal, yet its
+between-node exit is correctly FAIL; the retained reproducer passes in 5.07 s.
+Unsupported geometry/resources/required physical coverage remain INCONCLUSIVE.
+Next: implement A06 cyclic speed and independent dynamics validation on the same
+final coefficients, then integrated acceptance and exact-head CI. No combined
+W2 trajectory, immutable artifact, physical clearance or vehicle result is
 claimed yet. The historical W1 record below is retained as evidence; this W2
 section supersedes its old continuation/status statements.
 

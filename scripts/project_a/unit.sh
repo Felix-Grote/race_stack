@@ -37,7 +37,9 @@ from pathlib import Path
 import sys
 paths = sorted(Path('planner/global_planner').rglob('*.py'))
 paths += sorted(Path('scripts/project_a').rglob('*.py'))
-paths += sorted(Path('planner/global_planner/test/fixtures/project_a').glob('*.json'))
+paths += sorted(p for p in Path('planner/global_planner/test/fixtures/project_a').rglob('*')
+                if p.is_file())
+paths += [Path('scripts/project_a/unit.sh'), Path('docker-compose.test.yaml')]
 Path(sys.argv[1]).write_text(json.dumps({str(p): hashlib.sha256(p.read_bytes()).hexdigest()
                                       for p in paths}, indent=2, sort_keys=True))
 PY_HASH
@@ -56,16 +58,25 @@ docker --host=unix:///var/run/docker.sock compose -p project-a-unit \
   ' project-a-unit "$@" 2>&1 | tee "$out/run.log"
 rc=${PIPESTATUS[0]}
 set -e
-python3 - "$out/source-hashes-before.json" "$out/source-hashes-after.json" <<'PY_HASH'
+if ! python3 - "$out/source-hashes-before.json" "$out/source-hashes-after.json" <<'PY_HASH'
 import hashlib
 import json
 from pathlib import Path
 import sys
 before = json.loads(Path(sys.argv[1]).read_text())
-after = {name: hashlib.sha256(Path(name).read_bytes()).hexdigest() for name in before}
+paths = sorted(Path('planner/global_planner').rglob('*.py'))
+paths += sorted(Path('scripts/project_a').rglob('*.py'))
+paths += sorted(p for p in Path('planner/global_planner/test/fixtures/project_a').rglob('*')
+                if p.is_file())
+paths += [Path('scripts/project_a/unit.sh'), Path('docker-compose.test.yaml')]
+after = {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
 Path(sys.argv[2]).write_text(json.dumps(after, indent=2, sort_keys=True))
 if before != after:
     raise SystemExit('Source changed during verification; discard this acceptance run.')
 PY_HASH
+then
+  printf '1\n' > "$out/exit-code.txt"
+  exit 1
+fi
 printf '%s\n' "$rc" > "$out/exit-code.txt"
 exit "$rc"
