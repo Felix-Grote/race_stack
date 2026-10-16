@@ -85,3 +85,44 @@ Gauss-Legendre integration of coefficients, polynomial differentiation and the
 complete elliptic integral for an ellipse. Reconstructing from stored coefficients
 performs no refit. The unchanged W0 defect test remains green alongside the new
 true-metric inverse test.
+
+## A03 owned corridor and lineage
+
+`seed_curve(route)` returns `OrderedCurve` with q at every original seed knot.
+q is unwrapped piecewise-linear seed arclength, distinct from current spline
+metric s. `resample_ordered` uses A02 inverse arc and inherits q by segment/t;
+it adds exact occurrence, cap and portal bracket anchors. `refit_ordered` accepts
+shifted ordered knots plus those source records, checks source lineage and
+occurrence anchors, and interpolates with the inherited monotone q. No XY
+projection occurs. Cap values use the inherited local seed metric (right-hand
+knots with a 1e-9 m annotation allowance).
+
+`prepare_route` checks actual polynomial/gate intersections in the inherited
+portal brackets, requires unique forward crossings and ordered gates, resamples,
+and computes `Corridor` records. At each sample, intersect the full normal line
+with the original owning polygon. Use only the connected interval containing the
+reference; disjoint intervals are never bridged. Signed a is left-positive;
+TUM alpha=-a, `[x,y,right,left]` uses `right=-lower`, `left=upper`.
+
+Adjacent ownership is consulted only inside both the declared q bracket and
+portal support polygon. The permitted interval is `(original source UNION
+original target) INTERSECT support`. At a shared end cap, that cap may be removed
+as an ownership separator. Other endcaps cannot masquerade as legal side walls.
+Support enlargement cannot add legal area. Surface/occurrence changes, unsupported
+cap intersections, collinear boundary ambiguity and off-route samples reject.
+Portal roots use cubic polynomial roots with residual/direction/segment checks;
+near-real uncertain roots and tangent/collinear passages reject.
+
+Every interval is inset 1e-9 m for numerical allowance; widths are never inflated.
+Require `1-kappa*a >= .05` throughout the entire returned interval; reject rather
+than truncate a folded chart. Nonadjacent prepared normals inside the **same
+occurrence** cannot intersect. Crossings on unrelated occurrences/surfaces do not
+supply adjacency or cause a global normal-crossing rejection. Pair comparisons
+have a 1000000 budget; exhaustion rejects. Samples are limited by the A02 policy.
+
+Preparation verifies the solver mesh and directed portals; it is **not** the A05
+continuous spline/footprint certificate. Narrow restrictions between solver nodes
+still require W2 independent continuous validation. The fixed S3 notch test uses
+an explicit seed-metric cap anchor to exercise restriction transport through
+repeated resampling and independently solves ray/edge 2x2 systems against the
+actual fitted normal. Its generating analytic normal is a distinct approximation.

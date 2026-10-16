@@ -81,3 +81,26 @@
   legacy metric-defect characterization alongside the new inverse regression.
 - Add explicit NumPy/SciPy ROS package dependencies and a separate installed pure
   module check; preserve the original four W0 ROS tests and all entry points.
+
+## 2026-10-16 — A03 original ownership and progress
+
+- q is inherited piecewise original seed metric. Repeated resampling inserts
+  occurrence, cap and portal bracket anchors; refits must retain those anchors
+  and source segment/t/q. Never infer correspondence from XY.
+- Re-intersect current normals with original owner; only an explicitly active
+  adjacent portal permits a union, clipped by support. Shared cap removal is
+  specific to that portal. Support is never additive legal area.
+- Use only the connected normal interval containing the reference. Disconnected
+  intervals, unlike a continuous legal union at a declared cap, cannot bridge gaps.
+  Inset widths by 1e-9 m, require full chart Jacobian >=.05; reject rather than
+  narrow an invalid chart or inflate a legal corridor.
+- Polynomial gate intersections prove local directed portal passage within q
+  brackets. q alone is not passage evidence. Full continuous final-curve and
+  footprint validity remain A05, deliberately not implemented here.
+- Bound same-occurrence normal-pair checks to 1000000 comparisons. Unrelated
+  deck/occurrence normals are not globally rejected; their overlap is legal input.
+- A notch oracle initially compared a fitted normal to its analytic generating
+  normal at 2e-9 m. The observed ~2.2e-8 m difference was interpolation, not arc
+  or intersection error. Correct the oracle to independent ray/edge linear solves
+  on the actual fitted normal; keep 2e-9 m intersection tolerance and separately
+  declare 1e-6 m generating-geometry approximation. No production tolerance changed.

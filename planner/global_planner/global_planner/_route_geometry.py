@@ -75,7 +75,7 @@ def simple_polygon(poly):
     return True
 
 
-def line_intervals(p, n, poly):
+def line_intervals(p, n, poly, allowed_caps=()):
     """All open interior intervals of p+a*n. Collinear edges are ambiguous."""
     cuts = []
     for a, b in edges(poly):
@@ -83,7 +83,11 @@ def line_intervals(p, n, poly):
         den = cross(n, v)
         if abs(den) <= EPS * math.hypot(*v):
             if abs(cross(sub(a, p), n)) <= EPS:
-                raise ValueError('normal collinear with boundary/end cap')
+                if not any((distance(a, c) <= EPS and distance(b, d) <= EPS) or
+                           (distance(a, d) <= EPS and distance(b, c) <= EPS)
+                           for c, d in allowed_caps):
+                    raise ValueError('normal collinear with boundary/end cap')
+                cuts.extend((dot(sub(a, p), n), dot(sub(b, p), n)))
             continue
         z = cross(sub(a, p), v) / den
         t = cross(sub(a, p), n) / den
@@ -96,4 +100,4 @@ def line_intervals(p, n, poly):
             unique.append(z)
     return [(a, b) for a, b in zip(unique, unique[1:])
             if b - a > EPS and inside((p[0] + .5 * (a + b) * n[0],
-                                      p[1] + .5 * (a + b) * n[1]), poly, False)]
+                                      p[1] + .5 * (a + b) * n[1]), poly, bool(allowed_caps))]

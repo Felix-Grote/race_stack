@@ -144,3 +144,29 @@ Tests reject nonperiodic XY/tangent/curvature, interior zero derivative, NaN,
 regularity/integration exhaustion, ownership mismatch and nonfinite/unresolvable
 progress. Exact coefficient reconstruction, immutable records and periodic
 negative/multiple-lap/right-hand queries pass. No optimized/legal swept result.
+
+## W1 / A03 — occurrence-owned original corridor
+
+Parent `61c320e0b5551dc983d5b866460900a3f8428de2` + exact source/fixture hashes in
+[evidence/w1-a03](evidence/w1-a03/SHA256SUMS). Command:
+`scripts/project_a/verify.sh all work/w1-a03-final`, exit **0**.
+**15 A03 + 12 A02 + 39 A01 + 7 W0 numerical + 4 W0 ROS + 1 installed W1 pass**;
+three packages built; legacy 78 aggregate / 0 errors / original 10 failures /
+2 skipped. Scoped new-file flake8 and installed corridor checks pass. Initial
+formatting errors and the notch oracle mismatch were corrected; no legalization
+or numerical tolerance relaxed (see DECISIONS).
+
+S3 report: 132 prepared samples at requested .4 m spacing plus inherited anchors;
+seed q period **48.76566357269199 m**, actual cubic length **48.77778272770468 m**;
+minimum original-normal left/right widths **.3713079805827014/.5699481563955641 m**.
+Four unique directed gates, including seam; repeated reftrack/gate results identical.
+Fixed asymmetric S3 notch stays on o0 only through two meshes/refit; independent
+ray/edge solves agree within **2e-9 m**. Inward allowance **1e-9 m**; full returned
+chart Jacobian >=**.05**. No physical-map wall removal changes legal widths.
+
+Adversaries cover altered owner/deck, corrupt/nonmonotone lineage, off-route
+refit, unsupported end cap, disjoint ray components, rotated normals, arbitrary
+support enlargement, missing/reverse/ambiguous gates, actual folded chart,
+overlapping portal brackets and sample/pair budget exhaustion. S0 reverse/rotated,
+selected S2 cycles and S3 projected crossing all prepare without topology inference.
+This is geometric solver-input preparation, not continuous swept acceptance.

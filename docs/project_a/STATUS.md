@@ -1,6 +1,6 @@
 # Project A status — 2026-10-16
 
-**W0 COMPLETE. W1 IN PROGRESS: A01/A02 COMPLETE; A03 NEXT.**
+**W0 COMPLETE. W1 IMPLEMENTED: A01/A02/A03 CHECKPOINTS PASS; FINAL REVIEW/CI NEXT.**
 No accepted E1 trajectory or physical vehicle result exists.
 
 W1 starts from exactly `6370d0436aabd011d1b885fe1f500644b957b536`,
@@ -21,6 +21,13 @@ A01 final checkpoint: `cd6749d88139222bd6d4016bee5bb160feb19405` (hosted CI
 packages built. Original 10 legacy failures / 2 skips remain (63 aggregate
 reports including 51 new passing functional tests). A02 source/fixture hashes
 and full evidence: `evidence/w1-a02`. Checkpoint commit introduces this section.
+
+A02 commit `61c320e0b5551dc983d5b866460900a3f8428de2`, hosted CI
+38865798545 SUCCESS. A03: `verify.sh all work/w1-a03-final` exit 0,
+15 A03 + 12 A02 + 39 A01 + 7 W0 numerical + 4 W0 ROS + 1 installed W1
+test pass; three-package build. Legacy 78 aggregate / same 10 failures / 2 skips.
+`evidence/w1-a03` records hashes, numerical values and all logs.
+Next: adversarial self-review, final publication and exact-HEAD hosted CI.
 
 ## Source and durable review route
 
