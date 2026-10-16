@@ -170,3 +170,21 @@ support enlargement, missing/reverse/ambiguous gates, actual folded chart,
 overlapping portal brackets and sample/pair budget exhaustion. S0 reverse/rotated,
 selected S2 cycles and S3 projected crossing all prepare without topology inference.
 This is geometric solver-input preparation, not continuous swept acceptance.
+
+## W1 final adversarial self-review
+
+`verify.sh all work/w1-review` exit **0**: **47 A01 + 12 A02 + 17 A03 + 7 W0
+numerical + 4 W0 ROS + 1 installed W1 test passed**; three-package build passes.
+Legacy **88 aggregate / 0 errors / 10 failures / 2 skipped**. Compared the failing
+report identities directly with `evidence/pinned-run/legacy-results.txt.gz`:
+**exact match**; the 76 additional colcon tests pass. Scoped new-file flake8 passes;
+no W1 pep257 diagnostic. [Evidence](evidence/w1-review/SHA256SUMS), including the
+failure-identity comparison, and [adversarial review](W1_SELF_REVIEW.md).
+
+Additional review regressions reject incorrect numeric types consistently, retain
+small polygon area near coordinate-range limits, prevent ownership-cap recrossing,
+expose hidden double gate roots and distinguish identical XY/heading repeated
+visits. Kernel tolerances and physical scope are unchanged. A03 checkpoint hosted
+CI [38866587975](https://github.com/Felix-Grote/race_stack/actions/runs/38866587975)
+succeeded at `f4048adac1471c4db03616d5292f06aa83f78a13`; final reviewed source is
+subsequently published and independently checked again.

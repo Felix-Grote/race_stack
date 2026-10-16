@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="0.375" timestamp="2026-10-16T07:23:02.506580+00:00" hostname="23f2bd839e69"><testcase classname="test_w1_installed" name="test_installed_geometry_modules" time="0.311" /></testsuite></testsuites>

@@ -104,3 +104,13 @@
   or intersection error. Correct the oracle to independent ray/edge linear solves
   on the actual fitted normal; keep 2e-9 m intersection tolerance and separately
   declare 1e-6 m generating-geometry approximation. No production tolerance changed.
+
+## 2026-10-16 — W1 final adversarial hardening
+
+Self-review added explicit numeric type validation, seed ownership-cap recrossing
+rejection, translation-stable compensated polygon area, stationary-value checks
+for potentially hidden tangent gate roots, and rejection of endpoint ambiguity.
+Eight A01 and two A03 regressions were added. Identical XY/heading repeated
+visits remain distinct by supplied ordered progress. No tolerance was weakened.
+See W1_SELF_REVIEW.md. CI now triggers on Project A documentation too, so final
+closeout commits receive actual exact-HEAD validation; artifact names cover W1.

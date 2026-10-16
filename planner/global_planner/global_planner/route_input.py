@@ -13,8 +13,8 @@ from pathlib import Path
 import re
 import unicodedata
 
-from ._route_geometry import (EPS, cross, distance, edges, inside, on_segment,
-                              segments_touch, simple_polygon, sub)
+from ._route_geometry import (EPS, cross, distance, inside, on_segment,
+                              segments_touch, signed_area_twice, simple_polygon, sub)
 
 
 class RouteError(ValueError):
@@ -148,6 +148,8 @@ def validate_route(payload):
     _id(pm['frame_id'])
     _require(type(pm['registration']) is list and len(pm['registration']) == 3,
              'map SE2 registration')
+    for v in pm['registration']:
+        _number(v)
     _require(pm['coverage'] in ('unknown', 'partial', 'complete'), 'physical coverage declaration')
     _provenance(pm['provenance'])
     _require(type(p['surfaces']) is list and len(p['surfaces']) > 0, 'surfaces required')
@@ -168,13 +170,17 @@ def validate_route(payload):
         seed, left, right = (_points(o[k]) for k in ('seed', 'left', 'right'))
         poly = right + left[::-1]
         _require(simple_polygon(poly), 'invalid/simple ribbon polygon (holes unsupported)')
-        _require(sum(cross(a, b) for a, b in edges(poly)) > EPS,
+        _require(signed_area_twice(poly) > EPS,
                  'inconsistent left/right orientation')
         _require(on_segment(seed[0], right[0], left[0]) and
                  on_segment(seed[-1], right[-1], left[-1]), 'seed must meet directed end caps')
         _require(all(inside(x, poly) for x in seed), 'seed outside legal ribbon')
         # Seeds may meet caps, but never cross/touch a legal side or leave a concavity.
-        for a, b in zip(seed, seed[1:]):
+        for index, (a, b) in enumerate(zip(seed, seed[1:])):
+            for c, d, allowed in ((right[0], left[0], index == 0),
+                                  (right[-1], left[-1], index == len(seed) - 2)):
+                if segments_touch(a, b, c, d) and not allowed:
+                    raise RouteError('seed illegally recrosses ownership end cap')
             for chain in (left, right):
                 _require(not any(segments_touch(a, b, c, d) for c, d in zip(chain, chain[1:])),
                          'seed intersects legal side')
@@ -185,7 +191,7 @@ def validate_route(payload):
         parsed = []
         for cap in caps:
             _keys(cap, 'at_m max_speed_mps', 'cap')
-            q, v = cap['at_m'], cap['max_speed_mps']
+            q, v = _number(cap['at_m']), _number(cap['max_speed_mps'])
             _require(0 <= q < length and v > 0, 'cap outside occurrence or nonpositive')
             parsed.append((q, v))
         _require(parsed[0][0] == 0 and all(a[0] < b[0] for a, b in zip(parsed, parsed[1:])),
@@ -212,7 +218,7 @@ def validate_route(payload):
         _require(cross(sub(gate[1], gate[0]), travel) < -EPS, 'wrong directed gate')
         _require(inside(a.seed[-1], support, False) and all(inside(x, support) for x in gate),
                  'gate not covered by portal support')
-        before, after = tr['before_m'], tr['after_m']
+        before, after = _number(tr['before_m']), _number(tr['after_m'])
         _require(0 < before < a.length and 0 < after < b.length, 'invalid portal support progress')
         portals.append(Portal(_id(tr['id']), a.id, b.id, gate, support, before, after))
     pids = [x.id for x in portals]
@@ -223,6 +229,8 @@ def validate_route(payload):
     _keys(init, 'occurrence_id seed_interval_m zone heading_interval_rad', 'initialization')
     _require(init['occurrence_id'] == ids[0], 'initial occurrence must be route origin')
     bracket, heading = init['seed_interval_m'], init['heading_interval_rad']
+    _require(type(bracket) is list and type(heading) is list, 'invalid initial interval types')
+    bracket, heading = ([_number(x) for x in values] for values in (bracket, heading))
     _require(type(bracket) is list and len(bracket) == 2 and
              0 <= bracket[0] < bracket[1] <= occs[0].length, 'initial seed interval')
     _require(type(heading) is list and len(heading) == 2 and

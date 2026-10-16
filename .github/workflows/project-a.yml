@@ -2,9 +2,9 @@ name: Project A offline planner
 on:
   push:
     branches: [ros2-humble, 'project-a/**']
-    paths: ['planner/global_planner/**', 'utilities/libraries/f110_msgs/**', 'utilities/libraries/frenet_conversion/**', 'scripts/project_a/**', 'docker-compose.test.yaml', '.github/workflows/project-a.yml']
+    paths: ['planner/global_planner/**', 'utilities/libraries/f110_msgs/**', 'utilities/libraries/frenet_conversion/**', 'scripts/project_a/**', 'docs/project_a/**', 'docker-compose.test.yaml', '.github/workflows/project-a.yml']
   pull_request:
-    paths: ['planner/global_planner/**', 'utilities/libraries/f110_msgs/**', 'utilities/libraries/frenet_conversion/**', 'scripts/project_a/**', 'docker-compose.test.yaml', '.github/workflows/project-a.yml']
+    paths: ['planner/global_planner/**', 'utilities/libraries/f110_msgs/**', 'utilities/libraries/frenet_conversion/**', 'scripts/project_a/**', 'docs/project_a/**', 'docker-compose.test.yaml', '.github/workflows/project-a.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,7 +19,7 @@ jobs:
           persist-credentials: false
       - name: Build pinned Humble test environment
         run: scripts/project_a/setup.sh
-      - name: Numerical and installed ROS acceptance; record legacy baseline separately
+      - name: W0 regression and A01-A03 geometry; installed ROS; separate legacy baseline
         run: scripts/project_a/verify.sh all work/ci
       - name: Surface pre-existing legacy failures
         if: always()
@@ -34,7 +34,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: project-a-w0-${{ github.sha }}
+          name: project-a-${{ github.sha }}
           path: |
             work/ci/*.txt
             work/ci/*.log

@@ -53,13 +53,19 @@ def inside(p, poly, boundary=True):
     return hit
 
 
+def signed_area_twice(poly):
+    """Translation-stable signed area, avoiding cancellation of global XY terms."""
+    origin = poly[0]
+    return math.fsum(cross(sub(a, origin), sub(b, origin)) for a, b in edges(poly))
+
+
 def simple_polygon(poly):
     if len(poly) < 3:
         return False
     es = list(edges(poly))
     if any(distance(a, b) <= EPS for a, b in es):
         return False
-    if abs(sum(cross(a, b) for a, b in es)) <= EPS:
+    if abs(signed_area_twice(poly)) <= EPS:
         return False
     for i, (a, b) in enumerate(es):
         # Adjacent collinear reversals/overlap are invalid too.

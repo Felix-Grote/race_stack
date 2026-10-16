@@ -109,3 +109,28 @@ def test_pure_import():
                     'import sys; import global_planner.route_input; '
                     'assert "rclpy" not in sys.modules; '
                     'assert "trajectory_planning_helpers" not in sys.modules'], check=True)
+
+
+@pytest.mark.parametrize('mutation', [
+    lambda p: p['physical_map'].update(registration=[0, 'bad', 0]),
+    lambda p: p['occurrences'][0]['caps'][0].update(at_m='zero'),
+    lambda p: p['occurrences'][0]['caps'][0].update(max_speed_mps=[4]),
+    lambda p: p['transitions'][0].update(before_m='bad'),
+    lambda p: p['transitions'][0].update(after_m=[]),
+    lambda p: p['initialization'].update(seed_interval_m=[0, 'bad']),
+    lambda p: p['initialization'].update(heading_interval_rad=[0, []]),
+])
+def test_wrong_numeric_types_reject_consistently(mutation):
+    p = payload()
+    mutation(p)
+    with pytest.raises(RouteError):
+        validate_route(p)
+
+
+def test_translation_stable_polygon_predicate():
+    from global_planner._route_geometry import signed_area_twice, simple_polygon
+    # A small valid square near the documented maximum coordinate magnitude.
+    p = ((99999., 99999.), (99999.0001, 99999.),
+         (99999.0001, 99999.0001), (99999., 99999.0001))
+    assert simple_polygon(p)
+    assert signed_area_twice(p) == pytest.approx(2e-8, abs=3e-15)

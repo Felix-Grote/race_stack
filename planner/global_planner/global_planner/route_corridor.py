@@ -257,6 +257,32 @@ def normal_interval(ordered, sample, chart_min=.05):
     return Corridor(lo, hi, o.id, o.surface_id, pid, tuple(x.id for x in owners), sample.q)
 
 
+def _gate_parameters(segment, gate):
+    a, b = gate
+    g = sub(b, a)
+    c = np.asarray(segment.coefficients)
+    f = g[0] * c[1] - g[1] * c[0]
+    f[0] -= cross(g, a)
+    uncertainty = EPS * math.hypot(*g) + 128 * np.finfo(float).eps * sum(abs(f))
+    if max(abs(f)) <= uncertainty:
+        raise CorridorError('curve collinear/uncertain with gate')
+    roots = list(np.polynomial.polynomial.polyroots(f))
+    # A double root may be returned as a complex pair. Independently inspect
+    # stationary values near the line, then let bracket/segment/direction checks
+    # reject an actual or numerically uncertain tangent contact.
+    for root in np.polynomial.polynomial.polyroots(np.polynomial.polynomial.polyder(f)):
+        if abs(root.imag) < 1e-7 and -EPS <= root.real <= 1 + EPS:
+            if abs(np.polynomial.polynomial.polyval(root.real, f)) <= uncertainty:
+                roots.append(complex(root.real, 0))
+    result = []
+    for root in roots:
+        if 1e-10 < abs(root.imag) < 1e-7 and -.001 < root.real < 1.001:
+            raise CorridorError('uncertain/tangent gate root')
+        if abs(root.imag) <= 1e-10 and -EPS <= root.real <= 1 + EPS:
+            result.append(max(0., min(1., float(root.real))))
+    return tuple(result)
+
+
 def portal_crossings(ordered):
     """Require a unique directed polynomial/gate intersection in each q bracket."""
     ends = _layout(ordered.route)
@@ -273,18 +299,7 @@ def portal_crossings(ordered):
             delta -= ordered.period / 2
             if delta + width < -portal.before - EPS or delta - width > portal.after + EPS:
                 continue
-            c = np.asarray(seg.coefficients)
-            f = g[0] * c[1] - g[1] * c[0]
-            f[0] -= cross(g, a)
-            if max(abs(f)) <= EPS:
-                raise CorridorError('curve collinear with gate')
-            roots = np.polynomial.polynomial.polyroots(f)
-            for root in roots:
-                if 1e-10 < abs(root.imag) < 1e-7 and -.001 < root.real < 1.001:
-                    raise CorridorError('uncertain/tangent gate root')
-                if abs(root.imag) > 1e-10 or not -EPS <= root.real <= 1 + EPS:
-                    continue
-                t = max(0., min(1., float(root.real)))
+            for t in _gate_parameters(seg, portal.gate):
                 q = ordered.progress(i, t)
                 delta_q = (q - ends[j + 1] + ordered.period / 2) % ordered.period
                 delta_q -= ordered.period / 2
@@ -292,7 +307,9 @@ def portal_crossings(ordered):
                     continue
                 xy, d = seg.evaluate(t), seg.evaluate(t, 1)
                 u = dot(sub(xy, a), g) / dot(g, g)
-                if not EPS < u < 1 - EPS:
+                if -EPS <= u <= EPS or 1 - EPS <= u <= 1 + EPS:
+                    raise CorridorError('ambiguous gate endpoint intersection')
+                if not 0 < u < 1:
                     continue
                 if abs(cross(g, sub(xy, a))) > EPS * math.hypot(*g):
                     raise CorridorError('gate root residual')

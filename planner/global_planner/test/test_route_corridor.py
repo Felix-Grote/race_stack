@@ -247,3 +247,47 @@ def test_actual_folded_chart_and_gate_failures():
 def test_chart_pair_budget_is_fail_closed():
     with pytest.raises(CorridorError, match='pair budget'):
         prepare_route(route(), .4, chart_pair_budget=1)
+
+
+def test_tangent_gate_roots_cannot_hide_as_complex_pairs():
+    from global_planner.route_corridor import _gate_parameters
+    from global_planner.route_reference import CubicSegment
+    # y=(t-.25)^2*(t-.75): double contact and one genuine crossing.
+    f = np.polynomial.polynomial.polymul([-.25, 1], [-.25, 1])
+    f = np.polynomial.polynomial.polymul(f, [-.75, 1])
+    segment = CubicSegment(((0, 1, 0, 0), tuple(f)))
+    try:
+        roots = _gate_parameters(segment, ((-1, 0), (2, 0)))
+    except CorridorError as exc:
+        assert 'tangent' in str(exc)
+    else:
+        assert any(abs(t - .25) < 1e-7 for t in roots)
+        # Portal passage will reject this zero directed derivative, even if
+        # the cubic root solver omitted the double root itself.
+        t = min(roots, key=lambda t: abs(t - .25))
+        assert abs(segment.evaluate(t, 1)[1]) < 1e-8
+
+
+def test_identical_xy_heading_visits_stay_distinct():
+    import copy
+    raw = route().payload
+    more = copy.deepcopy(raw['occurrences'])
+    for o in more:
+        o['id'] = 'repeat-' + o['id']
+    raw['occurrences'] += more
+    more_transitions = copy.deepcopy(raw['transitions'])
+    raw['transitions'][-1]['to'] = 'repeat-o0'
+    for t in more_transitions:
+        t['id'] = 'repeat-' + t['id']
+        t['from'] = 'repeat-' + t['from']
+        t['to'] = 'repeat-' + t['to']
+    more_transitions[-1]['to'] = 'o0'
+    raw['transitions'] += more_transitions
+    raw['gate_sequence'] = [t['id'] for t in raw['transitions']]
+    raw['finish'] = raw['gate_sequence'][-1]
+    o = seed_curve(validate_route(raw))
+    a, b = o.curve.sample(.5), o.curve.sample(o.curve.length / 2 + .5)
+    assert a.xy == pytest.approx(b.xy, abs=1e-8)
+    assert a.heading == pytest.approx(b.heading, abs=1e-8)
+    assert (a.occurrence_id, b.occurrence_id) == ('o0', 'repeat-o0')
+    assert len(prepare_route(o.route, .5).gates) == 8
