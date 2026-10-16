@@ -32,7 +32,13 @@ this current remediation status supersedes its acceptance claims.
   **39 passed**, with 26 failing regressions preserved before implementation.
   Independent 14-family/70-inverse-query check passes (worst station residual
   9.91e-11 m). Evidence: `evidence/w1-remediation/f2`.
-- F3–F4 remain under repair; no final acceptance or final CI claim yet.
+- **F4 repaired:** exact coefficient endpoints return canonical cumulative
+  stations; tiny negative modulo retains the preceding owner in the half-open
+  domain; bounded prefix-subtraction roundoff does not change the selected owner.
+  Five new endpoint regressions failed before repair and now pass. Evidence:
+  `evidence/w1-remediation/f4`.
+- F3 and final combined numerical/geometry verification remain in progress;
+  no final acceptance or final CI claim yet.
 
 ## Source and review route
 

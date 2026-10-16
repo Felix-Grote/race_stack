@@ -61,6 +61,17 @@ Raw failing/initial/final passing logs, JUnit, scoped flake8 and source hashes:
 `evidence/w1-remediation/f2`. The mathematical control is documented in
 [W1_NUMERICAL_ERROR_CONTROL.md](W1_NUMERICAL_ERROR_CONTROL.md).
 
+### F4 canonical endpoint repair
+
+Five failing-first endpoint regressions now pass in pinned Humble: nonuniform
+5/8/17/64-knot curves, every coefficient endpoint and adjacent representable
+station, plus tiny negative/subnormal progress retaining the preceding owner.
+Exact endpoint stations use the stored compensated cumulative knots. Only a
+modulo result rounding to L and local subtraction overshoot within four lap ulps
+are normalized; distinct nearby stations are not broadly snapped across owners.
+Raw red/green JUnit, logs and source hashes: `evidence/w1-remediation/f4`.
+Full combined A02/A03 verification follows after the remaining anchor work.
+
 Tested source base: `67981ed7964a6d35e1da48f0c22bbd9f6d123d5e`, with W0 changes
 identified by [implementation SHA-256 manifest](evidence/implementation-files.json).
 No production source or gitlink changes. Final clean-clone verification follows in

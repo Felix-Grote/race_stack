@@ -232,3 +232,36 @@ def test_periodic_narrow_speed_feature():
     sample = curve.sample(target)
     actual = feature_arc(segment.coefficients, .3, .01, 2e-7, 1., sample.t)
     assert abs(actual - target) <= curve.policy.station_abs
+
+
+@pytest.mark.parametrize('count', [5, 8, 17, 64])
+def test_canonical_endpoint_owners_and_adjacent_floats(count):
+    theta = 2 * np.pi * (np.arange(count) / count) ** 1.2
+    owners = tuple(('o' + str(i), 's' + str(i)) for i in range(count))
+    curve = Curve.interpolate(np.c_[6 * np.cos(theta), 4 * np.sin(theta)], owners=owners)
+    for i in range(count):
+        assert curve.station(i, 0.) == curve.cumulative[i]
+        assert curve.station(i, 1.) == curve.cumulative[i + 1]
+        next_i = (i + 1) % count
+        assert curve.locate(curve.station(i, 1.)) == (next_i, 0.)
+        endpoint = curve.sample(curve.station(i, 1.))
+        assert (endpoint.occurrence_id, endpoint.surface_id) == owners[next_i]
+        left = curve.sample(float(np.nextafter(curve.cumulative[i + 1], -np.inf)))
+        right = curve.sample(float(np.nextafter(curve.cumulative[i], np.inf)))
+        assert (left.occurrence_id, left.surface_id) == owners[i]
+        assert (right.occurrence_id, right.surface_id) == owners[i]
+
+
+def test_negative_seam_progress_retains_preceding_side():
+    theta = np.linspace(0, 2 * np.pi, 64, endpoint=False)
+    owners = tuple(('o' + str(i), 's' + str(i)) for i in range(64))
+    curve = Curve.interpolate(np.c_[6 * np.cos(theta), 6 * np.sin(theta)], owners=owners)
+    for progress in (-1e-20, -float(np.nextafter(0., 1.)), -math.ulp(curve.length)):
+        assert 0 <= curve.wrap(progress) < curve.length
+        sample = curve.sample(progress)
+        assert sample.s < curve.length
+        assert (sample.occurrence_id, sample.surface_id) == owners[-1]
+        assert sample.xy == pytest.approx(curve.sample(0.).xy, abs=1e-8)
+    for progress in (0., curve.length, -curve.length, 2 * curve.length, -2 * curve.length):
+        assert curve.locate(progress) == (0, 0.)
+        assert curve.sample(progress).occurrence_id == 'o0'

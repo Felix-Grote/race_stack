@@ -47,6 +47,15 @@ regularity_depth also caps their subdivision. No arc table or second curve is
 introduced. A 256-panel policy is stated explicitly for the largest new stress
 cases; default-budget exhaustion is itself tested as fail-closed behavior.
 
+### F4 — One endpoint identity and directed half-open rounding
+
+Exact `(segment,0/1)` stations return the canonical cumulative knot, rather than
+re-adding a length with different rounding. If negative modulo rounds to L, use
+the representable predecessor of L so the preceding owner is preserved. After
+bisecting progress, clamp only a local subtraction overshoot bounded by four lap
+ulps; never select a different occurrence by a broad tolerance snap. All original
+finite-progress and floating-resolution rejection policies remain unchanged.
+
 ## 2026-10-16 — W0 environment and ownership
 
 1. **Path D selected by execution**, not assumption. Host Debian 13/Python 3.12 has

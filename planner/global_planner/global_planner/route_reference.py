@@ -354,19 +354,37 @@ class Curve:
         """Unwrapped anchor station; terminal (last,1) equals L."""
         if type(segment) is not int or not 0 <= segment < len(self.segments):
             raise GeometryError('invalid segment')
+        if not math.isfinite(t) or not 0 <= t <= 1:
+            raise GeometryError('arc parameter outside [0,1]')
+        # Exact coefficient endpoints have one canonical metric identity, even
+        # when compensated accumulation differs from ordinary local addition.
+        if t == 0:
+            return self.cumulative[segment]
+        if t == 1:
+            return self.cumulative[segment + 1]
         return self.cumulative[segment] + self.segments[segment].arc(t)
 
     def wrap(self, s):
         """Wrap finite supplied progress, rejecting unresolvable huge lap counts."""
         if not math.isfinite(s) or abs(s) * np.finfo(float).eps > self.policy.station_abs / 16:
             raise GeometryError('nonfinite/unresolvable metric progress')
-        return s % self.length
+        wrapped = s % self.length
+        # A tiny negative remainder can round upward to L. Keep its preceding
+        # side and owner using the nearest representable half-open station.
+        return math.nextafter(self.length, 0.) if wrapped == self.length else wrapped
 
     def locate(self, s):
         """Return segment/t with a half-open right-hand convention at knots/seam."""
         s = self.wrap(s)
         i = min(bisect_right(self.cumulative, s) - 1, len(self.segments) - 1)
-        return i, self.segments[i].parameter(s - self.cumulative[i])
+        local = s - self.cumulative[i]
+        length = self.segments[i].length
+        # Subtraction of compensated prefix sums can overshoot the separately
+        # stored segment length by a few ulps. Normalize only this arithmetic
+        # discrepancy; the bisected half-open segment/owner remains unchanged.
+        if local > length and local - length <= 4 * math.ulp(self.length):
+            local = length
+        return i, self.segments[i].parameter(local)
 
     def sample(self, s, occurrence_id=None):
         """Stateless query; optional supplied occurrence must match declared owner."""

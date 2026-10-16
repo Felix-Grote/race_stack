@@ -79,6 +79,10 @@ no chord approximation or dense resampling substitutes for metric inversion.
 
 `locate`, `station`, `sample` and `window` share these exact coefficients. Queries
 wrap negative/multiple-lap progress; knots and seam use the right-hand segment.
+Exact coefficient endpoints share the canonical cumulative station identity.
+Tiny negative modulo that rounds to L uses its representable predecessor,
+preserving the preceding owner; bounded prefix-subtraction roundoff is normalized
+without snapping distinct adjacent stations across ownership boundaries.
 Reject nonfinite progress and lap counts whose binary64 resolution exceeds 1/16
 of the station budget. Windows include endpoints and have at most 100000 samples.
 Heading is +X-zero/CCW, curvature is signed, normal is left-positive. There is no

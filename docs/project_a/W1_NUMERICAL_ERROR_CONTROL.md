@@ -43,8 +43,8 @@ For n-point Gauss-Legendre on `[0,1]`, the usual remainder yields
 
 `panel_error <= h * (n!)^4 / ((2*n+1)*((2*n)!)^2) * F_(2*n)`.
 
-The implementation uses n=32. Node/weight sums are positive; their values
-approximate this same polynomial speed, not a resampled/refitted curve.
+The implementation uses n=32. Node/weight sums are positive; they integrate
+the norm of this same polynomial derivative, not a resampled/refitted curve.
 
 ## Floating-point and resource policy
 
@@ -56,9 +56,9 @@ Independent analytic and high-order split-Gaussian oracles challenge the actual
 returned errors, including nearly stationary and scale-transformed examples.
 
 The largest panel bound is refined first until summed panel errors fit half the
-segment arc budget, leaving room for the final sum allowance. Nonfinite bounds,
-unresolved zero boxes, unsplittable intervals, depth exhaustion or too many live
-panels raise GeometryError. Candidate roots of `r' dot r''` accelerate initial
+segment arc budget, leaving room for the final sum allowance. Nonfinite bounds
+and unresolved zero boxes request subdivision; unsplittable intervals, depth
+exhaustion or too many live panels raise GeometryError. Candidate roots of `r' dot r''` accelerate initial
 partitioning; missed/inexact roots cannot grant acceptance because each resulting
 panel still needs its analytic bound.
 
