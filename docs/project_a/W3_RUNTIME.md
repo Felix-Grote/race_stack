@@ -6,13 +6,6 @@ immutable reference under a particular supported implementation and policy.
 Independent W3 adversarial review remains the release gate. A successful test,
 solver convergence or a waypoint JSON file does not establish race readiness.
 
-Clean candidate `531667abc0ad38236ec46825a544a3644c324b4f` passes both separate
-fresh-checkout acceptance and exact-head push CI: 552 functional tests / 27 groups
-and all nine installed scenario outcomes. The [publication receipt](evidence/w3-a09-publication/README.md)
-records its source, archive and trusted H identities, and distinguishes published
-hosted evidence from the larger local bundle affected by the workspace outage.
-The final containing head and CI are recorded externally in PR #3.
-
 ## Reproduce an exact committed candidate
 
 Use a normal nonroot developer account with Git/submodule access and the managed
@@ -212,10 +205,11 @@ time remains in the artifact; the legacy Float32 field is its correct binary32
 projection. Unavailable centerline and shortest-path arrays/markers are explicitly
 empty and identified in the export report/map text. They are not fabricated.
 
-Individual waypoint fields omit H, q, occurrence/surface identity, per-waypoint
-time and mathematical coverage. Map text includes informational H, but the
-original reader does not authenticate it or bind the arrays to the artifact.
-External trusted H and artifact replay remain necessary. This is a lossy view. Legacy consumers that refit a spline or assume `index * 0.1`
+Waypoint fields omit H, q, occurrence/surface identity, per-waypoint time and
+mathematical coverage. Map text includes H as information; the original reader
+does not authenticate it or bind it to waypoint contents. External H and artifact
+replay remain necessary. Waypoints are a lossy view. Legacy consumers that refit
+a spline or assume `index * 0.1`
 produce their own geometry/station and do not preserve the canonical reference.
 Export may include event stations and a short final interval. JSON/CDR acceptance
 does not establish that existing downstream algorithms preserve the certificate.
@@ -235,6 +229,19 @@ explicit synthetic dynamics model. Approved real-course geometry, calibration,
 controller tracking and real-car safety evidence remain external requirements.
 
 ## Evidence and independent review
+
+The clean implementation candidate
+`531667abc0ad38236ec46825a544a3644c324b4f` passed
+`scripts/project_a/fresh_verify.sh 531667abc0ad38236ec46825a544a3644c324b4f work/w3/a09-fresh`
+and exact-head push CI 38926539747: 552 functional tests in 27 groups, all nine
+source-free scenarios, three ordinary package builds and zero functional
+failures/errors/skips. The separate legacy aggregate remains 541 reports,
+ten inherited failures and two original skips, with zero errors and no added
+style diagnostics. All nine controlled artifact identities match across local
+fresh and hosted runs. Complete original logs, products, mutation reasons,
+provenance, CI archive and checksums are in
+[the A09 evidence index](evidence/w3-a09/README.md). The later evidence-containing head receives its
+own exact-head CI, recorded externally in the PR/final report.
 
 Keep the exact candidate SHA, recursive gitlinks, image ID, dependency manifests,
 input/build/module hashes, JUnit reports and raw logs together. Source-free evidence

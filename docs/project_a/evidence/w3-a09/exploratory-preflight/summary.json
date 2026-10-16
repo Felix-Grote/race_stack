@@ -1,0 +1,323 @@
+{
+  "scope": "Exploratory corrected installed preflight using retained dirty A07 installed prefix; not final exact-candidate acceptance",
+  "prefix_source_commit": "9fae5faed6ca62e0c943b6290babc50638477d9b",
+  "prefix_source_dirty": true,
+  "image_id": "sha256:2cc1f6ad969cdb3256f14b4b45500cb0fcdd4a3f321b4c2a1bbc7c7fb6ca0f88",
+  "installed": {
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "85.045"
+  },
+  "fresh_guards_initial_noexec_attempt": {
+    "tests": "3",
+    "failures": "3",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.180"
+  },
+  "fresh_guards_executable_scratch_retry": {
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.195"
+  },
+  "command_count": 21,
+  "negative_control_count": 15,
+  "negative_controls": [
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/references/8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8/reference.json",
+        "--expected-h",
+        "0f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/wrong-expected-h.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "externally trusted artifact H mismatch",
+      "report": "/results/w3-installed/wrong-expected-h.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/mutated-approval/reference.json",
+        "--expected-h",
+        "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/reject-approval-old-h.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "externally trusted artifact H mismatch",
+      "report": "/results/w3-installed/reject-approval-old-h.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/mutated-approval/reference.json",
+        "--expected-h",
+        "9f431662efa902007e5f193a3431741d21cda4125a9aefd8cdf7ea95d5d5a23b",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/reject-approval-new-h.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "geometry replay FAIL: complete curve differs from independently retained authority",
+      "report": "/results/w3-installed/reject-approval-new-h.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/mutated-model/reference.json",
+        "--expected-h",
+        "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/reject-model-old-h.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "externally trusted artifact H mismatch",
+      "report": "/results/w3-installed/reject-model-old-h.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/mutated-model/reference.json",
+        "--expected-h",
+        "648ff518a42b381a5a9c0ba41955b78ab00b65960f2354c5f567f392ff5c821f",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/reject-model-new-h.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "dynamics replay FAIL: profile curve/model provenance digest mismatch",
+      "report": "/results/w3-installed/reject-model-new-h.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/mutated-policy/reference.json",
+        "--expected-h",
+        "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/reject-policy-old-h.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "externally trusted artifact H mismatch",
+      "report": "/results/w3-installed/reject-policy-old-h.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/mutated-policy/reference.json",
+        "--expected-h",
+        "f33889f70aea1f287638dbda6265a7b3b361919ab859c9b877a8130549a70541",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/reject-policy-new-h.json"
+      ],
+      "returncode": 1,
+      "status": "UNSUPPORTED",
+      "reason": "artifact differs from independent acceptance policy",
+      "report": "/results/w3-installed/reject-policy-new-h.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/mutated-coefficient/reference.json",
+        "--expected-h",
+        "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/reject-coefficient-old-h.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "externally trusted artifact H mismatch",
+      "report": "/results/w3-installed/reject-coefficient-old-h.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/mutated-implementation/reference.json",
+        "--expected-h",
+        "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/reject-implementation-old-h.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "externally trusted artifact H mismatch",
+      "report": "/results/w3-installed/reject-implementation-old-h.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/mutated-implementation/reference.json",
+        "--expected-h",
+        "d8e5a1177cd2e3994521a93fa1302adfe4c6de00d8dfbfdb0067865e2b7a4a62",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/reject-implementation-new-h.json"
+      ],
+      "returncode": 1,
+      "status": "UNSUPPORTED",
+      "reason": "unsupported or changed kernel/checker/dependency identity",
+      "report": "/results/w3-installed/reject-implementation-new-h.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/.tmp-interrupted/reference.json",
+        "--expected-h",
+        "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/incomplete-stage.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "private staging and lock paths cannot be accepted references",
+      "report": "/results/w3-installed/incomplete-stage.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/truncated/reference.json",
+        "--expected-h",
+        "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/truncated-content.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "invalid bounded UTF-8 JSON",
+      "report": "/results/w3-installed/truncated-content.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/corrupt/reference.json",
+        "--expected-h",
+        "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--report",
+        "/results/w3-installed/corrupt-bytes.json"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "invalid bounded UTF-8 JSON",
+      "report": "/results/w3-installed/corrupt-bytes.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "validate",
+        "--artifact",
+        "/results/w3-installed/references/8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8/reference.json",
+        "--expected-h",
+        "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/results/w3-installed/unsupported-policy.json",
+        "--report",
+        "/results/w3-installed/unsupported-coverage.json"
+      ],
+      "returncode": 1,
+      "status": "UNSUPPORTED",
+      "reason": "unsupported independently required coverage",
+      "report": "/results/w3-installed/unsupported-coverage.json"
+    },
+    {
+      "command": [
+        "/work/install/global_planner/lib/global_planner/compile_route",
+        "query",
+        "--artifact",
+        "/results/w3-installed/references/8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8/reference.json",
+        "--expected-h",
+        "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "--policy",
+        "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+        "--s-m",
+        "0.5",
+        "--occurrence-id",
+        "unapproved-occurrence"
+      ],
+      "returncode": 1,
+      "status": "FAIL",
+      "reason": "supplied occurrence disagrees with ordered progress",
+      "report": "/results/w3-installed/wrong-supplied-occurrence.json"
+    }
+  ],
+  "H": "8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+  "current_production_matches_retained_A07_prefix": {
+    "route_artifact.py": {
+      "current_sha256": "5ef3153aff5b601eadeabfc4d3a99e4493a6afa4ededb78aa4afb73ce34d2597",
+      "installed_manifest_sha256": "5ef3153aff5b601eadeabfc4d3a99e4493a6afa4ededb78aa4afb73ce34d2597",
+      "equal": true
+    },
+    "route_compile.py": {
+      "current_sha256": "7abbd29f6c3e21757abe8e74046da12ab918bf2baf7d08529b55a6be7b697a50",
+      "installed_manifest_sha256": "7abbd29f6c3e21757abe8e74046da12ab918bf2baf7d08529b55a6be7b697a50",
+      "equal": true
+    },
+    "route_legacy_export.py": {
+      "current_sha256": "dc6f8a0c5d0b8e025f20f2a0cbc2a171cc6adf39fb0ab2f09118c4cbb44e8ad2",
+      "installed_manifest_sha256": "dc6f8a0c5d0b8e025f20f2a0cbc2a171cc6adf39fb0ab2f09118c4cbb44e8ad2",
+      "equal": true
+    }
+  },
+  "runtime_mounts": "Only installed prefix, optimizer wheel, copied minimal harness and results; no source/build mount",
+  "source_free": true
+}

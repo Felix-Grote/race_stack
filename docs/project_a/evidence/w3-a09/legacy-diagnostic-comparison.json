@@ -1,0 +1,8 @@
+{
+  "scope": "Emitted style diagnostics including repeated report copies; exact text and multiplicities",
+  "baseline_entries": 1173,
+  "candidate_entries": 1173,
+  "new": [],
+  "removed": [],
+  "identical": true
+}

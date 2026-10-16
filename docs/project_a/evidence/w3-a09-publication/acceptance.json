@@ -125,12 +125,13 @@
     "s6": "5246eda31c757ae728c7ba9deb03a40569590dd296a941aaacbaf15af2ac58da"
   },
   "local_bundle": {
-    "publication_status": "UNPUBLISHED: managed executor disconnected before git add/commit",
+    "publication_status": "PUBLISHED after managed workspace reconnection and all 530 file hashes reverified",
     "verified_file_hashes": 530,
     "ledger_sha256": "4e1629470acd36e6e7d35169f1ec069656d43a3e04f2fc9ebccbabf9f6e0f25a",
     "scope_audit_sha256": "1e586ac167267f4cb3a589c5e05dbadd7135f75987a9c00a985715c0ac2c1e7d",
-    "not_a_claim_that_local_files_are_committed": true
+    "evidence_directory": "../w3-a09"
   },
   "trust": "H values come from controlled compile receipts audited before transport. Artifact self-hash/stored PASS is not approval. Load with the externally trusted expected H and independently selected supported context. These H values bind candidate531667 build provenance, not a later containing commit.",
-  "remaining_gate": "Final containing-head CI must be recorded externally in PR3; separate independent adversarial review has direct remediation authority."
+  "remaining_gate": "Final containing-head CI must be recorded externally in PR3; separate independent adversarial review has direct remediation authority.",
+  "publication_incident": "Transient 409 environment_offline before local publication; docs-only receipt dd8d7cb was published through GitHub; complete bundle recovered intact and committed in the next ordinary descendant."
 }

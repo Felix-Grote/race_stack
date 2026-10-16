@@ -2,39 +2,43 @@
 
 ## W3 A07–A09 implemented — independent adversarial review pending
 
-A07 is `0c2d7c35fc50051a2ae96b9260de636610e280f4`, A08 is
-`6a3295753235889389be1374ce1195435afb7b74`, and the clean A09 implementation
-candidate is `531667abc0ad38236ec46825a544a3644c324b4f`. Its fresh recursive
-checkout, pinned setup, complete verification and separate source-free runtime
-all exit zero. **552 functional tests in 27 groups** pass with no functional
-failures/errors/skips. Three selected packages build without symlink installation.
+A07 is `0c2d7c35fc50051a2ae96b9260de636610e280f4`; A08 is
+`6a3295753235889389be1374ce1195435afb7b74`; A09 implementation is
+`531667abc0ad38236ec46825a544a3644c324b4f`. A fresh no-hardlink recursive
+checkout of that exact clean candidate passed safe setup and full verification:
+**552 functional tests / 27 groups / zero failures, errors or skips**, three
+ordinary non-symlink package builds (17.1 s), and a separate source-free runtime.
+The wrapper, full runner and runtime all exit 0. All 138 source hashes match exact
+Git before and after; 95 protected existing files and all seven pins are unchanged.
 
-All nine installed cases pass explicit compile, new-process dual validation,
-true metric CLI/API queries, original nine-group waypoint reader and ROS CDR:
-S0 forward/reverse/rotated, both S2 alternatives, S3 surfaces/notch, S4 repeated
-locations and full-course S6. The source-free runtime has no source/build tree,
-network, hidden map, user .ros, GUI, car configuration or running ROS node.
-Before/after manifests match all 138 committed source entries. All 95 protected
-pre-existing blobs and seven recursive pins remain unchanged.
+All nine installed cases PASS through compile, new-process dual replay, metric and
+occurrence queries, export, actual nine-group reader and CDR: forward/reverse/
+rotated S0, both S2 alternatives, S3 surfaces/notch, repeated-location S4 and full
+S6 at explicit .52 m spacing. The source-free suite passes 4 tests in 761.19 s,
+including all 15 content/trust negative controls. It mounts installed products
+and a minimal harness only, with no repository/build tree, network or hardware.
 
-Exact candidate push [CI 38926539747](https://github.com/Felix-Grote/race_stack/actions/runs/38926539747)
-is **SUCCESS** with the same 552 tests and nine outcomes; all nine H identities
-match the separate local fresh run. Legacy is **541 tests / zero errors / exactly
-10 inherited failures / 2 inherited skips**. All 1,173 raw style diagnostics match
-the established baseline; active new-source lint passes.
-[Published acceptance receipt](evidence/w3-a09-publication/README.md),
-[runtime contract](W3_RUNTIME.md), [review instructions](W3_REVIEW.md).
+Exact-candidate [push CI 38926539747](https://github.com/Felix-Grote/race_stack/actions/runs/38926539747)
+also passes all 552 tests and nine scenarios. Its original downloaded artifact
+SHA256 is `764a255ec0cad9456805e1480f9b30dab81823393a4f05014821b4c059f62595`.
+All nine artifact H values match byte-for-byte across local fresh and hosted
+compilation. Both runs retain legacy **541 / zero errors / ten inherited failures /
+two original skips**, with all 1,173 emitted style diagnostics unchanged.
+[Complete A09 evidence](evidence/w3-a09/README.md), [runtime contract](W3_RUNTIME.md).
 
-The final documentation-containing head requires its own exact-head CI. Its
-literal SHA/run and controlled artifact H are published outside that commit in
-[PR #3](https://github.com/Felix-Grote/race_stack/pull/3), avoiding self-reference.
-The managed workspace disconnected after acceptance; the larger local 530-file
-evidence bundle was verified but has not been committed. The published hosted
-artifact retains the complete candidate CI reports and source-free products;
-the receipt states this distinction and its archive checksum explicitly.
+Exploratory preflight against the retained dirty A07 prefix passes **3 installed
+tests in 85.04 s**, 21 CLI processes and all 15 content/trust negative controls.
+The three exact-candidate guard regressions pass in 0.19 s. Their initial attempt
+hit the intentionally noexec /tmp mount; explicit executable scratch fixes the
+test invocation and the original failures remain retained. Preflight is kept
+separate from the completed clean-candidate evidence above.
 
-Independent W3 adversarial review with direct remediation authority remains the
-acceptance gate. No physical-course or vehicle readiness is claimed.
+The containing evidence/documentation commit requires its own literal-head push
+CI; its final SHA, completed run and controlled artifact H values are recorded in
+the PR/final publication report, outside that self-referential commit. No earlier
+CI is substituted for it. The next ownership gate is the separate adversarial
+review with direct remediation authority. [Review instructions](W3_REVIEW.md).
+Do not auto-merge or operate a physical car.
 
 ## W3 A08 checkpoint — campaign complete, independent release review pending
 
@@ -67,9 +71,9 @@ in 24 groups**, three builds, and exact legacy **528 / 0 errors / 10 failures /
 2 skips**. All 1,173 emitted legacy style diagnostics also match the baseline
 exactly. [Downloaded hosted evidence](evidence/w3-a07-ci/REPRODUCE.md).
 
-A09 exact-candidate and separate source-free acceptance now pass as recorded
-above. Independent W3 adversarial review, with direct remediation authority,
-remains the final release gate. No physical-course or vehicle readiness is claimed.
+A09 clean fresh/source-free results above supersede this checkpoint's pending
+verification state. Independent W3 adversarial review remains the final release
+gate. No physical-course or vehicle readiness is claimed.
 
 ## W3 A07 checkpoint — implemented and internally verified
 

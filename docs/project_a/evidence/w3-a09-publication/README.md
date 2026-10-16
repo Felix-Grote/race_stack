@@ -22,8 +22,9 @@ It contains full verification summaries/JUnit/logs/source manifests and the
 persisted references, mutation controls, query reports and nine-group exports.
 Use GitHub's artifact download for that exact artifact, verify the archive SHA256
 before extraction, then inspect `w3-scenario-campaign.json` and the per-case
-references. GitHub artifacts are retention-limited; this document does not
-promise indefinite artifact hosting.
+references. GitHub artifacts are retention-limited. The exact original archive is now also
+[retained in Git](../w3-a09/hosted-ci/original-artifact.zip), together with the
+[complete fresh local evidence](../w3-a09/README.md).
 
 For a retained candidate artifact, select the corresponding trusted H from this
 receipt through your trusted approval channel and the independently supported
@@ -45,7 +46,7 @@ if its coefficients, checker implementation and policy remain unchanged. Final
 containing-head SHA, CI and controlled H are recorded outside the commit in
 [PR #3](https://github.com/Felix-Grote/race_stack/pull/3).
 
-## Local evidence publication limitation
+## Recovered local evidence and publication incident
 
 After the green fresh run and hosted audit, the managed executor disconnected
 with `409 environment_offline: Environment is not connected`. No planner test
@@ -55,9 +56,11 @@ hash checks; its ledger SHA256 is
 Its separate protected-source scope audit SHA256 is
 `1e586ac167267f4cb3a589c5e05dbadd7135f75987a9c00a985715c0ac2c1e7d`.
 That bundle includes fresh setup/wrapper logs and exploratory red/green preflight
-details in addition to hosted products. It remains uncommitted; these hashes
-are not a claim that the files are published. This smaller receipt was written
-through the authorized GitHub connector, without changing tested source code.
+details in addition to hosted products. The workspace subsequently reconnected,
+and all 530 file hashes were reverified with zero mismatches. The complete bundle
+is now committed at [w3-a09](../w3-a09/README.md). The earlier smaller receipt
+commit remains in history. No tested source code changed during recovery; the
+final containing head requires its own exact-head CI.
 
 The full frozen [benchmark evidence](../w3-benchmarks/REPRODUCE.md) and prior
 A07/baseline evidence are already committed. Separate independent W3 adversarial

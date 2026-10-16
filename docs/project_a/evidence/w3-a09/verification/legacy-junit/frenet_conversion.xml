@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="2" skipped="1" tests="3" time="0.277" timestamp="2026-10-16T16:00:10.896696+00:00" hostname="c9b446b93cb0"><testcase classname="frenet_conversion.test.test_copyright" name="test_copyright" time="0.000"><skipped type="pytest.skip" message="No copyright header has been placed in the generated source file.">/work/src/frenet_conversion/test/test_copyright.py:20: No copyright header has been placed in the generated source file.</skipped></testcase><testcase classname="frenet_conversion.test.test_flake8" name="test_flake8" time="0.120"><failure message="AssertionError: Found 49 code style errors / warnings:&#10;  ./frenet_conversion/__init__.py:1:1: F401 'frenet_conversion.frenet_converter' imported but unused&#10;  ./frenet_conversion/__init__.py:1:47: W292 no newline at end of file&#10;  ./frenet_conversion/frenet_converter_demo_node.py:21:53: E231 missing whitespace after ','&#10;  ./frenet_conversion/frenet_converter_demo_node.py:21:55: E231 missing whitespace after ','&#10;  ./frenet_conversion/frenet_converter_demo_node.py:21:57: E231 missing whitespace after ','&#10;  ./frenet_conversion/frenet_converter_demo_node.py:21:61: E231 missing whitespace after ','&#10;  ./frenet_conversion/frenet_converter_demo_node.py:21:73: E231 missing whitespace after ','&#10;  ./frenet_conversion/frenet_converter_demo_node.py:21:75: E231 missing whitespace after ','&#10;  ./frenet_conversion/frenet_converter_demo_node.py:21:77: E231 missing whitespace after ','&#10;  ./frenet_conversion/frenet_converter_demo_node.py:31:41: E231 missing whitespace after ','&#10;  ./frenet_conversion/frenet_converter_demo_node.py:32:23: E231 missing whitespace after ','&#10;  ./frenet_conversion/frenet_converter_demo_node.py:33:23: E231 missing whitespace after ','&#10;  ./frenet_conversion/frenet_converter.py:5:1: E302 expected 2 blank lines, found 1&#10;  ./frenet_conversion/frenet_converter.py:14:40: E261 at least two spaces before inline comment&#10;  ./frenet_conversion/frenet_converter.py:22:22: E222 multiple spaces after operator&#10;  ./frenet_conversion/frenet_converter.py:23:22: E222 multiple spaces after operator&#10;  ./frenet_conversion/frenet_converter.py:28:65: W291 trailing whitespace&#10;  ./frenet_conversion/frenet_converter.py:35:58: E261 at least two spaces before inline comment&#10;  ./frenet_conversion/frenet_converter.py:35:59: E262 inline comment should start with '# '&#10;  ./frenet_conversion/frenet_converter.py:52:100: E501 line too long (104 &gt; 99 characters)&#10;  ./frenet_conversion/frenet_converter.py:53:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:57:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:62:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:67:100: E501 line too long (102 &gt; 99 characters)&#10;  ./frenet_conversion/frenet_converter.py:71:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:77:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:81:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:93:5: E303 too many blank lines (2)&#10;  ./frenet_conversion/frenet_converter.py:97:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:103:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:111:38: E228 missing whitespace around modulo operator&#10;  ./frenet_conversion/frenet_converter.py:113:13: E265 block comment should start with '# '&#10;  ./frenet_conversion/frenet_converter.py:113:100: E501 line too long (113 &gt; 99 characters)&#10;  ./frenet_conversion/frenet_converter.py:114:100: E501 line too long (145 &gt; 99 characters)&#10;  ./frenet_conversion/frenet_converter.py:134:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:142:75: W291 trailing whitespace&#10;  ./frenet_conversion/frenet_converter.py:150:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:153:83: W291 trailing whitespace&#10;  ./frenet_conversion/frenet_converter.py:154:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:155:14: W291 trailing whitespace&#10;  ./frenet_conversion/frenet_converter.py:162:14: E228 missing whitespace around modulo operator&#10;  ./frenet_conversion/frenet_converter.py:165:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:167:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:169:5: E303 too many blank lines (2)&#10;  ./frenet_conversion/frenet_converter.py:172:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:176:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:186:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:188:1: W293 blank line contains whitespace&#10;  ./frenet_conversion/frenet_converter.py:190:1: W391 blank line at end of file&#10;assert 1 == 0">test/test_flake8.py:23: in test_flake8
+    assert rc == 0, \
+E   AssertionError: Found 49 code style errors / warnings:
+E     ./frenet_conversion/__init__.py:1:1: F401 'frenet_conversion.frenet_converter' imported but unused
+E     ./frenet_conversion/__init__.py:1:47: W292 no newline at end of file
+E     ./frenet_conversion/frenet_converter_demo_node.py:21:53: E231 missing whitespace after ','
+E     ./frenet_conversion/frenet_converter_demo_node.py:21:55: E231 missing whitespace after ','
+E     ./frenet_conversion/frenet_converter_demo_node.py:21:57: E231 missing whitespace after ','
+E     ./frenet_conversion/frenet_converter_demo_node.py:21:61: E231 missing whitespace after ','
+E     ./frenet_conversion/frenet_converter_demo_node.py:21:73: E231 missing whitespace after ','
+E     ./frenet_conversion/frenet_converter_demo_node.py:21:75: E231 missing whitespace after ','
+E     ./frenet_conversion/frenet_converter_demo_node.py:21:77: E231 missing whitespace after ','
+E     ./frenet_conversion/frenet_converter_demo_node.py:31:41: E231 missing whitespace after ','
+E     ./frenet_conversion/frenet_converter_demo_node.py:32:23: E231 missing whitespace after ','
+E     ./frenet_conversion/frenet_converter_demo_node.py:33:23: E231 missing whitespace after ','
+E     ./frenet_conversion/frenet_converter.py:5:1: E302 expected 2 blank lines, found 1
+E     ./frenet_conversion/frenet_converter.py:14:40: E261 at least two spaces before inline comment
+E     ./frenet_conversion/frenet_converter.py:22:22: E222 multiple spaces after operator
+E     ./frenet_conversion/frenet_converter.py:23:22: E222 multiple spaces after operator
+E     ./frenet_conversion/frenet_converter.py:28:65: W291 trailing whitespace
+E     ./frenet_conversion/frenet_converter.py:35:58: E261 at least two spaces before inline comment
+E     ./frenet_conversion/frenet_converter.py:35:59: E262 inline comment should start with '# '
+E     ./frenet_conversion/frenet_converter.py:52:100: E501 line too long (104 &gt; 99 characters)
+E     ./frenet_conversion/frenet_converter.py:53:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:57:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:62:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:67:100: E501 line too long (102 &gt; 99 characters)
+E     ./frenet_conversion/frenet_converter.py:71:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:77:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:81:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:93:5: E303 too many blank lines (2)
+E     ./frenet_conversion/frenet_converter.py:97:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:103:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:111:38: E228 missing whitespace around modulo operator
+E     ./frenet_conversion/frenet_converter.py:113:13: E265 block comment should start with '# '
+E     ./frenet_conversion/frenet_converter.py:113:100: E501 line too long (113 &gt; 99 characters)
+E     ./frenet_conversion/frenet_converter.py:114:100: E501 line too long (145 &gt; 99 characters)
+E     ./frenet_conversion/frenet_converter.py:134:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:142:75: W291 trailing whitespace
+E     ./frenet_conversion/frenet_converter.py:150:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:153:83: W291 trailing whitespace
+E     ./frenet_conversion/frenet_converter.py:154:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:155:14: W291 trailing whitespace
+E     ./frenet_conversion/frenet_converter.py:162:14: E228 missing whitespace around modulo operator
+E     ./frenet_conversion/frenet_converter.py:165:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:167:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:169:5: E303 too many blank lines (2)
+E     ./frenet_conversion/frenet_converter.py:172:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:176:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:186:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:188:1: W293 blank line contains whitespace
+E     ./frenet_conversion/frenet_converter.py:190:1: W391 blank line at end of file
+E   assert 1 == 0</failure></testcase><testcase classname="frenet_conversion.test.test_pep257" name="test_pep257" time="0.038"><failure message="AssertionError: Found code style errors / warnings&#10;assert 1 == 0">test/test_pep257.py:23: in test_pep257
+    assert rc == 0, 'Found code style errors / warnings'
+E   AssertionError: Found code style errors / warnings
+E   assert 1 == 0</failure></testcase></testsuite></testsuites>

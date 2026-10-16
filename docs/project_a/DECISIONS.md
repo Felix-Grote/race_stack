@@ -24,9 +24,10 @@
   and push CI 38926539747: 552 functional tests, nine installed scenarios, all
   nine H identities equal across local and hosted runs, unchanged inherited
   failures and raw diagnostics. Retain the exact candidate artifact checksum.
-  A managed-workspace outage prevented publication of the larger local bundle;
-  publish its verified receipt and the raw hosted artifact location without
-  representing unpublished local files as committed evidence.
+  A managed-workspace outage briefly delayed the larger local bundle. Publish
+  its verified receipt through GitHub, then retain the complete 530-file bundle
+  after reconnection and a repeated exact hash check. Preserve both commits;
+  the final containing head requires its own CI. No tested source changed.
 - Record completed fresh-candidate evidence in a later ordinary commit, then
   verify that literal delivered head in hosted push CI. Record its final SHA,
   run and H outside that containing commit to avoid self-referential provenance.

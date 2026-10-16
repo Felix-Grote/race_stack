@@ -1,0 +1,51 @@
+{
+  "s0_route": {
+    "iterations": 3,
+    "max_source_point_error_m": 4.440892098500626e-16,
+    "max_reference_coefficient_error_m": 8.698076980895308e-14,
+    "max_normal_error": 2.220446049250313e-16,
+    "max_shifted_coefficient_error_m": 5.819173268251099e-14
+  },
+  "s0_reverse_route": {
+    "iterations": 3,
+    "max_source_point_error_m": 1.1102230246251565e-16,
+    "max_reference_coefficient_error_m": 3.7021926323210774e-14,
+    "max_normal_error": 2.220446049250313e-16,
+    "max_shifted_coefficient_error_m": 2.86860921301646e-14
+  },
+  "s0_rotated_route": {
+    "iterations": 3,
+    "max_source_point_error_m": 8.881784197001252e-16,
+    "max_reference_coefficient_error_m": 2.155458971031532e-14,
+    "max_normal_error": 2.220446049250313e-16,
+    "max_shifted_coefficient_error_m": 2.327998904760875e-14
+  },
+  "s2_upper_route": {
+    "iterations": 3,
+    "max_source_point_error_m": 4.440892098500626e-16,
+    "max_reference_coefficient_error_m": 3.729655473350135e-15,
+    "max_normal_error": 2.220446049250313e-16,
+    "max_shifted_coefficient_error_m": 5.132179403677384e-15
+  },
+  "s2_lower_route": {
+    "iterations": 3,
+    "max_source_point_error_m": 1.1102230246251565e-16,
+    "max_reference_coefficient_error_m": 1.500102125850944e-15,
+    "max_normal_error": 2.220446049250313e-16,
+    "max_shifted_coefficient_error_m": 1.8175565219546996e-15
+  },
+  "s3_surfaces_route": {
+    "iterations": 3,
+    "max_source_point_error_m": 8.881784197001252e-16,
+    "max_reference_coefficient_error_m": 5.018555016000903e-15,
+    "max_normal_error": 2.220446049250313e-16,
+    "max_shifted_coefficient_error_m": 2.5032059758345326e-15
+  },
+  "s3_notch_route": {
+    "iterations": 3,
+    "max_source_point_error_m": 8.881784197001252e-16,
+    "max_reference_coefficient_error_m": 5.005544589931077e-15,
+    "max_normal_error": 2.220446049250313e-16,
+    "max_shifted_coefficient_error_m": 2.699229728619912e-15
+  }
+}
