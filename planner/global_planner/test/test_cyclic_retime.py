@@ -15,9 +15,11 @@ import global_planner.cyclic_retime as timing
 from global_planner.cyclic_retime import (
     DynamicsError, DynamicsModel, ModelRegion, RegionLimits, RetimePolicy,
     SteeringLimits, limits_from_tables, retime)
-from global_planner.route_corridor import OrderedCurve, seed_curve
+from global_planner.route_corridor import (
+    OrderedCurve, _sample_at_q, normal_interval, seed_curve)
 from global_planner.route_input import load_route, validate_route
 from global_planner.route_reference import Curve
+from global_planner.route_validate_dynamics import DynamicsValidationPolicy, validate_dynamics
 
 FIX = Path(__file__).parent / 'fixtures' / 'project_a'
 
@@ -294,3 +296,68 @@ def test_model_text_budget_rejects_before_expensive_reconstruction(monkeypatch):
         result = retime(ordered, large, policy=RetimePolicy(max_text_bytes=budget))
         assert result.status == 'INCONCLUSIVE' and result.profile is None
         assert 'text budget' in result.message
+
+
+def test_narrow_legal_notch_lower_cap_retimes_and_brakes_before_the_restriction():
+    base = candidate('s3_notch_route')
+    payload = base.route.payload
+    occurrence = base.route.occurrences[0]
+    start = payload['occurrences'][0]['caps'][1]['at_m']
+    finish = start + .25
+    assert finish < occurrence.length
+    at = normal_interval(base, _sample_at_q(base, start))
+    before = normal_interval(base, _sample_at_q(base, start - 1.))
+    after = normal_interval(base, _sample_at_q(base, start + 1.))
+    assert at.left + at.right < min(before.left + before.right, after.left + after.right)
+    payload['occurrences'][0]['caps'][1]['max_speed_mps'] = 1.
+    payload['occurrences'][0]['caps'].insert(2, {'at_m': finish, 'max_speed_mps': 4.})
+    route = validate_route(payload)
+    for original, changed in zip(base.route.occurrences, route.occurrences):
+        assert (original.seed, original.left, original.right) == (
+            changed.seed, changed.left, changed.right)
+    ordered = OrderedCurve(route, base.curve, base.q)
+    assert ordered.curve.coefficients == base.curve.coefficients and ordered.q == base.q
+    model = synthetic_model(route)
+    result = retime(ordered, model, spacing_m=.57)
+    assert result.status == 'CANDIDATE', result.message
+    checked = validate_dynamics(ordered, result.profile, model, metadata=result.metadata)
+    assert checked.status == 'PASS', (checked.reason, checked.offending_edge)
+    restricted, upstream = [], []
+    knots = result.profile.knots
+    for index, knot in enumerate(knots):
+        following = knots[(index + 1) % len(knots)]
+        t1 = following.t if following.segment == knot.segment else 1.
+        q0, q1 = (Fraction(ordered.q[knot.segment]),
+                  Fraction(ordered.q[knot.segment + 1]))
+        lo = q0 + Fraction(knot.t) * (q1 - q0)
+        hi = q0 + Fraction(t1) * (q1 - q0)
+        if lo <= Fraction(finish) and hi >= Fraction(start):
+            assert knot.u <= 1. + 1e-8 and following.u <= 1. + 1e-8
+            assert checked.edges[index].cap_mps <= 1.
+            restricted.append(index)
+        if Fraction(start - 3.) <= lo < hi < Fraction(start - 1e-6):
+            upstream.append(index)
+    assert restricted and upstream
+    assert any(result.metadata.acceleration_mps2[i] < -.01 for i in upstream)
+    assert max(result.metadata.velocity_mps[i] for i in upstream) > 1.05
+    assert any(k.segment == 0 and k.t == 0 for k in knots)
+    assert checked.edges[-1].closing
+    Path('/work/a06-narrow-lower-cap.json').write_text(json.dumps({
+        'route_sha256': route.digest, 'original_geometry_unchanged': True,
+        'base_route_sha256': base.route.digest, 'derived_route_payload': route.payload,
+        'actual_coefficients': ordered.curve.coefficients, 'q': ordered.q,
+        'owners': ordered.curve.owners, 'model': asdict(model),
+        'profile': asdict(result.profile), 'metadata': asdict(result.metadata),
+        'retime_policy': asdict(RetimePolicy()),
+        'dynamics_policy': asdict(DynamicsValidationPolicy()),
+        'independent_validation': asdict(checked),
+        'notch_width_m': at.left + at.right,
+        'adjacent_widths_m': [before.left + before.right, after.left + after.right],
+        'cap_start_seed_m': start, 'cap_finish_seed_m': finish, 'cap_mps': 1.,
+        'restricted_edges': restricted,
+        'minimum_upstream_acceleration_mps2': min(
+            result.metadata.acceleration_mps2[i] for i in upstream),
+        'maximum_upstream_speed_mps': max(result.metadata.velocity_mps[i] for i in upstream),
+        'independent_status': checked.status, 'lap_time_s': result.profile.lap_time_s,
+        'scope': 'synthetic planar software only',
+    }, indent=2))

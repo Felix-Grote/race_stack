@@ -369,3 +369,50 @@ def test_forged_tensor_count_cannot_bypass_preprocessing_resource_guard(candidat
                             policy=base.curve.policy)
     report = validate_geometry(_fake(base, curve=curve), base.route, BODY)
     assert report.status == 'FAIL' and 'resource shape' in report.reason
+
+
+def test_coincident_bridge_deck_cannot_be_legalized_by_optimizer_claims(candidates):
+    base = candidates['s3_surfaces_route']
+    ground = next(o for o in base.route.occurrences if o.id == 'o0')
+    upper = next(o for o in base.route.occurrences if o.id == 'o2')
+    polygons = tuple(tuple(validator._point(p) for p in o.polygon)
+                     for o in (ground, upper))
+    overlap = []
+    for index, owner in enumerate(base.curve.owners):
+        if owner != (ground.id, ground.surface_id):
+            continue
+        coefficient = validator._coefficient_records(base.curve.coefficients[index])
+        for parameter in (Fraction(0), Fraction(1, 4), Fraction(1, 2), Fraction(3, 4)):
+            point = validator._position(coefficient, parameter)
+            if all(validator._inside(point, polygon) for polygon in polygons):
+                overlap.append((index, parameter, point))
+    assert overlap, 'fixture must contain the same legal projected XY on both decks'
+    index, parameter, point = overlap[len(overlap) // 2]
+    curve = copy.deepcopy(base.curve)
+    owners = list(curve.owners)
+    owners[index] = (upper.id, upper.surface_id)
+    object.__setattr__(curve, 'owners', tuple(owners))
+    assert curve.coefficients == base.curve.coefficients
+    assert validator._position(validator._coefficient_records(
+        curve.coefficients[index]), parameter) == point
+    # The identical XY remains legal on both projected polygons. It supplies no
+    # permission to replace the original q-conditioned occurrence or deck.
+    forged = SimpleNamespace(
+        route=base.route, curve=curve, q=base.q, success=True, solver_success=True,
+        status='SUCCESS', clearance_m=1e6,
+        corridors=(SimpleNamespace(lower=-1e6, upper=1e6),))
+    report = validate_geometry(forged, base.route, BODY)
+    assert report.status == 'FAIL' and 'owner' in report.reason
+    Path('/work/a05-wrong-deck-coincident.json').write_text(json.dumps({
+        'route_sha256': base.route.digest, 'segment': index,
+        'original_route_payload': base.route.payload,
+        'actual_coefficients': base.curve.coefficients, 'q': base.q,
+        'owners_original': base.curve.owners, 'owners_forged': curve.owners,
+        'footprint': asdict(BODY), 'policy': asdict(GeometryValidationPolicy()),
+        'independent_report': asdict(report),
+        'parameter': [parameter.numerator, parameter.denominator],
+        'xy': [float(x) for x in point], 'same_xy_legal_on_both_decks': True,
+        'original_owner': list(base.curve.owners[index]),
+        'forged_owner': list(curve.owners[index]), 'optimizer_success_claim': True,
+        'false_clearance_m': 1e6, 'status': report.status, 'reason': report.reason,
+    }, indent=2))

@@ -1,5 +1,23 @@
 # Project A decision ledger
 
+## 2026-10-16 — W2 complete verification and literal regression coverage
+
+- Full local and exact A06 hosted verification pass 296 functional tests, actual
+  installed fresh pipeline and three builds; compare exact inherited legacy
+  failure identities, not merely their aggregate count.
+- A final requirements audit adds explicit closed ellipse, coincident S3 wrong
+  deck and lower-cap narrow-notch controls. The mathematical implementation
+  already handles all three; preserve production bytes and original fixtures.
+  Add selected frozen evidence and include every case in the full runner.
+- Retain false solver-success speed probes as independent review evidence.
+  A numerical candidate may fail the independent floor check; only independent
+  PASS authorizes acceptance. No postprocessing turns an unresolved or invalid
+  candidate into an accepted trajectory.
+- Publish source/checkpoint/evidence history and a PR against corrected W1.
+  Record the final exact-head hosted result externally in the PR/workflow/final
+  report; do not claim a previous head's CI validates a later delivery.
+  W3 artifact/export/benchmark/runtime work remains a separate wave.
+
 ## 2026-10-16 — W2 A06 declared cyclic dynamics
 
 - Use the specified sufficient planar squared-speed LP on true metric arc,

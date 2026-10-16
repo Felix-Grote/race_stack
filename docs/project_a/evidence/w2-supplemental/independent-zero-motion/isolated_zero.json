@@ -1,0 +1,9 @@
+{
+  "case": "isolated_zero",
+  "retimer_status": "CANDIDATE",
+  "retimer_message": "independent validation required",
+  "minimum_u": 0.0,
+  "independent_status": "FAIL",
+  "independent_reason": "invalid canonical half-open speed knot",
+  "declared_floor_mps": 1e-06
+}

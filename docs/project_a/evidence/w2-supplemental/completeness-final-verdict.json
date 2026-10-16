@@ -1,0 +1,21 @@
+{
+  "audited_head": "e3f94dce130cf0cee8cc0dfdbf697b57efbd7b87",
+  "verdict": "No remaining identified production or mathematical blocker; literal-test promotion and final verification are still required before completion.",
+  "requirement_map": "work/w2/completeness-review.json",
+  "supplemental_drafts": "work/w2/literal-gap-drafts/draft-provenance.json",
+  "drafts_frozen": true,
+  "literal_tests_pending_root_promotion": [
+    "Closed ellipse retiming and independent dynamics acceptance: work/w2/test_a06_ellipse_draft.py.",
+    "Wrong bridge-deck ownership at an actual XY point legal on both projected ribbons: work/w2/test_a05_deck_literal_draft.py.",
+    "Narrow legal notch with a lower speed cap, unchanged coefficients and independent upstream-braking check: work/w2/test_a06_narrow_cap_literal_draft.py."
+  ],
+  "supplemental_test_result": "2 passed in 3.28 s; exit 0; stable source hashes.",
+  "A05_RESULTS_command_provenance": "Resolved by root: output directory corrected to work/w2/a05-final-formatted; audit map records the original discovered gap as historical evidence.",
+  "zero_motion_review": "work/w2/a06-zero-motion-audit/independent-review.json",
+  "known_remaining_root_gates": [
+    "Finish active full and installed verification and inspect baseline failure identities.",
+    "Promote the three literal controls after the source freeze, then run selected tests and strict lint.",
+    "Commit closeout evidence, inspect exact final-head hosted CI, and finish the required review/report/W3 continuation."
+  ],
+  "limits": "Planar synthetic software certificate only; no real-vehicle, tire/contact, 3D bridge-clearance, calibration, global optimum, or deployment safety claim."
+}

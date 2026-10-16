@@ -1,0 +1,62 @@
+{
+  "identities_equal": true,
+  "baseline_log": "docs/project_a/evidence/w2-baseline/w1-ci-full.log.gz",
+  "baseline_log_sha256": "f0d3d2aa3b0be175bc0f89e20700d881c9f66409ec0b8a3dbc7d520a6dbb7b4c",
+  "baseline_identity_manifest": "docs/project_a/evidence/w2-baseline/legacy-identity-comparison.json",
+  "baseline_identity_manifest_sha256": "909babb37800ee5696accc30f83c04de1eab0af4a0ea58b4bafe922aed8632e3",
+  "current_legacy_summary": {
+    "tests": 295,
+    "errors": 0,
+    "failures": 10,
+    "skipped": 2
+  },
+  "current_legacy_reports": [
+    {
+      "path": "/work/build/f110_msgs/Testing/20261016-1111/Test.xml",
+      "tests": 2,
+      "errors": 0,
+      "failures": 2,
+      "skipped": 0
+    },
+    {
+      "path": "/work/build/f110_msgs/test_results/f110_msgs/lint_cmake.xunit.xml",
+      "tests": 3,
+      "errors": 0,
+      "failures": 3,
+      "skipped": 0
+    },
+    {
+      "path": "/work/build/f110_msgs/test_results/f110_msgs/xmllint.xunit.xml",
+      "tests": 1,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0
+    },
+    {
+      "path": "/work/build/frenet_conversion/pytest.xml",
+      "tests": 3,
+      "errors": 0,
+      "failures": 2,
+      "skipped": 1
+    },
+    {
+      "path": "/work/build/global_planner/pytest.xml",
+      "tests": 286,
+      "errors": 0,
+      "failures": 2,
+      "skipped": 1
+    }
+  ],
+  "identities": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ]
+}

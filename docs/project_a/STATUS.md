@@ -1,6 +1,6 @@
 # Project A status — 2026-10-16
 
-**W2 IN PROGRESS. A04–A06 AND FRESH PIPELINES PASS; FULL/INSTALLED/FINAL CI PENDING.**
+**W2 A04–A06 IMPLEMENTED. LOCAL/FULL/INSTALLED ACCEPTANCE PASS. A07–A09 PENDING.**
 
 The current authorized work is W2 A04–A06 on `project-a/w2-optimization`, created
 directly at corrected W1 commit
@@ -59,11 +59,40 @@ dynamics **PASS** on the same final coefficients. Maximum observed LP residual i
 **2.853e-12**; independent certificates have no positive normalized residual.
 [evidence/review](evidence/w2-a06/SHA256SUMS), [numerical contracts](W2_NUMERICS.md).
 
-Next: full `scripts/project_a/verify.sh all` at the committed A06 checkpoint,
-including actual installed W2 pipeline and unchanged W0/W1 regressions, then
-exact-head hosted CI, final evidence/report and reviewable PR. W2 is not declared
-complete until those gates pass. No immutable A07 artifact or physical vehicle
-result is claimed. The historical W1 record below is retained as evidence; this W2
+Checkpoint **`e3f94dce130cf0cee8cc0dfdbf697b57efbd7b87`** passes complete local
+`scripts/project_a/verify.sh all work/w2/full`, exit **0**: **296 functional tests**
+in fourteen groups, strict lint and three builds. The actual installed W2 test
+freshly optimizes S0 and passes both validators; installed source hashes match
+exactly. Source/fixture/harness hashes remain unchanged across the complete run.
+Legacy is **295 reports / 0 errors / 10 failures / 2 skips**, with the exact ten
+W0/W1 failure identities. [Full local evidence](evidence/w2-full/SHA256SUMS).
+
+Exact A06 [push CI 38891088081](https://github.com/Felix-Grote/race_stack/actions/runs/38891088081)
+is **SUCCESS** with the same 296 functional tests, builds and unchanged legacy
+identities. [Hosted A06 evidence](evidence/w2-a06-ci/SHA256SUMS).
+
+A final literal-requirement audit adds three explicit regressions: closed-ellipse
+retiming with independent arc/lateral/time oracles, false S3 deck ownership at the
+same legal projected XY, and a supplied 1 m/s cap through the narrower original
+S3 notch with upstream braking. All **3 pass in 8.75 s**, exit 0, stable hashes;
+strict lint passes. No production code, tolerance or original fixture changed.
+They are explicitly wired into the final full runner. The audit and complete
+supplemental states/certificates are [retained](evidence/w2-supplemental/SHA256SUMS).
+A05's command provenance is corrected to its actual final-formatted output path.
+
+Review: [PR #2](https://github.com/Felix-Grote/race_stack/pull/2), based on exact
+corrected W1, with no automatic merge. The **exact delivered final head must pass
+push CI**, not merely an earlier commit; its actual result and immutable source
+identity are recorded in the PR checks, workflow artifacts and final technical
+report. [Branch workflows](https://github.com/Felix-Grote/race_stack/actions?query=branch%3Aproject-a%2Fw2-optimization).
+
+Next wave: W3 A07–A09 from that final CI-tested W2 head. Implement immutable
+reference/load/query + pure compile/verify/export, existing ROS waypoint view,
+fair comparator/S0–S6 benchmarks and fresh artifact handoff. Preserve W2's exact
+coefficient/profile authorities and independent gates. No immutable A07 artifact,
+real-course approval, physical clearance or vehicle result is claimed in W2.
+
+The historical W1 record below is retained as evidence; this W2
 section supersedes its old continuation/status statements.
 
 ## Historical corrected W1 status

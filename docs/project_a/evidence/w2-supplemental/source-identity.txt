@@ -1,0 +1,16 @@
+pytest arguments: planner/global_planner/test/test_route_ellipse_dynamics.py planner/global_planner/test/test_route_validate_geometry.py planner/global_planner/test/test_cyclic_retime.py -k ellipse\ or\ coincident_bridge_deck\ or\ narrow_legal_notch_lower_cap -x 
+e3f94dce130cf0cee8cc0dfdbf697b57efbd7b87
+ M docs/project_a/RESULTS.md
+ M planner/global_planner/test/test_cyclic_retime.py
+ M planner/global_planner/test/test_route_validate_geometry.py
+ M scripts/project_a/container_verify.sh
+?? docs/project_a/evidence/w2-a06-ci/
+?? docs/project_a/evidence/w2-full/
+?? planner/global_planner/test/test_route_ellipse_dynamics.py
+ f8f8c9d4781d44a2959bae013f276410cb4e9da0 base_system/f110_simulator/f1tenth_gym (f8f8c9d)
+ 163020c0b631a5bdd9ddc59e6132337cec04cc27 base_system/f110_simulator/f1tenth_gym_ros (heads/humble)
+ 5d6490fc6426deb1254198020133a85c0614f183 base_system/f1tenth_system (v2.0.0-beta-22-g5d6490f)
+ ed4eac7284d13cae66628688e6fd32e585a96a62 base_system/f1tenth_system/ackermann_mux (heads/foxy-devel)
+ 09938461991ec2260ddab6db8ac962f46d205669 base_system/f1tenth_system/teleop_tools (heads/foxy-devel)
+ b1b38ecfefec7200d5bcb243f115af1d795b3766 planner/global_planner/global_planner/global_racetrajectory_optimization (remotes/origin/pip_package)
+ 2fd19be756544693752d3e5b36c128e6157e4bd3 sensors/vesc (1.2.0-5-g2fd19be)

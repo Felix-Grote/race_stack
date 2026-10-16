@@ -1,5 +1,58 @@
 # Project A validation matrix — W0/W1/W2
 
+## W2 full local, hosted A06 and literal-coverage closeout — 2026-10-16
+
+At committed **e3f94dce130cf0cee8cc0dfdbf697b57efbd7b87**, the full command
+`scripts/project_a/verify.sh all work/w2/full` exits **0** with complete source,
+fixture and harness hashes unchanged. **296 functional tests** pass in fourteen
+groups: A01 **60**, A02 **47**, A03 **38**, A04 **18**, A05 **37+13**, A06
+**20+34+8**, fresh same-curve pipeline **8**, numerical **7**, actual ROS **4**,
+installed W1 **1**, installed W2 **1**. Three selected packages build in 26.0 s.
+The actual installed W2 pipeline freshly optimizes S0 and independently passes
+geometry/dynamics in 18.69 s; module hashes under `/work/install` match source.
+
+The separate legacy run reports **295 tests / 0 errors / 10 failures / 2 skips**.
+Every failing identity exactly matches W0/W1; the inherited lint/XML failures
+remain visible. [Full local evidence](evidence/w2-full/SHA256SUMS), including
+JUnit, runtime/dependency inventories, full logs and installed coefficient/profile
+certificates. Exact A06 [push CI 38891088081](https://github.com/Felix-Grote/race_stack/actions/runs/38891088081)
+is **SUCCESS**, independently confirming the same 296 tests/builds/legacy
+identities. [Hosted evidence](evidence/w2-a06-ci/SHA256SUMS).
+
+Final literal-coverage controls, promoted after that source freeze:
+
+- Closed ellipse axes 8/5 m: 224 speed knots, nonuniform edges
+  .0029387–.392027 m, independent coefficient-arc length 41.386275696668 m.
+  Analytic ellipse shape discrepancy is -3.76e-7 m against a separate 1e-5 m
+  cubic-approximation allowance; metric-kernel tolerances are unchanged.
+  Curvature about .32047 versus .07810/m produces squared speeds about 6.18
+  versus 25.02 m²/s². Independent dynamics PASS; model time 11.713779280290 s is
+  inside the certified time interval.
+- At actual S3 XY (.128091022251, -.000981424079), both projected legal ribbons
+  contain the point. Replacing original ground ownership by upper-deck ownership
+  independently FAILs despite success and 1,000,000 m clearance claims.
+- Original notch normal width .935959 m versus neighboring 1.192171/1.142275 m:
+  supplied cap 1 m/s over inherited q 7.065451418853–7.315451418853 m applies
+  before retiming, with unchanged borders/coefficients/q and upstream braking.
+  Independent dynamics PASS. Reference acceleration includes supplied drag;
+  the declared longitudinal diamond constrains a+c*u.
+
+The final selected command in [promotion closeout](evidence/w2-supplemental/promotion-closeout.json)
+exits **0: 3 passed, 57 deselected in 8.75 s** with frozen hashes and strict
+99-column lint. Final full-runner collection includes all three without the
+selection filter; the exact delivered head's complete hosted result is recorded
+in [PR #2 checks](https://github.com/Felix-Grote/race_stack/pull/2/checks) and its
+workflow artifacts/final technical report. No unexecuted result is substituted
+for a completed run. Production mathematical modules remain byte-identical to
+A06 e3f94dc. [Supplemental audit/evidence](evidence/w2-supplemental/SHA256SUMS).
+
+A separate retained zero-motion review passes three adversarial cases: all-zero
+solver success returns structured INCONCLUSIVE; isolated zero and below-floor
+numerical candidates independently FAIL. This confirms the mandatory candidate
+versus acceptance boundary; no production repair or numerical relaxation was
+needed. Original and corrected command provenance and real exploratory failures
+remain retained as historical evidence.
+
 ## W2 A06 and fresh pipeline checkpoint — 2026-10-16
 
 The single frozen-source command in [A06 review](evidence/w2-a06/REVIEW.md) exits
@@ -51,7 +104,7 @@ passed 225 functional tests and three builds; legacy 225/0 errors/10 failures/
 
 ## W2 A05 local checkpoint — 2026-10-16
 
-`scripts/project_a/unit.sh work/w2/a05-final planner/global_planner/test/test_route_validate_geometry.py planner/global_planner/test/test_route_validate_bounds_oracle.py`
+`scripts/project_a/unit.sh work/w2/a05-final-formatted planner/global_planner/test/test_route_validate_geometry.py planner/global_planner/test/test_route_validate_bounds_oracle.py`
 exits **0: 50 passed in 103.41 s**. Production, tests, complete fixtures, helper
 and Compose hashes are unchanged before/after. Scoped lint passes. Two
 independent reviewers accept the exact-input planar certificate implementation.

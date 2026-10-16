@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "exit_code": 0,
+  "tests": 2,
+  "duration_s": 3.28,
+  "command": "scripts/project_a/unit.sh work/w2/literal-gap-drafts work/w2/test_a05_deck_literal_draft.py work/w2/test_a06_narrow_cap_literal_draft.py",
+  "head": "e3f94dce130cf0cee8cc0dfdbf697b57efbd7b87",
+  "scope": "scratch-only supplemental test drafts, production/test-tree/fixtures/workflow unchanged; promote after active source freeze ends",
+  "draft_sha256": {
+    "work/w2/test_a05_deck_literal_draft.py": "65e7472400c310557c28df1564a24e11b3ac0d8610e0f811bf84a6ff3bcfd68c",
+    "work/w2/test_a06_narrow_cap_literal_draft.py": "e81b8dbca06fbc960f49607531685167c56562504b23663d1bbe1ed82651c962"
+  },
+  "retained_facts": {
+    "a05-wrong-deck-coincident.json": {
+      "route_sha256": "a02d449cb06d86d69c4c468cca036b8a9821e96582bd9a447a0bc7d2a45abe6d",
+      "segment": 19,
+      "parameter": [
+        1,
+        2
+      ],
+      "xy": [
+        0.1280910222509995,
+        -0.0009814240790925934
+      ],
+      "same_xy_legal_on_both_decks": true,
+      "original_owner": [
+        "o0",
+        "ground"
+      ],
+      "forged_owner": [
+        "o2",
+        "upper-deck"
+      ],
+      "optimizer_success_claim": true,
+      "false_clearance_m": 1000000.0,
+      "status": "FAIL",
+      "reason": "incorrect occurrence/surface owner or interval crossing"
+    },
+    "a06-narrow-lower-cap.json": {
+      "route_sha256": "f12342727693e8e6d9220fa96cf995120efd05d0662ce91ef5a99fde710406f0",
+      "original_geometry_unchanged": true,
+      "notch_width_m": 0.9359590209752958,
+      "adjacent_widths_m": [
+        1.1921707707187648,
+        1.1422745588255983
+      ],
+      "cap_start_seed_m": 7.065451418852835,
+      "cap_finish_seed_m": 7.315451418852835,
+      "cap_mps": 1.0,
+      "restricted_edges": [
+        31,
+        32,
+        33,
+        34
+      ],
+      "minimum_upstream_acceleration_mps2": -3.0139134651256883,
+      "maximum_upstream_speed_mps": 3.6885972190001306,
+      "independent_status": "PASS",
+      "lap_time_s": 15.672008573801566,
+      "scope": "synthetic planar software only"
+    }
+  },
+  "promotion_notes": {
+    "A05": "Copy only test_coincident_bridge_deck_cannot_be_legalized_by_optimizer_claims into test_route_validate_geometry.py; existing candidates fixture and BODY/imports suffice.",
+    "A06": "Copy only test_narrow_legal_notch_lower_cap_retimes_and_brakes_before_the_restriction into test_cyclic_retime.py; reuse existing candidate/synthetic_model helpers, add _sample_at_q/normal_interval and validate_dynamics imports. Current FIX variables in target modules already valid; scratch standalone helpers are not needed."
+  }
+}
