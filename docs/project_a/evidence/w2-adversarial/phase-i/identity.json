@@ -1,0 +1,9 @@
+{
+  "reviewed_sha": "e852641849b2497efea51dfca5ead38ad4476235",
+  "baseline_sha": "9440c2ce68e3dee549de7efacff1cf723fe830df",
+  "phase": "I - no implementation modification",
+  "finding": "F1 P1 - independent final coefficient/q handoff binding absent",
+  "observed": "coordinated monotone q warp + regenerated profile/digests gets geometry PASS and dynamics PASS; original q check FAIL at edge 14",
+  "scope": "post-A04 authority tampering; not a failure of rational geometric or dynamic inequality bounds",
+  "red_tests": "2 failures; old missing-authority dual PASS and absent external authority API"
+}
