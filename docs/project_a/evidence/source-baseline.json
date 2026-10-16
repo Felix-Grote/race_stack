@@ -1,0 +1,26 @@
+{
+  "base": "67981ed7964a6d35e1da48f0c22bbd9f6d123d5e",
+  "upstream_live": "67981ed7964a6d35e1da48f0c22bbd9f6d123d5e\trefs/heads/ros2-humble",
+  "recursive_submodules": [
+    "f8f8c9d4781d44a2959bae013f276410cb4e9da0 base_system/f110_simulator/f1tenth_gym (f8f8c9d)",
+    " 163020c0b631a5bdd9ddc59e6132337cec04cc27 base_system/f110_simulator/f1tenth_gym_ros (heads/humble)",
+    " 5d6490fc6426deb1254198020133a85c0614f183 base_system/f1tenth_system (v2.0.0-beta-22-g5d6490f)",
+    " ed4eac7284d13cae66628688e6fd32e585a96a62 base_system/f1tenth_system/ackermann_mux (heads/foxy-devel)",
+    " 09938461991ec2260ddab6db8ac962f46d205669 base_system/f1tenth_system/teleop_tools (heads/foxy-devel)",
+    " b1b38ecfefec7200d5bcb243f115af1d795b3766 planner/global_planner/global_planner/global_racetrajectory_optimization (remotes/origin/pip_package)",
+    " 2fd19be756544693752d3e5b36c128e6157e4bd3 sensors/vesc (1.2.0-5-g2fd19be)"
+  ],
+  "sha256": {
+    "planner/global_planner/global_planner/global_planner_node.py": "026c55b7385e2969b0ac2c9949b13e7c1496f37bcbfffef502132d2453d72b65",
+    "planner/global_planner/global_planner/mapping_node.py": "802d53ce419f11013e7936396867fa87b46c65b2884e8bb5e9e94a863511abe9",
+    "planner/global_planner/global_planner/global_planner_utils.py": "d959b09919ece16235a0584c803c4f2b8d9d457c7a2810a8fc222fd5a81fb616",
+    "planner/global_planner/global_planner/readwrite_global_waypoints.py": "d5cdcf285ad66100699aeb70741a51daefa7b187b19f212af03837203b22eb72",
+    "planner/global_planner/setup.py": "d52abbe967fca1f3e6548228acb7d266b2c21a32c4a173c7307d2e600ae7f28e",
+    "planner/global_planner/package.xml": "8f8794038608e970da48840e87400a6c9e468575bdd562536a313c37f2ff6ddd",
+    "scripts/project_a/requirements.lock": "e920fd8b288646455f7c0ecf98275c1a998ec8ddbe49a1b452d8364df18a9aa5",
+    "scripts/project_a/requirements.build.lock": "57ba542c8ca996ee477a216227fbc53003fc37acf4f2c21c6c9962fa2e1b4efe",
+    "docs/project_a/references/GLOBAL_PLANNER_PROJECT_A_ARCHITECTURE.md": "67ca4b77bba80a756eea78204e5c06bda2162d01a4c691c76e7159e709614105",
+    "docs/project_a/references/GLOBAL_PLANNER_PROJECT_A_ROADMAP.md": "a865c9591d3d7209a53b76a32d21ffa3e6957d578002239b561a9bac05113c81",
+    "docs/project_a/EXECUTION_PLAN.md": "d9fe8c084478cc0a3d9f5b855fbd5e9dd2d39865d20d49927b7eeff18e198006"
+  }
+}

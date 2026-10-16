@@ -1,0 +1,13 @@
+# W0 numerical kernel, Python 3.10. Do not install optimizer/requirements.txt.
+numpy==1.26.4
+scipy==1.11.4
+trajectory-planning-helpers==0.79
+quadprog==0.1.7
+matplotlib==3.7.5
+pytest==8.3.5
+# Legacy optimizer imports these even for minimum curvature; no mintime solve.
+casadi==3.6.7
+scikit-learn==1.3.2
+opencv-python-headless==4.10.0.84
+scikit-image==0.22.0
+PyYAML==6.0.2

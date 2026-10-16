@@ -1,0 +1,14 @@
+{
+  ".github/workflows/project-a.yml": "5a248f508caa82f4a256ead403a79bc946943905087cb051e4069602c3228c89",
+  "docker-compose.test.yaml": "8a695a3147f834ee7b6112c5771f1b2a40b61e4f2ccac6a4ed01fb91539d8553",
+  "scripts/project_a/Dockerfile": "22fd6d9b79438347b914352eeb926732e7ca3aadb988f83b4dc9c03b710f6619",
+  "scripts/project_a/container_verify.sh": "9c27ff2ea8d9b1db889a2b6616f546669e995dd74dc9ad795b84bc86e6fdd908",
+  "scripts/project_a/identity.py": "bbd46b0407a43c54cd791b8f93acc1fe2d8f14a347dc478e399a9de8d9ac9781",
+  "scripts/project_a/requirements.build.lock": "57ba542c8ca996ee477a216227fbc53003fc37acf4f2c21c6c9962fa2e1b4efe",
+  "scripts/project_a/requirements.in": "2a42dd5b44ca2549174cb9ec36b4d1ce9709b66c832f2733ec8c1c6a9455d853",
+  "scripts/project_a/requirements.lock": "e920fd8b288646455f7c0ecf98275c1a998ec8ddbe49a1b452d8364df18a9aa5",
+  "scripts/project_a/setup.sh": "f113463deab82672dac0df7cc54763634ae504d893fde85c63696bc711c39331",
+  "scripts/project_a/tests/test_numerical.py": "c413070d951c863c2615c3c75357c1bccab4eaada7d4191d46e3840d93f115be",
+  "scripts/project_a/tests/test_ros.py": "cc945d7cb123770ae431a193411fb078e4241ef7e9e8f418ba706fc96534041a",
+  "scripts/project_a/verify.sh": "c2aa4be7b7dd5dadc11a774bcf4ee6dcd0fca5813a53a59014ab1e714064d6c5"
+}

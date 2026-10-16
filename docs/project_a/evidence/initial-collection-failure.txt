@@ -1,0 +1,1 @@
+Initial run failed with exit 4: launch_testing autoload collected ROS neighbor before generated interfaces existed. Fixed explicit W0 test invocations only; see DECISIONS.md.

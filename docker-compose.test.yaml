@@ -1,0 +1,27 @@
+# Standalone file. NEVER merge with docker-compose.yaml.
+services:
+  test:
+    image: project-a-humble:w0
+    user: "${PROJECT_A_UID:-1000}:${PROJECT_A_GID:-1000}"
+    working_dir: /work
+    read_only: true
+    network_mode: none
+    ipc: private
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 256
+    mem_limit: 4g
+    cpus: 2
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      MPLBACKEND: Agg
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      HOME: /work
+    volumes:
+      - .:/src:ro
+      - ${PROJECT_A_OUTPUT:?Set absolute writable output directory}:/work:rw
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,size=256m,mode=1777
+    entrypoint: ["/bin/bash", "/src/scripts/project_a/container_verify.sh"]
+    command: [all]

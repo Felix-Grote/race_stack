@@ -1,0 +1,43 @@
+name: Project A offline planner
+on:
+  push:
+    branches: [ros2-humble, 'project-a/**']
+    paths: ['planner/global_planner/**', 'utilities/libraries/f110_msgs/**', 'utilities/libraries/frenet_conversion/**', 'scripts/project_a/**', 'docker-compose.test.yaml', '.github/workflows/project-a.yml']
+  pull_request:
+    paths: ['planner/global_planner/**', 'utilities/libraries/f110_msgs/**', 'utilities/libraries/frenet_conversion/**', 'scripts/project_a/**', 'docker-compose.test.yaml', '.github/workflows/project-a.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  isolated-humble:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Build pinned Humble test environment
+        run: scripts/project_a/setup.sh
+      - name: Numerical and installed ROS acceptance; record legacy baseline separately
+        run: scripts/project_a/verify.sh all work/ci
+      - name: Surface pre-existing legacy failures
+        if: always()
+        run: |
+          if test -f work/ci/legacy-exit-codes.txt; then
+            cat work/ci/legacy-exit-codes.txt
+            if ! grep -q '^colcon_test_result=0$' work/ci/legacy-exit-codes.txt; then
+              echo '::warning::Legacy colcon tests failed; see legacy-results.txt. Functional acceptance is separate.'
+            fi
+          fi
+      - name: Preserve exact test evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: project-a-w0-${{ github.sha }}
+          path: |
+            work/ci/*.txt
+            work/ci/*.log
+            work/ci/*.json
+            work/ci/*.xml
+          if-no-files-found: error

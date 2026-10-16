@@ -60,3 +60,6 @@ sysid_bags/
 .env
 
 bags/
+
+# Project A scratch/build/test evidence; curated reports live under docs/project_a.
+/work/
