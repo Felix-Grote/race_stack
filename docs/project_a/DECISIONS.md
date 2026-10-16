@@ -1,5 +1,29 @@
 # Project A decision ledger
 
+## 2026-10-16 — W2 A04 bounded original-border adapter
+
+- Start exactly at user-required corrected W1 `9440c2ce68e3dee549de7efacff1cf723fe830df`
+  on `project-a/w2-optimization`; preserve W1 history and all recursive pins.
+- Keep pinned TUM minimum-curvature QP equations unchanged. Nonuniform semantic
+  anchors require its existing distance scaling with inherited `diff(q)`, matching
+  the W1 periodic interpolant. Final TUM coefficients remain the authority.
+- Bound both dense spline fitting and QP calls in fresh OS-limited children,
+  preflight sizes before metric preparation, and check driver deadlines across
+  finite geometry phases. Record hard child limits and cooperative phase overshoot
+  separately. No dependency, helper-source or gitlink change is needed.
+- A measured circle counterexample exposes the unchanged local surrogate's
+  limitation: true integrated curvature energy rises despite convergence. Report
+  it; do not claim exact/global curvature minimization or hide it by comparing
+  unweighted sums over different meshes. B remains the requested numerical
+  backend, pending independent legal/dynamic feasibility; this does not justify C.
+- Predeclare the synthetic integration rectangle (front/rear .10 m each, width
+  .12 m, separate .01 m margin) and .30 m solver width. These are software-test
+  inputs, never inferred physical car parameters. A04 produces candidates only.
+- Frozen A04 tests pass 18/18 and independent review accepts scope. Original W1
+  modules/tests, all vehicle/legacy code and all submodule pins are unchanged;
+  the initial complete W0/W1 baseline is retained. The expanded full runner/CI
+  will exercise checkpoint tests and final integrated acceptance.
+
 ## 2026-10-16 — Independent review and authorized W1 remediation
 
 - The independent review of exact CI-tested `133a96fd` supersedes the earlier

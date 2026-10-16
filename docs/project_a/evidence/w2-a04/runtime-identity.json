@@ -1,0 +1,15 @@
+{
+  "python": "3.10.12",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.35",
+  "uid": 1000,
+  "interfaces": [
+    [
+      1,
+      "lo"
+    ]
+  ],
+  "cap_eff": "0000000000000000",
+  "no_new_privs": "1",
+  "root_and_source_readonly": true,
+  "ros_distro": "humble"
+}

@@ -1,4 +1,36 @@
-# Project A validation matrix — W0/W1
+# Project A validation matrix — W0/W1/W2
+
+## W2 A04 local checkpoint — 2026-10-16
+
+Base is exactly corrected W1 `9440c2ce68e3dee549de7efacff1cf723fe830df`.
+Fresh setup + `verify.sh all work/w2/baseline` exit 0: **60/47/38 A01–A03,
+7 numerical, 4 installed ROS, 1 installed W1**, three package builds. Separate
+legacy: 157 reports / 0 errors / original 10 failures / 2 skips, exact W0 failure
+identities. Exact-base push CI 38879680224 is SUCCESS.
+
+`scripts/project_a/unit.sh work/w2/a04-final-stable planner/global_planner/test/test_iqp_route_adapter.py -x`
+exits **0**, **18 passed in 84.37 s**, before/after source hashes identical.
+Pinned-environment new-file lint passes. Independent source/adversarial review
+accepts the bounded TUM-surrogate candidate scope.
+
+All seven fixed S0/reverse/rigid-rotation/S2-upper/S2-lower/S3/s3-notch fixtures
+converge in three QPs. Final solver N ranges **89–135**, maximum primal residual
+**3.45e-15**, maximum matrix condition **3.738e8**, maximum observed child RSS
+**98,988,032 bytes**. Actual process timeout/memory, infeasibility, conditioning,
+oversized preparation, nonconvergence and corrupt-result tests pass. Identical
+fixed-input 64-knot ellipse/crossing QPs match direct pinned helper offsets within
+**1e-8 m** and linearization errors within **1e-10/m**.
+
+The exact-coefficient diagnostic for S0 rises from **1.0471975681** to
+**1.16278187265 1/m** integrated squared curvature: surrogate convergence does
+not establish actual objective improvement/global optimality. Cyclic identical-
+knot QP parity meets 1e-8 m; seam-dependent remeshing has **1.543 mm** measured
+q-correspondence sensitivity. These limits are retained explicitly.
+
+No geometric/footprint/dynamic acceptance is claimed at A04. See
+[numerical policy](W2_NUMERICS.md), [baseline evidence](evidence/w2-baseline/SHA256SUMS)
+and [A04 full traces, hashes and review](evidence/w2-a04/SHA256SUMS).
+The historical W0/W1 sections below retain their original evidence.
 
 ## Final corrected W1 local acceptance — 2026-10-16
 

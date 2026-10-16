@@ -1,5 +1,41 @@
 # Project A status — 2026-10-16
 
+**W2 IN PROGRESS. A04 LOCAL ACCEPTANCE PASS. A05–A09 PENDING.**
+
+The current authorized work is W2 A04–A06 on `project-a/w2-optimization`, created
+directly at corrected W1 commit
+`9440c2ce68e3dee549de7efacff1cf723fe830df`. No rebase or upstream merge occurred.
+The exact W1 push CI
+[38879680224](https://github.com/Felix-Grote/race_stack/actions/runs/38879680224)
+passed. All seven recursive gitlinks match, including optimizer
+`b1b38ecfefec7200d5bcb243f115af1d795b3766`.
+
+Fresh safe setup and `scripts/project_a/verify.sh all work/w2/baseline` both exit
+0: A01/A02/A03 **60/47/38**, W0 numerical **7**, actual installed ROS **4**,
+installed W1 **1**, and three package builds pass. The separate legacy aggregate
+is **157 reports / 0 errors / 10 failures / 2 skips**; failing report identities
+exactly match W0. [Baseline evidence](evidence/w2-baseline/SHA256SUMS).
+
+The additive A04 adapter preserves pinned TUM equations, uses inherited q-scaled
+splines and actual coefficients, recomputes original owned widths each iteration,
+and bounds dense fits/QPs in OS-limited child processes. Frozen-source command
+`scripts/project_a/unit.sh work/w2/a04-final-stable planner/global_planner/test/test_iqp_route_adapter.py -x`
+exits **0: 18 passed**. New-file lint passes and independent adversarial review
+accepts the stated numerical-candidate scope. Seven fixtures converge in three
+iterations each; maximum observed QP primal violation is **3.45e-15**.
+[A04 evidence and review](evidence/w2-a04/SHA256SUMS).
+It returns numerical candidates only. Read [W2 numerical contracts](W2_NUMERICS.md)
+for resource/tolerance policy and the measured local-surrogate limitation; actual
+curvature energy improvement or global optimality is not established.
+
+Next: implement A05 continuous geometry
+and full-footprint validation and A06 cyclic speed/independent dynamics. No W2
+accepted trajectory, immutable artifact, physical clearance or vehicle result is
+claimed yet. The historical W1 record below is retained as evidence; this W2
+section supersedes its old continuation/status statements.
+
+## Historical corrected W1 status
+
 **W0 COMPLETE. W1 CORRECTED; LOCAL ACCEPTANCE PASS. A04–A09 NOT STARTED.**
 
 All five findings from independent review of `133a96fd` are repaired with

@@ -19,7 +19,7 @@ jobs:
           persist-credentials: false
       - name: Build pinned Humble test environment
         run: scripts/project_a/setup.sh
-      - name: W0 regression and A01-A03 geometry; installed ROS; separate legacy baseline
+      - name: W0-W1 regressions and A04 bounded solver; installed ROS; legacy baseline
         run: scripts/project_a/verify.sh all work/ci
       - name: Surface pre-existing legacy failures
         if: always()
