@@ -65,8 +65,10 @@ def test_semantic_adversaries(mutation):
         validate_route(p)
 
 
-@pytest.mark.parametrize('raw', ['{"x":1,"x":2}', '{"x":NaN}', '{"x":Infinity}',
-                                '{"x":1e999}', '{"x":null}', '{"x":false}', '{bad'])
+@pytest.mark.parametrize('raw', [
+    '{"x":1,"x":2}', '{"x":NaN}', '{"x":Infinity}',
+    '{"x":1e999}', '{"x":null}', '{"x":false}', '{bad',
+])
 def test_malformed_json(tmp_path, raw):
     f = tmp_path / 'bad.json'
     f.write_text(raw)

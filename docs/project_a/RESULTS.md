@@ -98,8 +98,8 @@ Base: `6370d0436aabd011d1b885fe1f500644b957b536`. Command:
 `scripts/project_a/verify.sh all work/w1-a01-final`, exit **0**.
 **39 A01 + 7 W0 numerical + 4 installed ROS passed**, three packages built.
 Legacy: 51 collected aggregate, 0 errors, same 10 failures / 2 skipped (the new
-39 functional tests also pass under colcon). New files have no added legacy
-flake8/pep257 diagnostics. The initial run exposed formatting diagnostics in new
+39 functional tests also pass under colcon). The initial checkpoint retained one E128 formatting diagnostic in its test file;
+a follow-up checkpoint run removes it and adds an enforced scoped flake8 gate. The initial run exposed formatting diagnostics in new
 files; corrected before the checkpoint. No legacy assertion was modified.
 
 Six frozen fixtures: S0 forward/reverse/rotated, both selected S2 cycles, S3
@@ -115,3 +115,7 @@ Environment setup exit 0; rebuilt image
 A preliminary runner invocation before the image build finished failed at image
 inspection; no test result was claimed for that invocation. The completed setup
 and subsequent full acceptance are the authoritative results.
+
+A01 follow-up: `verify.sh all work/w1-a01-clean` exit **0**, same counts;
+enforced new-file flake8 passes and no new pep257 diagnostic appears in legacy
+logs. [Corrected evidence](evidence/w1-a01-clean/SHA256SUMS), parent `6dc2b38`.

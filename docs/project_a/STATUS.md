@@ -9,8 +9,9 @@ because the user explicitly required that verified W0 base. A01 adds the strict
 v1 manifest, frozen records, canonical identity and six fixed synthetic fixtures.
 `verify.sh all work/w1-a01-final`: exit 0, 39 A01 + 7 W0 numerical + 4 installed
 ROS tests; three packages built. Legacy now collects 51 tests (39 new functional
-tests + original 12), with the same 10 failures / 2 skips and no added W1 lint
-diagnostics. See `evidence/w1-a01` and [W1 contract](W1_GEOMETRY.md).
+tests + original 12), with the same 10 failures / 2 skips. One new E128 formatting diagnostic
+was caught during evidence review and fixed in the checkpoint follow-up; the
+runner now enforces scoped new-file flake8. See `evidence/w1-a01` and [W1 contract](W1_GEOMETRY.md).
 Checkpoint commit is the commit introducing this section; exact source bytes
 and tested parent are recorded in its evidence. A02 follows only after this commit.
 
