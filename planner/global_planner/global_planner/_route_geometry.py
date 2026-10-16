@@ -85,6 +85,10 @@ def line_intervals(p, n, poly, allowed_caps=()):
     """All open interior intervals of p+a*n. Collinear edges are ambiguous."""
     cuts = []
     for a, b in edges(poly):
+        # Shared caps occur with opposite polygon orientations. Use identical
+        # arithmetic for their cuts without bridging distinct nearby edges.
+        if (b[0], b[1]) < (a[0], a[1]):
+            a, b = b, a
         v = sub(b, a)
         den = cross(n, v)
         if abs(den) <= EPS * math.hypot(*v):

@@ -1,5 +1,18 @@
 # Project A decision ledger
 
+## 2026-10-16 — Independent W2 F2: identical shared-edge arithmetic
+
+- A newly constructed varying-width ellipse has a continuously legal seed but
+  exposes an artificial 3.15e-15 m gap between reversed evaluations of the same
+  exact approved cap. Preserve the original failing route and rational oracle.
+- Canonicalize undirected edge endpoint order before normal-line arithmetic.
+  Reversing an edge preserves its root and only maps finite parameter t to 1-t;
+  identical binary64 edges must use identical operations.
+- Do not add an epsilon merge, widen legal/support geometry, change EPS or alter
+  `_merge`. Genuine gaps and ordinary tangent contacts remain cuts. Retain the
+  corrected W1 tests and add transformed shared-cap/gap/tangency controls plus
+  the unchanged new ellipse's full fresh numerical/validation pipeline.
+
 ## 2026-10-16 — Independent W2 review: bind the final authority at handoff
 
 - A monotone within-occurrence q alteration can move a seed-local speed cap

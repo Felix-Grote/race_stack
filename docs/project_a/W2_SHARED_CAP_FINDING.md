@@ -7,8 +7,13 @@ An independently generated asymmetric ellipse (semiaxes 9.7/4.6 m, rotated
 0.37 rad and translated by (19.25,-7.5) m) has four explicitly approved owned
 ribbons, exact reused cap endpoints, varying signed widths and an interior speed
 restriction. Its unchanged seed receives independent A05 **PASS**, 137 proof
-leaves. Default A04 nevertheless returns **GEOMETRY_FAILURE** at the first
-reference preparation: `reference outside/ambiguous connected legal interval`.
+leaves. Default A04 nevertheless returns **GEOMETRY_FAILURE** during first-iteration
+corridor checking: `reference outside/ambiguous connected legal interval`.
+An independent process replay confirms one QP and the second geometry call
+(the first damped shifted fit), before any completed iteration trace. The initial
+interpretation as the first reference preparation was incorrect; traces are
+appended only after shifted geometry succeeds. The geometric counterexample and
+all recorded normal coordinates are unchanged.
 
 At q=23.180201347200946, p=(10.346273849151595,-10.953427375385925) and left
 normal n=(0.9350684075601509,0.3544673090468617), the very same undirected cap

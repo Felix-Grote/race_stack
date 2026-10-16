@@ -42,6 +42,14 @@ same-occurrence normal-intersection checks, with bounded pair comparisons.
 TUM alpha is right-positive, the negative of W1's left-positive signed offset.
 Widths are never accumulated, inflated or reassigned by nearest XY.
 
+Normal-line preparation canonicalizes each undirected polygon edge's endpoint
+order before floating-point intersection arithmetic. This prevents opposite
+traversals of an exact shared cap from creating an artificial rounding gap.
+It leaves the strict open-interior merge, allowed-cap rule and 1e-9 m inward
+allowance unchanged; it does not permit numerical-gap bridging. A separate
+exact-rational root oracle and new complete asymmetric-ellipse case cover this
+repair. Final continuous containment still uses A05's independent exact bounds.
+
 The final shifted TUM coefficients are retained verbatim; no export refit becomes
 a second curve. Stock early damping and the raw curvature-linearization error
 criterion are preserved. A damped offset must also satisfy the eroded nodal

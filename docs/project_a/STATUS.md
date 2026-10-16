@@ -1,6 +1,15 @@
 # Project A status — 2026-10-16
 
 **Independent W2 review: F1 handoff-binding repair implemented; final verification pending.**
+F2 additionally repairs reversed evaluation of an exact shared cap, exposed by
+an independently generated asymmetric ellipse. The original seed was continuously
+legal, but the first shifted corridor acquired a spurious 3.15e-15 m gap.
+Canonical edge arithmetic fixes it without changing EPS or contact merging.
+The original 38 corridor tests plus 49 new controls pass with stable hashes;
+the unchanged new ellipse now completes both validators. The F1-only complete
+checkpoint passes 323 functional tests; final combined-source verification is
+required after this separate F2 correction. See `W2_SHARED_CAP_FINDING.md`.
+
 The independently reviewed initial head is `e852641849b2497efea51dfca5ead38ad4476235`.
 The coordinated q/profile rehash reproducer and original failing tests are
 preserved in `W2_INDEPENDENT_ADVERSARIAL_FINDINGS.md` and its evidence archive.
