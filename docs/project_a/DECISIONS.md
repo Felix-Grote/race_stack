@@ -1,5 +1,19 @@
 # Project A decision ledger
 
+## 2026-10-16 — Independent review and authorized W1 remediation
+
+- The independent review of exact CI-tested `133a96fd` supersedes the earlier
+  self-review acceptance: two P1 and three P2 findings are reproducible.
+  Preserve the original report and complete hashed reproductions as historical
+  evidence; do not rewrite the report to imply the original source was correct.
+- The user explicitly lifted read-only restrictions and authorized incremental
+  commits and normal pushes to `project-a/w1-geometry`, PR #1. Recheck remote head
+  before pushing; never force-push, merge, or overwrite concurrent work.
+- Repair original A01–A03 contracts with failing regressions and pinned Humble
+  evidence. Do not loosen tolerances, infer connectivity, inflate widths, or
+  introduce W2/physical-system implementation. Independent final exact-head CI
+  and a new adversarial examination are required before restoring acceptance.
+
 ## 2026-10-16 — W0 environment and ownership
 
 1. **Path D selected by execution**, not assumption. Host Debian 13/Python 3.12 has

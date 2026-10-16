@@ -1,8 +1,18 @@
 # Project A status — 2026-10-16
 
-**W0 AND W1 COMPLETE. A01–A03 PASS. A04–A09 NOT STARTED.**
+**W0 COMPLETE. W1 REMEDIATION IN PROGRESS. A04–A09 NOT STARTED.**
 No accepted optimized trajectory, continuous footprint certificate or physical
-vehicle result exists. W2 is the next authorized continuation wave.
+vehicle result exists. Independent review of `133a96fd6653e4d3b16d71c38e1c70fc38585101`
+found two P1 and three P2 defects; W2 foundation acceptance is blocked pending
+regression-first repairs and independent exact-head CI. The user authorized
+autonomous corrections on this same branch without rewriting history.
+
+The original [independent adversarial review](W1_INDEPENDENT_ADVERSARIAL_REVIEW.md)
+and its [hashed evidence/reproducers](evidence/w1-independent-review/SHA256SUMS)
+are preserved. Findings: F1 tangent normal contacts, F2 metric error control,
+F3 semantic cap anchors, F4 endpoint ownership, F5 gate predicate scale.
+The sections below retain the historical pre-review W1 completion evidence;
+this current remediation status supersedes its acceptance claims.
 
 ## Source and review route
 

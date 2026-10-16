@@ -1,5 +1,24 @@
 # Project A validation matrix — W0
 
+## Independent W1 review and reopened acceptance — 2026-10-16
+
+The [independent report](W1_INDEPENDENT_ADVERSARIAL_REVIEW.md) reviewed exact
+CI-tested SHA `133a96fd6653e4d3b16d71c38e1c70fc38585101`; verdict **CHANGES REQUIRED**.
+Its complete original scripts, minimal counterexample manifests, runtime hashes,
+CI logs and local W0/W1 replay are preserved in
+`evidence/w1-independent-review/review-evidence.zip` with SHA-256 checksums.
+All 12 final independent probes executed on Python 3.10.12 / NumPy 1.26.4 /
+SciPy 1.11.4 in isolated ROS Humble. Two P1 failures (tangent interval bridging,
+approximately 2.67e-6 m station error versus 1e-8 m) and three bounded P2 failures
+(cap anchors, exact endpoints, gate subdivision) reopen W1 acceptance.
+Existing 48/12/18 + 7 W0 numerical + 4 ROS + 1 installed tests still passed;
+legacy failure/skip identities were identical to W0. Passing those original
+tests is not evidence that the five findings are resolved.
+
+The numerical tolerances and original geometry contracts remain unchanged.
+Remediation will add failing regressions before repairs and publish new evidence;
+historical results below are retained as dated measurements.
+
 Tested source base: `67981ed7964a6d35e1da48f0c22bbd9f6d123d5e`, with W0 changes
 identified by [implementation SHA-256 manifest](evidence/implementation-files.json).
 No production source or gitlink changes. Final clean-clone verification follows in
