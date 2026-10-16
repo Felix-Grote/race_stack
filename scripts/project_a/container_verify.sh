@@ -31,6 +31,12 @@ if [[ "$mode" == all || "$mode" == numerical ]]; then
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_w2_handoff.py --junitxml=/work/w2-handoff.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_w2_pipeline.py --junitxml=/work/w2-pipeline.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_w2_novel_pipeline.py --junitxml=/work/w2-novel-pipeline.xml
+  # W3 additions have their own strict gates; inherited package lint stays visible.
+  python -m flake8 --max-line-length=99 /src/scripts/project_a/source_manifest.py /src/scripts/project_a/legacy_identity.py /src/scripts/project_a/tests/test_w3_installed.py
+  ament_pep257 --convention pep257 /src/planner/global_planner/global_planner/route_artifact.py /src/planner/global_planner/global_planner/route_compile.py /src/planner/global_planner/global_planner/route_legacy_export.py /src/planner/global_planner/test/test_route_artifact.py /src/planner/global_planner/test/test_route_compile.py /src/planner/global_planner/test/test_route_legacy_export.py
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_artifact.py --junitxml=/work/a07-artifact.xml
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_compile.py --junitxml=/work/a07-cli.xml
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_legacy_export.py -k 'not actual_nine_group_reader_and_generated_ros_cdr and not corrupt_staged_ros_serialization_is_never_published' --junitxml=/work/a07-export-pure.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_numerical.py --junitxml=/work/numerical.xml
 fi
 if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
@@ -38,6 +44,8 @@ if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
   mkdir -p /work/src
   cp -a /src/planner/global_planner /work/src/
   cp -a /src/utilities/libraries/f110_msgs /src/utilities/libraries/frenet_conversion /work/src/
+  python /src/scripts/project_a/source_manifest.py --repository /src \
+    --build-identity /work/src/global_planner/config/project_a/build_identity.json
   python /usr/bin/colcon --log-base /work/log build --base-paths /work/src \
     --build-base /work/build --install-base /work/install \
     --packages-select f110_msgs frenet_conversion global_planner --parallel-workers 2
@@ -50,6 +58,8 @@ if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_ros.py --junitxml=/work/ros.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_w1_installed.py --junitxml=/work/w1-installed.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_w2_installed.py --junitxml=/work/w2-installed.xml
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_w3_installed.py --junitxml=/work/w3-installed.xml
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_legacy_export.py -k 'actual_nine_group_reader_and_generated_ros_cdr or corrupt_staged_ros_serialization_is_never_published' --junitxml=/work/a07-export-ros.xml
 fi
 if [[ "$mode" == all || "$mode" == legacy ]]; then
   # Legacy failures remain visible in a separate result; never used to mask functional failure.
@@ -64,6 +74,10 @@ if [[ "$mode" == all || "$mode" == legacy ]]; then
   set -e
   printf 'colcon_test=%s\ncolcon_test_result=%s\n' "$legacy_rc" "$summary_rc" > /work/legacy-exit-codes.txt
   cat /work/legacy-results.txt
+  python /src/scripts/project_a/legacy_identity.py \
+    --baseline /src/docs/project_a/evidence/pinned-run/legacy-results.txt.gz \
+    --actual /work/legacy-results.txt --build-root /work/build \
+    --output /work/legacy-identity-comparison.json
   # Baseline lint is recorded, not a passing acceptance check.
   if [[ "$mode" == legacy ]]; then exit "$legacy_rc"; fi
 fi
@@ -72,12 +86,14 @@ python - <<'PY_SUMMARY'
 import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
-out = {'scope': 'W0_THROUGH_A06', 'legal_planner_acceptance': 'SYNTHETIC_PLANAR_W2'}
+out = {'scope': 'W0_THROUGH_A07', 'legal_planner_acceptance': 'SYNTHETIC_PLANAR_OFFLINE',
+       'independent_w3_adversarial_review': 'REQUIRED'}
 for kind in ('numerical', 'ros', 'a01', 'a02', 'a03', 'a04', 'a05', 'a05-oracle',
              'a06', 'a06-independent', 'a06-oracle', 'a06-ellipse', 'w2-handoff',
              'w2-numerical-oracle', 'w2-shared-cap', 'w2-pipeline', 'w2-novel-pipeline',
              'w1-installed',
-             'w2-installed'):
+             'w2-installed', 'a07-artifact', 'a07-cli', 'a07-export-pure', 'a07-export-ros',
+             'w3-installed'):
     path = Path('/work', kind + '.xml')
     if path.exists():
         suite = ET.parse(path).getroot().find('testsuite')

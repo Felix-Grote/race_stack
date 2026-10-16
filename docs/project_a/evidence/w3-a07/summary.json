@@ -1,0 +1,36 @@
+{
+  "scope": "A07 internal checkpoint; independent W3 adversarial review REQUIRED",
+  "accepted_W2": "fe53365f86d660b4f6d4389925f9810cf33d41b3",
+  "base": "9fae5faed6ca62e0c943b6290babc50638477d9b",
+  "combined_new_tests": {
+    "tests": 156,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "seconds": 348.9
+  },
+  "selected_builds": 3,
+  "installed_tests": {
+    "tests": 9,
+    "inherited": 6,
+    "new": 3,
+    "seconds": 104.15
+  },
+  "additional_existing_reader_CDR_cases": {
+    "tests": 2,
+    "seconds": 30.35,
+    "overlap": "These two cases are also included in combined_new_tests; do not add twice."
+  },
+  "production_hashes": {
+    "route_artifact": "5ef3153aff5b601eadeabfc4d3a99e4493a6afa4ededb78aa4afb73ce34d2597",
+    "route_compile": "7abbd29f6c3e21757abe8e74046da12ab918bf2baf7d08529b55a6be7b697a50",
+    "route_legacy_export": "dc6f8a0c5d0b8e025f20f2a0cbc2a171cc6adf39fb0ab2f09118c4cbb44e8ad2"
+  },
+  "independent_internal_boundary_queries": 1566,
+  "producer_trust_repair": "Separately retained C and frozen H, original controlled inputs/profile/reports checked before H capture.",
+  "notes": [
+    "Combined snapshot predates test-docstrings-only additions; normalized AST checks show unchanged assertions/control flow. Final exact-candidate runner repeats all tests.",
+    "Installed build provenance honestly marks the pre-checkpoint working tree dirty; A09 requires a fresh exact clean commit.",
+    "No new dependency, W2 kernel change, map/message/hardware/legacy behavior change."
+  ]
+}

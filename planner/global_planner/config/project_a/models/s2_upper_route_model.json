@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "model": {
+    "regions": [
+      {
+        "occurrence_id": "o0",
+        "surface_id": "ground",
+        "limits": {
+          "speed_min_mps": 0.05,
+          "speed_max_mps": 3.0,
+          "ax_pos_mps2": 2.0,
+          "ax_neg_mps2": 3.0,
+          "ay_mps2": 4.0,
+          "motor_mps2": 2.5,
+          "drag_over_mass": 0.02,
+          "provenance": "Explicit synthetic W3 software budgets; no car calibration"
+        }
+      },
+      {
+        "occurrence_id": "o1",
+        "surface_id": "ground",
+        "limits": {
+          "speed_min_mps": 0.05,
+          "speed_max_mps": 3.0,
+          "ax_pos_mps2": 2.0,
+          "ax_neg_mps2": 3.0,
+          "ay_mps2": 4.0,
+          "motor_mps2": 2.5,
+          "drag_over_mass": 0.02,
+          "provenance": "Explicit synthetic W3 software budgets; no car calibration"
+        }
+      },
+      {
+        "occurrence_id": "o2",
+        "surface_id": "ground",
+        "limits": {
+          "speed_min_mps": 0.05,
+          "speed_max_mps": 3.0,
+          "ax_pos_mps2": 2.0,
+          "ax_neg_mps2": 3.0,
+          "ay_mps2": 4.0,
+          "motor_mps2": 2.5,
+          "drag_over_mass": 0.02,
+          "provenance": "Explicit synthetic W3 software budgets; no car calibration"
+        }
+      },
+      {
+        "occurrence_id": "o3",
+        "surface_id": "ground",
+        "limits": {
+          "speed_min_mps": 0.05,
+          "speed_max_mps": 3.0,
+          "ax_pos_mps2": 2.0,
+          "ax_neg_mps2": 3.0,
+          "ay_mps2": 4.0,
+          "motor_mps2": 2.5,
+          "drag_over_mass": 0.02,
+          "provenance": "Explicit synthetic W3 software budgets; no car calibration"
+        }
+      }
+    ],
+    "provenance": "Synthetic planar test model; no physical evidence",
+    "steering": {
+      "wheelbase_m": 0.3,
+      "angle_max_rad": 0.7,
+      "rate_max_radps": 3.0
+    }
+  },
+  "footprint": {
+    "front_m": 0.1,
+    "rear_m": 0.1,
+    "width_m": 0.12,
+    "margin_m": 0.01
+  }
+}

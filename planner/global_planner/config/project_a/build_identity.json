@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "kind": "declared_behavioral_contract",
+  "contract_id": "forzaeth.offline-reference.v1",
+  "accepted_w2_commit": "fe53365f86d660b4f6d4389925f9810cf33d41b3",
+  "development_baseline": "9fae5faed6ca62e0c943b6290babc50638477d9b",
+  "optimizer_gitlink": "b1b38ecfefec7200d5bcb243f115af1d795b3766",
+  "coverage": "synthetic planar offline software only"
+}

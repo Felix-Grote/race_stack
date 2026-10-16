@@ -1,5 +1,16 @@
 # Project A decision ledger
 
+## 2026-10-16 — A07 immutable authority and producer trust
+
+- Use three small production modules with existing W2 mathematics. No server, registry, alternate geometry kernel or new production dependency.
+- Artifact JSON preserves W2 float/int spelling, signed zero, booleans and null. A01 normalization applies only to the embedded original route; applying it globally changes accepted W2 authority.
+- Capture C directly at trusted A04 return. Freeze original caller inputs/profile/reports, compare serialized authorities, then freeze H. Publisher requires both separate expectations and replays staged bytes with original C. This repairs a coordinated payload/model/body self-approval gap found in internal review.
+- Bind all 11 kernel/compiler/export module hashes and pinned numerical versions. Later loading requires external H plus independent proof context; stored PASS never authorizes it.
+- Linux fd-relative no-symlink traversal, flock and renameat2 NOREPLACE protect publication. Post-rename fsync failure may leave a complete valid artifact without receipt; uncertain power-loss durability is disclosed, never called transactional rollback.
+- Preserve true-metric u/time/closing acceleration and explicit unavailable ROS groups. Side distances use original owned corridor intersections including existing 1e-9 m inward numerical allowance. Portal tags may conservatively include numerical boundary support; continuous proof reports remain authoritative.
+- Separate run telemetry projects numerical scalar observations to native JSON; immutable curve/model/profile values remain exact. No numerical tolerance, physical margin, legacy behavior, map, message or gitlink changes.
+
+
 ## 2026-10-16 — Independent W2 verification and publication identity
 
 - Technical blockers F1 P1 and F2 P2 are repaired separately with original red

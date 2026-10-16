@@ -1,5 +1,20 @@
 # Project A status — 2026-10-16
 
+## W3 A07 checkpoint — implemented and internally verified
+
+Branch `project-a/w3-reference-benchmarks` starts at actual PR #2 merge
+`9fae5faed6ca62e0c943b6290babc50638477d9b`, containing independently accepted W2
+`fe53365f86d660b4f6d4389925f9810cf33d41b3` with an identical tree. All seven recursive pins remain unchanged.
+
+Fresh safe setup and complete W0–W2 baseline exit 0: **373 functional tests  / 19 groups**,3 builds, exact 92-file manifest, unchanged legacy **372 tests / 0 errors / 10 inherited failures / 2 skips**. Independently compared raw failure identities; no new failure is relabeled inherited. [Baseline evidence](evidence/w3-baseline/REPRODUCE.txt).
+
+A07 adds exact immutable references, true-metric cyclic queries, explicit installed compile/validate/query/export, and original ROS nine-group export. Final three module bytes match both combined-test snapshot and actual non-symlink install. **156 new tests pass together in 348.90 s, 0 failures/errors/skips**;3 package builds,9 installed tests (6 inherited + 3 new), and2 actual ROS export tests pass. The latter two also belong to 156 and are not added twice. Strict 99-column flake8 and strict pep257 pass. [Contract](W3_ARTIFACT.md), [evidence](evidence/w3-a07/summary.json).
+
+An internal challenge closed a producer publication gap: stage approval now requires separately retained C and frozen H, after exact comparison with original route/model/body/policies/profile/proofs. Both staged validators use original C. Loader still requires external H and an independent context. Internal high-precision boundary review ran 1,566 queries with no omitted portal support in tested controls; tiny conservative tag differences are within station allowance. This is not the final independent W3 review.
+
+A08 and A09 remain in progress. Pilot S6 .52/.53m meshes pass unchanged independent policies; .5m conditioning and .4/.2/.1m resource failures are retained. These are preliminary, overlapping-work timings, not final isolated benchmarks. No real-course or vehicle readiness is claimed.
+
+
 ## Independent W2 review closeout — implementation verified, publication pending
 
 F1 P1 handoff binding and F2 P2 reversed shared-cap arithmetic are corrected in

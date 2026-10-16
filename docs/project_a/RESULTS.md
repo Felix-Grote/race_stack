@@ -1,3 +1,7 @@
+# W3 current evidence
+
+A07 internally verified:156 new tests/0failures/errors/skips,3 builds and installed CLI/ROS roundtrip. Complete unchanged W0–W2 baseline 373 passes, exact inherited 10 failures. See [A07 summary](evidence/w3-a07/summary.json), [artifact specification](W3_ARTIFACT.md) and [baseline](evidence/w3-baseline/REPRODUCE.txt). A08/A09 final campaign and exact clean installed release are pending; final independent W3 review is required.
+
 # Project A validation matrix — W0/W1/W2
 
 ## Independent adversarial W2 final implementation — 2026-10-16

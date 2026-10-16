@@ -1,0 +1,12 @@
+{
+  "route_sha256": "de49bc69c8c51680919ec569e5a5c105ba374fdffa4d1b2c363ee72323dfefb5",
+  "knots": 144,
+  "oracle": "directed cycle acceleration/braking distance-cone envelope",
+  "maximum_squared_speed_error": 1.677465277793999e-08,
+  "closing_acceleration_mps2": -0.9999999989912076,
+  "lap_time_s": 11.142414527692983,
+  "longitudinal_positive_mps2": 2.0,
+  "longitudinal_negative_mps2": 1.0,
+  "lateral_mps2": 1000000000000.0,
+  "comparison_tolerance_m2ps2": 1e-07
+}
