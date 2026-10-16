@@ -43,7 +43,7 @@ scripts/project_a/verify.sh ros work/ros-1
 scripts/project_a/verify.sh legacy work/legacy-1
 ```
 
-- `numerical`: A01/A02/A03 suites (47/12/17), scoped new-file flake8, and the
+- `numerical`: A01/A02/A03 suites (48/12/18), scoped new-file flake8, and the
   original seven W0 dependency/QP/oracle/legacy-characterization checks.
 - `ros`: isolated non-symlink colcon install of `f110_msgs`, `frenet_conversion`,
   `global_planner`; optimizer wheel build/install; four original ROS/install tests plus one installed W1 geometry/corridor test.

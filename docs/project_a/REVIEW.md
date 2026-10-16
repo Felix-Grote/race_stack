@@ -1,17 +1,13 @@
-W0 restores the missing repository-local ROS development foundation for Project A. It adds a digest-pinned Ubuntu 22.04/ROS 2 Humble test image, hash-locked numerical dependencies, a nonroot/read-only/network-disabled Compose target, reproducible setup/verification scripts, planner-specific CI, and the execution/status/decision/results documents with canonical inputs and raw evidence.
+W1 implements A01–A03 on the approved W0 foundation at `6370d0436aabd011d1b885fe1f500644b957b536`: strict selected directed legal-route input, canonical periodic true-arclength geometry and occurrence-owned original-boundary corridor preparation. XY equality never supplies adjacency or ownership. Original legal borders, directed portals and inherited progress remain authoritative through resampling/refits.
 
-Verification in Codex Cloud: 7 numerical checks passed (including two real ordered synthetic QPs); `f110_msgs`, `frenet_conversion` and `global_planner` built and installed; 4 actual ROS/install checks passed (generated message CDR, existing nine-group JSON, installed utilities/optimizer and Frenet). The published branch was recursively cloned and the checks repeated. Existing colcon baseline remains red: 12 aggregate reports, 0 errors, 10 failures, 2 skipped; complete lint/XML logs are preserved separately. `verify.sh all` gates functional checks and reports baseline failures explicitly; `verify.sh legacy` returns their failure status.
+Validation in isolated Ubuntu 22.04/ROS Humble: 48 A01, 12 A02, 18 A03, 7 W0 numerical, 4 W0 ROS and 1 installed W1 test pass; three packages build. Independent analytic/Gauss/ellipse/intersection oracles and adversarial self-review are committed. The original 10 legacy lint/XML failures and 2 skips retain exactly their W0 identities; 78 new colcon functional tests pass. See RESULTS.md for checkpoint and final clean-clone/hosted evidence.
 
-Base is live `ros2-humble` at `67981ed7964a6d35e1da48f0c22bbd9f6d123d5e`; all seven recursive gitlinks match. Production planner, maps, configs, messages, submodules and vehicle-facing code are unchanged. No hardware Compose, host networking, nodes or devices were used. W0 is infrastructure only: A01–A09, continuous legal/footprint validation, cyclic dynamics and real-course/vehicle acceptance are not implemented or claimed.
+Legacy planner, maps/config, vehicle-facing code and all submodule gitlinks are unchanged. W1 has no accepted optimized trajectory, continuous footprint certificate, speed/artifact/export pipeline or physical vehicle claim. A04–A09 remain pending. W2 must start from this W1 branch and implement A04–A06 with independent continuous/dynamic acceptance; no automatic merge.
 
-See `docs/project_a/STATUS.md` for exact commit/run identities and the W1 A01–A03 continuation instruction, `RESULTS.md` for measured values/tolerances, and `RUNBOOK.md` for reproduction. Please review; no automatic upstream merge.
+Draft review PR, based on W0 to show only W1:
+https://github.com/Felix-Grote/race_stack/pull/1
 
-Upstream draft PR creation was attempted and denied by the GitHub integration.
-The durable branch is ready for review:
-https://github.com/Felix-Grote/race_stack/tree/project-a/w0-cloud-foundation
+Durable branch:
+https://github.com/Felix-Grote/race_stack/tree/project-a/w1-geometry
 
-Prepared upstream comparison:
-https://github.com/ForzaETH/race_stack/compare/ros2-humble...Felix-Grote:project-a/w0-cloud-foundation?expand=1
-
-Confirmed hosted CI:
-https://github.com/Felix-Grote/race_stack/actions/runs/38862974185
+Upstream W0 remains unmerged; this draft intentionally targets the fork's W0 branch. No upstream deployment or merge occurred.

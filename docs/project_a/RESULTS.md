@@ -188,3 +188,40 @@ visits. Kernel tolerances and physical scope are unchanged. A03 checkpoint hoste
 CI [38866587975](https://github.com/Felix-Grote/race_stack/actions/runs/38866587975)
 succeeded at `f4048adac1471c4db03616d5292f06aa83f78a13`; final reviewed source is
 subsequently published and independently checked again.
+
+## W1 final publication and continuation
+
+Published production implementation:
+**`129c28100cd060d155cafb4a1a4e0469e0855cae`**, branch `project-a/w1-geometry`,
+[W1-only draft PR #1](https://github.com/Felix-Grote/race_stack/pull/1) against
+`project-a/w0-cloud-foundation`. PR creation in the fork succeeded; no merge.
+
+Fresh recursive remote clone at that SHA: setup +
+`verify.sh all work/w1-clean-verify` exit **0**, clean source before/after,
+**47 A01 / 12 A02 / 17 A03 / 7 W0 numerical / 4 W0 ROS / 1 installed W1 pass**,
+three-package build; 88 legacy aggregate / 10 original failures / 2 skips.
+[Clean-clone evidence](evidence/w1-clean-clone/SHA256SUMS).
+
+Independent **push** CI run
+[38867033917](https://github.com/Felix-Grote/race_stack/actions/runs/38867033917)
+at exactly that SHA: **SUCCESS**. Retrieved job logs explicitly show 47/12/17,
+7 numerical, 4 ROS, 1 installed, three-package build and original red baseline.
+All setup/test/artifact steps succeeded. [Full job logs/metadata](evidence/w1-ci-129c281/SHA256SUMS).
+
+Two additional final regressions exercise the new end-cap recrossing and gate
+endpoint rejections directly. `scripts/project_a/verify.sh all work/w1-final`
+exit **0**: **48 A01 + 12 A02 + 18 A03 + 7 W0 numerical + 4 W0 ROS + 1 installed
+W1 passed**, no errors/failures/skips; three-package build passes. Legacy now
+**90 aggregate / 0 errors / 10 failures / 2 skipped**; 78 new passing tests.
+Failure identities compare **exactly** with W0. New-file flake8 passes; no new
+pep257 diagnostic. Production module bytes equal the clean clone/CI-tested
+`129c281`; final commit adds tests/docs/evidence only.
+[Final evidence and full implementation hashes](evidence/w1-final/SHA256SUMS).
+
+The final closeout commit itself also runs CI (Project A docs are in the workflow
+path filter). Its exact SHA and verified run are reported in the delivery message;
+`git rev-parse HEAD` and the branch Checks identify it without a self-referential
+hash in its own contents. W1 has no outstanding technical blocker. Proceed to
+W2 A04–A06 **from that final W1 HEAD**, preserving these gates. A07–A09, accepted
+optimized/continuous-footprint/dynamic artifacts and physical deployment remain
+unimplemented/unapproved.

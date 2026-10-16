@@ -114,3 +114,9 @@ Eight A01 and two A03 regressions were added. Identical XY/heading repeated
 visits remain distinct by supplied ordered progress. No tolerance was weakened.
 See W1_SELF_REVIEW.md. CI now triggers on Project A documentation too, so final
 closeout commits receive actual exact-HEAD validation; artifact names cover W1.
+
+Closeout adds direct cap-recrossing and gate-endpoint regressions; production code
+is unchanged from `129c281`. Final local counts 48/12/18; fresh clone and push CI
+at `129c281` pass with 47/12/17 plus unchanged W0/install checks. Retain those
+source/test identities separately. The W1 draft PR targets the fork's W0 branch
+because the foundation has not yet been merged upstream; PR creation succeeded.

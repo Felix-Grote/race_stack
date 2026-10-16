@@ -32,3 +32,9 @@ directed portal roots. Holes and arbitrary non-shared connector caps are rejecte
 connectors require explicit occurrences. No measured real course, 3D clearance,
 contact, traction, calibrated vehicle envelope or optimized trajectory is approved.
 W2 A04–A06 must implement the solver and independent continuous/dynamic gates.
+
+Closeout adds two direct regressions for end-cap recrossing and ambiguous gate
+endpoint contact. Final counts are 48 A01 / 12 A02 / 18 A03 plus 7 W0 numerical,
+4 W0 ROS and 1 installed W1; `verify.sh all work/w1-final` exits 0. Legacy is
+90 aggregate with the same 10 failure identities and 2 skips. Production code is
+unchanged from independently passing clean-clone/push CI commit `129c281`.

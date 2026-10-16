@@ -291,3 +291,11 @@ def test_identical_xy_heading_visits_stay_distinct():
     assert a.heading == pytest.approx(b.heading, abs=1e-8)
     assert (a.occurrence_id, b.occurrence_id) == ('o0', 'repeat-o0')
     assert len(prepare_route(o.route, .5).gates) == 8
+
+
+def test_gate_endpoint_contact_is_ambiguous():
+    o = seed_curve(route())
+    coefficients = np.asarray(o.curve.coefficients) * (5.3 / 6)
+    endpoint_curve = OrderedCurve(o.route, Curve(coefficients, o.curve.owners), o.q)
+    with pytest.raises(CorridorError, match='endpoint'):
+        portal_crossings(endpoint_curve)

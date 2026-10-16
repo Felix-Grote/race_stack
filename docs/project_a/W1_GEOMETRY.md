@@ -126,3 +126,12 @@ still require W2 independent continuous validation. The fixed S3 notch test uses
 an explicit seed-metric cap anchor to exercise restriction transport through
 repeated resampling and independently solves ray/edge 2x2 systems against the
 actual fitted normal. Its generating analytic normal is a distinct approximation.
+
+Final hardening additionally checks numeric field types, seed recrossing of end
+caps and translation-stable polygon area. Gate root candidates include stationary
+polynomial values close to zero, using 1e-9 m line-distance ambiguity plus
+128 binary64 eps times polynomial coefficient norm for roundoff. A candidate on a
+gate endpoint, or a tangent/uncertain contact, rejects. The seven fixed JSON
+fixtures include the asymmetric S3 notch; repeated identical XY/heading visits
+are also constructed explicitly in an adversarial test. No connectivity is
+inferred from either geometric coincidence.

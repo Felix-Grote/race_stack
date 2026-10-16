@@ -1,0 +1,18 @@
+{
+  "identities_unchanged": true,
+  "failure_reports": [
+    "- lint_cmake",
+    "- xmllint",
+    "- f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "- f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "- f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "- f110_msgs.xmllint package.xml",
+    "- frenet_conversion.test.test_flake8 test_flake8",
+    "- frenet_conversion.test.test_pep257 test_pep257",
+    "- global_planner.test.test_flake8 test_flake8",
+    "- global_planner.test.test_pep257 test_pep257"
+  ],
+  "original_aggregate_tests": 12,
+  "current_aggregate_tests": 90,
+  "added_passing_tests": 78
+}

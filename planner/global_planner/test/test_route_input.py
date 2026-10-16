@@ -134,3 +134,12 @@ def test_translation_stable_polygon_predicate():
          (99999.0001, 99999.0001), (99999., 99999.0001))
     assert simple_polygon(p)
     assert signed_area_twice(p) == pytest.approx(2e-8, abs=3e-15)
+
+
+def test_seed_cannot_recross_ownership_end_cap():
+    p = payload()
+    # A legal-side-contained detour revisits the starting cap inside occurrence 0.
+    # End caps separate declared ownership; this is not another legal portal.
+    p['occurrences'][0]['seed'].insert(2, [6.1, 0])
+    with pytest.raises(RouteError, match='ownership end cap'):
+        validate_route(p)
