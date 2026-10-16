@@ -1,0 +1,6 @@
+{
+  "scope": "Historical debugging only; concurrent source-hash drift invalidates acceptance",
+  "first_retimer_result": "13 passed, 2 test failures: duplicate endpoint alias and explicitly incompatible steering/moving-floor model",
+  "repairs": "Canonicalize endpoint aliases without dropping source constraints; retain infeasible model rejection and add separately declared feasible moving-floor model",
+  "acceptance": "Only final global frozen run and full pinned verification can establish acceptance"
+}

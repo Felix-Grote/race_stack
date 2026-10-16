@@ -24,11 +24,17 @@ export PROJECT_A_UID=$(id -u) PROJECT_A_GID=$(id -g)
   cat /etc/os-release
   python3 --version
 } > "$out/source-identity.txt"
+python3 scripts/project_a/source_manifest.py > "$out/source-hashes-before.json"
 unset DOCKER_HOST DOCKER_CONTEXT DOCKER_TLS DOCKER_TLS_VERIFY DOCKER_CERT_PATH
 docker --host=unix:///var/run/docker.sock image inspect project-a-humble:w0 --format '{{.Id}}' > "$out/image-id.txt"
 set +e
 docker --host=unix:///var/run/docker.sock compose -p project-a-w0 -f docker-compose.test.yaml run --rm -T test "$mode" 2>&1 | tee "$out/run.log"
 rc=${PIPESTATUS[0]}
 set -e
+python3 scripts/project_a/source_manifest.py > "$out/source-hashes-after.json"
+if ! cmp -s "$out/source-hashes-before.json" "$out/source-hashes-after.json"; then
+  echo 'Source changed during verification; discard this acceptance run.' >&2
+  rc=1
+fi
 printf '%s\n' "$rc" > "$out/exit-code.txt"
 exit "$rc"

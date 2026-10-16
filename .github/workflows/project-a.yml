@@ -11,7 +11,7 @@ permissions:
 jobs:
   isolated-humble:
     runs-on: ubuntu-22.04
-    timeout-minutes: 25
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -19,7 +19,7 @@ jobs:
           persist-credentials: false
       - name: Build pinned Humble test environment
         run: scripts/project_a/setup.sh
-      - name: W0-W1 regressions, bounded solver and continuous geometry; installed ROS
+      - name: W0-W2 regressions and independent geometry/dynamics; installed ROS
         run: scripts/project_a/verify.sh all work/ci
       - name: Surface pre-existing legacy failures
         if: always()

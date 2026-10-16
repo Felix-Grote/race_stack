@@ -1,5 +1,54 @@
 # Project A validation matrix — W0/W1/W2
 
+## W2 A06 and fresh pipeline checkpoint — 2026-10-16
+
+The single frozen-source command in [A06 review](evidence/w2-a06/REVIEW.md) exits
+**0: 70 passed in 169.24 s**, with stable source/fixture/helper/Compose hashes:
+**20 retimer + 34 independent dynamics + 8 math oracles + 8 fresh pipeline**.
+Strict flake8 at 99 columns and two independent source/math reviews pass. No
+original W0/W1 test, release tolerance, dependency or gitlink was changed.
+
+Every integration case reruns actual pinned IQP and then certifies the same
+final coefficients geometrically and dynamically under explicit synthetic
+footprint/model/policies. All include the closing edge and supplied steering.
+
+| Scenario | Geometry / dynamics | Speed knots | Nominal time s | Time error bound s |
+|---|---|---:|---:|---:|
+| s0_route | PASS / PASS | 166 | 8.593509770 | 8.48e-11 |
+| s0_reverse_route | PASS / PASS | 166 | 8.593509770 | 8.48e-11 |
+| s0_rotated_route | PASS / PASS | 166 | 8.593509770 | 8.48e-11 |
+| s2_upper_route | PASS / PASS | 155 | 9.411623853 | 1.01e-10 |
+| s2_lower_route | PASS / PASS | 151 | 8.587343725 | 9.38e-11 |
+| s3_surfaces_route | PASS / PASS | 231 | 16.419262764 | 1.17e-10 |
+| s3_notch_route | PASS / PASS | 232 | 16.419182802 | 1.16e-10 |
+
+Maximum observed normalized LP residual against inward constraints: **2.853e-12**
+(target 1e-8). Independent normalized residual maxima are nonpositive; their
+largest value is approximately -1.11e-16. Geometry uses 164–269 continuous leaves
+and four independently isolated directed gates per case; minimum sweep slack is
+8.949819e-5 m. The time-error column propagates arc and square-root numerical
+allowances; it describes synthetic model time, never measured vehicle time.
+Repeating S0 optimization agrees within 1e-10 m coefficient tolerance; identical
+retiming returns exactly equal profiles and metadata.
+
+An independent asymmetric cyclic braking envelope agrees within **1.6775e-8
+m²/s²** (predeclared comparison 1e-7), with closing a=-0.999999998991 m/s².
+Known constant-speed and motor/drag optima, nonuniform 96/48-point derivative
+quadrature, table dips and unchanged legacy CSV imports pass. False candidates
+with only a bad closing edge, hidden interior curvature, motor/drag/diamond,
+steering rate/angle, wrong surface budgets and stale metadata fail independently.
+Missing required models are UNSUPPORTED; exhausted/unrepresentable proof remains
+INCONCLUSIVE. Initial real debugging failures and source-drift runs are retained
+as exploratory evidence, never substituted for frozen acceptance.
+
+Full raw traces, final coefficients/q/owners, models, policies, profiles, metadata
+and both certificates: [A06 evidence](evidence/w2-a06/SHA256SUMS). Full W0–W2,
+actual installed-module pipeline and exact-head hosted CI remain the final gates.
+A05 exact-head hosted CI [38888550247](https://github.com/Felix-Grote/race_stack/actions/runs/38888550247)
+passed 225 functional tests and three builds; legacy 225/0 errors/10 failures/
+2 skips retained the exact original ten failure identities.
+[Hosted A05 evidence](evidence/w2-a05-ci/SHA256SUMS).
+
 ## W2 A05 local checkpoint — 2026-10-16
 
 `scripts/project_a/unit.sh work/w2/a05-final planner/global_planner/test/test_route_validate_geometry.py planner/global_planner/test/test_route_validate_bounds_oracle.py`

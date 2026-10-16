@@ -1,0 +1,25 @@
+{
+  "total_count": 1,
+  "artifacts": [
+    {
+      "id": 12041360931,
+      "node_id": "MDg6QXJ0aWZhY3QxMjA0MTM2MDkzMQ==",
+      "name": "project-a-1fea1213896ca6e32eb93dfd14acd18cfdb78701",
+      "size_in_bytes": 1211544,
+      "url": "https://api.github.com/repos/Felix-Grote/race_stack/actions/artifacts/12041360931",
+      "archive_download_url": "https://api.github.com/repos/Felix-Grote/race_stack/actions/artifacts/12041360931/zip",
+      "expired": false,
+      "digest": "sha256:d2278f76caee430154fdfd9d2fd785f36459cbaadf35d1da7377f894e0af3b1b",
+      "created_at": "2026-10-16T10:49:33Z",
+      "updated_at": "2026-10-16T10:49:33Z",
+      "expires_at": "2027-01-14T10:38:23Z",
+      "workflow_run": {
+        "id": 38888550247,
+        "repository_id": 1421739826,
+        "head_repository_id": 1421739826,
+        "head_branch": "project-a/w2-optimization",
+        "head_sha": "1fea1213896ca6e32eb93dfd14acd18cfdb78701"
+      }
+    }
+  ]
+}

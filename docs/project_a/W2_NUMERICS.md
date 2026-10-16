@@ -118,9 +118,84 @@ curvature limit is independently supplied (1/m for the synthetic campaign).
 Outcomes are PASS, demonstrated FAIL, or INCONCLUSIVE for unsupported numerical
 or geometric cases and exhausted resources. No partial certificate grants PASS.
 
+## A06: cyclic squared-speed candidate and independent acceptance
+
+`cyclic_retime.retime` consumes the final `OrderedCurve` and an explicitly supplied
+`DynamicsModel`. It returns a numerical `CANDIDATE`, requiring separate geometry
+and dynamics PASS. `route_validate.validate_dynamics` delegates to the independent
+`route_validate_dynamics` implementation. The checker does not use LP rows,
+optimizer residuals, model-applicability helpers or stored speed/time views.
+
+The profile stores half-open `(segment,t,u)` knots, where `u=v^2` is affine in
+**true metric arc** on each edge. Every coefficient boundary is a profile knot.
+For edge distance `ds`, including the closing edge, acceleration is
+`a=(u_next-u)/(2*ds)`. Local partial-integral error bounds enclose `ds`; neither
+global prefix subtraction nor inherited seed progress `q` supplies physical
+distance. Cap and portal events are transported through the original q lineage.
+Exact closed interval overlaps retain all applicable restrictions even when an
+event parameter rounds. Both adjacent models and the minimum original static
+caps over the declared portal brackets apply throughout portal support.
+
+The declared planar model supplies speed range, separate positive/negative
+longitudinal axes `A+`, `A-`, lateral axis `Ay`, motor acceleration `M`, and
+`c=drag/mass` in inverse metres. These are explicit model inputs. For a certified
+whole-edge absolute curvature bound `K`, the LP enforces
+
+```
+ +(a+c*u)/A+ + K*u/Ay <= 1
+ -(a+c*u)/A- + K*u/Ay <= 1
+  (a+c*u)/M           <= 1
+```
+
+at both u endpoints and both distance-error extremes. Acceleration is constant
+and u is affine in metric arc, so these sufficient corners enclose the whole
+edge. The checker independently evaluates these inequalities with exact rational
+arithmetic and independent applicability logic. Loose conservative bounds do not
+demonstrate a violation: unresolved proof is INCONCLUSIVE; FAIL requires malformed
+authority or a demonstrated constraint witness. Missing required model terms are
+UNSUPPORTED. Only PASS grants dynamic acceptance.
+
+With supplied wheelbase `b`, steering angle is `atan(b*kappa)` and rate is
+`b*kappa_s*v/(1+(b*kappa)^2)`. Dropping the positive denominator to one gives a
+sufficient rate cap from the whole-edge curvature-rate bound. An upper curvature
+bound cannot be used to enlarge that denominator. No steering parameters are
+invented when the model omits them.
+
+The objective maximizes the distance-weighted squared-speed integral on the
+declared mesh; it does not establish minimum lap time. Each moving edge has
+analytic time `2*ds/(sqrt(u)+sqrt(u_next))`. Final velocity, right-hand cyclic
+acceleration, signed curvature, station and cumulative time are regenerated;
+the independent checker recomputes them and propagates arc/square-root error to
+a lap-time enclosure. Metadata agreement is distinct from true-time accuracy.
+
+Explicit CSV imports accept the legacy three-column GGV and two-column motor
+formats. One bounded byte snapshot supplies both parsed values and the recorded
+SHA256. Exact rational piecewise-linear interpolation takes the minimum over the
+entire declared speed range, including interior table knots, and rounds down.
+No extrapolation is supported. Braking, drag and model provenance are separately
+required; these tables alone establish no tire/contact or physical calibration.
+
+Default retimer resources are 10,000 knots, 1,000,000 sparse constraint rows,
+100,000 native LP iterations, 20 bound-refinement levels and a 10 s cooperative
+deadline; HiGHS receives the remaining time. Preflight limits include 2,048
+segments, 2 MiB route bytes, 512 polygon vertices, 2,000,000 polygon work units
+and 65,536 cumulative model-text bytes. CSV snapshots are at most 8 MiB. The
+LP uses 1e-10 primal/dual solver tolerances, a 1e-9 normalized inward constraint
+margin, and rejects observed residual above 1e-8. Source/input, native numerical
+and test-container limits are distinct; no hard 10 s process guarantee is made.
+
+Independent defaults retain the separately expected W1 `NumericPolicy`, moving
+speed floor 1e-6 m/s, normalized residual allowance 1e-8, angle allowance 1e-10 rad,
+and metadata allowance `1e-7 + 1e-8*abs(expected)` in each field's units. The
+checker permits at most 100,000 bound intervals, depth 20, 10,000 profile knots,
+the same stated geometry/text limits, and a 120 s cooperative deadline. It
+checks deadlines inside growing leaf/witness/station loops. Unrepresentable
+bounds remain INCONCLUSIVE. Reported time enclosures include numerical arc and
+square-root error; their widths are measured separately for each accepted lap.
+
 ## Synthetic acceptance inputs
 
-The planned W2 integration footprint is an explicitly supplied rectangle with
+The W2 integration footprint is an explicitly supplied rectangle with
 front/rear extents 0.10 m each, width 0.12 m and separate legal margin 0.01 m.
 The 0.30 m solver width provides conservative nodal clearance for that smaller
 footprint. All geometric and dynamic checks still use the supplied footprint

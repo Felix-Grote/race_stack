@@ -1,5 +1,36 @@
 # Project A decision ledger
 
+## 2026-10-16 — W2 A06 declared cyclic dynamics
+
+- Use the specified sufficient planar squared-speed LP on true metric arc,
+  including closure, both distance-error extremes and both endpoint speeds.
+  Maximize distance-weighted u; do not claim minimum lap time or tire truth.
+- Keep immutable explicit model/profile records in `cyclic_retime.py`, with a
+  separate independent `route_validate_dynamics.py` and lazy public facade in
+  `route_validate.py`. Shared schema and A05 polynomial bounds are permitted;
+  LP rows, residuals and applicability helpers are not acceptance authorities.
+- Apply original cap events before solving, retain exact closed q overlaps, and
+  enforce both adjacent portal models. Canonical endpoint aliases may share one
+  mesh point; distinct source restrictions are never dropped or averaged.
+- Import explicit GGV/motor CSV snapshots with full-range rational interpolation
+  minima and byte hashes. Braking/drag/provenance remain supplied inputs. Reject
+  missing required steering and unsupported model terms, without guessed values.
+- Predeclare integrated synthetic ground limits: speed .05–4 m/s, positive/
+  negative longitudinal 2/3 m/s², lateral 4 m/s², motor 2.5 m/s², drag/mass .02/m.
+  Upper-deck speed .05–2.5 m/s, longitudinal 1.5/2 m/s², lateral 2 m/s²; motor/drag
+  unchanged. Supplied synthetic steering uses wheelbase .3 m, angle .7 rad,
+  rate 3 rad/s. These are test inputs, never real-car calibration.
+- Preserve distinction between demonstrated constraint failure and conservative
+  numerical uncertainty. Independent time intervals propagate local arc error;
+  consistent metadata alone does not prove exact lap time. Resource preflights
+  precede decoding/reconstruction/meshing; deadlines remain cooperative across
+  bounded phases and native HiGHS receives remaining time/iteration limits.
+- Exercise fresh optimization and both validators on the same final coefficients,
+  with an additional fresh installed-package pipeline. Extend the committed full
+  runner and exact source/fixture/harness hash guard; preserve separate legacy
+  failure identities and actual hosted CI evidence. Expanded CI allows 45 minutes
+  because legacy colcon repeats the new numerical suites as well.
+
 ## 2026-10-16 — W2 A05 independent continuous planar acceptance
 
 - Rebuild separately supplied approved route and actual coefficient metadata;

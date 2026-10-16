@@ -1,6 +1,6 @@
 # Project A status — 2026-10-16
 
-**W2 IN PROGRESS. A04/A05 LOCAL ACCEPTANCE PASS. A06–A09 PENDING.**
+**W2 IN PROGRESS. A04–A06 AND FRESH PIPELINES PASS; FULL/INSTALLED/FINAL CI PENDING.**
 
 The current authorized work is W2 A04–A06 on `project-a/w2-optimization`, created
 directly at corrected W1 commit
@@ -41,13 +41,29 @@ each. Exact rational bounds and full-rectangle/disc sweep proofs cover interiors
 every join and the seam. Two independent reviewers accept the planar scope.
 [A05 evidence/review](evidence/w2-a05/SHA256SUMS).
 
+A05 checkpoint **`1fea1213896ca6e32eb93dfd14acd18cfdb78701`** is pushed. Exact-head
+[push CI 38888550247](https://github.com/Felix-Grote/race_stack/actions/runs/38888550247)
+is **SUCCESS**: 225 functional tests pass across nine groups, three packages
+build, and all ten legacy failure identities remain unchanged (225 reports,
+0 errors / 10 failures / 2 skips). Full logs and exact metadata are retained.
+
 An independent 44-knot S3 adversary has every nodal footprint legal, yet its
 between-node exit is correctly FAIL; the retained reproducer passes in 5.07 s.
 Unsupported geometry/resources/required physical coverage remain INCONCLUSIVE.
-Next: implement A06 cyclic speed and independent dynamics validation on the same
-final coefficients, then integrated acceptance and exact-head CI. No combined
-W2 trajectory, immutable artifact, physical clearance or vehicle result is
-claimed yet. The historical W1 record below is retained as evidence; this W2
+A06 now passes a single globally frozen **70-test** run in **169.24 s**, exit 0:
+20 retimer, 34 independent dynamics, eight independent math oracles and eight
+fresh whole-pipeline/repeatability cases. Strict 99-column lint passes. Two
+independent source/math reviews ACCEPT. All seven freshly optimized S0/reversed/
+rotated, S2 alternatives and S3 surface/notch cases receive geometry **PASS** and
+dynamics **PASS** on the same final coefficients. Maximum observed LP residual is
+**2.853e-12**; independent certificates have no positive normalized residual.
+[evidence/review](evidence/w2-a06/SHA256SUMS), [numerical contracts](W2_NUMERICS.md).
+
+Next: full `scripts/project_a/verify.sh all` at the committed A06 checkpoint,
+including actual installed W2 pipeline and unchanged W0/W1 regressions, then
+exact-head hosted CI, final evidence/report and reviewable PR. W2 is not declared
+complete until those gates pass. No immutable A07 artifact or physical vehicle
+result is claimed. The historical W1 record below is retained as evidence; this W2
 section supersedes its old continuation/status statements.
 
 ## Historical corrected W1 status

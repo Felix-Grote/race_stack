@@ -1,0 +1,15 @@
+{
+  "retrieved_at_utc": "2026-10-16T10:51:26.652395+00:00",
+  "repository": "Felix-Grote/race_stack",
+  "commit": "1fea1213896ca6e32eb93dfd14acd18cfdb78701",
+  "run_id": 38888550247,
+  "run_attempt": 1,
+  "run_url": "https://github.com/Felix-Grote/race_stack/actions/runs/38888550247",
+  "job_id": 116932165831,
+  "job_url": "https://github.com/Felix-Grote/race_stack/actions/runs/38888550247/job/116932165831",
+  "log_retrieval_tool": "github_fetch_workflow_job_logs",
+  "log_content": "Full decoded job log, UTF-8; gzip mtime=0",
+  "full_log_scratch_path": "work/w2/a05-ci-full.log",
+  "uncompressed_bytes": 296503,
+  "uncompressed_sha256": "dd5f2a5b5314f998871a9dbb3528fdb09d4c60bc90970991e5e30280056d2442"
+}

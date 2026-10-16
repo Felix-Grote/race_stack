@@ -1,0 +1,44 @@
+{
+  "verdict": "ACCEPT_NO_REMAINING_SOURCE_BLOCKER",
+  "scope": "independent read-only source/numerical/model/resource review; final frozen consolidated tests and strict lint remain root acceptance gates",
+  "source_sha256": {
+    "planner/global_planner/global_planner/cyclic_retime.py": "7ff74dbf3f57500731e5eebb069882d35efc6ed6d2b5805e22c796556286ceb3",
+    "planner/global_planner/global_planner/route_validate_dynamics.py": "76e162abd99ef8d6fcc2a4b03cca08929622ef67eb63745a95d2712c3605af08",
+    "planner/global_planner/test/test_cyclic_retime.py": "70aa16dcfbafda8914f2f3185eff2ede1e3880c2d8d3b4379d09d6e671d989a5",
+    "planner/global_planner/test/test_route_validate_dynamics.py": "3e200c5783b8033bc0c5db1760cde087abeeb57ef4bb213236265a36facd7c40",
+    "planner/global_planner/test/test_route_dynamics_oracle.py": "8b1e3e5e8f38e39c4db932348d5b15179fdfe1a00f234d22f1b95c15288a5880"
+  },
+  "retimer_review": [
+    "sufficient both-distance-extreme and both-speed-endpoint positive/negative diamond and motor constraints",
+    "cyclic closing edge and original local-arc coefficient authority",
+    "whole-edge exact q cap intersections and both declared portal budgets",
+    "optional steering angle/rate before LP",
+    "bounded source/semantic mesh/LP rows/iterations/cooperative time/text preprocessing",
+    "bounded CSV bytes hashed and parsed from same snapshot; full-range exact linear-interpolation minima",
+    "numerical candidate only; distance-weighted squared-speed objective not minimum time"
+  ],
+  "validator_review": [
+    "separately reconstructs approved route and independently expected coefficient/numerical policies",
+    "independent exact model evaluation, never LP rows/success/residuals",
+    "closed support/cap intersections and coefficients/seam/profile identities",
+    "conservative global whole-edge curvature and curvature-rate bounds and direct actual-point violation witnesses",
+    "arc/parameter-conversion error transported to witness velocity intervals",
+    "outward square-root/ratio time enclosures and independent metadata recomputation",
+    "depth/interval/route/polygon/model/text checks and cooperative wall callbacks inside growing loops"
+  ],
+  "findings_closed": [
+    "CSV read-before-limit/reopen-after-hash",
+    "mesh/preprocessing before own knot budgets",
+    "tiny positive floor/steering-product arithmetic failures",
+    "malformed policy and coefficient dimensions before reconstruction",
+    "missing explicit witness parameter-conversion transport",
+    "unchecked growing leaf/witness/station loops",
+    "extreme rational float conversion uncertainty classification"
+  ],
+  "limitations": [
+    "pure planar supplied diamond/motor/drag/optional steering model only",
+    "no tire/contact/3D/physical calibration or minimum-time claim",
+    "phase-boundary deadlines are cooperative, finite kernel and structural budgets remain enforced"
+  ],
+  "final_test_status": "PENDING_ROOT_GLOBAL_FROZEN_RUN"
+}

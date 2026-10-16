@@ -20,6 +20,14 @@ class BoundUncertain(ValueError):
     """An interval cannot be enclosed under this supported numerical model."""
 
 
+def validate_dynamics(ordered, profile, model, policy=None, metadata=None):
+    """Independently check cyclic dynamics; import lazily to keep geometry pure."""
+    from .route_validate_dynamics import DynamicsValidationPolicy, validate_dynamics as check
+    if policy is None:
+        policy = DynamicsValidationPolicy()
+    return check(ordered, profile, model, policy=policy, metadata=metadata)
+
+
 def _f(x):
     if isinstance(x, bool) or not isinstance(x, (int, float, Fraction)):
         raise BoundUncertain('non-numeric or boolean bound input')
