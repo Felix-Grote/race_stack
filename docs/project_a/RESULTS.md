@@ -19,6 +19,18 @@ The numerical tolerances and original geometry contracts remain unchanged.
 Remediation will add failing regressions before repairs and publish new evidence;
 historical results below are retained as dated measurements.
 
+### F5 gate-direction repair
+
+Command inside the pinned, nonroot/network-none/read-only-source Humble image:
+`python -m pytest -q -p no:cacheprovider planner/global_planner/test/test_route_input.py`.
+The 12 new geometric subdivision cases first produced 6 failures / 6 passes
+with `-k collinear_seed`; after repair all **60 A01 tests pass** (exit 0).
+The cases cover scale .01/1/100, full width .0001/.2 m before scaling, and
+rotation/translation. Existing malformed/reverse input tests remain passing.
+Exact source/test hashes, red/green logs/JUnit and unchanged image identity are
+in `evidence/w1-remediation/f5`. EPS remains 1e-9 m; no supported scale restriction
+or legal requirement was relaxed.
+
 Tested source base: `67981ed7964a6d35e1da48f0c22bbd9f6d123d5e`, with W0 changes
 identified by [implementation SHA-256 manifest](evidence/implementation-files.json).
 No production source or gitlink changes. Final clean-clone verification follows in

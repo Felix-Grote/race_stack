@@ -14,6 +14,14 @@ F3 semantic cap anchors, F4 endpoint ownership, F5 gate predicate scale.
 The sections below retain the historical pre-review W1 completion evidence;
 this current remediation status supersedes its acceptance claims.
 
+### Remediation checkpoint progress
+
+- **F5 repaired:** gate direction uses signed normal travel in metres, independent
+  of gate width. Twelve subdivision/rigid-motion/scale regressions were executed
+  first: 6 failed / 6 passed before repair; full A01 now **60 passed** in pinned
+  Humble. Red/green JUnit, logs and source hashes: `evidence/w1-remediation/f5`.
+- F1–F4 remain under repair; no final acceptance or final CI claim yet.
+
 ## Source and review route
 
 - Repository: `Felix-Grote/race_stack`, durable branch **`project-a/w1-geometry`**.

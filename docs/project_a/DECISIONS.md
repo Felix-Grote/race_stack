@@ -14,6 +14,15 @@
   introduce W2/physical-system implementation. Independent final exact-head CI
   and a new adversarial examination are required before restoring acceptance.
 
+### F5 — Dimensionally consistent gate direction
+
+Divide the gate/travel cross product by nonzero gate length before comparing
+with the original 1e-9 m uncertainty threshold. The result is signed normal
+travel in metres, so harmless collinear seed subdivision cannot be mistaken
+for reversed/tangent direction merely because the gate is narrow. Keep all
+nondegenerate/endcap/topology checks and EPS unchanged. The failing-first
+regressions include rigid motions and geometric scaling, not just one fixture.
+
 ## 2026-10-16 — W0 environment and ownership
 
 1. **Path D selected by execution**, not assumption. Host Debian 13/Python 3.12 has

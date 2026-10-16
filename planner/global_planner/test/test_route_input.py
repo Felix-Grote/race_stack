@@ -2,6 +2,7 @@
 import copy
 from dataclasses import FrozenInstanceError
 import json
+import math
 from pathlib import Path
 import subprocess
 import sys
@@ -143,3 +144,51 @@ def test_seed_cannot_recross_ownership_end_cap():
     p['occurrences'][0]['seed'].insert(2, [6.1, 0])
     with pytest.raises(RouteError, match='ownership end cap'):
         validate_route(p)
+
+
+@pytest.mark.parametrize('scale', [.01, 1., 100.])
+@pytest.mark.parametrize('width', [.0001, .2])
+@pytest.mark.parametrize('rigid', [False, True])
+def test_forward_gate_is_invariant_under_collinear_seed_subdivision(scale, width, rigid):
+    p = payload()
+    for occurrence in p['occurrences']:
+        for side, radius in (('left', 6 - width / 2), ('right', 6 + width / 2)):
+            occurrence[side] = [[x * radius / 6, y * radius / 6]
+                                for x, y in occurrence['seed']]
+    for occurrence, portal in zip(p['occurrences'], p['transitions']):
+        portal['gate'] = [occurrence['right'][-1], occurrence['left'][-1]]
+        portal['before_m'] *= scale
+        portal['after_m'] *= scale
+    angle = .37 if rigid else 0.
+    dx, dy = (1234., -4321.) if rigid else (0., 0.)
+
+    def transform(points):
+        return [[scale * (math.cos(angle) * x - math.sin(angle) * y) + dx,
+                 scale * (math.sin(angle) * x + math.cos(angle) * y) + dy]
+                for x, y in points]
+
+    for occurrence in p['occurrences']:
+        for key in ('seed', 'left', 'right'):
+            occurrence[key] = transform(occurrence[key])
+    for portal in p['transitions']:
+        for key in ('gate', 'support'):
+            portal[key] = transform(portal[key])
+    p['initialization']['zone'] = transform(p['initialization']['zone'])
+    bracket = p['initialization']['seed_interval_m']
+    p['initialization']['seed_interval_m'] = [scale * q for q in bracket]
+    before = validate_route(p)
+    incoming, outgoing = p['occurrences'][0]['seed'], p['occurrences'][1]['seed']
+    gate = incoming[-1]
+    epsilon = 1e-6 * scale
+    old_in, old_out = incoming[-2], outgoing[1]
+    before_fraction, after_fraction = epsilon / math.dist(gate, old_in), epsilon / math.dist(
+        gate, old_out)
+    before_point = [gate[k] + before_fraction * (old_in[k] - gate[k]) for k in (0, 1)]
+    after_point = [gate[k] + after_fraction * (old_out[k] - gate[k]) for k in (0, 1)]
+    incoming.insert(len(incoming) - 1, before_point)
+    outgoing.insert(1, after_point)
+    after = validate_route(p)
+    assert [(v.source, v.target) for v in before.portals] == [
+        (v.source, v.target) for v in after.portals]
+    assert [o.length for o in after.occurrences] == pytest.approx(
+        [o.length for o in before.occurrences], abs=1e-9)

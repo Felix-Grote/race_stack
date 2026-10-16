@@ -215,7 +215,11 @@ def validate_route(payload):
                      ((gate[0], a.right[-1]), (gate[1], a.left[-1]),
                       (gate[0], b.right[0]), (gate[1], b.left[0]))), 'invalid portal end caps')
         travel = sub(b.seed[1], a.seed[-2])
-        _require(cross(sub(gate[1], gate[0]), travel) < -EPS, 'wrong directed gate')
+        # Signed travel normal to the gate is a distance; EPS is in metres.
+        # Comparing the unnormalised cross product to EPS makes direction depend
+        # on ribbon width and harmless collinear subdivision of the seed.
+        _require(cross(sub(gate[1], gate[0]), travel) / distance(*gate) < -EPS,
+                 'wrong directed gate')
         _require(inside(a.seed[-1], support, False) and all(inside(x, support) for x in gate),
                  'gate not covered by portal support')
         before, after = _number(tr['before_m']), _number(tr['after_m'])
