@@ -65,13 +65,17 @@ scaled by coefficient magnitude, which is limited to 1e8. Subdivision is limited
 to depth 24 and 10000 boxes per segment. These are software numerical assumptions,
 not a continuous legal/footprint certificate.
 
-QUADPACK adaptive Gauss-Kronrod integrates speed with total-lap absolute estimated
-error budget 1e-10 m, divided among segments; relative request 5e-14, 100 interval
-limit. QUADPACK's estimates are numerical error control, not formal interval
-arithmetic. Nonconvergence or excess estimate rejects. Compensated sums accumulate
-lengths. Brent inversion uses physical station tolerance 1e-8 m and verifies the
-residual plus two partial integration allowances; the regression acceptance is
-<=1e-7 m as required by the roadmap. No chord approximation is substituted.
+Gauss32 integrates speed with a conservative derivative-remainder and binary64
+roundoff allowance, independently of differences between sampled quadrature
+rules. The total-lap budget remains 1e-10 m, divided among segments. Quadratic
+derivative Bezier boxes bound speed and its Taylor derivatives; unresolved boxes
+subdivide. Candidate speed extrema accelerate partitioning but cannot authorize
+acceptance. The default limit remains 100 live panels, bounded by depth24;
+budget/roundoff exhaustion rejects. See [the error-control derivation](W1_NUMERICAL_ERROR_CONTROL.md).
+Compensated sums accumulate lengths. Brent inversion retains physical station
+tolerance 1e-8 m and checks its residual plus two partial integration allowances.
+Tests use independent analytic/split-Gaussian oracles at the actual 1e-8 m policy;
+no chord approximation or dense resampling substitutes for metric inversion.
 
 `locate`, `station`, `sample` and `window` share these exact coefficients. Queries
 wrap negative/multiple-lap progress; knots and seam use the right-hand segment.

@@ -25,7 +25,14 @@ this current remediation status supersedes its acceptance claims.
   tests: 8 failures / 6 passes; full A03 now **32 passed**. The actual sampled
   tangent-notch route retains its first legal component. Evidence:
   `evidence/w1-remediation/f1`.
-- F2–F4 remain under repair; no final acceptance or final CI claim yet.
+- **F2 repaired:** speed integration now uses Gauss32 with an independent
+  derivative-remainder/roundoff bound and bounded refinement. Original segment,
+  periodic and non-retracing counterexamples meet unchanged default tolerances;
+  hard stress cases use an explicit larger panel budget or fail closed. A02:
+  **39 passed**, with 26 failing regressions preserved before implementation.
+  Independent 14-family/70-inverse-query check passes (worst station residual
+  9.91e-11 m). Evidence: `evidence/w1-remediation/f2`.
+- F3–F4 remain under repair; no final acceptance or final CI claim yet.
 
 ## Source and review route
 

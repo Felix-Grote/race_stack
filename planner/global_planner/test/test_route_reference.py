@@ -146,3 +146,89 @@ def test_budgets_owners_and_bad_queries():
         NumericPolicy(arc_abs=1e-3)
     with pytest.raises(GeometryError):
         Curve.interpolate([[0, 0], [0, 0], [1, 1]])
+
+
+def feature_arc(coeff, center, width, transverse, scale, t=1.):
+    """Independent Gaussian oracle with the narrow feature explicitly resolved."""
+    anchors = {0., t}
+    for root in (center - width, center, center + width):
+        local = transverse / max(2 * scale * width, math.sqrt(scale * transverse))
+        for factor in (-1000, -100, -10, -1, -.1, 0, .1, 1, 10, 100, 1000):
+            value = root + factor * local
+            if 0 < value < t:
+                anchors.add(value)
+    x, w = np.polynomial.legendre.leggauss(96)
+    values = []
+    a = np.asarray(coeff)
+    anchors = sorted(anchors)
+    for lo, hi in zip(anchors, anchors[1:]):
+        u = lo + (x + 1) * (hi - lo) / 2
+        d = a[:, 1, None] + 2 * a[:, 2, None] * u + 3 * a[:, 3, None] * u ** 2
+        values.append(float(np.dot(w, np.hypot(*d)) * (hi - lo) / 2))
+    return math.fsum(values)
+
+
+@pytest.mark.parametrize('center', [.2, .37, .53, .8])
+@pytest.mark.parametrize('width', [.001, .01])
+@pytest.mark.parametrize('scale', [.1, 1., 10.])
+def test_regular_narrow_speed_features(center, width, scale):
+    transverse = max(2e-7, scale * 2e-7)
+    coeff = ((0., scale * (center ** 2 - width ** 2), -scale * center, scale / 3),
+             (0., transverse, 0., 0.))
+    # This stress matrix explicitly grants more panels, never looser accuracy.
+    seg = CubicSegment(coeff, NumericPolicy(quad_limit=256))
+    oracle = feature_arc(coeff, center, width, transverse, scale)
+    assert abs(seg.length - oracle) <= seg.policy.arc_abs
+    assert abs(seg.length - oracle) <= seg.arc_error + 2e-14 * scale
+    projected = scale * (1 / 3 - center + center ** 2 - width ** 2 + 8 * width ** 3 / 3)
+    assert seg.length + seg.arc_error >= projected - 1e-14 * scale
+    for fraction in (.25, .6, .75, .93):
+        target = fraction * seg.length
+        t = seg.parameter(target)
+        actual = feature_arc(coeff, center, width, transverse, scale, t)
+        assert abs(actual - target) <= seg.policy.station_abs
+
+
+def test_regular_monotone_speed_minimum():
+    scale, center, transverse = .75, 17 / 32, 4e-6
+    coeff = ((0., .211669921876, -.3984375, .25), (0., transverse, 0., 0.))
+    seg = CubicSegment(coeff)
+    oracle = feature_arc(coeff, center, 0., transverse, scale)
+    assert abs(seg.length - oracle) <= seg.policy.arc_abs
+    target = .75 * seg.length
+    actual = feature_arc(coeff, center, 0., transverse, scale, seg.parameter(target))
+    assert abs(actual - target) <= seg.policy.station_abs
+
+
+def test_original_speed_feature_and_explicit_budget_exhaustion():
+    coeff = ((0., .0899, -.3, 1 / 3), (0., 2e-7, 0., 0.))
+    segment = CubicSegment(coeff)
+    oracle = feature_arc(coeff, .3, .01, 2e-7, 1.)
+    assert abs(segment.length - oracle) <= segment.policy.arc_abs
+    # The larger-scale stress above is resolvable, but cannot silently spend
+    # beyond the caller's default 100-panel numerical resource allowance.
+    hard = ((0., 10 * (.53 ** 2 - .01 ** 2), -5.3, 10 / 3),
+            (0., 2e-6, 0., 0.))
+    with pytest.raises(GeometryError, match='budget exhausted'):
+        CubicSegment(hard)
+
+
+def test_periodic_narrow_speed_feature():
+    points = [
+        [-1.5024623491492127e-15, -7.957616698076442e-22],
+        [.12323333333333301, 1.9999999999986714e-7],
+        [.2867959417586583, -.4813887455929313],
+        [-1.4997593897109303, -1.6151633169617934],
+        [-.647436223972624, .9494314068337777],
+        [-.20927157109936093, .9423388372100486],
+        [1.4381127571538583, -.3109547412709052],
+        [.23234307397572523, -.12505112468113805],
+    ]
+    curve = Curve.interpolate(points, q=np.arange(9, dtype=float))
+    segment = curve.segments[0]
+    oracle = feature_arc(segment.coefficients, .3, .01, 2e-7, 1.)
+    assert abs(segment.length - oracle) <= segment.policy.arc_abs
+    target = .75 * segment.length
+    sample = curve.sample(target)
+    actual = feature_arc(segment.coefficients, .3, .01, 2e-7, 1., sample.t)
+    assert abs(actual - target) <= curve.policy.station_abs

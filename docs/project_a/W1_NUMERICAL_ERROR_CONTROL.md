@@ -1,0 +1,81 @@
+# W1 arc-integration error control after independent review
+
+This note documents the F2 repair. It applies to the exact stored cubic
+coefficients under the declared binary64 numerical model. It is not an A05
+continuous legal/footprint certificate or a physical measurement guarantee.
+
+## Why the former acceptance rule failed
+
+For `x'=(t-.3)^2-.01^2`, `y'=2e-7`, the curve is regular but its short
+low-speed/backtracking feature was missed by unconstrained adaptive quadrature.
+The former routine reported error 1.53e-13 m while actual length and inverse
+errors exceeded 2.66e-6 m. Rechecking the inverse with the same arc function was
+self-consistent and wrong. The original report and exact reproducer are retained
+in W1_INDEPENDENT_ADVERSARIAL_REVIEW.md and its evidence archive.
+
+## Panel bound
+
+On a parameter panel `[a,b]`, let `h=b-a`, `u=(t-a)/h`, and
+`d(u)=r'(a+h*u)`. This is a quadratic vector polynomial. Its three Bezier
+controls bound every component by an axis-aligned box. Distance of that box
+from zero supplies a conservative speed lower bound `m`; the maximum control
+norm supplies an upper bound `D0`. Endpoint norms of the affine derivative
+bound `D1 >= |d_u'|`; the constant second derivative bounds `D2 >= |d_u''|`.
+Boxes that cannot establish positive m request subdivision.
+
+For `g=d dot d`, upper bounds on its Taylor derivatives `|g^(k)/k!|` are:
+
+| k | Gk |
+|---|---|
+| 1 | `2*D0*D1` |
+| 2 | `D1^2 + D0*D2` |
+| 3 | `D1*D2` |
+| 4 | `D2^2/4` |
+| >4 | 0 |
+
+With `f=|d|` and `f^2=g`, differentiating in Taylor form gives
+`2*f*f_k = g_k - sum(f_j*f_(k-j), j=1..k-1)`.
+Consequently the nonnegative recurrence
+`Fk = (Gk + sum(Fj*F_(k-j))) / (2*m)` bounds `|f^(k)/k!|` throughout the
+panel. It does not infer accuracy from agreement between two quadrature rules.
+
+For n-point Gauss-Legendre on `[0,1]`, the usual remainder yields
+
+`panel_error <= h * (n!)^4 / ((2*n+1)*((2*n)!)^2) * F_(2*n)`.
+
+The implementation uses n=32. Node/weight sums are positive; their values
+approximate this same polynomial speed, not a resampled/refitted curve.
+
+## Floating-point and resource policy
+
+Bounds include a coefficient-scaled 128-binary64-epsilon evaluation allowance
+and inflated positive bound arithmetic. A separate final positive-sum allowance
+is added. These are explicit software arithmetic assumptions, not a full
+machine-checked IEEE-754 proof or interval-arithmetic vehicle certificate.
+Independent analytic and high-order split-Gaussian oracles challenge the actual
+returned errors, including nearly stationary and scale-transformed examples.
+
+The largest panel bound is refined first until summed panel errors fit half the
+segment arc budget, leaving room for the final sum allowance. Nonfinite bounds,
+unresolved zero boxes, unsplittable intervals, depth exhaustion or too many live
+panels raise GeometryError. Candidate roots of `r' dot r''` accelerate initial
+partitioning; missed/inexact roots cannot grant acceptance because each resulting
+panel still needs its analytic bound.
+
+NumericPolicy values are unchanged: whole-lap arc_abs=1e-10 m, station_abs=1e-8 m,
+quad_limit=100 panels, regularity_depth=24. Curve divides arc_abs among segments.
+Some stress examples require an explicitly declared 256-panel policy; the default
+must reject on exhaustion rather than pretend all regular cubics fit its budget.
+Regularity remains separately checked before integration. Brent inversion uses
+the bounded partial-arc function, its original physical residual check and no
+nominal parameter/chord substitution. Queries remain stateless.
+
+## Regression evidence
+
+The original single-segment, accepted periodic and strictly monotone near-minimum
+counterexamples are covered, plus a feature center/width/scale matrix, partial
+inverse stations, explicit resource exhaustion and all original A02 tests.
+An independent 14-family, 70-query split Gauss256/512 replay found maximum length
+difference 3.89e-15 m and inverse residual 9.91e-11 m with the default policy.
+Per-checkpoint raw evidence and hashes are in `evidence/w1-remediation/f2`;
+final combined and installed checks are recorded separately in RESULTS.md.

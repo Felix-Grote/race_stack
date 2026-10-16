@@ -33,6 +33,20 @@ tangent legal-side contact. Keep original occurrence ownership, 1e-9 m inward
 allowance and full-width chart checks unchanged. This repairs A03's sampled
 interval guarantee; A05 still owns continuous spline/footprint validation.
 
+### F2 — Bound quadrature independently of its sampled values
+
+Replace QUADPACK's self-reported estimate with Gauss32 plus a conservative
+analytic derivative-remainder bound from quadratic derivative Bezier boxes.
+Heap refinement subdivides the largest unresolved bound; speed-squared extrema
+only accelerate partitioning and cannot authorize acceptance. Include explicit
+binary64 coefficient-evaluation/positive-sum allowances, reject unresolved boxes,
+nonfinite bounds, floating-point resolution limits and exhausted panel/depth
+budgets. Keep arc_abs=1e-10 m, station_abs=1e-8 m, default quad_limit=100 and all
+other policy values unchanged. quad_limit now caps live Gauss panels; existing
+regularity_depth also caps their subdivision. No arc table or second curve is
+introduced. A 256-panel policy is stated explicitly for the largest new stress
+cases; default-budget exhaustion is itself tested as fail-closed behavior.
+
 ## 2026-10-16 — W0 environment and ownership
 
 1. **Path D selected by execution**, not assumption. Host Debian 13/Python 3.12 has

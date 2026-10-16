@@ -1,10 +1,10 @@
 """Periodic cubic geometry and bounded metric queries without ROS or TUM."""
 from bisect import bisect_right
 from dataclasses import dataclass
+import heapq
 import math
 
 import numpy as np
-from scipy.integrate import quad
 from scipy.interpolate import CubicSpline
 from scipy.optimize import brentq
 
@@ -17,11 +17,11 @@ class GeometryError(ValueError):
 class NumericPolicy:
     """Software tolerances in metres/radians; never physical clearance margins."""
 
-    arc_abs: float = 1e-10  # total-lap QUADPACK estimated error budget
+    arc_abs: float = 1e-10  # total-lap quadrature remainder/roundoff budget
     station_abs: float = 1e-8
     join_abs: float = 1e-8  # XY, unit tangent and curvature join tolerances
     min_speed: float = 1e-7  # |dr/dt| for each normalized coefficient segment
-    quad_limit: int = 100
+    quad_limit: int = 100  # maximum Gauss panels in one complete/partial integral
     regularity_depth: int = 24
     regularity_budget: int = 10000
     max_samples: int = 100000
@@ -86,6 +86,86 @@ def _regularity(coeff, policy):
     return upper
 
 
+_GAUSS_ORDER = 32
+_GAUSS = tuple((float((x + 1) / 2), float(w / 2))
+               for x, w in zip(*np.polynomial.legendre.leggauss(_GAUSS_ORDER)))
+# On [0,1], Gauss n-point error <= (n!)^4 / ((2n+1)*((2n)!)^2)
+# times sup |f^(2n)/(2n)!|.
+_GAUSS_ERROR = (math.factorial(_GAUSS_ORDER) ** 4 /
+                ((2 * _GAUSS_ORDER + 1) * math.factorial(2 * _GAUSS_ORDER) ** 2))
+
+
+def _arc_panel(coeff, lo, hi):
+    """Gauss value and independent derivative-remainder/roundoff upper bound.
+
+    With u=(t-lo)/(hi-lo), d=r'(t) is quadratic. Its Bezier box bounds
+    |d| below and above, and endpoint/constant bounds give D1>=|d_u'|,
+    D2>=|d_u''|. For g=|d|^2, the Taylor derivative bounds Gk are zero
+    above order four. Since f^2=g, Taylor coefficients at every u obey
+    2*f*F_k=G_k-sum(F_j*F_(k-j)); absolute values and a lower f give
+    an upper bound for |f^(k)/k!|. Gauss' analytic remainder then bounds
+    the integral without using a difference between numerical rules.
+
+    Positive bound arithmetic is inflated; the separate 128-eps allowance
+    covers coefficient evaluation, nodes/weights and positive summation.
+    Boxes containing zero and nonfinite bounds request subdivision.
+    """
+    h = hi - lo
+    a = np.asarray(coeff)
+    eps = float(np.finfo(float).eps)
+    inflate = 1 + 128 * eps
+    scale = math.fsum((math.hypot(*a[:, 1]), 2 * math.hypot(*a[:, 2]),
+                       3 * math.hypot(*a[:, 3])))
+    rounding = 128 * eps * scale
+    start = np.asarray(_eval(coeff, lo, 1))
+    end = np.asarray(_eval(coeff, hi, 1))
+    dd_start = np.asarray(_eval(coeff, lo, 2))
+    controls = np.stack((start, start + h * dd_start / 2, end))
+    low, high = controls.min(axis=0) - rounding, controls.max(axis=0) + rounding
+    nearest = np.maximum(0., np.maximum(low, -high))
+    lower = math.hypot(*nearest) / inflate
+    if lower <= 0:
+        return 0., math.inf
+    d0 = (max(math.hypot(*x) for x in controls) + 2 * rounding) * inflate
+    dd_round = 128 * eps * (2 * math.hypot(*a[:, 2]) + 6 * math.hypot(*a[:, 3]))
+    d1 = h * (max(math.hypot(*dd_start), math.hypot(*_eval(coeff, hi, 2))) + dd_round)
+    d2 = h * h * 6 * math.hypot(*a[:, 3]) * inflate
+    g = (0., 2 * d0 * d1, d1 * d1 + d0 * d2, d1 * d2, d2 * d2 / 4)
+    f = [0.]
+    for k in range(1, 2 * _GAUSS_ORDER + 1):
+        try:
+            convolution = math.fsum(f[j] * f[k - j] for j in range(1, k))
+        except OverflowError:
+            return 0., math.inf
+        bound = ((g[k] * inflate if k < len(g) else 0.) + convolution) / (2 * lower)
+        f.append(bound * inflate)
+        if not math.isfinite(f[-1]):
+            return 0., math.inf
+    remainder = h * _GAUSS_ERROR * f[2 * _GAUSS_ORDER] * inflate
+    error = remainder + 128 * eps * scale * h
+    if not math.isfinite(error):
+        return 0., math.inf
+    value = h * math.fsum(weight * math.hypot(*_eval(coeff, lo + h * node, 1))
+                          for node, weight in _GAUSS)
+    return value, error * inflate
+
+
+def _arc_features(coeff):
+    """Candidate speed extrema accelerate, but never authorize, integration."""
+    a = np.asarray(coeff)
+    d0, d1, d2 = a[:, 1], 2 * a[:, 2], 3 * a[:, 3]
+    # r' dot r'' is cubic. Missing/inexact roots cannot grant acceptance:
+    # every resulting panel still needs the independent derivative bound.
+    polynomial = (float(d0 @ d1), float(2 * (d0 @ d2) + d1 @ d1),
+                  float(3 * (d1 @ d2)), float(2 * (d2 @ d2)))
+    try:
+        roots = np.polynomial.polynomial.polyroots(polynomial)
+    except (ValueError, np.linalg.LinAlgError) as exc:
+        raise GeometryError('arc feature isolation failed') from exc
+    return tuple(sorted({float(r.real) for r in roots
+                         if abs(r.imag) < 1e-10 and 0 < r.real < 1}))
+
+
 @dataclass(frozen=True, init=False)
 class CubicSegment:
     """One regular normalized cubic, also useful for nonperiodic analytic probes."""
@@ -95,12 +175,14 @@ class CubicSegment:
     length: float
     arc_error: float
     speed_upper: float
+    integration_breaks: tuple
 
     def __init__(self, coefficients, policy=NumericPolicy()):
         coeff = _coefficients(coefficients)
         object.__setattr__(self, 'coefficients', coeff)
         object.__setattr__(self, 'policy', policy)
         object.__setattr__(self, 'speed_upper', _regularity(coeff, policy))
+        object.__setattr__(self, 'integration_breaks', _arc_features(coeff))
         length, error = self._integrate(1.)
         if length <= policy.min_speed:
             raise GeometryError('degenerate arc')
@@ -112,11 +194,26 @@ class CubicSegment:
         return _eval(self.coefficients, t, derivative)
 
     def _integrate(self, t):
-        result = quad(lambda u: math.hypot(*self.evaluate(u, 1)), 0., t,
-                      epsabs=self.policy.arc_abs, epsrel=5e-14,
-                      limit=self.policy.quad_limit, full_output=1)
-        value, error = result[:2]
-        if len(result) != 3 or not math.isfinite(value) or error > self.policy.arc_abs:
+        anchors = (0.,) + tuple(x for x in self.integration_breaks if x < t) + (t,)
+        panels = []
+        for lo, hi in zip(anchors, anchors[1:]):
+            value, error = _arc_panel(self.coefficients, lo, hi)
+            heapq.heappush(panels, (-error, lo, hi, 0, value))
+        if len(panels) > self.policy.quad_limit:
+            raise GeometryError('arc integration uncertainty/budget exhausted')
+        while math.fsum(-p[0] for p in panels) > self.policy.arc_abs / 2:
+            negative_error, lo, hi, depth, value = heapq.heappop(panels)
+            if len(panels) + 1 >= self.policy.quad_limit or depth >= self.policy.regularity_depth:
+                raise GeometryError('arc integration uncertainty/budget exhausted')
+            mid = (lo + hi) / 2
+            if not lo < mid < hi:
+                raise GeometryError('arc integration floating point resolution exhausted')
+            for a, b in ((lo, mid), (mid, hi)):
+                value, error = _arc_panel(self.coefficients, a, b)
+                heapq.heappush(panels, (-error, a, b, depth + 1, value))
+        value = math.fsum(p[4] for p in panels)
+        error = math.fsum(-p[0] for p in panels) + 4 * np.finfo(float).eps * abs(value)
+        if not math.isfinite(value) or not math.isfinite(error) or error > self.policy.arc_abs:
             raise GeometryError('arc integration uncertainty/budget exhausted')
         return value, error
 

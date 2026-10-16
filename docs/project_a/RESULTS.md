@@ -43,6 +43,24 @@ authorized shared-cap union. Raw red/green logs and exact source/test hashes:
 contact instead of merging through it. No width inflation, tolerance change or
 continuous-footprint certification is introduced.
 
+### F2 bounded metric integration repair
+
+Pinned full A02 suite: **39 passed**, including all 12 original tests and
+27 new regressions; 26 new counterexamples failed before source correction.
+The original hidden-pocket segment and accepted periodic embedding now satisfy
+their unchanged arc/station budgets under the default 100-panel policy.
+The 24-case feature-center/width/scale matrix uses an explicit 256-panel policy
+with identical tolerances; one difficult case verifies that the default budget
+rejects rather than silently returning an inaccurate value. This is a declared
+resource increase in that stress test, not relaxed numerical acceptance.
+
+Independent split Gauss256/512 oracles over 14 additional families and five
+inverse stations each report maximum length difference 3.89e-15 m and maximum
+station residual 9.91e-11 m; all those families succeeded with default100.
+Raw failing/initial/final passing logs, JUnit, scoped flake8 and source hashes:
+`evidence/w1-remediation/f2`. The mathematical control is documented in
+[W1_NUMERICAL_ERROR_CONTROL.md](W1_NUMERICAL_ERROR_CONTROL.md).
+
 Tested source base: `67981ed7964a6d35e1da48f0c22bbd9f6d123d5e`, with W0 changes
 identified by [implementation SHA-256 manifest](evidence/implementation-files.json).
 No production source or gitlink changes. Final clean-clone verification follows in
