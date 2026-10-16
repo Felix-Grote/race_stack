@@ -299,3 +299,65 @@ def test_gate_endpoint_contact_is_ambiguous():
     endpoint_curve = OrderedCurve(o.route, Curve(coefficients, o.curve.owners), o.q)
     with pytest.raises(CorridorError, match='endpoint'):
         portal_crossings(endpoint_curve)
+
+
+@pytest.mark.parametrize('angle,translation', [(0., (0., 0.)), (.37, (0., 0.)),
+                                               (1.1, (10000., -20000.))])
+@pytest.mark.parametrize('tip_dx', [-1e-6, -5e-9, 0., 1e-6])
+def test_normal_tangent_cuts_preserve_connected_interior(angle, translation, tip_dx):
+    """A tangent notch splits the open interval even when the cuts coincide."""
+    c, s = math.cos(angle), math.sin(angle)
+
+    def transform(p):
+        return (c * p[0] - s * p[1] + translation[0],
+                s * p[0] + c * p[1] + translation[1])
+
+    occ = Occurrence('strip', 'ground', tuple(map(transform, ((0, 0), (10, 0)))),
+                     tuple(map(transform, ((0, 2), (10, 2), (10, 1),
+                                           (5 + tip_dx, .75), (10, .5), (10, .1)))),
+                     tuple(map(transform, ((0, -1), (10, -1)))), ((0, 4),))
+    lo, hi = _normal_geometry((occ,), transform((5, 0)), (c, s))
+    assert lo == pytest.approx(-1, abs=2e-9)
+    if tip_dx <= 0:
+        assert hi <= .75
+        assert hi > .7499998
+    else:
+        assert hi == pytest.approx(2, abs=2e-9)
+
+
+def test_prepared_sample_cannot_span_tangent_original_side():
+    """Force the public preparation path to inspect the original-side contact."""
+    from global_planner.route_corridor import _sample
+    original = seed_curve(route())
+    q = original.q[16]
+    v = _sample(original, original.station_at_q(q))
+    n = (-v.tangent[1], v.tangent[0])
+    raw = original.route.payload
+    raw['occurrences'][0]['left'].insert(19, [v.xy[k] + .2 * n[k] for k in (0, 1)])
+    raw['occurrences'][0]['caps'].append({'at_m': q, 'max_speed_mps': 4})
+    prepared = prepare_route(validate_route(raw), spacing=.4)
+    v, corridor = next((v, c) for v, c in zip(prepared.samples, prepared.corridors)
+                       if abs(v.q - q) < 1e-12)
+    assert corridor.portal_id == ''
+    assert corridor.support_occurrences == ('o0',)
+    assert .19999999 < corridor.left < .2
+
+
+def test_only_declared_shared_cap_can_join_touching_owned_intervals():
+    """Keep authorized portal unions without treating every touching side as a join."""
+    a = Occurrence('a', 'ground', ((-2, 0), (0, 0)),
+                   ((-2, 1), (0, 1)), ((-2, -1), (0, -1)), ((0, 4),))
+    b = Occurrence('b', 'ground', ((0, 0), (2, 0)),
+                   ((0, 1), (2, 1)), ((0, -1), (2, -1)), ((0, 4),))
+    support = ((-3, -2), (3, -2), (3, 4), (-3, 4))
+    gate = ((0, -1), (0, 1))
+    tangent = (math.sqrt(.5), -math.sqrt(.5))
+    lo, hi = _normal_geometry((a, b), (-.3, 0), tangent, support, (gate,))
+    assert (lo, hi) == pytest.approx((-math.sqrt(2), math.sqrt(2)), abs=2e-9)
+    # Distinct interiors touching at a side away from the gate are not connected.
+    below = Occurrence('below', 'ground', ((-2, 0), (2, 0)),
+                       ((-2, 1), (2, 1)), ((-2, -1), (2, -1)), ((0, 4),))
+    above = replace(below, id='above', seed=((-2, 2), (2, 2)),
+                    left=((-2, 3), (2, 3)), right=((-2, 1), (2, 1)))
+    lo, hi = _normal_geometry((below, above), (1, 0), (1, 0), support, (gate,))
+    assert (lo, hi) == pytest.approx((-1, 1), abs=2e-9)

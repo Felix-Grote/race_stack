@@ -31,6 +31,18 @@ Exact source/test hashes, red/green logs/JUnit and unchanged image identity are
 in `evidence/w1-remediation/f5`. EPS remains 1e-9 m; no supported scale restriction
 or legal requirement was relaxed.
 
+### F1 tangent-contact interval repair
+
+Pinned command: `python -m pytest -q -p no:cacheprovider
+planner/global_planner/test/test_route_corridor.py`. Fourteen new selected cases
+first produced **8 failures / 6 passes**; after repair all **32 A03 tests pass**
+(exit 0). Cases include the original public preparation counterexample, rotated
+and translated tangencies, near-contact cuts, disconnected owner intervals and
+authorized shared-cap union. Raw red/green logs and exact source/test hashes:
+`evidence/w1-remediation/f1`. The returned interval stops at the first legal-side
+contact instead of merging through it. No width inflation, tolerance change or
+continuous-footprint certification is introduced.
+
 Tested source base: `67981ed7964a6d35e1da48f0c22bbd9f6d123d5e`, with W0 changes
 identified by [implementation SHA-256 manifest](evidence/implementation-files.json).
 No production source or gitlink changes. Final clean-clone verification follows in

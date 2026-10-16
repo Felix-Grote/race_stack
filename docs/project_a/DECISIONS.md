@@ -23,6 +23,16 @@ for reversed/tangent direction merely because the gate is narrow. Keep all
 nondegenerate/endcap/topology checks and EPS unchanged. The failing-first
 regressions include rigid motions and geometric scaling, not just one fixture.
 
+### F1 — Preserve open-interior contact topology
+
+Union genuinely overlapping open normal intervals, but preserve a boundary-only
+contact as a cut. A touching join is permitted only at an explicitly supplied
+shared portal gate; support-mask intersections receive no such exemption.
+Selecting the origin-containing interval then naturally stops at the first
+tangent legal-side contact. Keep original occurrence ownership, 1e-9 m inward
+allowance and full-width chart checks unchanged. This repairs A03's sampled
+interval guarantee; A05 still owns continuous spline/footprint validation.
+
 ## 2026-10-16 — W0 environment and ownership
 
 1. **Path D selected by execution**, not assumption. Host Debian 13/Python 3.12 has

@@ -20,7 +20,12 @@ this current remediation status supersedes its acceptance claims.
   of gate width. Twelve subdivision/rigid-motion/scale regressions were executed
   first: 6 failed / 6 passed before repair; full A01 now **60 passed** in pinned
   Humble. Red/green JUnit, logs and source hashes: `evidence/w1-remediation/f5`.
-- F1–F4 remain under repair; no final acceptance or final CI claim yet.
+- **F1 repaired:** touching open normal interiors remain separated unless their
+  contact lies on an explicitly declared shared portal gate. Failing-first
+  tests: 8 failures / 6 passes; full A03 now **32 passed**. The actual sampled
+  tangent-notch route retains its first legal component. Evidence:
+  `evidence/w1-remediation/f1`.
+- F2–F4 remain under repair; no final acceptance or final CI claim yet.
 
 ## Source and review route
 

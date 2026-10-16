@@ -157,10 +157,13 @@ def refit_ordered(ordered, samples, xy):
                         Curve.interpolate(xy, q, owners, ordered.curve.policy), q)
 
 
-def _merge(intervals):
+def _merge(intervals, join_at=None):
+    """Union open intervals without erasing a boundary-only contact."""
     result = []
     for a, b in sorted(intervals):
-        if result and a <= result[-1][1]:
+        touch = (result and a == result[-1][1] and join_at is not None
+                 and join_at(a))
+        if result and (a < result[-1][1] or touch):
             result[-1] = (result[-1][0], max(b, result[-1][1]))
         else:
             result.append((a, b))
@@ -182,9 +185,16 @@ def _normal_geometry(occurrences, xy, tangent, support=None, caps=()):
     if abs(math.hypot(*tangent) - 1) > 1e-8:
         raise CorridorError('invalid tangent chart')
     n = (-tangent[1], tangent[0])
+
+    def shared_cap(z):
+        p = (xy[0] + z * n[0], xy[1] + z * n[1])
+        return any(on_segment(p, a, b) for a, b in caps)
+
     try:
+        # Only an explicit shared cap joins touching owned interiors. A tangent
+        # side contact remains a cut even when line_intervals deduplicates its roots.
         intervals = _merge([v for o in occurrences for v in
-                            line_intervals(xy, n, o.polygon, caps)])
+                            line_intervals(xy, n, o.polygon, caps)], shared_cap)
         if support is not None:
             mask = line_intervals(xy, n, support)
             intervals = _merge([(max(a, c), min(b, d)) for a, b in intervals
