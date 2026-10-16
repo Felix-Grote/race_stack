@@ -1,0 +1,42 @@
+{
+  "scope": "Independent scratch-only review; no production source changes or numerical policy changes requested.",
+  "command": "scripts/project_a/unit.sh work/w2/a06-zero-motion-audit work/w2/test_a06_zero_motion_audit.py",
+  "exit_code": 0,
+  "tests": 3,
+  "duration_s": 3.99,
+  "reproducer": "work/w2/test_a06_zero_motion_audit.py",
+  "reproducer_sha256": "ba2d96c3a502801a2de75eadcff349800ee801f9340d007c25845e9ad6562cce",
+  "source_hashes_stable": true,
+  "cases": [
+    {
+      "case": "all_zero",
+      "retimer_status": "INCONCLUSIVE",
+      "retimer_message": "retiming computation failed: float division by zero",
+      "minimum_u": null,
+      "independent_status": null,
+      "independent_reason": null,
+      "declared_floor_mps": 1e-06
+    },
+    {
+      "case": "isolated_zero",
+      "retimer_status": "CANDIDATE",
+      "retimer_message": "independent validation required",
+      "minimum_u": 0.0,
+      "independent_status": "FAIL",
+      "independent_reason": "invalid canonical half-open speed knot",
+      "declared_floor_mps": 1e-06
+    },
+    {
+      "case": "positive_below_floor",
+      "retimer_status": "CANDIDATE",
+      "retimer_message": "independent validation required",
+      "minimum_u": 1e-14,
+      "independent_status": "FAIL",
+      "independent_reason": "demonstrated original static/model speed violation",
+      "declared_floor_mps": 1e-06
+    }
+  ],
+  "verdict": "NO FALSE INDEPENDENT PASS AND NO UNHANDLED EXCEPTION",
+  "interpretation": "The all-zero injected LP success returns structured INCONCLUSIVE. Isolated zero and positive below-floor numerical candidates are independently rejected. The retimer numerical CANDIDATE status is not release approval; the independent checker remains authoritative.",
+  "action": "Retain as independent review evidence only; no production numerical changes or test promotion required."
+}

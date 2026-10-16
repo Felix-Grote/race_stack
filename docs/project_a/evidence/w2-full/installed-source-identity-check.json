@@ -1,0 +1,25 @@
+{
+  "identities_equal": true,
+  "modules": {
+    "global_planner.iqp_route_adapter": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/iqp_route_adapter.py",
+      "sha256": "2af86a21c10c16a8202ec70265b323c5a999bbfa3100631240605cae040ea9dd"
+    },
+    "global_planner.cyclic_retime": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/cyclic_retime.py",
+      "sha256": "7ff74dbf3f57500731e5eebb069882d35efc6ed6d2b5805e22c796556286ceb3"
+    },
+    "global_planner.route_validate": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_validate.py",
+      "sha256": "ad1fcad2430866af0b99541f2749712d0e888fbb307469a1dc7b2a0fd2577481"
+    },
+    "global_planner.route_validate_dynamics": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_validate_dynamics.py",
+      "sha256": "76e162abd99ef8d6fcc2a4b03cca08929622ef67eb63745a95d2712c3605af08"
+    }
+  },
+  "geometry": "PASS",
+  "dynamics": "PASS",
+  "iqp_iterations": 3,
+  "lap_time_s": 11.456316732476841
+}

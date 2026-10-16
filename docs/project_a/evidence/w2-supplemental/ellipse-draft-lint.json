@@ -1,0 +1,27 @@
+{
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "-v",
+    "/workspace/race_stack:/src:ro",
+    "project-a-humble:w0",
+    "python",
+    "-m",
+    "flake8",
+    "--max-line-length=99",
+    "/src/work/w2/test_a06_ellipse_draft.py"
+  ],
+  "exit_code": 0,
+  "source_sha256": "47f0ff238c49387d6bde4080d7605e98034f3ea3c2b5a971189d2471b5a92fef",
+  "stdout": "",
+  "stderr": "",
+  "prior_standalone_test": "scripts/project_a/unit.sh work/w2/ellipse-probe work/w2/test_a06_ellipse_draft.py -x",
+  "prior_test_exit_code": 0,
+  "prior_test_count": 1,
+  "prior_test_seconds": 3.96,
+  "prior_test_source_sha256": "4f91d4b93fe15e2d9f9f83546522097c7bdea6f984d58635353d99f67c75d17b",
+  "subsequent_change": "Report-only provenance extension and formatting; assertions, model, policy and tolerances unchanged."
+}

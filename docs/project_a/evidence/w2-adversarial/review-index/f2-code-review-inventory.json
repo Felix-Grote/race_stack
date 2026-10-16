@@ -1,0 +1,174 @@
+{
+  "baseline_w1": "9440c2ce68e3dee549de7efacff1cf723fe830df",
+  "f1_checkpoint": "6b778519de74b09a7b66be2ac89e12d687226c9d",
+  "changed_helper_functions": [
+    "line_intervals"
+  ],
+  "unchanged_helper_functions": [
+    "sub",
+    "cross",
+    "dot",
+    "distance",
+    "on_segment",
+    "segments_touch",
+    "edges",
+    "inside",
+    "signed_area_twice",
+    "simple_polygon"
+  ],
+  "line_intervals_AST_identical_after_removing_only_edge_sort_if": true,
+  "inserted_if_AST": "if (b[0], b[1]) < (a[0], a[1]):\n    a, b = (b, a)",
+  "w1_initial_blobs": [
+    {
+      "path": "planner/global_planner/global_planner/__init__.py",
+      "unchanged": true,
+      "baseline_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "current_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "planner/global_planner/global_planner/_route_geometry.py",
+      "unchanged": false,
+      "baseline_sha256": "d78a04aee15295a0c95c714067b29c5f67df0c562182b23afa50b2006cd403ce",
+      "current_sha256": "90b957a7356a2252ef5755031598ecbedbc40f7a7015f87e172b9cfde02f68f2"
+    },
+    {
+      "path": "planner/global_planner/global_planner/global_planner_node.py",
+      "unchanged": true,
+      "baseline_sha256": "026c55b7385e2969b0ac2c9949b13e7c1496f37bcbfffef502132d2453d72b65",
+      "current_sha256": "026c55b7385e2969b0ac2c9949b13e7c1496f37bcbfffef502132d2453d72b65"
+    },
+    {
+      "path": "planner/global_planner/global_planner/global_planner_utils.py",
+      "unchanged": true,
+      "baseline_sha256": "d959b09919ece16235a0584c803c4f2b8d9d457c7a2810a8fc222fd5a81fb616",
+      "current_sha256": "d959b09919ece16235a0584c803c4f2b8d9d457c7a2810a8fc222fd5a81fb616"
+    },
+    {
+      "path": "planner/global_planner/global_planner/global_trajectory_publisher.py",
+      "unchanged": true,
+      "baseline_sha256": "ce3366bdc6598ae5b16c72583dd6794c34f45509021a9608be22624a9e540b38",
+      "current_sha256": "ce3366bdc6598ae5b16c72583dd6794c34f45509021a9608be22624a9e540b38"
+    },
+    {
+      "path": "planner/global_planner/global_planner/mapping_node.py",
+      "unchanged": true,
+      "baseline_sha256": "802d53ce419f11013e7936396867fa87b46c65b2884e8bb5e9e94a863511abe9",
+      "current_sha256": "802d53ce419f11013e7936396867fa87b46c65b2884e8bb5e9e94a863511abe9"
+    },
+    {
+      "path": "planner/global_planner/global_planner/readwrite_global_waypoints.py",
+      "unchanged": true,
+      "baseline_sha256": "d5cdcf285ad66100699aeb70741a51daefa7b187b19f212af03837203b22eb72",
+      "current_sha256": "d5cdcf285ad66100699aeb70741a51daefa7b187b19f212af03837203b22eb72"
+    },
+    {
+      "path": "planner/global_planner/global_planner/route_corridor.py",
+      "unchanged": true,
+      "baseline_sha256": "50b97011b805642287cd41f9fbb8f262b7b69124f5f43031b5e1409548fe770d",
+      "current_sha256": "50b97011b805642287cd41f9fbb8f262b7b69124f5f43031b5e1409548fe770d"
+    },
+    {
+      "path": "planner/global_planner/global_planner/route_input.py",
+      "unchanged": true,
+      "baseline_sha256": "fb834bcb3d26c0078575f10768771f842111ca9c92b0a3b179206b61678aeeb8",
+      "current_sha256": "fb834bcb3d26c0078575f10768771f842111ca9c92b0a3b179206b61678aeeb8"
+    },
+    {
+      "path": "planner/global_planner/global_planner/route_reference.py",
+      "unchanged": true,
+      "baseline_sha256": "9302188ac655c12c773383f45b99246425c51d6f59f2fde6b99f29a2284fa6b8",
+      "current_sha256": "9302188ac655c12c773383f45b99246425c51d6f59f2fde6b99f29a2284fa6b8"
+    },
+    {
+      "path": "planner/global_planner/test/fixtures/project_a/s0_reverse_route.json",
+      "unchanged": true,
+      "baseline_sha256": "eea555e7bd76e911bdf13cf395dd9958d40cdcda46a05681838844b3cc2891c6",
+      "current_sha256": "eea555e7bd76e911bdf13cf395dd9958d40cdcda46a05681838844b3cc2891c6"
+    },
+    {
+      "path": "planner/global_planner/test/fixtures/project_a/s0_rotated_route.json",
+      "unchanged": true,
+      "baseline_sha256": "12fa1e23b1078ac1b0720defa8a90e8e4e3e545adc8f73bff6b2cff8a9dae465",
+      "current_sha256": "12fa1e23b1078ac1b0720defa8a90e8e4e3e545adc8f73bff6b2cff8a9dae465"
+    },
+    {
+      "path": "planner/global_planner/test/fixtures/project_a/s0_route.json",
+      "unchanged": true,
+      "baseline_sha256": "3bfddf1726bdf55d53496ddd37d6289cb2808136bfaba49fb0c6228340d85cff",
+      "current_sha256": "3bfddf1726bdf55d53496ddd37d6289cb2808136bfaba49fb0c6228340d85cff"
+    },
+    {
+      "path": "planner/global_planner/test/fixtures/project_a/s2_lower_route.json",
+      "unchanged": true,
+      "baseline_sha256": "5a8c24775d52901231dc7134ddf27d121854501cde7953a41a89f85c111a576f",
+      "current_sha256": "5a8c24775d52901231dc7134ddf27d121854501cde7953a41a89f85c111a576f"
+    },
+    {
+      "path": "planner/global_planner/test/fixtures/project_a/s2_upper_route.json",
+      "unchanged": true,
+      "baseline_sha256": "9abdc88ead71bcff8e170be6b5e4df3935d4a2fac02ee4a493318b7b2a4bb42a",
+      "current_sha256": "9abdc88ead71bcff8e170be6b5e4df3935d4a2fac02ee4a493318b7b2a4bb42a"
+    },
+    {
+      "path": "planner/global_planner/test/fixtures/project_a/s3_notch_route.json",
+      "unchanged": true,
+      "baseline_sha256": "d1dcbfe952da8c2aa00b430e986cb8273ae0a0db95eb2869ea63ea444f715ef9",
+      "current_sha256": "d1dcbfe952da8c2aa00b430e986cb8273ae0a0db95eb2869ea63ea444f715ef9"
+    },
+    {
+      "path": "planner/global_planner/test/fixtures/project_a/s3_surfaces_route.json",
+      "unchanged": true,
+      "baseline_sha256": "f397127bdd14e1713b4a4ace30b5aec76c16b0091d07b41d379c3411746afa98",
+      "current_sha256": "f397127bdd14e1713b4a4ace30b5aec76c16b0091d07b41d379c3411746afa98"
+    },
+    {
+      "path": "planner/global_planner/test/test_copyright.py",
+      "unchanged": true,
+      "baseline_sha256": "ea71bbbc6247b5c14d176ed09f39ee274d563cc9b2ec355828ea451ceff31757",
+      "current_sha256": "ea71bbbc6247b5c14d176ed09f39ee274d563cc9b2ec355828ea451ceff31757"
+    },
+    {
+      "path": "planner/global_planner/test/test_flake8.py",
+      "unchanged": true,
+      "baseline_sha256": "37a813a0507f0ce51a2d0b57312d2cc078a0307a3ca85580ea801b0d2f9755d2",
+      "current_sha256": "37a813a0507f0ce51a2d0b57312d2cc078a0307a3ca85580ea801b0d2f9755d2"
+    },
+    {
+      "path": "planner/global_planner/test/test_pep257.py",
+      "unchanged": true,
+      "baseline_sha256": "e8b88d49ee296987b1b40069f81019b5fa09b1aa1bfee9a1faae45bb5cf53eda",
+      "current_sha256": "e8b88d49ee296987b1b40069f81019b5fa09b1aa1bfee9a1faae45bb5cf53eda"
+    },
+    {
+      "path": "planner/global_planner/test/test_route_corridor.py",
+      "unchanged": true,
+      "baseline_sha256": "02b1ed86ac981bd5decc29d64e50ba11e26e6b5f2150000a68427db43fe84174",
+      "current_sha256": "02b1ed86ac981bd5decc29d64e50ba11e26e6b5f2150000a68427db43fe84174"
+    },
+    {
+      "path": "planner/global_planner/test/test_route_input.py",
+      "unchanged": true,
+      "baseline_sha256": "6d78f41bc9a50a9358052dd4526ec89742d32234663bc961bd78293948006dab",
+      "current_sha256": "6d78f41bc9a50a9358052dd4526ec89742d32234663bc961bd78293948006dab"
+    },
+    {
+      "path": "planner/global_planner/test/test_route_reference.py",
+      "unchanged": true,
+      "baseline_sha256": "4ee86a2b65be71d420640efd331d54e0eedc9ac16614484b58876cca1de72295",
+      "current_sha256": "4ee86a2b65be71d420640efd331d54e0eedc9ac16614484b58876cca1de72295"
+    }
+  ],
+  "intentional_w1_changed_paths": [
+    "planner/global_planner/global_planner/_route_geometry.py"
+  ],
+  "reviewed_file_hashes": {
+    "planner/global_planner/global_planner/_route_geometry.py": "90b957a7356a2252ef5755031598ecbedbc40f7a7015f87e172b9cfde02f68f2",
+    "planner/global_planner/test/test_route_w2_shared_cap.py": "f6df05c0664175dc24bab623ca6cfc46424632d0959358ff573e29163d82d141",
+    "planner/global_planner/test/test_route_w2_novel_pipeline.py": "a29b6e9b3ae83768ac3eec4f11b18d7c9252504f20b9e9b27ca70f9a93704806",
+    "planner/global_planner/test/fixtures/project_a/novel_varying_ellipse_route.json": "742b03fa77cef8bfab9f203787ac8dd5435e479a6fddf9449ac4138e83c5a0aa",
+    "planner/global_planner/global_planner/route_validate.py": "3d19294aa72dea9c3c2d66c47cbf115f83661ab360b0922d6fdf91e8cd52c651",
+    "planner/global_planner/global_planner/route_validate_dynamics.py": "9e8f8b787f2f0468b4cfeb18860c83bc54956e698b91fd7442fd9b38aae436d2",
+    "scripts/project_a/container_verify.sh": "1f0db9a64baaece90a5bd22c27a2a67e6130d0ca841b484997b01b0fb39b8d3b"
+  },
+  "validators_identical_to_f1_checkpoint": true
+}

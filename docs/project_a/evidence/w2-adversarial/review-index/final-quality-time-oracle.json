@@ -1,0 +1,52 @@
+{
+  "source_sha256": "2a432f54f7b48b6f5580a95fe7971b3954ba88cb8631464126a5a15f13ea146c",
+  "scope": "numerical independent controls; dense residuals do not certify",
+  "base": {
+    "quad_lap_time_s": 8.593509770179754,
+    "reported_lap_time_s": 8.593509770179757,
+    "difference_s": -3.552713678800501e-15,
+    "checker_lap_time_enclosure_s": [
+      8.593509770094927,
+      8.593509770264578
+    ],
+    "oracle_inside_reported_enclosure": true,
+    "sampled_max_normalized_constraint_residuals": [
+      -0.001117271065875003,
+      -0.25744957572582217,
+      -0.6930150526795412
+    ],
+    "edges": 166
+  },
+  "changed_origin": {
+    "quad_lap_time_s": 8.593509770211895,
+    "reported_lap_time_s": 8.593509770211897,
+    "difference_s": -1.7763568394002505e-15,
+    "checker_lap_time_enclosure_s": [
+      8.593509770127069,
+      8.593509770296718
+    ],
+    "oracle_inside_reported_enclosure": true,
+    "sampled_max_normalized_constraint_residuals": [
+      -0.0011172710613183146,
+      -0.2574495753701336,
+      -0.693015052394368
+    ],
+    "edges": 166
+  },
+  "remeshed": {
+    "quad_lap_time_s": 8.898074718327074,
+    "reported_lap_time_s": 8.898074718327077,
+    "difference_s": -3.552713678800501e-15,
+    "checker_lap_time_enclosure_s": [
+      8.898074718255852,
+      8.898074718398293
+    ],
+    "oracle_inside_reported_enclosure": true,
+    "sampled_max_normalized_constraint_residuals": [
+      -1.3043218727304406e-09,
+      -0.00010665706177181988,
+      -0.5396590224478504
+    ],
+    "edges": 254
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "original_fixture_sha256": "02ebe30b528e8d1994d645cf6cabbc94672f2e4fd21ef93ed7ec914f7518bac6",
+  "generated_fixture_sha256": "c009c7824c13fd5ff01df7dcca9e2bba9cc3d2d719c905c0788546134f5f7732",
+  "candidate_knot_count": 44,
+  "original_notch_q": 7.065451418852835,
+  "seed_phase_q_m": 0.05,
+  "notch_floor_m": 0.02,
+  "all_knot_bodies_legal": true,
+  "status": "FAIL",
+  "reason": "demonstrated actual rectangle midpoint exit",
+  "offending_interval": [
+    5,
+    0.0,
+    0.5
+  ],
+  "certified_leaves_before_rejection": 93
+}

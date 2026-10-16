@@ -1,0 +1,302 @@
+{
+  "final_code_sha": "37b36ccc1f33300ce50e6c120c886147db11b4a7",
+  "exit_code": "0",
+  "source_stable": true,
+  "source_manifest_sha256": "c4076eb430c38cd1e1faf956f7830fbdc1a0c3d09136a7f0c8c82b1a2d6bf132",
+  "pipeline_sha256": "fb42f757f888a524be7e8912ba2bb77e9b87f584c59c26cac0e513643bc3f862",
+  "functional_total": 373,
+  "group_count": 19,
+  "groups": [
+    {
+      "file": "a01.xml",
+      "tests": 60,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.214
+    },
+    {
+      "file": "a02.xml",
+      "tests": 47,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 43.226
+    },
+    {
+      "file": "a03.xml",
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 47.401
+    },
+    {
+      "file": "a04.xml",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 54.72
+    },
+    {
+      "file": "a05-oracle.xml",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.457
+    },
+    {
+      "file": "a05.xml",
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 85.027
+    },
+    {
+      "file": "a06-ellipse.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 2.77
+    },
+    {
+      "file": "a06-independent.xml",
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 18.504
+    },
+    {
+      "file": "a06-oracle.xml",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 10.314
+    },
+    {
+      "file": "a06.xml",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 23.162
+    },
+    {
+      "file": "numerical.xml",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.203
+    },
+    {
+      "file": "ros.xml",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.009
+    },
+    {
+      "file": "w1-installed.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1.226
+    },
+    {
+      "file": "w2-handoff.xml",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 16.127
+    },
+    {
+      "file": "w2-installed.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 12.694
+    },
+    {
+      "file": "w2-novel-pipeline.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 16.025
+    },
+    {
+      "file": "w2-numerical-oracle.xml",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 3.528
+    },
+    {
+      "file": "w2-pipeline.xml",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 93.27
+    },
+    {
+      "file": "w2-shared-cap.xml",
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.283
+    }
+  ],
+  "legacy_summary": "Summary: 372 tests, 0 errors, 10 failures, 2 skipped",
+  "legacy_identities_equal_initial": true,
+  "legacy_identities": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ],
+  "seven_case_pipeline": [
+    {
+      "scenario": "s0_route",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "same_expected_authority": true,
+      "iterations": 3,
+      "segments": 98,
+      "geometry_leaves": 224,
+      "gates": 4,
+      "speed_knots": 166,
+      "lap_time_s": 8.593509770179754,
+      "lap_time_error_s": 8.482636815188016e-11,
+      "max_lp_residual": 2.716715741257758e-13,
+      "min_geometry_slack_m": 0.00012359755931762775
+    },
+    {
+      "scenario": "s0_reverse_route",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "same_expected_authority": true,
+      "iterations": 3,
+      "segments": 98,
+      "geometry_leaves": 224,
+      "gates": 4,
+      "speed_knots": 166,
+      "lap_time_s": 8.59350977019643,
+      "lap_time_error_s": 8.482636815188016e-11,
+      "max_lp_residual": 2.716715741257758e-13,
+      "min_geometry_slack_m": 0.00012359756856084505
+    },
+    {
+      "scenario": "s0_rotated_route",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "same_expected_authority": true,
+      "iterations": 3,
+      "segments": 98,
+      "geometry_leaves": 224,
+      "gates": 4,
+      "speed_knots": 166,
+      "lap_time_s": 8.593509770233526,
+      "lap_time_error_s": 8.482636815188016e-11,
+      "max_lp_residual": 2.716715741257758e-13,
+      "min_geometry_slack_m": 0.00012359754438609952
+    },
+    {
+      "scenario": "s2_upper_route",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "same_expected_authority": true,
+      "iterations": 3,
+      "segments": 92,
+      "geometry_leaves": 170,
+      "gates": 4,
+      "speed_knots": 155,
+      "lap_time_s": 9.411623852760156,
+      "lap_time_error_s": 1.014317518865937e-10,
+      "max_lp_residual": 2.8527180617743397e-12,
+      "min_geometry_slack_m": 0.00019830170232707842
+    },
+    {
+      "scenario": "s2_lower_route",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "same_expected_authority": true,
+      "iterations": 3,
+      "segments": 89,
+      "geometry_leaves": 164,
+      "gates": 4,
+      "speed_knots": 151,
+      "lap_time_s": 8.587343724788767,
+      "lap_time_error_s": 9.375256126986642e-11,
+      "max_lp_residual": 2.8029800702711327e-12,
+      "min_geometry_slack_m": 0.00105922813117392
+    },
+    {
+      "scenario": "s3_surfaces_route",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "same_expected_authority": true,
+      "iterations": 3,
+      "segments": 134,
+      "geometry_leaves": 266,
+      "gates": 4,
+      "speed_knots": 231,
+      "lap_time_s": 16.41926276370743,
+      "lap_time_error_s": 1.1655743037408683e-10,
+      "max_lp_residual": 1.2202461263655096e-12,
+      "min_geometry_slack_m": 9.040300860063874e-05
+    },
+    {
+      "scenario": "s3_notch_route",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "same_expected_authority": true,
+      "iterations": 3,
+      "segments": 135,
+      "geometry_leaves": 269,
+      "gates": 4,
+      "speed_knots": 232,
+      "lap_time_s": 16.41918280156494,
+      "lap_time_error_s": 1.1606360317273356e-10,
+      "max_lp_residual": 1.209587985329108e-12,
+      "min_geometry_slack_m": 8.949819354105348e-05
+    }
+  ],
+  "installed_source_identities": {
+    "global_planner.iqp_route_adapter": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/iqp_route_adapter.py",
+      "sha256": "2af86a21c10c16a8202ec70265b323c5a999bbfa3100631240605cae040ea9dd"
+    },
+    "global_planner.cyclic_retime": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/cyclic_retime.py",
+      "sha256": "7ff74dbf3f57500731e5eebb069882d35efc6ed6d2b5805e22c796556286ceb3"
+    },
+    "global_planner.route_validate": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_validate.py",
+      "sha256": "3d19294aa72dea9c3c2d66c47cbf115f83661ab360b0922d6fdf91e8cd52c651"
+    },
+    "global_planner.route_validate_dynamics": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_validate_dynamics.py",
+      "sha256": "9e8f8b787f2f0468b4cfeb18860c83bc54956e698b91fd7442fd9b38aae436d2"
+    }
+  }
+}

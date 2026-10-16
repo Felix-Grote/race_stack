@@ -1,0 +1,9 @@
+{
+  "case": "positive_below_floor",
+  "retimer_status": "CANDIDATE",
+  "retimer_message": "independent validation required",
+  "minimum_u": 1e-14,
+  "independent_status": "FAIL",
+  "independent_reason": "demonstrated original static/model speed violation",
+  "declared_floor_mps": 1e-06
+}

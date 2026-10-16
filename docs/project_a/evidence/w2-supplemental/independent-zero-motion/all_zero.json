@@ -1,0 +1,9 @@
+{
+  "case": "all_zero",
+  "retimer_status": "INCONCLUSIVE",
+  "retimer_message": "retiming computation failed: float division by zero",
+  "minimum_u": null,
+  "independent_status": null,
+  "independent_reason": null,
+  "declared_floor_mps": 1e-06
+}

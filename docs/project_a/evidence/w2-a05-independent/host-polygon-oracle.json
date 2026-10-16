@@ -1,0 +1,7 @@
+{
+  "scope": "host-only exact planar primitive oracle, not whole-curve/ROS acceptance",
+  "notch_all_four_corners_inside": true,
+  "notch_full_rectangle_rejected": true,
+  "analytic_rectangle_clearance_squared_m2": "1",
+  "sub_eps_shared_cap_gap_status": "INCONCLUSIVE"
+}

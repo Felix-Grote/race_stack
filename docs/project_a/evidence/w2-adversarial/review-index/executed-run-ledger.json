@@ -1,0 +1,572 @@
+[
+  {
+    "path": "work/adversarial/adapter/f2-quality/runtime",
+    "junit": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/adapter/f2-quality/test_independent_adapter.py -x ",
+      "cba5ee5bea8d60cae7899bc1c1ee877c2870a925"
+    ]
+  },
+  {
+    "path": "work/adversarial/adapter/runtime-quality",
+    "junit": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/adapter/test_independent_adapter.py -x ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/adapter/runtime-quality-final",
+    "junit": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/adapter/test_independent_adapter.py -x ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/adapter/runtime-quality-v2",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/adapter/test_independent_adapter.py -x ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/contracts/compact-pinned",
+    "junit": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/contracts/proposed/test_w2_independent_numerical_contracts.py ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/contracts/final-pinned",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/contracts/test_numerical_contracts.py ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/contracts/promoted-pinned",
+    "junit": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": false,
+    "command_and_source": [
+      "pytest arguments: planner/global_planner/test/test_route_w2_numerical_oracle.py ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/final-actual-37b36ccc",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/test_final_actual.py -x -s ",
+      "37b36ccc1f33300ce50e6c120c886147db11b4a7"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/final-actual-harness-dry",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/test_final_actual_dry.py -x -s ",
+      "37b36ccc1f33300ce50e6c120c886147db11b4a7"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/final-actual-retained-37b36ccc",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/test_final_retained.py -x -s ",
+      "37b36ccc1f33300ce50e6c120c886147db11b4a7"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/missing-identity-red",
+    "junit": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/test_expected_digest_required.py -x ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/pinned-mesh",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/test_runtime_mesh.py -x ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/pinned-oracle",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/test_independent_oracle.py -x -s ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/pinned-oracle-analytic",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/test_independent_oracle.py -x -s ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/pinned-oracle-binary64",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/test_independent_oracle.py -x -s ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/pinned-shared-kernel",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/test_shared_metric_fault.py -x ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/proposed-verification",
+    "junit": {
+      "tests": 57,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/proposed/test_route_validate_dynamics.py work/adversarial/dynamics/proposed/test_cyclic_retime.py work/adversarial/dynamics/proposed/test_route_dynamics_oracle.py work/adversarial/dynamics/proposed/test_route_ellipse_dynamics.py -x ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/proposed-verification-path-corrected",
+    "junit": {
+      "tests": 71,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/proposed/test_route_validate_dynamics.py work/adversarial/dynamics/proposed/test_cyclic_retime.py work/adversarial/dynamics/proposed/test_route_dynamics_oracle.py work/adversarial/dynamics/proposed/test_route_ellipse_dynamics.py -x ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/remediation-focused",
+    "junit": {
+      "tests": 72,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": false,
+    "command_and_source": [
+      "pytest arguments: planner/global_planner/test/test_route_validate_dynamics.py planner/global_planner/test/test_cyclic_retime.py planner/global_planner/test/test_route_dynamics_oracle.py planner/global_planner/test/test_route_ellipse_dynamics.py work/adversarial/dynamics/test_expected_digest_required.py -x ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/remediation-focused-frozen",
+    "junit": {
+      "tests": 72,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: planner/global_planner/test/test_route_validate_dynamics.py planner/global_planner/test/test_cyclic_retime.py planner/global_planner/test/test_route_dynamics_oracle.py planner/global_planner/test/test_route_ellipse_dynamics.py work/adversarial/dynamics/test_expected_digest_required.py -x ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/dynamics/remediation-high-precision-frozen",
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/dynamics/test_independent_oracle.py -x -s ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/geometry/authority-green",
+    "junit": {
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": false,
+    "command_and_source": [
+      "pytest arguments: planner/global_planner/test/test_route_validate_geometry.py ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/geometry/authority-proposed",
+    "junit": {
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/geometry/proposed/test_route_validate_geometry.py ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/geometry/authority-red",
+    "junit": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/geometry/test_geometry_authority_failing_first.py ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/geometry/runtime-primitives",
+    "junit": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/geometry/test_adversarial_geometry.py ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/geometry/shared-cap-final",
+    "junit": {
+      "tests": 87,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: planner/global_planner/test/test_route_corridor.py planner/global_planner/test/test_route_w2_shared_cap.py ",
+      "cba5ee5bea8d60cae7899bc1c1ee877c2870a925"
+    ]
+  },
+  {
+    "path": "work/adversarial/geometry/shared-cap-green",
+    "junit": {
+      "tests": 87,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": false,
+    "command_and_source": [
+      "pytest arguments: planner/global_planner/test/test_route_corridor.py planner/global_planner/test/test_route_w2_shared_cap.py ",
+      "cba5ee5bea8d60cae7899bc1c1ee877c2870a925"
+    ]
+  },
+  {
+    "path": "work/adversarial/geometry/shared-cap-proposed",
+    "junit": {
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/geometry/shared-cap/test_exact_shared_cap.py --canonical-shared-cap ",
+      "6b778519de74b09a7b66be2ac89e12d687226c9d"
+    ]
+  },
+  {
+    "path": "work/adversarial/geometry/shared-cap-red",
+    "junit": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/geometry/shared-cap/test_exact_shared_cap.py -x ",
+      "6b778519de74b09a7b66be2ac89e12d687226c9d"
+    ]
+  },
+  {
+    "path": "work/adversarial/integration/handoff-pipeline-green",
+    "junit": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: planner/global_planner/test/test_route_w2_handoff.py planner/global_planner/test/test_w2_pipeline.py ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/integration/handoff-red",
+    "junit": {
+      "tests": 2,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/integration/test_handoff_binding_regression.py ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/integration/novel/run1",
+    "junit": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/integration/novel/test_novel_complete_pipeline.py ",
+      "6b778519de74b09a7b66be2ac89e12d687226c9d"
+    ]
+  },
+  {
+    "path": "work/adversarial/integration/novel/run2-corrected",
+    "junit": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": false,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/integration/novel/test_novel_complete_pipeline.py planner/global_planner/test/test_route_w2_novel_pipeline.py ",
+      "cba5ee5bea8d60cae7899bc1c1ee877c2870a925"
+    ]
+  },
+  {
+    "path": "work/adversarial/integration/novel/run3-stable",
+    "junit": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/integration/novel/test_novel_complete_pipeline.py planner/global_planner/test/test_route_w2_novel_pipeline.py ",
+      "cba5ee5bea8d60cae7899bc1c1ee877c2870a925"
+    ]
+  },
+  {
+    "path": "work/adversarial/integration/phase1",
+    "junit": {
+      "tests": 3,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "1",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/integration/test_integration_adversarial.py ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/integration/phase1b",
+    "junit": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/integration/test_integration_adversarial.py ",
+      "e852641849b2497efea51dfca5ead38ad4476235"
+    ]
+  },
+  {
+    "path": "work/adversarial/integration/phase2-metamorphic",
+    "junit": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/integration/proposed/test_integration_adversarial_bound.py ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  },
+  {
+    "path": "work/adversarial/remediation-red-replay",
+    "junit": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exit_code": "0",
+    "source_stable": true,
+    "command_and_source": [
+      "pytest arguments: work/adversarial/integration/test_handoff_binding_regression.py planner/global_planner/test/test_route_w2_numerical_oracle.py -x ",
+      "e6f9bc0510e729441749692a9bfab97a6138ea73"
+    ]
+  }
+]

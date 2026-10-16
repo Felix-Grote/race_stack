@@ -1,5 +1,148 @@
 # Project A status — 2026-10-16
 
+## Independent W2 review closeout — implementation verified, publication pending
+
+F1 P1 handoff binding and F2 P2 reversed shared-cap arithmetic are corrected in
+`6b778519de74b09a7b66be2ac89e12d687226c9d` and
+`37b36ccc1f33300ce50e6c120c886147db11b4a7`. Final isolated full verification at
+37b36ccc exits 0: **373 functional tests / 19 groups**, strict 99-column new-source
+lint, three package builds, actual ROS and installed W1/W2 pipelines all pass.
+The separate legacy aggregate is 372 tests / zero errors / the exact inherited
+10 failures / 2 skips. All 92 source/fixture/harness hashes match exact Git and
+remain stable. Exact-code push CI 38906194264 and PR CI 38906201603 both SUCCESS;
+the downloaded push artifact independently matches those results.
+
+The independently generated eighth varying-width ellipse completes three IQP
+iterations and both validators; external Decimal/GEOS/true-arc oracles check all
+actual final outputs. The five W1 repairs remain covered; only the documented
+shared-edge primitive changes, without EPS/gap-merging changes. Complete
+findings, proofs, original failures, commands, quality/resource limits and W3
+prerequisites are in [the independent review](W2_INDEPENDENT_ADVERSARIAL_REVIEW.md)
+and its [checksummed evidence](evidence/w2-adversarial/REPRODUCE.md).
+
+No final ACCEPT verdict is assigned to this future containing documentation
+commit. The final delivery/companion publication manifest records its literal
+SHA and completed exact-head push CI before a final verdict. Do not auto-merge
+PR #2 or deploy hardware. The earlier review/implementation status below is
+historical; this closeout supersedes its pending local-verification statements.
+
+**Independent W2 review: F1 handoff-binding repair implemented; final verification pending.**
+F2 additionally repairs reversed evaluation of an exact shared cap, exposed by
+an independently generated asymmetric ellipse. The original seed was continuously
+legal, but the first shifted corridor acquired a spurious 3.15e-15 m gap.
+Canonical edge arithmetic fixes it without changing EPS or contact merging.
+The original 38 corridor tests plus 49 new controls pass with stable hashes;
+the unchanged new ellipse now completes both validators. The F1-only complete
+checkpoint passes 323 functional tests; final combined-source verification is
+required after this separate F2 correction. See `W2_SHARED_CAP_FINDING.md`.
+
+The independently reviewed initial head is `e852641849b2497efea51dfca5ead38ad4476235`.
+The coordinated q/profile rehash reproducer and original failing tests are
+preserved in `W2_INDEPENDENT_ADVERSARIAL_FINDINGS.md` and its evidence archive.
+Both validators now require a separately retained complete curve authority;
+actual source and installed pipelines carry the same approval through both
+checks. Fresh seven-case lineage replay uses a different spline system.
+The original 299-test full baseline and five corrected replay/oracle tests pass;
+final complete local and exact-head hosted verification remain release gates.
+The historical implementation record below is retained, not a final review verdict.
+
+**W2 A04–A06 IMPLEMENTED. LOCAL/FULL/INSTALLED ACCEPTANCE PASS. A07–A09 PENDING.**
+
+The current authorized work is W2 A04–A06 on `project-a/w2-optimization`, created
+directly at corrected W1 commit
+`9440c2ce68e3dee549de7efacff1cf723fe830df`. No rebase or upstream merge occurred.
+The exact W1 push CI
+[38879680224](https://github.com/Felix-Grote/race_stack/actions/runs/38879680224)
+passed. All seven recursive gitlinks match, including optimizer
+`b1b38ecfefec7200d5bcb243f115af1d795b3766`.
+
+Fresh safe setup and `scripts/project_a/verify.sh all work/w2/baseline` both exit
+0: A01/A02/A03 **60/47/38**, W0 numerical **7**, actual installed ROS **4**,
+installed W1 **1**, and three package builds pass. The separate legacy aggregate
+is **157 reports / 0 errors / 10 failures / 2 skips**; failing report identities
+exactly match W0. [Baseline evidence](evidence/w2-baseline/SHA256SUMS).
+
+The additive A04 adapter preserves pinned TUM equations, uses inherited q-scaled
+splines and actual coefficients, recomputes original owned widths each iteration,
+and bounds dense fits/QPs in OS-limited child processes. Frozen-source command
+`scripts/project_a/unit.sh work/w2/a04-final-stable planner/global_planner/test/test_iqp_route_adapter.py -x`
+exits **0: 18 passed**. New-file lint passes and independent adversarial review
+accepts the stated numerical-candidate scope. Seven fixtures converge in three
+iterations each; maximum observed QP primal violation is **3.45e-15**.
+[A04 evidence and review](evidence/w2-a04/SHA256SUMS).
+Checkpoint **`604ad5da4cefd2ce5f052a4e71d30d5b5467bd27`** is pushed; exact-head
+[push CI 38885077894](https://github.com/Felix-Grote/race_stack/actions/runs/38885077894)
+is **SUCCESS**. Retrieved full logs confirm 60/47/38 + 18 A04 + 7/4/1 passing
+tests, three package builds and unchanged legacy failure identities (175 reports,
+10 failures / 2 skips). [Hosted evidence](evidence/w2-a04-ci/SHA256SUMS).
+It returns numerical candidates only. Read [W2 numerical contracts](W2_NUMERICS.md)
+for resource/tolerance policy and the measured local-surrogate limitation; actual
+curvature energy improvement or global optimality is not established.
+
+Independent A05 continuous geometry and swept-footprint validation now passes
+**50 tests in 103.41 s**, exit 0, frozen production/fixture/harness hashes. All
+seven actual A04 coefficient candidates receive **PASS**, with **164–269**
+continuous certificate leaves and four independently isolated directed gates
+each. Exact rational bounds and full-rectangle/disc sweep proofs cover interiors,
+every join and the seam. Two independent reviewers accept the planar scope.
+[A05 evidence/review](evidence/w2-a05/SHA256SUMS).
+
+A05 checkpoint **`1fea1213896ca6e32eb93dfd14acd18cfdb78701`** is pushed. Exact-head
+[push CI 38888550247](https://github.com/Felix-Grote/race_stack/actions/runs/38888550247)
+is **SUCCESS**: 225 functional tests pass across nine groups, three packages
+build, and all ten legacy failure identities remain unchanged (225 reports,
+0 errors / 10 failures / 2 skips). Full logs and exact metadata are retained.
+
+An independent 44-knot S3 adversary has every nodal footprint legal, yet its
+between-node exit is correctly FAIL; the retained reproducer passes in 5.07 s.
+Unsupported geometry/resources/required physical coverage remain INCONCLUSIVE.
+A06 now passes a single globally frozen **70-test** run in **169.24 s**, exit 0:
+20 retimer, 34 independent dynamics, eight independent math oracles and eight
+fresh whole-pipeline/repeatability cases. Strict 99-column lint passes. Two
+independent source/math reviews ACCEPT. All seven freshly optimized S0/reversed/
+rotated, S2 alternatives and S3 surface/notch cases receive geometry **PASS** and
+dynamics **PASS** on the same final coefficients. Maximum observed LP residual is
+**2.853e-12**; independent certificates have no positive normalized residual.
+[evidence/review](evidence/w2-a06/SHA256SUMS), [numerical contracts](W2_NUMERICS.md).
+
+Checkpoint **`e3f94dce130cf0cee8cc0dfdbf697b57efbd7b87`** passes complete local
+`scripts/project_a/verify.sh all work/w2/full`, exit **0**: **296 functional tests**
+in fourteen groups, strict lint and three builds. The actual installed W2 test
+freshly optimizes S0 and passes both validators; installed source hashes match
+exactly. Source/fixture/harness hashes remain unchanged across the complete run.
+Legacy is **295 reports / 0 errors / 10 failures / 2 skips**, with the exact ten
+W0/W1 failure identities. [Full local evidence](evidence/w2-full/SHA256SUMS).
+
+Exact A06 [push CI 38891088081](https://github.com/Felix-Grote/race_stack/actions/runs/38891088081)
+is **SUCCESS** with the same 296 functional tests, builds and unchanged legacy
+identities. [Hosted A06 evidence](evidence/w2-a06-ci/SHA256SUMS).
+
+A final literal-requirement audit adds three explicit regressions: closed-ellipse
+retiming with independent arc/lateral/time oracles, false S3 deck ownership at the
+same legal projected XY, and a supplied 1 m/s cap through the narrower original
+S3 notch with upstream braking. All **3 pass in 8.75 s**, exit 0, stable hashes;
+strict lint passes. No production code, tolerance or original fixture changed.
+They are explicitly wired into the final full runner. The audit and complete
+supplemental states/certificates are [retained](evidence/w2-supplemental/SHA256SUMS).
+A05's command provenance is corrected to its actual final-formatted output path.
+
+Review: [PR #2](https://github.com/Felix-Grote/race_stack/pull/2), based on exact
+corrected W1, with no automatic merge. The **exact delivered final head must pass
+push CI**, not merely an earlier commit; its actual result and immutable source
+identity are recorded in the PR checks, workflow artifacts and final technical
+report. [Branch workflows](https://github.com/Felix-Grote/race_stack/actions?query=branch%3Aproject-a%2Fw2-optimization).
+
+Next wave: W3 A07–A09 from that final CI-tested W2 head. Implement immutable
+reference/load/query + pure compile/verify/export, existing ROS waypoint view,
+fair comparator/S0–S6 benchmarks and fresh artifact handoff. Preserve W2's exact
+coefficient/profile authorities and independent gates. No immutable A07 artifact,
+real-course approval, physical clearance or vehicle result is claimed in W2.
+
+The historical W1 record below is retained as evidence; this W2
+section supersedes its old continuation/status statements.
+
+## Historical corrected W1 status
+
 **W0 COMPLETE. W1 CORRECTED; LOCAL ACCEPTANCE PASS. A04–A09 NOT STARTED.**
 
 All five findings from independent review of `133a96fd` are repaired with

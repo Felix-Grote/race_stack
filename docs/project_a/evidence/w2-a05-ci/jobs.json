@@ -1,0 +1,97 @@
+{
+  "total_count": 1,
+  "jobs": [
+    {
+      "id": 116932165831,
+      "run_id": 38888550247,
+      "workflow_name": "Project A offline planner",
+      "head_branch": "project-a/w2-optimization",
+      "run_url": "https://api.github.com/repos/Felix-Grote/race_stack/actions/runs/38888550247",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOVL4HMs8AAAAbObNAxw",
+      "head_sha": "1fea1213896ca6e32eb93dfd14acd18cfdb78701",
+      "url": "https://api.github.com/repos/Felix-Grote/race_stack/actions/jobs/116932165831",
+      "html_url": "https://github.com/Felix-Grote/race_stack/actions/runs/38888550247/job/116932165831",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-16T10:38:23Z",
+      "started_at": "2026-10-16T10:38:25Z",
+      "completed_at": "2026-10-16T10:49:35Z",
+      "name": "isolated-humble",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-16T10:38:25Z",
+          "completed_at": "2026-10-16T10:38:26Z"
+        },
+        {
+          "name": "Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-16T10:38:26Z",
+          "completed_at": "2026-10-16T10:38:33Z"
+        },
+        {
+          "name": "Build pinned Humble test environment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-16T10:38:33Z",
+          "completed_at": "2026-10-16T10:39:35Z"
+        },
+        {
+          "name": "W0-W1 regressions, bounded solver and continuous geometry; installed ROS",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-16T10:39:35Z",
+          "completed_at": "2026-10-16T10:49:32Z"
+        },
+        {
+          "name": "Surface pre-existing legacy failures",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-16T10:49:32Z",
+          "completed_at": "2026-10-16T10:49:33Z"
+        },
+        {
+          "name": "Preserve exact test evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-16T10:49:33Z",
+          "completed_at": "2026-10-16T10:49:33Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-16T10:49:33Z",
+          "completed_at": "2026-10-16T10:49:34Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-16T10:49:34Z",
+          "completed_at": "2026-10-16T10:49:34Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Felix-Grote/race_stack/check-runs/116932165831",
+      "labels": [
+        "ubuntu-22.04"
+      ],
+      "runner_id": 1000001424,
+      "runner_name": "GitHub Actions 1000001424",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "ast_equivalent_to_before_formatting": true,
+  "command": "PROJECT_A_OUTPUT=/workspace/race_stack/work/w2/a05-strict-lint PROJECT_A_UID=1000 PROJECT_A_GID=1000 docker --host=unix:///var/run/docker.sock compose -p project-a-a05-strict-lint -f docker-compose.test.yaml run --rm -T --entrypoint /bin/bash test -c 'python -m flake8 --max-line-length=99 /src/planner/global_planner/global_planner/route_validate.py /src/planner/global_planner/test/test_route_validate_geometry.py /src/planner/global_planner/test/test_route_validate_bounds_oracle.py'",
+  "docker_argv": [
+    "docker",
+    "--host=unix:///var/run/docker.sock",
+    "compose",
+    "-p",
+    "project-a-a05-strict-lint",
+    "-f",
+    "docker-compose.test.yaml",
+    "run",
+    "--rm",
+    "-T",
+    "--entrypoint",
+    "/bin/bash",
+    "test",
+    "-c",
+    "\npython -m flake8 --max-line-length=99 /src/planner/global_planner/global_planner/route_validate.py /src/planner/global_planner/test/test_route_validate_geometry.py /src/planner/global_planner/test/test_route_validate_bounds_oracle.py > /work/lint.log 2>&1\nlint_result=$?\nprintf \"%s\\n\" \"$lint_result\" > /work/exit-code.txt\ncat /work/lint.log\nexit \"$lint_result\"\n"
+  ],
+  "environment": {
+    "PROJECT_A_GID": "1000",
+    "PROJECT_A_OUTPUT": "/workspace/race_stack/work/w2/a05-strict-lint",
+    "PROJECT_A_UID": "1000"
+  },
+  "executed_container_shell_script": "\npython -m flake8 --max-line-length=99 /src/planner/global_planner/global_planner/route_validate.py /src/planner/global_planner/test/test_route_validate_geometry.py /src/planner/global_planner/test/test_route_validate_bounds_oracle.py > /work/lint.log 2>&1\nlint_result=$?\nprintf \"%s\\n\" \"$lint_result\" > /work/exit-code.txt\ncat /work/lint.log\nexit \"$lint_result\"\n",
+  "exit_code": 0,
+  "ignore_overrides": [],
+  "lint_command": "python -m flake8 --max-line-length=99 /src/planner/global_planner/global_planner/route_validate.py /src/planner/global_planner/test/test_route_validate_geometry.py /src/planner/global_planner/test/test_route_validate_bounds_oracle.py",
+  "source_hashes_after": {
+    "planner/global_planner/global_planner/route_validate.py": "da6ddcb89fb46823575fedfdc291a23bab96508b54f3bb8a98889b1898dc47ef",
+    "planner/global_planner/test/test_route_validate_bounds_oracle.py": "357c5490d49a7150755e32f02afb3d6821b9e91781984a898927bcd1a653fb15",
+    "planner/global_planner/test/test_route_validate_geometry.py": "c1541b691b348b03d87f38ce6dede5660dee9be0c2583a907e22d80ccf02e971"
+  },
+  "source_hashes_before": {
+    "planner/global_planner/global_planner/route_validate.py": "da6ddcb89fb46823575fedfdc291a23bab96508b54f3bb8a98889b1898dc47ef",
+    "planner/global_planner/test/test_route_validate_bounds_oracle.py": "357c5490d49a7150755e32f02afb3d6821b9e91781984a898927bcd1a653fb15",
+    "planner/global_planner/test/test_route_validate_geometry.py": "c1541b691b348b03d87f38ce6dede5660dee9be0c2583a907e22d80ccf02e971"
+  },
+  "status": "PASS",
+  "tool_completion_chunk": "5f02e8",
+  "tool_session_id": 6043
+}

@@ -1,0 +1,77 @@
+{
+  "a06-ellipse.json": {
+    "status": "PASS",
+    "route_sha256": "71a88a1da6eb4482d09dad829ce73c893b4cb3e8f5e9816927600977753a4657",
+    "knots": 224,
+    "coefficient_length_m": 41.38627569666786,
+    "analytic_ellipse_length_m": 41.38627607222883,
+    "minimum_metric_edge_m": 0.002938696316539162,
+    "maximum_metric_edge_m": 0.39202714838175323,
+    "high_curvature_axis_u_kappa": [
+      [
+        6.183440226262256,
+        0.3204682144350902
+      ],
+      [
+        6.189379564071948,
+        0.32046821443509277
+      ]
+    ],
+    "low_curvature_axis_u_kappa": [
+      [
+        25.01965035565916,
+        0.07810243854420443
+      ],
+      [
+        25.01965035565926,
+        0.07810243854420543
+      ]
+    ],
+    "independent_time_s": 11.713779280290497,
+    "certified_time_lower_s": 11.713779280188888,
+    "certified_time_upper_s": 11.713779280392107,
+    "oracle_errors": {
+      "metric_length_m": 0.0,
+      "analytic_shape_length_m": -3.755609725430986e-07,
+      "time_s": -3.552713678800501e-15,
+      "maximum_metric_edge_m": 1.1102230246251565e-16,
+      "maximum_acceleration_mps2": 1.199040866595169e-14
+    }
+  },
+  "a06-narrow-lower-cap.json": {
+    "independent_status": "PASS",
+    "route_sha256": "f12342727693e8e6d9220fa96cf995120efd05d0662ce91ef5a99fde710406f0",
+    "original_geometry_unchanged": true,
+    "notch_width_m": 0.9359590209752958,
+    "adjacent_widths_m": [
+      1.1921707707187648,
+      1.1422745588255983
+    ],
+    "cap_start_seed_m": 7.065451418852835,
+    "cap_finish_seed_m": 7.315451418852835,
+    "cap_mps": 1.0,
+    "minimum_upstream_acceleration_mps2": -3.0139134651256883,
+    "maximum_upstream_speed_mps": 3.6885972190001306,
+    "lap_time_s": 15.672008573801566
+  },
+  "a05-wrong-deck-coincident.json": {
+    "status": "FAIL",
+    "reason": "incorrect occurrence/surface owner or interval crossing",
+    "route_sha256": "a02d449cb06d86d69c4c468cca036b8a9821e96582bd9a447a0bc7d2a45abe6d",
+    "xy": [
+      0.1280910222509995,
+      -0.0009814240790925934
+    ],
+    "same_xy_legal_on_both_decks": true,
+    "original_owner": [
+      "o0",
+      "ground"
+    ],
+    "forged_owner": [
+      "o2",
+      "upper-deck"
+    ],
+    "optimizer_success_claim": true,
+    "false_clearance_m": 1000000.0
+  }
+}

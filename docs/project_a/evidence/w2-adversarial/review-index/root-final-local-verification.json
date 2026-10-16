@@ -1,0 +1,23 @@
+{
+  "implementation_sha": "37b36ccc1f33300ce50e6c120c886147db11b4a7",
+  "source_stable_and_git_exact": true,
+  "source_count": 92,
+  "source_manifest_sha256": "c4076eb430c38cd1e1faf956f7830fbdc1a0c3d09136a7f0c8c82b1a2d6bf132",
+  "functional_count": 373,
+  "functional_groups": 19,
+  "legacy_summary": "Summary: 372 tests, 0 errors, 10 failures, 2 skipped",
+  "legacy_exact_ten_identities": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ],
+  "complete_exit": 0,
+  "retained_pipeline_sha256": "fb42f757f888a524be7e8912ba2bb77e9b87f584c59c26cac0e513643bc3f862"
+}

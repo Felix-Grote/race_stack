@@ -1,0 +1,645 @@
+{
+  "status": "PASS",
+  "functional_snapshot_sha256": "886a5ae3f048db79bebad842eb24c24f4c1ce4893d35c1ce313555e65afbbf83",
+  "retained_snapshot_sha256": "fb42f757f888a524be7e8912ba2bb77e9b87f584c59c26cac0e513643bc3f862",
+  "complete_math_payload_equal": true,
+  "common_math_payload_sha256": "aef04784288e6c0718db106bfac672cf9e0bd692942f2d9b6466b27d0e2e354e",
+  "excluded_resource_fields": [
+    "solver_iterations[*].qp.peak_rss_bytes",
+    "solver_iterations[*].qp.elapsed_seconds",
+    "solver_iterations[*].reference_fit_resources",
+    "solver_iterations[*].shifted_fit_resources"
+  ],
+  "scalar_resource_differences": [
+    {
+      "path": "/scenarios/s0_route/solver_iterations/0/qp/peak_rss_bytes",
+      "functional": 85520384,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/0/qp/elapsed_seconds",
+      "functional": 0.05642558299996381,
+      "retained": 0.05192198099985035
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/0/reference_fit_resources/0",
+      "functional": 80801792.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/0/reference_fit_resources/1",
+      "functional": 0.01973830499991891,
+      "retained": 0.01731928400022298
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/0/shifted_fit_resources/0",
+      "functional": 85520384.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/0/shifted_fit_resources/1",
+      "functional": 0.019365704999927402,
+      "retained": 0.01847520399996938
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/1/qp/peak_rss_bytes",
+      "functional": 86650880,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/1/qp/elapsed_seconds",
+      "functional": 0.048431962999984535,
+      "retained": 0.04873209500010489
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/1/reference_fit_resources/0",
+      "functional": 85520384.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/1/reference_fit_resources/1",
+      "functional": 0.01678114399965125,
+      "retained": 0.016531470000245463
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/1/shifted_fit_resources/0",
+      "functional": 86650880.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/1/shifted_fit_resources/1",
+      "functional": 0.01838102900001104,
+      "retained": 0.01780155799997374
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/2/qp/peak_rss_bytes",
+      "functional": 86650880,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/2/qp/elapsed_seconds",
+      "functional": 0.04805025800033036,
+      "retained": 0.046269743999800994
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/2/reference_fit_resources/0",
+      "functional": 86650880.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/2/reference_fit_resources/1",
+      "functional": 0.017231740000170248,
+      "retained": 0.016525591000117856
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/2/shifted_fit_resources/0",
+      "functional": 86650880.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_route/solver_iterations/2/shifted_fit_resources/1",
+      "functional": 0.015174096999999165,
+      "retained": 0.018221517999791104
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/0/qp/peak_rss_bytes",
+      "functional": 92762112,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/0/qp/elapsed_seconds",
+      "functional": 0.06951090799975645,
+      "retained": 0.053311274999941816
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/0/reference_fit_resources/0",
+      "functional": 87781376.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/0/reference_fit_resources/1",
+      "functional": 0.02081824000015331,
+      "retained": 0.018394735000129003
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/0/shifted_fit_resources/0",
+      "functional": 92762112.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/0/shifted_fit_resources/1",
+      "functional": 0.02042049500005305,
+      "retained": 0.01820365200001106
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/1/qp/peak_rss_bytes",
+      "functional": 92762112,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/1/qp/elapsed_seconds",
+      "functional": 0.05527420400039773,
+      "retained": 0.05316842299998825
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/1/reference_fit_resources/0",
+      "functional": 92762112.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/1/reference_fit_resources/1",
+      "functional": 0.01862611199976527,
+      "retained": 0.017055884999990667
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/1/shifted_fit_resources/0",
+      "functional": 92762112.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/1/shifted_fit_resources/1",
+      "functional": 0.016929058999721747,
+      "retained": 0.017146740000043792
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/2/qp/peak_rss_bytes",
+      "functional": 92762112,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/2/qp/elapsed_seconds",
+      "functional": 0.04683662400020694,
+      "retained": 0.050239792999946076
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/2/reference_fit_resources/0",
+      "functional": 92762112.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/2/reference_fit_resources/1",
+      "functional": 0.01711609399990266,
+      "retained": 0.018737641999905463
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/2/shifted_fit_resources/0",
+      "functional": 92762112.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_reverse_route/solver_iterations/2/shifted_fit_resources/1",
+      "functional": 0.021461158999954932,
+      "retained": 0.017749660999925254
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/0/qp/peak_rss_bytes",
+      "functional": 94674944,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/0/qp/elapsed_seconds",
+      "functional": 0.06204486499973427,
+      "retained": 0.053230378000080236
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/0/reference_fit_resources/0",
+      "functional": 92762112.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/0/reference_fit_resources/1",
+      "functional": 0.01801112099974489,
+      "retained": 0.020514942999852792
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/0/shifted_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/0/shifted_fit_resources/1",
+      "functional": 0.017564610000135872,
+      "retained": 0.02170171299985668
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/1/qp/peak_rss_bytes",
+      "functional": 94674944,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/1/qp/elapsed_seconds",
+      "functional": 0.04880839699990247,
+      "retained": 0.05596784299996216
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/1/reference_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/1/reference_fit_resources/1",
+      "functional": 0.02157702300019082,
+      "retained": 0.018710782000198378
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/1/shifted_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/1/shifted_fit_resources/1",
+      "functional": 0.018445143000008102,
+      "retained": 0.017327527000361442
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/2/qp/peak_rss_bytes",
+      "functional": 94674944,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/2/qp/elapsed_seconds",
+      "functional": 0.04888087400013319,
+      "retained": 0.04540962300006868
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/2/reference_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/2/reference_fit_resources/1",
+      "functional": 0.01887267400024939,
+      "retained": 0.015911482999854343
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/2/shifted_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s0_rotated_route/solver_iterations/2/shifted_fit_resources/1",
+      "functional": 0.018353246000060608,
+      "retained": 0.015865955999743164
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/0/qp/peak_rss_bytes",
+      "functional": 94674944,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/0/qp/elapsed_seconds",
+      "functional": 0.04954187500015905,
+      "retained": 0.05619133000027432
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/0/reference_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/0/reference_fit_resources/1",
+      "functional": 0.0196133459999146,
+      "retained": 0.01590303100010715
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/0/shifted_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/0/shifted_fit_resources/1",
+      "functional": 0.01778306899996096,
+      "retained": 0.02200193799990302
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/1/qp/peak_rss_bytes",
+      "functional": 94674944,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/1/qp/elapsed_seconds",
+      "functional": 0.042536235000170564,
+      "retained": 0.040553774000272824
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/1/reference_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/1/reference_fit_resources/1",
+      "functional": 0.015159209000103147,
+      "retained": 0.01629589100002704
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/1/shifted_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/1/shifted_fit_resources/1",
+      "functional": 0.017260686000099668,
+      "retained": 0.01765016400031527
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/2/qp/peak_rss_bytes",
+      "functional": 94674944,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/2/qp/elapsed_seconds",
+      "functional": 0.05453011300005528,
+      "retained": 0.038920488999792724
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/2/reference_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/2/reference_fit_resources/1",
+      "functional": 0.017307856000115862,
+      "retained": 0.01610011200000372
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/2/shifted_fit_resources/0",
+      "functional": 94674944.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_upper_route/solver_iterations/2/shifted_fit_resources/1",
+      "functional": 0.020933878000050754,
+      "retained": 0.02005512000005183
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/0/qp/peak_rss_bytes",
+      "functional": 96653312,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/0/qp/elapsed_seconds",
+      "functional": 0.05333484299990232,
+      "retained": 0.04803020800000013
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/0/reference_fit_resources/0",
+      "functional": 94687232.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/0/reference_fit_resources/1",
+      "functional": 0.017142662999958702,
+      "retained": 0.017582803999630414
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/0/shifted_fit_resources/0",
+      "functional": 96653312.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/0/shifted_fit_resources/1",
+      "functional": 0.018935894000151166,
+      "retained": 0.02010480299986739
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/1/qp/peak_rss_bytes",
+      "functional": 97832960,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/1/qp/elapsed_seconds",
+      "functional": 0.04925075700020898,
+      "retained": 0.04348153299997648
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/1/reference_fit_resources/0",
+      "functional": 96784384.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/1/reference_fit_resources/1",
+      "functional": 0.026381349999610393,
+      "retained": 0.021728924999933952
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/1/shifted_fit_resources/0",
+      "functional": 97832960.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/1/shifted_fit_resources/1",
+      "functional": 0.02304381999965699,
+      "retained": 0.015421509000134392
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/2/qp/peak_rss_bytes",
+      "functional": 97964032,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/2/qp/elapsed_seconds",
+      "functional": 0.04369367100025556,
+      "retained": 0.04281900499972835
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/2/reference_fit_resources/0",
+      "functional": 97964032.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/2/reference_fit_resources/1",
+      "functional": 0.018850638999992952,
+      "retained": 0.015206492000288563
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/2/shifted_fit_resources/0",
+      "functional": 97964032.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s2_lower_route/solver_iterations/2/shifted_fit_resources/1",
+      "functional": 0.017417262999970262,
+      "retained": 0.01741497700004402
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/0/qp/peak_rss_bytes",
+      "functional": 102334464,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/0/qp/elapsed_seconds",
+      "functional": 0.09133575800024119,
+      "retained": 0.08310272999960944
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/0/reference_fit_resources/0",
+      "functional": 98095104.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/0/reference_fit_resources/1",
+      "functional": 0.027716795000287675,
+      "retained": 0.02215047899971978
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/0/shifted_fit_resources/0",
+      "functional": 102334464.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/0/shifted_fit_resources/1",
+      "functional": 0.021601251999982196,
+      "retained": 0.024237182999968354
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/1/qp/peak_rss_bytes",
+      "functional": 102334464,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/1/qp/elapsed_seconds",
+      "functional": 0.09031847300002482,
+      "retained": 0.08654539100007241
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/1/reference_fit_resources/0",
+      "functional": 102334464.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/1/reference_fit_resources/1",
+      "functional": 0.021989354999732313,
+      "retained": 0.022994626000127028
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/1/shifted_fit_resources/0",
+      "functional": 102334464.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/1/shifted_fit_resources/1",
+      "functional": 0.02681754000013825,
+      "retained": 0.027122338000026502
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/2/qp/peak_rss_bytes",
+      "functional": 104497152,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/2/qp/elapsed_seconds",
+      "functional": 0.16447068400020726,
+      "retained": 0.08684000699986427
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/2/reference_fit_resources/0",
+      "functional": 102334464.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/2/reference_fit_resources/1",
+      "functional": 0.022862585999973817,
+      "retained": 0.02625671899977533
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/2/shifted_fit_resources/0",
+      "functional": 104497152.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_surfaces_route/solver_iterations/2/shifted_fit_resources/1",
+      "functional": 0.03742478899994239,
+      "retained": 0.02286614600006942
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/0/qp/peak_rss_bytes",
+      "functional": 106893312,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/0/qp/elapsed_seconds",
+      "functional": 0.10323167900014596,
+      "retained": 0.10249754599999505
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/0/reference_fit_resources/0",
+      "functional": 104497152.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/0/reference_fit_resources/1",
+      "functional": 0.02460008399975777,
+      "retained": 0.023263142999894626
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/0/shifted_fit_resources/0",
+      "functional": 106893312.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/0/shifted_fit_resources/1",
+      "functional": 0.026417971000228135,
+      "retained": 0.02890259099967807
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/1/qp/peak_rss_bytes",
+      "functional": 109543424,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/1/qp/elapsed_seconds",
+      "functional": 0.09110023900029773,
+      "retained": 0.09604959299986149
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/1/reference_fit_resources/0",
+      "functional": 106893312.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/1/reference_fit_resources/1",
+      "functional": 0.021886501999688335,
+      "retained": 0.02400746400007847
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/1/shifted_fit_resources/0",
+      "functional": 109543424.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/1/shifted_fit_resources/1",
+      "functional": 0.02932631500016214,
+      "retained": 0.024878231000002415
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/2/qp/peak_rss_bytes",
+      "functional": 109543424,
+      "retained": 143171584
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/2/qp/elapsed_seconds",
+      "functional": 0.09231348200000866,
+      "retained": 0.09109472799991636
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/2/reference_fit_resources/0",
+      "functional": 109543424.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/2/reference_fit_resources/1",
+      "functional": 0.0242879739998898,
+      "retained": 0.02333076299964887
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/2/shifted_fit_resources/0",
+      "functional": 109543424.0,
+      "retained": 143171584.0
+    },
+    {
+      "path": "/scenarios/s3_notch_route/solver_iterations/2/shifted_fit_resources/1",
+      "functional": 0.023478727000110666,
+      "retained": 0.023405292999996163
+    }
+  ]
+}

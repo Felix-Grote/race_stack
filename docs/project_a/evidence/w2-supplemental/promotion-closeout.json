@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "tests": 3,
+  "deselected": 57,
+  "duration_s": 8.75,
+  "exit_code": 0,
+  "source_hashes_equal": true,
+  "strict_max_line_length": 99,
+  "strict_exit_code": 0,
+  "production_changed": false,
+  "audit_remaining_literal_promotions_resolved": true,
+  "A05_report_command_corrected": true,
+  "command": "scripts/project_a/unit.sh work/w2/supplemental-final-formatted planner/global_planner/test/test_route_ellipse_dynamics.py planner/global_planner/test/test_route_validate_geometry.py planner/global_planner/test/test_cyclic_retime.py -k 'ellipse or coincident_bridge_deck or narrow_legal_notch_lower_cap' -x"
+}

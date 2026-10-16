@@ -1,0 +1,35 @@
+{
+  "exact_head": "37b36ccc1f33300ce50e6c120c886147db11b4a7",
+  "artifact_sha256": "c980acf5f5df4234914276e4de6d70818554c2285d4324634a0f650645de6aa7",
+  "functional_tests": 373,
+  "functional_groups": 19,
+  "all_functional_zero_failures_errors_skips": true,
+  "source_entries": 92,
+  "source_manifest_stable_and_git_exact": true,
+  "source_manifest_sha256": "c4076eb430c38cd1e1faf956f7830fbdc1a0c3d09136a7f0c8c82b1a2d6bf132",
+  "legacy_exact_ten_identities": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ],
+  "legacy_summary": "Summary: 372 tests, 0 errors, 10 failures, 2 skipped",
+  "same_authority_pipeline_cases": [
+    "s0_route",
+    "s0_reverse_route",
+    "s0_rotated_route",
+    "s2_upper_route",
+    "s2_lower_route",
+    "s3_surfaces_route",
+    "s3_notch_route"
+  ],
+  "installed_source_hashes_match": true,
+  "novel_same_authority_verified": true,
+  "pinned_runtime_and_isolation_verified": true
+}

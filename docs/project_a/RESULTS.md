@@ -1,4 +1,214 @@
-# Project A validation matrix — W0/W1
+# Project A validation matrix — W0/W1/W2
+
+## Independent adversarial W2 final implementation — 2026-10-16
+
+Reviewed e852641 from exact corrected W1 9440c2c. Original F1/F2 findings and red
+runs precede separate corrections 6b778519 and 37b36ccc. Final implementation
+37b36ccc full local command `scripts/project_a/verify.sh all work/adversarial/final-full`
+exits 0 with 373 functional passes/19 groups, zero functional failures/errors/skips,
+strict scoped 99-column lint, three builds (17.3 s), ROS 4 and installed W1/W2 (1+1).
+Source manifests match before/after and all 92 exact committed source/fixture
+files; SHA256 c4076eb430c38cd1e1faf956f7830fbdc1a0c3d09136a7f0c8c82b1a2d6bf132.
+Separate legacy 372/0 errors/10 failures/2 skips exactly matches initial ten raw
+failure identities. Final retained seven-case pipeline SHA256:
+fb42f757f888a524be7e8912ba2bb77e9b87f584c59c26cac0e513643bc3f862.
+
+Exact-code push [38906194264](https://github.com/Felix-Grote/race_stack/actions/runs/38906194264)
+and PR [38906201603](https://github.com/Felix-Grote/race_stack/actions/runs/38906201603)
+SUCCESS. Push job 116990251430 / artifact 12049420387 independently downloaded;
+archive SHA256 c980acf5f5df4234914276e4de6d70818554c2285d4324634a0f650645de6aa7.
+All 373 tests, source/Git/installed hashes, same-authority seven/novel pipeline and
+exact inherited legacy failures verified from artifact, not only workflow status.
+
+New F2 exact-cap 49 + original A03 38 pass 87 / 49.36 s; new unchanged analytic ellipse
+probe+permanent full pipeline pass 2 / 31.13 s. The novel case has 129 segments,
+330 swept leaves,4 gates and 221 speed knots. Independent 80-digit Decimal/GEOS and
+true-arc oracle checks 2967 bodies/3757 dynamic points; time 13.759213225603533 s
+is inside [13.759213225499257,13.759213225707809] s. Independently checked actual
+final seven-case output covers 1541 leaves/7705 bodies/28 gates and 1267 edges/
+11403 dynamic points at both functional and retained output stages. Only 126
+RSS/time scalars differ; complete mathematical payloads are exactly identical.
+
+Full report, per-group ledger, exact commands, complete source/fixture identities,
+independent oracle scripts, preserved failed experiments and archive checksums:
+[review](W2_INDEPENDENT_ADVERSARIAL_REVIEW.md),
+[reproduction](evidence/w2-adversarial/REPRODUCE.md).
+The report-containing commit still requires its own exact-head publication CI;
+its final literal SHA/verdict is supplied by the companion publication manifest.
+This does not substitute 37b36ccc CI for a later commit or authorize PR merge.
+
+## W2 full local, hosted A06 and literal-coverage closeout — 2026-10-16
+
+At committed **e3f94dce130cf0cee8cc0dfdbf697b57efbd7b87**, the full command
+`scripts/project_a/verify.sh all work/w2/full` exits **0** with complete source,
+fixture and harness hashes unchanged. **296 functional tests** pass in fourteen
+groups: A01 **60**, A02 **47**, A03 **38**, A04 **18**, A05 **37+13**, A06
+**20+34+8**, fresh same-curve pipeline **8**, numerical **7**, actual ROS **4**,
+installed W1 **1**, installed W2 **1**. Three selected packages build in 26.0 s.
+The actual installed W2 pipeline freshly optimizes S0 and independently passes
+geometry/dynamics in 18.69 s; module hashes under `/work/install` match source.
+
+The separate legacy run reports **295 tests / 0 errors / 10 failures / 2 skips**.
+Every failing identity exactly matches W0/W1; the inherited lint/XML failures
+remain visible. [Full local evidence](evidence/w2-full/SHA256SUMS), including
+JUnit, runtime/dependency inventories, full logs and installed coefficient/profile
+certificates. Exact A06 [push CI 38891088081](https://github.com/Felix-Grote/race_stack/actions/runs/38891088081)
+is **SUCCESS**, independently confirming the same 296 tests/builds/legacy
+identities. [Hosted evidence](evidence/w2-a06-ci/SHA256SUMS).
+
+Final literal-coverage controls, promoted after that source freeze:
+
+- Closed ellipse axes 8/5 m: 224 speed knots, nonuniform edges
+  .0029387–.392027 m, independent coefficient-arc length 41.386275696668 m.
+  Analytic ellipse shape discrepancy is -3.76e-7 m against a separate 1e-5 m
+  cubic-approximation allowance; metric-kernel tolerances are unchanged.
+  Curvature about .32047 versus .07810/m produces squared speeds about 6.18
+  versus 25.02 m²/s². Independent dynamics PASS; model time 11.713779280290 s is
+  inside the certified time interval.
+- At actual S3 XY (.128091022251, -.000981424079), both projected legal ribbons
+  contain the point. Replacing original ground ownership by upper-deck ownership
+  independently FAILs despite success and 1,000,000 m clearance claims.
+- Original notch normal width .935959 m versus neighboring 1.192171/1.142275 m:
+  supplied cap 1 m/s over inherited q 7.065451418853–7.315451418853 m applies
+  before retiming, with unchanged borders/coefficients/q and upstream braking.
+  Independent dynamics PASS. Reference acceleration includes supplied drag;
+  the declared longitudinal diamond constrains a+c*u.
+
+The final selected command in [promotion closeout](evidence/w2-supplemental/promotion-closeout.json)
+exits **0: 3 passed, 57 deselected in 8.75 s** with frozen hashes and strict
+99-column lint. Final full-runner collection includes all three without the
+selection filter; the exact delivered head's complete hosted result is recorded
+in [PR #2 checks](https://github.com/Felix-Grote/race_stack/pull/2/checks) and its
+workflow artifacts/final technical report. No unexecuted result is substituted
+for a completed run. Production mathematical modules remain byte-identical to
+A06 e3f94dc. [Supplemental audit/evidence](evidence/w2-supplemental/SHA256SUMS).
+
+A separate retained zero-motion review passes three adversarial cases: all-zero
+solver success returns structured INCONCLUSIVE; isolated zero and below-floor
+numerical candidates independently FAIL. This confirms the mandatory candidate
+versus acceptance boundary; no production repair or numerical relaxation was
+needed. Original and corrected command provenance and real exploratory failures
+remain retained as historical evidence.
+
+## W2 A06 and fresh pipeline checkpoint — 2026-10-16
+
+The single frozen-source command in [A06 review](evidence/w2-a06/REVIEW.md) exits
+**0: 70 passed in 169.24 s**, with stable source/fixture/helper/Compose hashes:
+**20 retimer + 34 independent dynamics + 8 math oracles + 8 fresh pipeline**.
+Strict flake8 at 99 columns and two independent source/math reviews pass. No
+original W0/W1 test, release tolerance, dependency or gitlink was changed.
+
+Every integration case reruns actual pinned IQP and then certifies the same
+final coefficients geometrically and dynamically under explicit synthetic
+footprint/model/policies. All include the closing edge and supplied steering.
+
+| Scenario | Geometry / dynamics | Speed knots | Nominal time s | Time error bound s |
+|---|---|---:|---:|---:|
+| s0_route | PASS / PASS | 166 | 8.593509770 | 8.48e-11 |
+| s0_reverse_route | PASS / PASS | 166 | 8.593509770 | 8.48e-11 |
+| s0_rotated_route | PASS / PASS | 166 | 8.593509770 | 8.48e-11 |
+| s2_upper_route | PASS / PASS | 155 | 9.411623853 | 1.01e-10 |
+| s2_lower_route | PASS / PASS | 151 | 8.587343725 | 9.38e-11 |
+| s3_surfaces_route | PASS / PASS | 231 | 16.419262764 | 1.17e-10 |
+| s3_notch_route | PASS / PASS | 232 | 16.419182802 | 1.16e-10 |
+
+Maximum observed normalized LP residual against inward constraints: **2.853e-12**
+(target 1e-8). Independent normalized residual maxima are nonpositive; their
+largest value is approximately -1.11e-16. Geometry uses 164–269 continuous leaves
+and four independently isolated directed gates per case; minimum sweep slack is
+8.949819e-5 m. The time-error column propagates arc and square-root numerical
+allowances; it describes synthetic model time, never measured vehicle time.
+Repeating S0 optimization agrees within 1e-10 m coefficient tolerance; identical
+retiming returns exactly equal profiles and metadata.
+
+An independent asymmetric cyclic braking envelope agrees within **1.6775e-8
+m²/s²** (predeclared comparison 1e-7), with closing a=-0.999999998991 m/s².
+Known constant-speed and motor/drag optima, nonuniform 96/48-point derivative
+quadrature, table dips and unchanged legacy CSV imports pass. False candidates
+with only a bad closing edge, hidden interior curvature, motor/drag/diamond,
+steering rate/angle, wrong surface budgets and stale metadata fail independently.
+Missing required models are UNSUPPORTED; exhausted/unrepresentable proof remains
+INCONCLUSIVE. Initial real debugging failures and source-drift runs are retained
+as exploratory evidence, never substituted for frozen acceptance.
+
+Full raw traces, final coefficients/q/owners, models, policies, profiles, metadata
+and both certificates: [A06 evidence](evidence/w2-a06/SHA256SUMS). Full W0–W2,
+actual installed-module pipeline and exact-head hosted CI remain the final gates.
+A05 exact-head hosted CI [38888550247](https://github.com/Felix-Grote/race_stack/actions/runs/38888550247)
+passed 225 functional tests and three builds; legacy 225/0 errors/10 failures/
+2 skips retained the exact original ten failure identities.
+[Hosted A05 evidence](evidence/w2-a05-ci/SHA256SUMS).
+
+## W2 A05 local checkpoint — 2026-10-16
+
+`scripts/project_a/unit.sh work/w2/a05-final-formatted planner/global_planner/test/test_route_validate_geometry.py planner/global_planner/test/test_route_validate_bounds_oracle.py`
+exits **0: 50 passed in 103.41 s**. Production, tests, complete fixtures, helper
+and Compose hashes are unchanged before/after. Scoped lint passes. Two
+independent reviewers accept the exact-input planar certificate implementation.
+
+All seven actual A04 candidates PASS continuous geometry and swept-rectangle
+containment with the original .01 m margin, independent 1/m curvature limit and
+four actual directed gates each. Certificate leaves **164–269**, certified
+curvature upper maxima **0.2125–0.4535/m**, minimum certificate slack across
+the campaign **8.9498e-5 m** beyond motion, margin and numerical allowances.
+Both enclosing-disc and full-rectangle curvature sweep methods are exercised;
+every coefficient interval is covered without gaps, including the periodic seam.
+
+Adversaries include actual between-node reference/rectangle-edge exits despite
+legal solver-node bodies; an interior curvature peak despite legal nodal values;
+wrongly phased actual gate passage; forged authority/owners/q/policies; stale
+curve metadata; degenerate/seam corruption; holes, nonexact shared caps and
+resource/required physical-coverage uncertainty. Thirteen separate high-precision
+oracles check whole-interval derivative, curvature and curvature-rate bounds,
+cancellation, transforms/scales, subnormal conversion and overflow behavior.
+
+Independent pinned S3 hidden-footprint reproducer: **1 passed in 5.07 s**,
+exit 0, all **44 nodal bodies legal**, continuous actual exit correctly FAIL.
+Full negative route, coefficients/q/body, command and report are retained.
+First frozen main run had **44 passes / 1 test-fixture failure**; corrected cap
+placement preserves the notch. Second run **49 passed**; final adds input-size
+hardening and explicit nodal-body controls. No old acceptance gate changed.
+
+Exact A04 checkpoint push CI at **604ad5d**, run **38885077894**, is SUCCESS;
+retrieved logs show 60/47/38 + 18 + 7/4/1 passes and three builds. Separate legacy
+aggregate grows to 175 reports with the same 10 failures / 2 skips.
+See [A04 hosted logs](evidence/w2-a04-ci/SHA256SUMS),
+[A05 evidence/review](evidence/w2-a05/SHA256SUMS),
+[independent reproducer](evidence/w2-a05-independent/SHA256SUMS) and
+[numerical contract](W2_NUMERICS.md). A06/combined trajectory acceptance remains
+pending. These are synthetic planar software results, without physical evidence.
+
+## W2 A04 local checkpoint — 2026-10-16
+
+Base is exactly corrected W1 `9440c2ce68e3dee549de7efacff1cf723fe830df`.
+Fresh setup + `verify.sh all work/w2/baseline` exit 0: **60/47/38 A01–A03,
+7 numerical, 4 installed ROS, 1 installed W1**, three package builds. Separate
+legacy: 157 reports / 0 errors / original 10 failures / 2 skips, exact W0 failure
+identities. Exact-base push CI 38879680224 is SUCCESS.
+
+`scripts/project_a/unit.sh work/w2/a04-final-stable planner/global_planner/test/test_iqp_route_adapter.py -x`
+exits **0**, **18 passed in 84.37 s**, before/after source hashes identical.
+Pinned-environment new-file lint passes. Independent source/adversarial review
+accepts the bounded TUM-surrogate candidate scope.
+
+All seven fixed S0/reverse/rigid-rotation/S2-upper/S2-lower/S3/s3-notch fixtures
+converge in three QPs. Final solver N ranges **89–135**, maximum primal residual
+**3.45e-15**, maximum matrix condition **3.738e8**, maximum observed child RSS
+**98,988,032 bytes**. Actual process timeout/memory, infeasibility, conditioning,
+oversized preparation, nonconvergence and corrupt-result tests pass. Identical
+fixed-input 64-knot ellipse/crossing QPs match direct pinned helper offsets within
+**1e-8 m** and linearization errors within **1e-10/m**.
+
+The exact-coefficient diagnostic for S0 rises from **1.0471975681** to
+**1.16278187265 1/m** integrated squared curvature: surrogate convergence does
+not establish actual objective improvement/global optimality. Cyclic identical-
+knot QP parity meets 1e-8 m; seam-dependent remeshing has **1.543 mm** measured
+q-correspondence sensitivity. These limits are retained explicitly.
+
+No geometric/footprint/dynamic acceptance is claimed at A04. See
+[numerical policy](W2_NUMERICS.md), [baseline evidence](evidence/w2-baseline/SHA256SUMS)
+and [A04 full traces, hashes and review](evidence/w2-a04/SHA256SUMS).
+The historical W0/W1 sections below retain their original evidence.
 
 ## Final corrected W1 local acceptance — 2026-10-16
 

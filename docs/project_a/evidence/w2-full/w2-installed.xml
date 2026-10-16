@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="18.694" timestamp="2026-10-16T11:11:28.360294+00:00" hostname="846bdcc64674"><testcase classname="test_w2_installed" name="test_installed_w2_pipeline" time="18.668" /></testsuite></testsuites>
