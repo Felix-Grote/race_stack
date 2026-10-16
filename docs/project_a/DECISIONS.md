@@ -1,5 +1,37 @@
 # Project A decision ledger
 
+## 2026-10-16 — A08 fair comparison and measured S6 mesh policy
+
+- Freeze the 92-job primary manifest before execution; predeclare a separate
+  four-job .52/.53 m repaired-legacy supplement for comparisons at matching mesh
+  settings. Preserve all stock failures, resource rejections, conditioning
+  failures and exploratory provenance limitations.
+- Authenticate pinned legacy source and apply only declared test-local SciPy
+  parameter and boundary-array repairs. Contain unchanged-equation fits/QPs in
+  fresh children under the accepted A04 budgets. Never patch installed TPH or
+  the optimizer gitlink.
+- Retain raw final legacy coefficients and source-index/t/q history. Missing
+  original ownership anchors make raw geometry approval UNSUPPORTED. Algebraic
+  subdivision/rotation produces a separately identified binary64 authority;
+  coordinate roundoff bounds do not transfer derivative or geometry certificates.
+  Validate the adapted output directly and use common W2 retiming, explicitly
+  excluding native legacy continuous-speed approval.
+- The .5 m S6 anchored mesh is ill-conditioned under unchanged limits; .4/.2/.1 m
+  exceed the unchanged point budget. Explicit .52 m spacing completes a full
+  approximately 240 m synthetic solve and all independent checks twice. Prefer
+  it to the more poorly conditioned .53 m alternative. No sparse backend, larger
+  numerical budget, widened corridor or weakened certificate was necessary.
+- Report actual-coefficient curvature energy and common-model time separately
+  from the frozen-derivative surrogate. Circle energy increases after convergence;
+  neither planner establishes global curvature or lap-time optimality.
+- Phase CPU omits startup and unscoped serialization, so do not sum it as total
+  CPU. Predeclare two resource-only .52 m replays around the unchanged worker;
+  calibrate Linux wait4 descendant accounting, retain exact authority matches
+  and distinguish their concurrent wall times from isolated primary measurements.
+- Preserve original archives as software compatibility data. Synthetic physical
+  coverage declarations, surface labels and ramp annotations provide no approved
+  real-course, 3D/contact, localization, control or vehicle-safety evidence.
+
 ## 2026-10-16 — A07 immutable authority and producer trust
 
 - Use three small production modules with existing W2 mathematics. No server, registry, alternate geometry kernel or new production dependency.

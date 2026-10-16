@@ -2,6 +2,8 @@
 set -eo pipefail
 mode=${1:-all}
 source /opt/ros/humble/setup.bash
+# Test-only helper/archive paths are explicit; never inherited by the source-free container.
+export PROJECT_A_TEST_REPO=/src
 printf 'ROS_DISTRO=%s\n' "$ROS_DISTRO"
 cat /etc/os-release
 id
@@ -37,6 +39,9 @@ if [[ "$mode" == all || "$mode" == numerical ]]; then
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_artifact.py --junitxml=/work/a07-artifact.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_compile.py --junitxml=/work/a07-cli.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_route_legacy_export.py -k 'not actual_nine_group_reader_and_generated_ros_cdr and not corrupt_staged_ros_serialization_is_never_published' --junitxml=/work/a07-export-pure.xml
+  python -m flake8 --max-line-length=99 /src/planner/global_planner/test/test_w3_benchmarks.py /src/scripts/project_a/benchmark_w3.py /src/scripts/project_a/w3_benchmark_support.py
+  ament_pep257 --convention pep257 /src/planner/global_planner/test/test_w3_benchmarks.py
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/planner/global_planner/test/test_w3_benchmarks.py --junitxml=/work/a08-regressions.xml
   PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider /src/scripts/project_a/tests/test_numerical.py --junitxml=/work/numerical.xml
 fi
 if [[ "$mode" == all || "$mode" == ros || "$mode" == legacy ]]; then
@@ -86,14 +91,15 @@ python - <<'PY_SUMMARY'
 import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
-out = {'scope': 'W0_THROUGH_A07', 'legal_planner_acceptance': 'SYNTHETIC_PLANAR_OFFLINE',
+out = {'scope': 'W0_THROUGH_A08',
+       'legal_planner_acceptance': 'SYNTHETIC_PLANAR_OFFLINE',
        'independent_w3_adversarial_review': 'REQUIRED'}
 for kind in ('numerical', 'ros', 'a01', 'a02', 'a03', 'a04', 'a05', 'a05-oracle',
              'a06', 'a06-independent', 'a06-oracle', 'a06-ellipse', 'w2-handoff',
              'w2-numerical-oracle', 'w2-shared-cap', 'w2-pipeline', 'w2-novel-pipeline',
              'w1-installed',
              'w2-installed', 'a07-artifact', 'a07-cli', 'a07-export-pure', 'a07-export-ros',
-             'w3-installed'):
+             'w3-installed', 'a08-regressions'):
     path = Path('/work', kind + '.xml')
     if path.exists():
         suite = ET.parse(path).getroot().find('testsuite')

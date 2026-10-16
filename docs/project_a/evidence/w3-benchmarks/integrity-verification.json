@@ -1,0 +1,55 @@
+{
+  "indexed_files_verified": 939,
+  "runs": {
+    "coarse-retry": {
+      "files_verified": 38,
+      "original_bytes": 6060301,
+      "status": "PASS",
+      "stored_bytes": 2445816
+    },
+    "cpu-collector-probe": {
+      "files_verified": 7,
+      "original_bytes": 36335,
+      "status": "PASS",
+      "stored_bytes": 36335
+    },
+    "cpu-replay": {
+      "files_verified": 31,
+      "original_bytes": 7930925,
+      "status": "PASS",
+      "stored_bytes": 2719391
+    },
+    "matched-coarse": {
+      "files_verified": 44,
+      "original_bytes": 12766546,
+      "status": "PASS",
+      "stored_bytes": 4190767
+    },
+    "pilot": {
+      "files_verified": 51,
+      "original_bytes": 741097,
+      "status": "PASS",
+      "stored_bytes": 720559
+    },
+    "primary": {
+      "files_verified": 723,
+      "original_bytes": 58525774,
+      "status": "PASS",
+      "stored_bytes": 23002252
+    },
+    "ros-probe": {
+      "files_verified": 31,
+      "original_bytes": 1734479,
+      "status": "PASS",
+      "stored_bytes": 648349
+    },
+    "s4-probe": {
+      "files_verified": 14,
+      "original_bytes": 1341564,
+      "status": "PASS",
+      "stored_bytes": 589724
+    }
+  },
+  "scope": "read-only byte-integrity verification, not artifact authorization",
+  "status": "PASS"
+}

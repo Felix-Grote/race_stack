@@ -1,5 +1,40 @@
 # Project A status — 2026-10-16
 
+## W3 A08 checkpoint — campaign complete, independent release review pending
+
+The frozen 92-attempt primary campaign completed with **54 PASS, 28 stock
+preparation failures, eight point-budget rejections and two conditioning
+rejections**. A separately predeclared four-attempt matched S6 supplement passed
+all four complete paths. All 58 accepted outputs pass both continuous validators,
+staged persisted-byte replay, fine metric queries and actual legacy reader/CDR
+export. All 151 saved-output independent history/metric/control checks pass;
+the copied-package A08 regression suite passes **13 tests in 8.42 s** with strict
+new-source lint. [Protocol and complete outcomes](W3_BENCHMARKS.md),
+[reproduction and evidence](evidence/w3-benchmarks/REPRODUCE.md).
+
+Full approximately 240 m synthetic S6 succeeds at explicit .52 m spacing with
+iteration point counts 472/474/474, unchanged solver/proof budgets, maximum TUM
+spline-system condition 21448.6714 and QP inequality residual 2.537e-14.
+End-to-end repeated wall time is 117.96–121.53 s, including proof replay, fine
+queries and actual ROS export. The .5 m ill-conditioned mesh and .4/.2/.1 m
+point-budget rejections remain unresolved limitations. Raw legacy coefficients
+and native speed lack the required authority; certificates apply only to its
+declared algebraically adapted binary64 output with common W2 retiming.
+Two separately predeclared .52 m resource replays also PASS with identical
+authority. External whole-worker CPU is 130.628536 s new / 124.494186 s repaired;
+peak process RSS is 278,716,416 / 270,630,912 bytes. These concurrent replays
+provide whole-process CPU accounting, not isolated wall-time comparisons.
+
+A07 exact-head push [CI 38918290086](https://github.com/Felix-Grote/race_stack/actions/runs/38918290086)
+at `0c2d7c35fc50051a2ae96b9260de636610e280f4` passes **532 functional tests
+in 24 groups**, three builds, and exact legacy **528 / 0 errors / 10 failures /
+2 skips**. All 1,173 emitted legacy style diagnostics also match the baseline
+exactly. [Downloaded hosted evidence](evidence/w3-a07-ci/REPRODUCE.md).
+
+A09 fresh exact-candidate and separate source-free acceptance remain pending.
+Independent W3 adversarial review, with direct remediation authority, remains the
+final release gate. No physical-course or vehicle readiness is claimed.
+
 ## W3 A07 checkpoint — implemented and internally verified
 
 Branch `project-a/w3-reference-benchmarks` starts at actual PR #2 merge
@@ -12,7 +47,9 @@ A07 adds exact immutable references, true-metric cyclic queries, explicit instal
 
 An internal challenge closed a producer publication gap: stage approval now requires separately retained C and frozen H, after exact comparison with original route/model/body/policies/profile/proofs. Both staged validators use original C. Loader still requires external H and an independent context. Internal high-precision boundary review ran 1,566 queries with no omitted portal support in tested controls; tiny conservative tag differences are within station allowance. This is not the final independent W3 review.
 
-A08 and A09 remain in progress. Pilot S6 .52/.53m meshes pass unchanged independent policies; .5m conditioning and .4/.2/.1m resource failures are retained. These are preliminary, overlapping-work timings, not final isolated benchmarks. No real-course or vehicle readiness is claimed.
+The A08 section above supersedes the preliminary overlapping-work pilot timings.
+A09 installed release verification remains separate. No real-course or vehicle
+readiness is claimed.
 
 
 ## Independent W2 review closeout — implementation verified, publication pending

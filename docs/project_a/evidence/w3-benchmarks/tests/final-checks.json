@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "copied_package_tests": {
+      "command": [
+        "/opt/project-a/bin/python",
+        "-m",
+        "pytest",
+        "/work/a08-tests/copied/global_planner/test/test_w3_benchmarks.py",
+        "-q",
+        "--junitxml",
+        "/work/a08-tests/a08-final.xml"
+      ],
+      "exit_code": 0
+    },
+    "strict_flake8": {
+      "command": [
+        "/opt/project-a/bin/python",
+        "-m",
+        "flake8",
+        "--max-line-length=99",
+        "/src/planner/global_planner/test/test_w3_benchmarks.py",
+        "/src/scripts/project_a/benchmark_w3.py",
+        "/src/scripts/project_a/w3_benchmark_support.py"
+      ],
+      "exit_code": 0
+    },
+    "strict_pep257": {
+      "command": [
+        "ament_pep257",
+        "--convention",
+        "pep257",
+        "/src/planner/global_planner/test/test_w3_benchmarks.py",
+        "/src/scripts/project_a/benchmark_w3.py",
+        "/src/scripts/project_a/w3_benchmark_support.py"
+      ],
+      "exit_code": 0
+    }
+  },
+  "copied_test_sha256": "928511b2938e0ce075db91aaaf6b606fbb5aff43a00ba5a580487d3027af1b9d",
+  "source_context": "/src",
+  "source_sha256": {
+    "/src/planner/global_planner/test/test_w3_benchmarks.py": "928511b2938e0ce075db91aaaf6b606fbb5aff43a00ba5a580487d3027af1b9d",
+    "/src/scripts/project_a/benchmark_w3.py": "9e7f028e40c224afc519c096c9326c52bae836c0c60579fddfe9bc23a02912a5",
+    "/src/scripts/project_a/w3_benchmark_support.py": "29a25360fc2ee4411fb6483ae70dffda30335cbebec1d02a0218ec3a9ae50f59"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "head": "0c2d7c35fc50051a2ae96b9260de636610e280f4",
+  "run_id": 38918290086,
+  "job_id": 117031340872,
+  "artifact_id": 12053294603,
+  "status": "completed",
+  "conclusion": "success",
+  "url": "https://github.com/Felix-Grote/race_stack/actions/runs/38918290086",
+  "functional_tests": 532,
+  "functional_groups": 24,
+  "functional_failures": 0,
+  "functional_errors": 0,
+  "functional_skips": 0,
+  "legacy_tests": 528,
+  "legacy_errors": 0,
+  "legacy_failures": 10,
+  "legacy_skips": 2,
+  "scope": "Exact-head A07 push CI; sourceful installed acceptance. A09 source-free release remains separate. Initial installed content mutation paths are not credited as content checks; see W3_RUNTIME correction."
+}

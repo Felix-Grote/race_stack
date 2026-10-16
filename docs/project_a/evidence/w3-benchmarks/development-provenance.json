@@ -1,0 +1,9 @@
+{
+  "scope": "DEVELOPMENT HISTORY ONLY; primary and matched-coarse supplement are frozen acceptance/performance campaign",
+  "initial_pilot_source": "pilot/source-start/*; exact hashes match initial manifest",
+  "initial_pilot_limitation": "An inactive artifact-output path branch changed while the artifact-disabled pilot ran; not every worker used the original manifest script bytes. Numerical core and helper bytes unchanged.",
+  "later_probe_limitation": "Worker script/support hashes are retained, but telemetry, corruption-control path and docstrings evolved between workers; not all intermediate source snapshots survive.",
+  "legacy_fit_resource_change": "Initial pilot used original legacy spline helper inside contained parent. Final primary/supp use exact-array-equivalent fresh fit subprocesses with same20s/20CPU/2GiB accepted A04 limits.",
+  "known_negative_control_bug": "Early .52 retry corrupt-control passed corrupt.json as a directory-like load target and rejected wrong path rather than JSON bytes. Primary actual reference.json corruption controls correct this and were rerun.",
+  "primary_guarantee": "Frozen script/support hashes match declared manifest before and during primary; all final policies/inputs/outcomes independently repeated. No benchmark math source edit during primary."
+}

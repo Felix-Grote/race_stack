@@ -1,6 +1,43 @@
 # W3 current evidence
 
-A07 internally verified:156 new tests/0failures/errors/skips,3 builds and installed CLI/ROS roundtrip. Complete unchanged W0–W2 baseline 373 passes, exact inherited 10 failures. See [A07 summary](evidence/w3-a07/summary.json), [artifact specification](W3_ARTIFACT.md) and [baseline](evidence/w3-baseline/REPRODUCE.txt). A08/A09 final campaign and exact clean installed release are pending; final independent W3 review is required.
+A07 commit `0c2d7c35fc50051a2ae96b9260de636610e280f4` passes exact-head push
+[CI 38918290086](https://github.com/Felix-Grote/race_stack/actions/runs/38918290086):
+532 functional tests / 24 groups, no functional failures/errors/skips, three
+builds, and exact inherited legacy 528 / zero errors / ten failures / two skips.
+All 1,173 emitted style diagnostics are unchanged from the complete W0–W2
+baseline. [A07 hosted evidence](evidence/w3-a07-ci/REPRODUCE.md),
+[artifact specification](W3_ARTIFACT.md), [baseline](evidence/w3-baseline/REPRODUCE.txt).
+
+A08 completes **92 primary + four separately predeclared matched S6 attempts**:
+58 complete accepted synthetic outputs, 28 original stock preparation failures,
+eight point-budget rejections and two .5 m new-adapter conditioning failures.
+All 151 independent saved-output checks and 13 copied-package regression tests
+pass without tolerance changes. Every S0–S5 variant passes both repeated new
+and adapted repaired paths. S1 physical completeness and S5 3D/contact remain
+unsupported; requiring unavailable physical coverage remains INCONCLUSIVE.
+The [complete result matrix](W3_BENCHMARKS.md) retains every successful,
+unsuccessful and exploratory attempt with its actual provenance.
+
+S6 .52 m completes three iterations (472/474/474 points), 1,184 geometry leaves,
+955 dynamic edges and 2,409 fine metric queries. Its exact final coefficients
+describe 240.856069139 m with model time 68.009787876 s. Repeated complete wall
+time is 117.96–121.53 s, maximum spline-system condition 21448.6713562 and QP
+inequality violation 2.537e-14; QP child peak RSS is about 280 MB. The matched
+adapted repaired .52 m output has 467 cubics, model time 67.912308846 s and wall
+time 110.09–114.44 s. Actual curvature energies are 0.189922802 / 0.189997285 1/m.
+These are common-model diagnostics, not native legacy speed, minimum curvature,
+minimum lap time or measured vehicle performance. The circle's actual energy
+increases despite solver convergence. Default finer meshes and the .5 m
+conditioning failure remain explicit engineering limitations.
+Two additional predeclared resource-only .52 m replays PASS with original
+authority. Linux wait4 collects startup/import through serialization/exit and
+reaped numerical children: whole-worker CPU is **130.628536 / 124.494186 s**
+(new / repaired), with maximum process RSS **278,716,416 / 270,630,912 bytes**.
+These replay wall times are explicitly non-isolated. The original 96-attempt
+outcome matrix and isolated wall measurements remain separate.
+
+A09 fresh recursive exact-candidate/source-free verification and final exact-head
+CI remain pending. Separate independent W3 adversarial review is required.
 
 # Project A validation matrix — W0/W1/W2
 

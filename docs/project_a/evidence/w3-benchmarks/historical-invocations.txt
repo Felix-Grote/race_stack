@@ -1,0 +1,39 @@
+env -u DOCKER_HOST -u DOCKER_CONTEXT -u DOCKER_TLS \
+  -u DOCKER_TLS_VERIFY -u DOCKER_CERT_PATH \
+  docker --host=unix:///var/run/docker.sock run --rm --name w3-a08-primary \
+  --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+  --pids-limit 256 --memory 4g --cpus 2 --user 1000:1000 \
+  --tmpfs /tmp:rw,nosuid,nodev,size=256m,mode=1777 \
+  -e HOME=/work -e PYTHONDONTWRITEBYTECODE=1 \
+  -e OPENBLAS_NUM_THREADS=1 -e OMP_NUM_THREADS=1 \
+  --mount type=bind,src=/workspace/race_stack,dst=/src,readonly \
+  --mount type=bind,src=/workspace/race_stack/work/w3,dst=/work \
+  project-a-humble:w0 /bin/bash -c '
+    source /opt/ros/humble/setup.bash &&
+    source /src/work/w3/a07-ros-integration/install/setup.bash &&
+    export PYTHONPATH=/src/planner/global_planner:/src/scripts/project_a:$PYTHONPATH &&
+    python /src/scripts/project_a/identity.py > /work/a08-primary-runtime.json &&
+    python /src/scripts/project_a/benchmark_w3.py \
+      --repo /src \
+      --fixtures /src/planner/global_planner/test/fixtures/project_a \
+      --output /work/a08-primary \
+      --scenarios S6-240m,S0-circle,S0-reverse,S0-rotated,S0-ellipse,S1-wall-gaps,S2-upper,S2-lower,S2-upper-cap,S3-surfaces,S3-notch,S4-coincident,S5-planar-connectors \
+      --repeat 2 --artifacts --export-ros'
+
+env -u DOCKER_HOST -u DOCKER_CONTEXT -u DOCKER_TLS \
+  -u DOCKER_TLS_VERIFY -u DOCKER_CERT_PATH \
+  docker --host=unix:///var/run/docker.sock run --rm --name w3-a08-matched-coarse \
+  --network none --read-only --cap-drop ALL --security-opt no-new-privileges \
+  --pids-limit 256 --memory 4g --cpus 2 --user 1000:1000 \
+  --tmpfs /tmp:rw,nosuid,nodev,size=256m,mode=1777 \
+  -e HOME=/work -e PYTHONDONTWRITEBYTECODE=1 \
+  -e OPENBLAS_NUM_THREADS=1 -e OMP_NUM_THREADS=1 \
+  --mount type=bind,src=/workspace/race_stack,dst=/src,readonly \
+  --mount type=bind,src=/workspace/race_stack/work/w3,dst=/work \
+  project-a-humble:w0 /bin/bash -c '
+    source /opt/ros/humble/setup.bash &&
+    source /src/work/w3/a07-ros-integration/install/setup.bash &&
+    export PYTHONPATH=/src/planner/global_planner:/src/scripts/project_a:$PYTHONPATH &&
+    python /work/a08-matched-coarse/run_manifest.py \
+      --manifest /work/a08-matched-coarse/manifest.json \
+      --worker /src/scripts/project_a/benchmark_w3.py'
