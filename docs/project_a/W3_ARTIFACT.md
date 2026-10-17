@@ -153,6 +153,19 @@ hardware persistence guarantee is claimed. Orphan private stages are unaccepted.
 The contract targets the pinned Linux/Humble local filesystem, with no distributed
 filesystem locking claim.
 
+Publication trusts the effective user, root, privileged capabilities and filesystem
+administration. Every output ancestor and the stage parent must be owned by that
+user or root and have no group/other write permission (including the Linux POSIX
+ACL mask). A root-owned sticky shared ancestor such as `/tmp` is supported only
+when followed by a trusted-owned child without group/other write permission;
+the final stage parent itself must never be shared. Unsafe ancestry is rejected
+before creating output directories or stages. This protects stage names from
+replacement by other principals through the namespace, including after validation
+and before rename. The same-user trust scope also applies to legacy export and
+to the read-only/immutable publication claims. No protection against the effective
+user or privileged filesystem mutation is claimed; an inode comparison immediately
+before rename would not close that race.
+
 Loading requires externally trusted `expected_H` and an independently selected
 `ValidationContext`. H is checked before the embedded curve approval is used.
 The loader rejects changed behavioral implementation, numerical dependencies or

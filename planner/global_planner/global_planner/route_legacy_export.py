@@ -240,7 +240,7 @@ def export_waypoints(reference, *, step_m, output_dir):
     parent_fd = lock_fd = stage_fd = None
     stage_name = None
     try:
-        parent_fd = _open_directory(target.parent)
+        parent_fd = _open_directory(target.parent, publication=True)
         lock_fd = os.open('.' + target.name + '.export.lock',
                           os.O_RDWR | os.O_CREAT | os.O_CLOEXEC | os.O_NOFOLLOW | os.O_NONBLOCK,
                           0o600, dir_fd=parent_fd)

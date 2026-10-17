@@ -184,6 +184,15 @@ descriptors, a per-H flock and `renameat2(RENAME_NOREPLACE)`. An interrupted wri
 reference. A crash after a successful rename may leave a complete valid reference
 without a receipt; filesystem power-loss durability has the documented fsync scope.
 
+Use a publication directory whose full ancestry is owned by the effective user or
+root, with no group/other write permission. The publisher rejects unsafe ancestry
+for references and legacy exports. Root-owned sticky `/tmp` may be traversed into
+a trusted-owned child without group/other writes; a shared directory itself cannot
+be the stage parent. Linux POSIX ACL write masks are covered by the mode check.
+The effective user, root, privileged capabilities and filesystem administration
+are trusted throughout publication. Same-user mutation and distributed filesystem
+namespace/locking semantics are outside this local Linux contract.
+
 For a Python consumer:
 
 ```python

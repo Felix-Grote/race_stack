@@ -487,3 +487,44 @@ def test_rename_error_does_not_leave_export_staging(references, tmp_path, monkey
         exporting.export_waypoints(references(), step_m=1., output_dir=tmp_path / 'export')
     assert not (tmp_path / 'export').exists()
     assert not list(tmp_path.glob('.tmp-export-*'))
+
+
+@pytest.mark.parametrize('shared_ancestor', [False, True])
+def test_export_rejects_stage_swap_from_shared_directory(
+        tmp_path, monkeypatch, shared_ancestor):
+    """Reject mutable output ancestry before a different principal can swap the stage."""
+    from global_planner import route_artifact
+
+    shared = tmp_path / 'shared'
+    shared.mkdir(mode=0o777)
+    shared.chmod(0o777)
+    parent = shared / 'private' if shared_ancestor else shared
+    if shared_ancestor:
+        parent.mkdir(mode=0o700)
+    target = parent / 'accepted-export'
+    view = SimpleNamespace(H='1' * 64, length_m=40., lap_time_s=20.,
+                           legacy_lap_time_float32_s=20., waypoints=(None,))
+    monkeypatch.setattr(exporting, 'waypoint_view', lambda *args, **kwargs: view)
+
+    def checked_product(view, stage):
+        """Stand in for numerical projection and the original ROS/CDR roundtrip only."""
+        (stage / 'global_waypoints.json').write_text('{"validated":"original"}')
+
+    monkeypatch.setattr(exporting, '_write_ros_product', checked_product)
+    actual_rename = route_artifact._rename_noreplace
+    swapped = []
+
+    def swap_then_rename(source, destination, parent_fd):
+        """Replace the stage after the validated directory descriptor has been synced."""
+        stage = parent / source
+        stage.rename(parent / 'displaced-validated-stage')
+        stage.mkdir()
+        (stage / 'global_waypoints.json').write_text('{"unvalidated":true}')
+        swapped.append(True)
+        actual_rename(source, destination, parent_fd)
+
+    monkeypatch.setattr(route_artifact, '_rename_noreplace', swap_then_rename)
+    with pytest.raises(exporting.ExportError, match='publication directory'):
+        exporting.export_waypoints(object(), step_m=1., output_dir=target)
+    assert not swapped
+    assert not target.exists()

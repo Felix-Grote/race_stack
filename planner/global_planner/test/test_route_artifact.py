@@ -9,6 +9,7 @@ import json
 import math
 import os
 from pathlib import Path
+import stat
 import subprocess
 import sys
 
@@ -837,3 +838,93 @@ def test_new_external_approval_can_authorize_a_different_independently_legal_bod
     assert canonical_bytes(asdict(reference.geometry_report)) != canonical_bytes(
         payload['validation']['geometry'])
     assert published.path.read_bytes() != path.read_bytes()
+
+
+@pytest.mark.parametrize('shared_ancestor', [False, True])
+def test_publication_rejects_stage_swap_from_shared_directory(
+        tmp_path, monkeypatch, shared_ancestor):
+    """Reject mutable output ancestry before a different principal can swap the stage."""
+    shared = tmp_path / 'shared'
+    shared.mkdir(mode=0o777)
+    shared.chmod(0o777)
+    output = shared / 'private' if shared_ancestor else shared
+    if shared_ancestor:
+        output.mkdir(mode=0o700)
+    # Isolate the filesystem transaction; numerical acceptance cannot bind a renamed name.
+    payload = {'filesystem_transaction_test': True}
+    expected_H = artifact_identity(payload)
+    monkeypatch.setattr(artifact, '_load_bytes', lambda *args: object())
+    actual_rename = artifact._rename_noreplace
+    swapped = []
+
+    def swap_then_rename(source, destination, parent_fd):
+        """Replace the stage after the validated directory descriptor has been synced."""
+        stage = output / source
+        stage.rename(output / 'displaced-validated-stage')
+        stage.mkdir()
+        (stage / 'reference.json').write_text('{"unvalidated":true}')
+        swapped.append(True)
+        actual_rename(source, destination, parent_fd)
+
+    monkeypatch.setattr(artifact, '_rename_noreplace', swap_then_rename)
+    with pytest.raises(ArtifactError, match='publication directory'):
+        publish_reference(payload, output, expected_H=expected_H,
+                          expected_curve_digest='1' * 64)
+    assert not swapped
+    assert not (output / expected_H).exists()
+
+
+@pytest.mark.parametrize('owner,mode,allow_sticky,accepted', [
+    ('self', 0o755, False, True), ('root', 0o755, False, True),
+    ('other', 0o755, False, False), ('self', 0o775, False, False),
+    ('self', 0o757, False, False), ('self', 0o1777, True, False),
+    ('root', 0o1777, True, True), ('root', 0o1777, False, False),
+    ('other', 0o1777, True, False), ('root', 0o777, True, False),
+])
+def test_publication_namespace_owner_and_mode_contract(
+        tmp_path, monkeypatch, owner, mode, allow_sticky, accepted):
+    """Cover ownership and Linux ACL-mask mode gates without needing privileged chown."""
+    descriptor = os.open(tmp_path, os.O_RDONLY | os.O_DIRECTORY)
+    actual_fstat = os.fstat
+    effective_uid = os.geteuid()
+    selected_uid = {'self': effective_uid, 'root': 0, 'other': effective_uid + 1}[owner]
+
+    def selected_info(fd):
+        """Change only the selected directory's uid/mode for the permission contract."""
+        info = actual_fstat(fd)
+        if fd != descriptor:
+            return info
+        fields = list(info)
+        fields[stat.ST_UID] = selected_uid
+        fields[stat.ST_MODE] = stat.S_IFDIR | mode
+        return os.stat_result(fields)
+
+    monkeypatch.setattr(artifact.os, 'fstat', selected_info)
+    try:
+        if accepted:
+            artifact._publication_directory(descriptor, allow_sticky_ancestor=allow_sticky)
+        else:
+            with pytest.raises(ArtifactError, match='publication directory'):
+                artifact._publication_directory(descriptor, allow_sticky_ancestor=allow_sticky)
+    finally:
+        os.close(descriptor)
+
+
+def test_publication_checks_ancestors_before_creating_output(tmp_path):
+    """Leave an unsafe writable ancestor untouched instead of creating a private child."""
+    shared = tmp_path / 'shared'
+    shared.mkdir()
+    shared.chmod(0o777)
+    with pytest.raises(ArtifactError, match='publication directory'):
+        artifact._open_directory(shared / 'absent' / 'output', create=True, publication=True)
+    assert list(shared.iterdir()) == []
+
+
+def test_publication_allows_private_tmp_child_but_rejects_shared_parent(tmp_path):
+    """Support a private user directory below root-owned sticky /tmp, never /tmp itself."""
+    assert os.stat('/tmp').st_uid == 0
+    assert os.stat('/tmp').st_mode & stat.S_ISVTX
+    descriptor = artifact._open_directory(tmp_path, publication=True)
+    os.close(descriptor)
+    with pytest.raises(ArtifactError, match='publication directory'):
+        artifact._open_directory('/tmp', publication=True)

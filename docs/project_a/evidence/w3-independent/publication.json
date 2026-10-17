@@ -1,0 +1,59 @@
+{
+  "reviewed_head": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "image_tag": "project-a-humble:w0",
+  "image_id": "sha256:72059c0caff2aa71e7ee9ff85d718c2e1761488d144857a42167de36ff74d246",
+  "original_issue": "../queries-export/export-stage-swap-red.json",
+  "red": {
+    "test_filter": "stage_swap_from_shared_directory",
+    "passed": 0,
+    "failed": 4,
+    "directory": "red",
+    "production_edited": false
+  },
+  "focused_green": {
+    "passed": 16,
+    "failed": 0,
+    "directory": "green-focused"
+  },
+  "scope": "Pinned Linux local filesystem; effective UID, root, privileged capabilities and filesystem administration are trusted; Linux POSIX ACL masks covered by group mode bits; no same-UID defense or distributed namespace guarantee",
+  "baseline_sha256": {
+    "planner/global_planner/global_planner/route_artifact.py": "443e6f7fdfae5fb78899ac3d887c66796574945335ecf45d84d768166b9dc5cb",
+    "planner/global_planner/global_planner/route_legacy_export.py": "dc6f8a0c5d0b8e025f20f2a0cbc2a171cc6adf39fb0ab2f09118c4cbb44e8ad2",
+    "planner/global_planner/test/test_route_artifact.py": "4f334d3f316c7427a736fabb1e517401598c2fb30d656f7d3137d7f7aa033e3f",
+    "planner/global_planner/test/test_route_legacy_export.py": "7c38d9c155ced33b682657a29b3d5668b73f3cdeebacd05c2cb0c77ecfcfaf3f",
+    "docs/project_a/W3_ARTIFACT.md": "87a375a3b20c1a23e136a228e3ab1b1c73fec805325aadf84e4e6ef552ef0b66",
+    "docs/project_a/W3_RUNTIME.md": "517837c7385f5feb5f8e889915ea341eed8306e123da6d4e410e718d3f2278de"
+  },
+  "corrected_sha256": {
+    "planner/global_planner/global_planner/route_artifact.py": "2dd9b714afd7e137e13e954a94e62b708b1feeef949a2bc8dad7878177308130",
+    "planner/global_planner/global_planner/route_legacy_export.py": "d06ef255d4cb5697a99239a3873e8dadeb298350c412db4067338324fe79a5aa",
+    "planner/global_planner/test/test_route_artifact.py": "304d2355d6c1ec9c1a2f32d9588711a2f103e4f61183d362f9554cf9ddee2253",
+    "planner/global_planner/test/test_route_legacy_export.py": "a865d7a0504c44acb16dc8b5f03c97f36508afddd79ce9dce9bf5ab740412ad7",
+    "docs/project_a/W3_ARTIFACT.md": "c814dea6df4c83cbf91c282773ff81a4dafa530b08e85e61dcc2e29bbdd2460d",
+    "docs/project_a/W3_RUNTIME.md": "a49b3b4ff1fcd726f55343b8df750700db4ed8cacba00b3dabaa39a8219a5e78"
+  },
+  "permanent_tests": "Existing artifact/export test files are already wired into container_verify.sh; no runner exemption or tolerance change.",
+  "wrapper_limitation": "unit.sh refuses this review checkout because gitlinks are not initialized. Direct docker-compose.test.yaml invocation keeps its source/root readonly, UID 1000, no network/capabilities and writable /work plus bounded sticky /tmp.",
+  "full_green": {
+    "passed": 139,
+    "failed": 0,
+    "deselected": 2,
+    "duration_s": 349.78,
+    "directory": "full-pure-retry",
+    "exit_code": 0,
+    "strict_flake8_max_line_length": 99,
+    "pep257": "PASS",
+    "four_source_hashes_stable": true
+  },
+  "actual_principal_check": {
+    "effective_uid": 1000,
+    "ancestor_uid": 1001,
+    "ancestor_mode": "0o755",
+    "child_uid": 1000,
+    "child_mode": "0o700",
+    "rejected": true,
+    "message": "publication directory is owned by another principal"
+  },
+  "separate_validation": "Actual ROS reader/CDR tests and route_compile integration delegated to queries_export/installed_recovery final fresh/install gate; not included in139.",
+  "retained_setup_retry": "full-pure/run.log: set-u caused stock Humble setup.bash AMENT_TRACE_SETUP_FILES unbound before lint/tests; full-pure-retry uses repository set-eo shell mode."
+}

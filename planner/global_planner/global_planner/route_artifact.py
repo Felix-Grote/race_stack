@@ -197,12 +197,27 @@ def _parse_json(raw):
         raise ArtifactError('invalid bounded UTF-8 JSON') from exc
 
 
-def _open_directory(path, create=False):
-    """Open a directory by file descriptor without following any symlink."""
+def _publication_directory(descriptor, *, allow_sticky_ancestor=False):
+    """Require namespace control by the publishing user or trusted root."""
+    info = os.fstat(descriptor)
+    if info.st_uid not in (0, os.geteuid()):
+        raise ArtifactError('publication directory is owned by another principal')
+    shared = info.st_mode & (stat.S_IWGRP | stat.S_IWOTH)
+    if shared:
+        if allow_sticky_ancestor and info.st_uid == 0 and info.st_mode & stat.S_ISVTX:
+            return True
+        raise ArtifactError('publication directory is writable by another principal')
+    return False
+
+
+def _open_directory(path, create=False, *, publication=False):
+    """Open without symlinks and optionally require trusted publication ancestry."""
     path = Path(os.path.abspath(os.fspath(path)))
     descriptor = os.open('/', os.O_RDONLY | os.O_DIRECTORY)
     try:
         for component in path.parts[1:]:
+            shared_parent = publication and _publication_directory(
+                descriptor, allow_sticky_ancestor=True)
             try:
                 child = os.open(component, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW,
                                 dir_fd=descriptor)
@@ -217,9 +232,15 @@ def _open_directory(path, create=False):
                                 dir_fd=descriptor)
             os.close(descriptor)
             descriptor = child
+            if shared_parent:
+                _publication_directory(descriptor)
+        if publication:
+            _publication_directory(descriptor)
         return descriptor
-    except OSError as exc:
+    except (OSError, ArtifactError) as exc:
         os.close(descriptor)
+        if isinstance(exc, ArtifactError):
+            raise
         raise ArtifactError('directory absent, unsupported or contains symlink: ' +
                             str(exc)) from exc
 
@@ -937,6 +958,8 @@ def publish_reference(payload, output_dir, *, expected_H, expected_curve_digest,
     uncertain power-loss durability and no receipt. All earlier failures leave
     the accepted directory absent. Existing targets are never replaced, including
     targets created by uncooperative writers between inspection and rename.
+    Publication trusts the effective user, root and filesystem administration;
+    other principals must not control any output ancestor or the stage parent.
     """
     _sha(expected_H, 'independently frozen producer artifact H')
     _sha(expected_curve_digest, 'independently retained producer A04 approval')
@@ -946,7 +969,7 @@ def publish_reference(payload, output_dir, *, expected_H, expected_curve_digest,
         raise ArtifactError('payload differs from independently frozen producer artifact H')
     data = canonical_bytes({'schema_version': SCHEMA_VERSION, 'H': H, 'payload': payload})
     output = Path(os.path.abspath(os.fspath(output_dir)))
-    parent = _open_directory(output, create=True)
+    parent = _open_directory(output, create=True, publication=True)
     lock = stage = None
     stage_name, published = None, False
     try:
