@@ -1,0 +1,2179 @@
+{
+  "reviewed_final_sha": "67fbcc8283e59649d38dc9318291634089df3741",
+  "accepted_w2_merge": "9fae5faed6ca62e0c943b6290babc50638477d9b",
+  "companion_sha": "326aa3783ac2d757b6e714eadd14fdba96f595fd",
+  "method": "Exact git ls-tree/cat-file objects; physical LOC counts splitlines; git diff --numstat line totals; bytes are uncompressed tracked blob sizes; gitlink contents excluded. Categories are mutually exclusive.",
+  "totals": {
+    "changed_files": 1836,
+    "added_lines": 295237,
+    "deleted_lines": 49,
+    "binary_changed_files": 665
+  },
+  "diff_breakdown": {
+    "documentation": {
+      "files": 9,
+      "bytes": 208377,
+      "text_files": 9,
+      "physical_lines": 2952,
+      "nonblank_lines": 2514,
+      "added_lines": 1641,
+      "deleted_lines": 3,
+      "binary_files": 0
+    },
+    "evidence": {
+      "files": 1780,
+      "bytes": 109238328,
+      "text_files": 1111,
+      "physical_lines": 273222,
+      "nonblank_lines": 269774,
+      "added_lines": 273226,
+      "deleted_lines": 0,
+      "binary_files": 665
+    },
+    "installed_fixtures_models_policies": {
+      "files": 22,
+      "bytes": 349800,
+      "text_files": 22,
+      "physical_lines": 14311,
+      "nonblank_lines": 14311,
+      "added_lines": 14311,
+      "deleted_lines": 0,
+      "binary_files": 0
+    },
+    "other_integration": {
+      "files": 4,
+      "bytes": 9978,
+      "text_files": 4,
+      "physical_lines": 210,
+      "nonblank_lines": 189,
+      "added_lines": 116,
+      "deleted_lines": 3,
+      "binary_files": 0
+    },
+    "production_python": {
+      "files": 3,
+      "bytes": 84183,
+      "text_files": 3,
+      "physical_lines": 1708,
+      "nonblank_lines": 1537,
+      "added_lines": 1708,
+      "deleted_lines": 0,
+      "binary_files": 0
+    },
+    "test_python": {
+      "files": 7,
+      "bytes": 141112,
+      "text_files": 7,
+      "physical_lines": 2784,
+      "nonblank_lines": 2459,
+      "added_lines": 2784,
+      "deleted_lines": 0,
+      "binary_files": 0
+    },
+    "verification_benchmark_harness": {
+      "files": 11,
+      "bytes": 86806,
+      "text_files": 11,
+      "physical_lines": 1634,
+      "nonblank_lines": 1529,
+      "added_lines": 1451,
+      "deleted_lines": 43,
+      "binary_files": 0
+    }
+  },
+  "new_production_modules": {
+    "planner/global_planner/global_planner/route_artifact.py": {
+      "files": 1,
+      "bytes": 51343,
+      "text_files": 1,
+      "physical_lines": 1029,
+      "nonblank_lines": 930
+    },
+    "planner/global_planner/global_planner/route_compile.py": {
+      "files": 1,
+      "bytes": 19407,
+      "text_files": 1,
+      "physical_lines": 382,
+      "nonblank_lines": 340
+    },
+    "planner/global_planner/global_planner/route_legacy_export.py": {
+      "files": 1,
+      "bytes": 13433,
+      "text_files": 1,
+      "physical_lines": 297,
+      "nonblank_lines": 267
+    }
+  },
+  "all_project_a_production_modules": {
+    "files": 11,
+    "bytes": 258328,
+    "text_files": 11,
+    "physical_lines": 5412,
+    "nonblank_lines": 4815
+  },
+  "all_project_a_production_module_paths": [
+    "planner/global_planner/global_planner/_route_geometry.py",
+    "planner/global_planner/global_planner/cyclic_retime.py",
+    "planner/global_planner/global_planner/iqp_route_adapter.py",
+    "planner/global_planner/global_planner/route_artifact.py",
+    "planner/global_planner/global_planner/route_compile.py",
+    "planner/global_planner/global_planner/route_corridor.py",
+    "planner/global_planner/global_planner/route_input.py",
+    "planner/global_planner/global_planner/route_legacy_export.py",
+    "planner/global_planner/global_planner/route_reference.py",
+    "planner/global_planner/global_planner/route_validate.py",
+    "planner/global_planner/global_planner/route_validate_dynamics.py"
+  ],
+  "all_planner_and_harness_test_python": {
+    "files": 30,
+    "bytes": 338335,
+    "text_files": 30,
+    "physical_lines": 6809,
+    "nonblank_lines": 5978
+  },
+  "new_test_python_paths": [
+    "planner/global_planner/test/test_route_artifact.py",
+    "planner/global_planner/test/test_route_compile.py",
+    "planner/global_planner/test/test_route_legacy_export.py",
+    "planner/global_planner/test/test_w3_benchmarks.py",
+    "scripts/project_a/tests/test_w3_harness.py",
+    "scripts/project_a/tests/test_w3_installed.py",
+    "scripts/project_a/tests/test_w3_scenario_installed.py"
+  ],
+  "evidence_subdirectories": {
+    "w3-a07": {
+      "files": 12,
+      "bytes": 805381,
+      "text_files": 8,
+      "physical_lines": 485,
+      "nonblank_lines": 482
+    },
+    "w3-a07-ci": {
+      "files": 12,
+      "bytes": 3132802,
+      "text_files": 11,
+      "physical_lines": 865,
+      "nonblank_lines": 861
+    },
+    "w3-a09": {
+      "files": 532,
+      "bytes": 52360277,
+      "text_files": 526,
+      "physical_lines": 228339,
+      "nonblank_lines": 225202
+    },
+    "w3-a09-publication": {
+      "files": 2,
+      "bytes": 8928,
+      "text_files": 2,
+      "physical_lines": 204,
+      "nonblank_lines": 192
+    },
+    "w3-baseline": {
+      "files": 60,
+      "bytes": 2019100,
+      "text_files": 46,
+      "physical_lines": 10725,
+      "nonblank_lines": 10725
+    },
+    "w3-benchmarks": {
+      "files": 967,
+      "bytes": 34955221,
+      "text_files": 334,
+      "physical_lines": 11085,
+      "nonblank_lines": 11005
+    },
+    "w3-independent": {
+      "files": 8,
+      "bytes": 48293,
+      "text_files": 8,
+      "physical_lines": 746,
+      "nonblank_lines": 717
+    },
+    "w3-report-portability": {
+      "files": 187,
+      "bytes": 15908326,
+      "text_files": 176,
+      "physical_lines": 20773,
+      "nonblank_lines": 20590
+    }
+  },
+  "all_evidence_baseline": {
+    "files": 583,
+    "bytes": 30259017,
+    "text_files": 465,
+    "physical_lines": 64119,
+    "nonblank_lines": 64002
+  },
+  "all_evidence_delivered_head": {
+    "files": 2363,
+    "bytes": 139497345,
+    "text_files": 1576,
+    "physical_lines": 337341,
+    "nonblank_lines": 333776
+  },
+  "companion_additional_evidence": {
+    "files": 32,
+    "bytes": 59107999,
+    "text_files": 28,
+    "physical_lines": 439551,
+    "nonblank_lines": 439520
+  },
+  "largest_evidence": [
+    {
+      "path": "docs/project_a/evidence/w3-report-portability/red/hosted-original-ci.zip",
+      "files": 1,
+      "bytes": 9280836,
+      "text_files": 0,
+      "physical_lines": 0,
+      "nonblank_lines": 0
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/hosted-ci/original-artifact.zip",
+      "files": 1,
+      "bytes": 9275421,
+      "text_files": 0,
+      "physical_lines": 0,
+      "nonblank_lines": 0
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a07-ci/github-artifact.zip",
+      "files": 1,
+      "bytes": 3072896,
+      "text_files": 0,
+      "physical_lines": 0,
+      "nonblank_lines": 0
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/compile.stdout.txt",
+      "files": 1,
+      "bytes": 2287644,
+      "text_files": 1,
+      "physical_lines": 1,
+      "nonblank_lines": 1
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/compile.json",
+      "files": 1,
+      "bytes": 2287643,
+      "text_files": 1,
+      "physical_lines": 1,
+      "nonblank_lines": 1
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/w2-pipeline.json.gz",
+      "files": 1,
+      "bytes": 1224721,
+      "text_files": 0,
+      "physical_lines": 0,
+      "nonblank_lines": 0
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/w2-novel-pipeline.json",
+      "files": 1,
+      "bytes": 1148960,
+      "text_files": 1,
+      "physical_lines": 44366,
+      "nonblank_lines": 44366
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/references/5cd2661ee51cb124b7ed02ac8d32570da61cc1467a125119fda7d020f27544dd/reference.json",
+      "files": 1,
+      "bytes": 1141919,
+      "text_files": 1,
+      "physical_lines": 1,
+      "nonblank_lines": 1
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/legacy.log",
+      "files": 1,
+      "bytes": 1057208,
+      "text_files": 1,
+      "physical_lines": 12447,
+      "nonblank_lines": 9559
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/a05-geometry.json",
+      "files": 1,
+      "bytes": 971765,
+      "text_files": 1,
+      "physical_lines": 34362,
+      "nonblank_lines": 34362
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/validate.stdout.txt",
+      "files": 1,
+      "bytes": 971133,
+      "text_files": 1,
+      "physical_lines": 1,
+      "nonblank_lines": 1
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/validate.json",
+      "files": 1,
+      "bytes": 971132,
+      "text_files": 1,
+      "physical_lines": 1,
+      "nonblank_lines": 1
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s4_repeated_route/compile.stdout.txt",
+      "files": 1,
+      "bytes": 959594,
+      "text_files": 1,
+      "physical_lines": 1,
+      "nonblank_lines": 1
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s4_repeated_route/compile.json",
+      "files": 1,
+      "bytes": 959593,
+      "text_files": 1,
+      "physical_lines": 1,
+      "nonblank_lines": 1
+    },
+    {
+      "path": "docs/project_a/evidence/w3-baseline/a04-candidates.json.gz",
+      "files": 1,
+      "bytes": 879517,
+      "text_files": 0,
+      "physical_lines": 0,
+      "nonblank_lines": 0
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/a04-candidates.json.gz",
+      "files": 1,
+      "bytes": 879499,
+      "text_files": 0,
+      "physical_lines": 0,
+      "nonblank_lines": 0
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/a06-independent-dynamics.json",
+      "files": 1,
+      "bytes": 806399,
+      "text_files": 1,
+      "physical_lines": 21940,
+      "nonblank_lines": 21940
+    },
+    {
+      "path": "docs/project_a/evidence/w3-benchmarks/cpu-replay/S6-240m-new-0.52-r1.json.gz",
+      "files": 1,
+      "bytes": 692388,
+      "text_files": 0,
+      "physical_lines": 0,
+      "nonblank_lines": 0
+    },
+    {
+      "path": "docs/project_a/evidence/w3-benchmarks/coarse-retry/S6-240m-new-0.52-r1.json.gz",
+      "files": 1,
+      "bytes": 692348,
+      "text_files": 0,
+      "physical_lines": 0,
+      "nonblank_lines": 0
+    },
+    {
+      "path": "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.52-r1.json.gz",
+      "files": 1,
+      "bytes": 692341,
+      "text_files": 0,
+      "physical_lines": 0,
+      "nonblank_lines": 0
+    }
+  ],
+  "largest_json_by_lines": [
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/w2-novel-pipeline.json",
+      "files": 1,
+      "bytes": 1148960,
+      "text_files": 1,
+      "physical_lines": 44366,
+      "nonblank_lines": 44366
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/a05-geometry.json",
+      "files": 1,
+      "bytes": 971765,
+      "text_files": 1,
+      "physical_lines": 34362,
+      "nonblank_lines": 34362
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/a06-independent-dynamics.json",
+      "files": 1,
+      "bytes": 806399,
+      "text_files": 1,
+      "physical_lines": 21940,
+      "nonblank_lines": 21940
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/a04-origin-shift.json",
+      "files": 1,
+      "bytes": 533280,
+      "text_files": 1,
+      "physical_lines": 21650,
+      "nonblank_lines": 21650
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/w2-installed.json",
+      "files": 1,
+      "bytes": 343390,
+      "text_files": 1,
+      "physical_lines": 12628,
+      "nonblank_lines": 12628
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/a06-narrow-lower-cap.json",
+      "files": 1,
+      "bytes": 323665,
+      "text_files": 1,
+      "physical_lines": 12036,
+      "nonblank_lines": 12036
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/a06-ellipse.json",
+      "files": 1,
+      "bytes": 325535,
+      "text_files": 1,
+      "physical_lines": 11993,
+      "nonblank_lines": 11993
+    },
+    {
+      "path": "docs/project_a/evidence/w3-report-portability/red/crosshost-review.json",
+      "files": 1,
+      "bytes": 347111,
+      "text_files": 1,
+      "physical_lines": 9187,
+      "nonblank_lines": 9187
+    },
+    {
+      "path": "docs/project_a/evidence/w3-benchmarks/primary/files.json",
+      "files": 1,
+      "bytes": 308459,
+      "text_files": 1,
+      "physical_lines": 6509,
+      "nonblank_lines": 6509
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/a05-wrong-deck-coincident.json",
+      "files": 1,
+      "bytes": 96687,
+      "text_files": 1,
+      "physical_lines": 5099,
+      "nonblank_lines": 5099
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/index.json",
+      "files": 1,
+      "bytes": 106378,
+      "text_files": 1,
+      "physical_lines": 2658,
+      "nonblank_lines": 2658
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/verification/a06-retimer-s3_notch_route.json",
+      "files": 1,
+      "bytes": 56534,
+      "text_files": 1,
+      "physical_lines": 2311,
+      "nonblank_lines": 2311
+    }
+  ],
+  "exact_duplicate_groups": [
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/artifacts/S6-240m-new-0.52-r1/72e7f5449d7ec61c88f3ef71339544dd46c32a3bcc74385801075c8463caf024/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/artifacts/S6-240m-new-0.52-r1/72e7f5449d7ec61c88f3ef71339544dd46c32a3bcc74385801075c8463caf024/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S6-240m-new-0.52-r1/72e7f5449d7ec61c88f3ef71339544dd46c32a3bcc74385801075c8463caf024/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S6-240m-new-0.52-r2/72e7f5449d7ec61c88f3ef71339544dd46c32a3bcc74385801075c8463caf024/reference.json.gz"
+      ],
+      "bytes_each": 238817,
+      "redundant_bytes": 716451
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/legacy/S6-240m-new-0.52-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S6-240m-new-0.52-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S6-240m-new-0.52-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 343167,
+      "redundant_bytes": 686334
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/legacy/S6-240m-repaired-0.52-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/legacy/S6-240m-repaired-0.52-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/legacy/S6-240m-repaired-0.52-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 342823,
+      "redundant_bytes": 685646
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/mutations/S6-240m-new-0.52-r1/corrupt.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/mutations/S6-240m-new-0.52-r1/corrupt/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/mutations/S6-240m-new-0.52-r1/corrupt/reference.json.gz"
+      ],
+      "bytes_each": 238819,
+      "redundant_bytes": 477638
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/artifacts/S6-240m-repaired-0.52-r1/2daac1aa15deda868187b93917806c80616d24ac7a551ccf2ec8e619213d9846/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/artifacts/S6-240m-repaired-0.52-r1/2daac1aa15deda868187b93917806c80616d24ac7a551ccf2ec8e619213d9846/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/artifacts/S6-240m-repaired-0.52-r2/2daac1aa15deda868187b93917806c80616d24ac7a551ccf2ec8e619213d9846/reference.json.gz"
+      ],
+      "bytes_each": 238780,
+      "redundant_bytes": 477560
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/artifacts/S6-240m-new-0.53-r1/164b5e6450b04baa6bc97d4e606579e0fe7b8101e816b1b29d3c27bdd6d481d9/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S6-240m-new-0.53-r1/164b5e6450b04baa6bc97d4e606579e0fe7b8101e816b1b29d3c27bdd6d481d9/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S6-240m-new-0.53-r2/164b5e6450b04baa6bc97d4e606579e0fe7b8101e816b1b29d3c27bdd6d481d9/reference.json.gz"
+      ],
+      "bytes_each": 236783,
+      "redundant_bytes": 473566
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/references/f2e283fd673c735a956350e3b73236420e5a353067f2f1b8a54b28ee533b85be/reference.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_route/references/f2e283fd673c735a956350e3b73236420e5a353067f2f1b8a54b28ee533b85be/reference.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/references/f2e283fd673c735a956350e3b73236420e5a353067f2f1b8a54b28ee533b85be/reference.json"
+      ],
+      "bytes_each": 233363,
+      "redundant_bytes": 466726
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S6-240m-repaired-0.5-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S6-240m-repaired-0.5-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 344690,
+      "redundant_bytes": 344690
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S6-240m-new-0.53-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S6-240m-new-0.53-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 342525,
+      "redundant_bytes": 342525
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/legacy/S6-240m-repaired-0.53-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/legacy/S6-240m-repaired-0.53-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 341725,
+      "redundant_bytes": 341725
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S6-240m-repaired-0.5-r1/9b23315907d4ab900b5cdd8d92d9c3c30f41d58a66bbf58e73f7a132d029ad05/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S6-240m-repaired-0.5-r2/9b23315907d4ab900b5cdd8d92d9c3c30f41d58a66bbf58e73f7a132d029ad05/reference.json.gz"
+      ],
+      "bytes_each": 245189,
+      "redundant_bytes": 245189
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/mutations/S6-240m-repaired-0.52-r1/corrupt/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/mutations/S6-240m-repaired-0.52-r1/corrupt/reference.json.gz"
+      ],
+      "bytes_each": 238782,
+      "redundant_bytes": 238782
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/mutations/S6-240m-new-0.53-r1/corrupt/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/mutations/S6-240m-new-0.53-r1/corrupt/reference.json.gz"
+      ],
+      "bytes_each": 236784,
+      "redundant_bytes": 236784
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/artifacts/S6-240m-repaired-0.53-r1/8e70bbee46e48d35fb3bbf263d783add79d02f3db6334b47e92ad35e06d0e61b/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/artifacts/S6-240m-repaired-0.53-r2/8e70bbee46e48d35fb3bbf263d783add79d02f3db6334b47e92ad35e06d0e61b/reference.json.gz"
+      ],
+      "bytes_each": 236061,
+      "redundant_bytes": 236061
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/corrupt/reference.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/corrupt/reference.json"
+      ],
+      "bytes_each": 233364,
+      "redundant_bytes": 233364
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/mutated-model/reference.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/mutated-model/reference.json"
+      ],
+      "bytes_each": 233364,
+      "redundant_bytes": 233364
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/mutated-approval/reference.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/mutated-approval/reference.json"
+      ],
+      "bytes_each": 233363,
+      "redundant_bytes": 233363
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/mutated-policy/reference.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/mutated-policy/reference.json"
+      ],
+      "bytes_each": 233363,
+      "redundant_bytes": 233363
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/mutated-coefficient/reference.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/mutated-coefficient/reference.json"
+      ],
+      "bytes_each": 233349,
+      "redundant_bytes": 233349
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/mutated-implementation/reference.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/mutated-implementation/reference.json"
+      ],
+      "bytes_each": 233349,
+      "redundant_bytes": 233349
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S4-coincident-new-0.4-r1/d9606f843060749ab9b7eb697294037e71b5f5591cd79cedefe2b145f484112b/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S4-coincident-new-0.4-r2/d9606f843060749ab9b7eb697294037e71b5f5591cd79cedefe2b145f484112b/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/s4-probe/artifacts/S4-coincident-new-0.4-r1/d9606f843060749ab9b7eb697294037e71b5f5591cd79cedefe2b145f484112b/reference.json.gz"
+      ],
+      "bytes_each": 107534,
+      "redundant_bytes": 215068
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/legacy/global_waypoints.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_route/legacy/global_waypoints.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/legacy/global_waypoints.json"
+      ],
+      "bytes_each": 103594,
+      "redundant_bytes": 207188
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-circle-repaired-0.4-r1/1dc0939220a7ed7731cea303dda057c816e70b84d36dd76ee26dd0583520a36a/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-circle-repaired-0.4-r2/1dc0939220a7ed7731cea303dda057c816e70b84d36dd76ee26dd0583520a36a/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/artifacts/S0-circle-repaired-0.4-r1/1dc0939220a7ed7731cea303dda057c816e70b84d36dd76ee26dd0583520a36a/reference.json.gz"
+      ],
+      "bytes_each": 60994,
+      "redundant_bytes": 121988
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-circle-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-circle-new-0.4-r2/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/legacy/S0-circle-new-0.4-r1/global_waypoints.json.gz"
+      ],
+      "bytes_each": 59618,
+      "redundant_bytes": 119236
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S4-coincident-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S4-coincident-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 118256,
+      "redundant_bytes": 118256
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/installed-inputs/fixtures/s6_competition_route.json",
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/inputs/S6-240m.json",
+        "docs/project_a/evidence/w3-benchmarks/cpu-collector-probe/inputs/S6-240m.json",
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/inputs/S6-240m.json",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/inputs/S6-240m.json",
+        "docs/project_a/evidence/w3-benchmarks/pilot/inputs/S6-240m.json",
+        "docs/project_a/evidence/w3-benchmarks/primary/inputs/S6-240m.json"
+      ],
+      "bytes_each": 19683,
+      "redundant_bytes": 118098
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-circle-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-circle-repaired-0.4-r2/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/legacy/S0-circle-repaired-0.4-r1/global_waypoints.json.gz"
+      ],
+      "bytes_each": 57524,
+      "redundant_bytes": 115048
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S4-coincident-repaired-0.4-r1/d1a0b0287ae8fd5b654dc04bc0248feaf56ef2220f7034da7acfdfd061cbdf12/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S4-coincident-repaired-0.4-r2/d1a0b0287ae8fd5b654dc04bc0248feaf56ef2220f7034da7acfdfd061cbdf12/reference.json.gz"
+      ],
+      "bytes_each": 114863,
+      "redundant_bytes": 114863
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S4-coincident-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S4-coincident-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 112747,
+      "redundant_bytes": 112747
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-circle-new-0.4-r1/ab2d611eb0308bccf8db3d5359c5d4e9973e800a1a6a4515a1461160506b4f9c/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-circle-new-0.4-r2/ab2d611eb0308bccf8db3d5359c5d4e9973e800a1a6a4515a1461160506b4f9c/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/artifacts/S0-circle-new-0.4-r1/ab2d611eb0308bccf8db3d5359c5d4e9973e800a1a6a4515a1461160506b4f9c/reference.json.gz"
+      ],
+      "bytes_each": 55351,
+      "redundant_bytes": 110702
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/mutations/S4-coincident-new-0.4-r1/corrupt/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/s4-probe/mutations/S4-coincident-new-0.4-r1/corrupt/reference.json.gz"
+      ],
+      "bytes_each": 107536,
+      "redundant_bytes": 107536
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/hosted-ci/build-identity.json",
+        "docs/project_a/evidence/w3-a09/hosted-ci/source-free/build-identity.json",
+        "docs/project_a/evidence/w3-a09/installed-inputs/build_identity.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/build-identity.json",
+        "docs/project_a/evidence/w3-a09/verification/build-identity.json"
+      ],
+      "bytes_each": 24366,
+      "redundant_bytes": 97464
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S3-notch-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S3-notch-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 90973,
+      "redundant_bytes": 90973
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S3-surfaces-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S3-surfaces-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 90963,
+      "redundant_bytes": 90963
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S3-notch-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S3-notch-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 89346,
+      "redundant_bytes": 89346
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S3-surfaces-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S3-surfaces-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 89159,
+      "redundant_bytes": 89159
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/green/artifact-unit/source-hashes-after.json",
+        "docs/project_a/evidence/w3-report-portability/green/artifact-unit/source-hashes-before.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/build/source-hashes-after.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/build/source-hashes-before.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/source-hashes-after-runtime.json"
+      ],
+      "bytes_each": 20713,
+      "redundant_bytes": 82852
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/hosted-ci/source-free/w3-scenario-campaign.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenario-campaign.json"
+      ],
+      "bytes_each": 79405,
+      "redundant_bytes": 79405
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S3-notch-new-0.4-r1/3986ddc4c76c94066c325401eea797079f9a2ee76795f5f21b54067a9b6ca374/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S3-notch-new-0.4-r2/3986ddc4c76c94066c325401eea797079f9a2ee76795f5f21b54067a9b6ca374/reference.json.gz"
+      ],
+      "bytes_each": 77743,
+      "redundant_bytes": 77743
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S3-surfaces-new-0.4-r1/eea47a60d58c99f8c7d027c2e8a5de6a553db91ab1188e4bef46ba00d9df68a3/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S3-surfaces-new-0.4-r2/eea47a60d58c99f8c7d027c2e8a5de6a553db91ab1188e4bef46ba00d9df68a3/reference.json.gz"
+      ],
+      "bytes_each": 77434,
+      "redundant_bytes": 77434
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/installed-inputs/fixtures/s4_repeated_route.json",
+        "docs/project_a/evidence/w3-benchmarks/primary/inputs/S4-coincident.json",
+        "docs/project_a/evidence/w3-benchmarks/s4-probe/inputs/S4-coincident.json"
+      ],
+      "bytes_each": 37743,
+      "redundant_bytes": 75486
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-ellipse-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-ellipse-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 71605,
+      "redundant_bytes": 71605
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S3-notch-repaired-0.4-r1/fd07068d065b907aed957484d00ce7c9bc97ab481929c202435517e6e1cd4212/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S3-notch-repaired-0.4-r2/fd07068d065b907aed957484d00ce7c9bc97ab481929c202435517e6e1cd4212/reference.json.gz"
+      ],
+      "bytes_each": 71504,
+      "redundant_bytes": 71504
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S3-surfaces-repaired-0.4-r1/c8e028026c03f3f5ebc3363302c14d7fd018fc92fb7822b4727d9c0d60b685d4/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S3-surfaces-repaired-0.4-r2/c8e028026c03f3f5ebc3363302c14d7fd018fc92fb7822b4727d9c0d60b685d4/reference.json.gz"
+      ],
+      "bytes_each": 71069,
+      "redundant_bytes": 71069
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-ellipse-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-ellipse-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 70994,
+      "redundant_bytes": 70994
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S5-planar-connectors-repaired-0.4-r1/d1f17a93b6c60b4a58a6a4e23dce9c435a25fb55efe60f3f65a26269f3f8df93/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S5-planar-connectors-repaired-0.4-r2/d1f17a93b6c60b4a58a6a4e23dce9c435a25fb55efe60f3f65a26269f3f8df93/reference.json.gz"
+      ],
+      "bytes_each": 63472,
+      "redundant_bytes": 63472
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/inputs/s1_gapped_physical_walls.json",
+        "docs/project_a/evidence/w3-benchmarks/pilot/inputs/s1_gapped_physical_walls.json",
+        "docs/project_a/evidence/w3-benchmarks/primary/inputs/s1_gapped_physical_walls.json",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/inputs/s1_gapped_physical_walls.json",
+        "docs/project_a/evidence/w3-benchmarks/s4-probe/inputs/s1_gapped_physical_walls.json"
+      ],
+      "bytes_each": 15569,
+      "redundant_bytes": 62276
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-upper-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-upper-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 62172,
+      "redundant_bytes": 62172
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/hosted-ci/source-hashes-after.json",
+        "docs/project_a/evidence/w3-a09/hosted-ci/source-hashes-before.json",
+        "docs/project_a/evidence/w3-a09/verification/source-hashes-after.json",
+        "docs/project_a/evidence/w3-a09/verification/source-hashes-before.json"
+      ],
+      "bytes_each": 20713,
+      "redundant_bytes": 62139
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-ellipse-new-0.4-r1/e4976a360093d36d36723dcea2d69325c943ce02b457b81b0f0d8cd3c1177fe8/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-ellipse-new-0.4-r2/e4976a360093d36d36723dcea2d69325c943ce02b457b81b0f0d8cd3c1177fe8/reference.json.gz"
+      ],
+      "bytes_each": 61099,
+      "redundant_bytes": 61099
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S1-wall-gaps-repaired-0.4-r1/c790ae3d0ba7139a095a91679da5636fb9cf6495e8e531428957d8ddcbd4c7cd/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S1-wall-gaps-repaired-0.4-r2/c790ae3d0ba7139a095a91679da5636fb9cf6495e8e531428957d8ddcbd4c7cd/reference.json.gz"
+      ],
+      "bytes_each": 61077,
+      "redundant_bytes": 61077
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/mutations/S0-circle-repaired-0.4-r1/corrupt/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/mutations/S0-circle-repaired-0.4-r1/corrupt/reference.json.gz"
+      ],
+      "bytes_each": 60996,
+      "redundant_bytes": 60996
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-rotated-repaired-0.4-r1/373f30db522deaeb096c42992f4a3c94f7dd37dceeabe4f95c71f359be5cf1a2/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-rotated-repaired-0.4-r2/373f30db522deaeb096c42992f4a3c94f7dd37dceeabe4f95c71f359be5cf1a2/reference.json.gz"
+      ],
+      "bytes_each": 60901,
+      "redundant_bytes": 60901
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-reverse-repaired-0.4-r1/6cf74d57669ff951bfc2b46fa757a79efd0cd7e86a90c6fa35fc3ff2d28fcfd9/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-reverse-repaired-0.4-r2/6cf74d57669ff951bfc2b46fa757a79efd0cd7e86a90c6fa35fc3ff2d28fcfd9/reference.json.gz"
+      ],
+      "bytes_each": 60813,
+      "redundant_bytes": 60813
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-lower-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-lower-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 60672,
+      "redundant_bytes": 60672
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-upper-cap-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-upper-cap-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 60402,
+      "redundant_bytes": 60402
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S5-planar-connectors-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S5-planar-connectors-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 60043,
+      "redundant_bytes": 60043
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S5-planar-connectors-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S5-planar-connectors-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 59746,
+      "redundant_bytes": 59746
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-ellipse-repaired-0.4-r1/d67ef66bba2eed5cde44f4dac17944e874bbaa6653bce9bba658940d2866210d/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-ellipse-repaired-0.4-r2/d67ef66bba2eed5cde44f4dac17944e874bbaa6653bce9bba658940d2866210d/reference.json.gz"
+      ],
+      "bytes_each": 59675,
+      "redundant_bytes": 59675
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S1-wall-gaps-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S1-wall-gaps-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 59627,
+      "redundant_bytes": 59627
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-upper-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-upper-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 59565,
+      "redundant_bytes": 59565
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-lower-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-lower-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 59544,
+      "redundant_bytes": 59544
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-reverse-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-reverse-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 59470,
+      "redundant_bytes": 59470
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-rotated-new-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-rotated-new-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 59394,
+      "redundant_bytes": 59394
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-upper-cap-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S2-upper-cap-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 59193,
+      "redundant_bytes": 59193
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-reverse-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-reverse-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 57703,
+      "redundant_bytes": 57703
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S1-wall-gaps-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S1-wall-gaps-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 57528,
+      "redundant_bytes": 57528
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-rotated-repaired-0.4-r1/global_waypoints.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/S0-rotated-repaired-0.4-r2/global_waypoints.json.gz"
+      ],
+      "bytes_each": 57519,
+      "redundant_bytes": 57519
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S5-planar-connectors-new-0.4-r1/01e00d1b805e01d88216aa6702f735b6670e63c3d574a55a4e0f4b7373851a42/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S5-planar-connectors-new-0.4-r2/01e00d1b805e01d88216aa6702f735b6670e63c3d574a55a4e0f4b7373851a42/reference.json.gz"
+      ],
+      "bytes_each": 56231,
+      "redundant_bytes": 56231
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-upper-new-0.4-r1/aa6433365f485253c64c849481484b8dac53cc347d1dc297af2ccfd2ff0962e9/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-upper-new-0.4-r2/aa6433365f485253c64c849481484b8dac53cc347d1dc297af2ccfd2ff0962e9/reference.json.gz"
+      ],
+      "bytes_each": 56143,
+      "redundant_bytes": 56143
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S1-wall-gaps-new-0.4-r1/d43e0aa011e6b2d1f7d29caac067fc8728eaf36c479d49acb5a1876508f19f58/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S1-wall-gaps-new-0.4-r2/d43e0aa011e6b2d1f7d29caac067fc8728eaf36c479d49acb5a1876508f19f58/reference.json.gz"
+      ],
+      "bytes_each": 55414,
+      "redundant_bytes": 55414
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/mutations/S0-circle-new-0.4-r1/corrupt/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/mutations/S0-circle-new-0.4-r1/corrupt/reference.json.gz"
+      ],
+      "bytes_each": 55352,
+      "redundant_bytes": 55352
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-reverse-new-0.4-r1/883b6bc85a81b7a716f03260d81d23f6678f7faa90f58c0f2a5e01172b6498d2/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-reverse-new-0.4-r2/883b6bc85a81b7a716f03260d81d23f6678f7faa90f58c0f2a5e01172b6498d2/reference.json.gz"
+      ],
+      "bytes_each": 55282,
+      "redundant_bytes": 55282
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-rotated-new-0.4-r1/5dbd6f9e34cd2f065134efe17652636c132c70c2355a16027fa3c688cd931e74/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S0-rotated-new-0.4-r2/5dbd6f9e34cd2f065134efe17652636c132c70c2355a16027fa3c688cd931e74/reference.json.gz"
+      ],
+      "bytes_each": 55176,
+      "redundant_bytes": 55176
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-upper-repaired-0.4-r1/102243a58dc608049c2292f26ce849867da7b9fdc439bc4d4efd7982a2d10bde/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-upper-repaired-0.4-r2/102243a58dc608049c2292f26ce849867da7b9fdc439bc4d4efd7982a2d10bde/reference.json.gz"
+      ],
+      "bytes_each": 54982,
+      "redundant_bytes": 54982
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-upper-cap-repaired-0.4-r1/bcf31e3353de41cf9dc1aee028c59447ece2c5dbf3ab05a954a3d9353f34169e/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-upper-cap-repaired-0.4-r2/bcf31e3353de41cf9dc1aee028c59447ece2c5dbf3ab05a954a3d9353f34169e/reference.json.gz"
+      ],
+      "bytes_each": 54737,
+      "redundant_bytes": 54737
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-lower-new-0.4-r1/c429d7cfe9756bd52480f5da29cf2914c3a4fb4c206b8256feecd28c2ed7a330/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-lower-new-0.4-r2/c429d7cfe9756bd52480f5da29cf2914c3a4fb4c206b8256feecd28c2ed7a330/reference.json.gz"
+      ],
+      "bytes_each": 54602,
+      "redundant_bytes": 54602
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-upper-cap-new-0.4-r1/2f77939d86263b42082b2a599d52c8adf02dfb098648bae4f78b2419b8f3d530/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-upper-cap-new-0.4-r2/2f77939d86263b42082b2a599d52c8adf02dfb098648bae4f78b2419b8f3d530/reference.json.gz"
+      ],
+      "bytes_each": 54592,
+      "redundant_bytes": 54592
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-lower-repaired-0.4-r1/6ca5bb15b2cd4639a7851062598bfcdf8c8f73aba91dea7b09763783b212e4f7/reference.json.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/artifacts/S2-lower-repaired-0.4-r2/6ca5bb15b2cd4639a7851062598bfcdf8c8f73aba91dea7b09763783b212e4f7/reference.json.gz"
+      ],
+      "bytes_each": 52424,
+      "redundant_bytes": 52424
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a06-retimer-s0_reverse_route.json",
+        "docs/project_a/evidence/w3-baseline/a06-retimer-s0_reverse_route.json"
+      ],
+      "bytes_each": 40226,
+      "redundant_bytes": 40226
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a06-retimer-s0_rotated_route.json",
+        "docs/project_a/evidence/w3-baseline/a06-retimer-s0_rotated_route.json"
+      ],
+      "bytes_each": 40092,
+      "redundant_bytes": 40092
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a06-retimer-s0_route.json",
+        "docs/project_a/evidence/w3-baseline/a06-retimer-s0_route.json"
+      ],
+      "bytes_each": 40087,
+      "redundant_bytes": 40087
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a06-retimer-s2_upper_route.json",
+        "docs/project_a/evidence/w3-baseline/a06-retimer-s2_upper_route.json"
+      ],
+      "bytes_each": 38512,
+      "redundant_bytes": 38512
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/pilot/inputs/S0-circle.json",
+        "docs/project_a/evidence/w3-benchmarks/primary/inputs/S0-circle.json",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/inputs/S0-circle.json"
+      ],
+      "bytes_each": 19236,
+      "redundant_bytes": 38472
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a06-retimer-s2_lower_route.json",
+        "docs/project_a/evidence/w3-baseline/a06-retimer-s2_lower_route.json"
+      ],
+      "bytes_each": 37654,
+      "redundant_bytes": 37654
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/red/hosted-build-identity.json",
+        "docs/project_a/evidence/w3-report-portability/red/local-build-identity.json"
+      ],
+      "bytes_each": 24366,
+      "redundant_bytes": 24366
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/green/installed/build/build-identity.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/build-identity.json"
+      ],
+      "bytes_each": 24365,
+      "redundant_bytes": 24365
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/os-packages.txt",
+        "docs/project_a/evidence/w3-baseline/os-packages.txt"
+      ],
+      "bytes_each": 23293,
+      "redundant_bytes": 23293
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-unit-console.log",
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-unit/run.log"
+      ],
+      "bytes_each": 22922,
+      "redundant_bytes": 22922
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/hosted-ci/source-free/w3-installed.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed.json"
+      ],
+      "bytes_each": 21319,
+      "redundant_bytes": 21319
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/initial-retry-unit/source-hashes-after.json",
+        "docs/project_a/evidence/w3-report-portability/initial-retry-unit/source-hashes-before.json"
+      ],
+      "bytes_each": 20713,
+      "redundant_bytes": 20713
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-unit/source-hashes-after.json",
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-unit/source-hashes-before.json"
+      ],
+      "bytes_each": 20713,
+      "redundant_bytes": 20713
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a06-ellipse-route.json",
+        "docs/project_a/evidence/w3-baseline/a06-ellipse-route.json"
+      ],
+      "bytes_each": 19893,
+      "redundant_bytes": 19893
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a06-ellipse-profile.json",
+        "docs/project_a/evidence/w3-baseline/a06-ellipse-profile.json"
+      ],
+      "bytes_each": 19512,
+      "redundant_bytes": 19512
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a07-ci/source-hashes-after.json",
+        "docs/project_a/evidence/w3-a07-ci/source-hashes-before.json"
+      ],
+      "bytes_each": 18951,
+      "redundant_bytes": 18951
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/optimizer-wheel.log",
+        "docs/project_a/evidence/w3-report-portability/green/installed/build/optimizer-wheel.log"
+      ],
+      "bytes_each": 16794,
+      "redundant_bytes": 16794
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-baseline/source-hashes-after.json",
+        "docs/project_a/evidence/w3-baseline/source-hashes-before.json"
+      ],
+      "bytes_each": 14742,
+      "redundant_bytes": 14742
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/hosted-ci/dependencies.txt",
+        "docs/project_a/evidence/w3-a09/verification/dependencies.txt",
+        "docs/project_a/evidence/w3-baseline/dependencies.txt"
+      ],
+      "bytes_each": 3697,
+      "redundant_bytes": 7394
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/unsupported-policy.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/unsupported-policy.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/unsupported-policy.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/unsupported-policy.json"
+      ],
+      "bytes_each": 2116,
+      "redundant_bytes": 6348
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/installed-inputs/models/s0_route_model.json",
+        "docs/project_a/evidence/w3-a09/installed-inputs/models/s2_lower_route_model.json",
+        "docs/project_a/evidence/w3-a09/installed-inputs/models/s2_upper_route_model.json",
+        "docs/project_a/evidence/w3-a09/installed-inputs/models/synthetic_model.json"
+      ],
+      "bytes_each": 1983,
+      "redundant_bytes": 5949
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/hosted-ci/summary.json",
+        "docs/project_a/evidence/w3-a09/verification/summary.json"
+      ],
+      "bytes_each": 4385,
+      "redundant_bytes": 4385
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a05-bounds-oracle.json",
+        "docs/project_a/evidence/w3-baseline/a05-bounds-oracle.json"
+      ],
+      "bytes_each": 3567,
+      "redundant_bytes": 3567
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/green/artifact-unit/dependencies.txt",
+        "docs/project_a/evidence/w3-report-portability/initial-retry-unit/dependencies.txt",
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-unit/dependencies.txt"
+      ],
+      "bytes_each": 1760,
+      "redundant_bytes": 3520
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/installed-inputs/models/s4_repeated_route_model.json",
+        "docs/project_a/evidence/w3-benchmarks/s4-probe/inputs/S4-coincident-model.json"
+      ],
+      "bytes_each": 2390,
+      "redundant_bytes": 2390
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-approval-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-coefficient-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-implementation-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-model-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-policy-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/wrong-expected-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-approval-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-coefficient-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-implementation-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-model-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-policy-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/wrong-expected-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-approval-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-coefficient-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-implementation-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-model-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-policy-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/wrong-expected-h.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-approval-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-coefficient-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-implementation-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-model-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-policy-old-h.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/wrong-expected-h.stdout.txt"
+      ],
+      "bytes_each": 87,
+      "redundant_bytes": 2001
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/installed-inputs/models/s3_notch_route_model.json",
+        "docs/project_a/evidence/w3-a09/installed-inputs/models/s3_surfaces_route_model.json"
+      ],
+      "bytes_each": 1987,
+      "redundant_bytes": 1987
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-approval-old-h.json",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-coefficient-old-h.json",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-implementation-old-h.json",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-model-old-h.json",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-policy-old-h.json",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/wrong-expected-h.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-approval-old-h.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-coefficient-old-h.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-implementation-old-h.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-model-old-h.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-policy-old-h.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/wrong-expected-h.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-approval-old-h.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-coefficient-old-h.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-implementation-old-h.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-model-old-h.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-policy-old-h.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/wrong-expected-h.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-approval-old-h.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-coefficient-old-h.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-implementation-old-h.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-model-old-h.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-policy-old-h.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/wrong-expected-h.json"
+      ],
+      "bytes_each": 86,
+      "redundant_bytes": 1978
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/initial-retry-unit-console.log",
+        "docs/project_a/evidence/w3-report-portability/initial-retry-unit/run.log"
+      ],
+      "bytes_each": 1710,
+      "redundant_bytes": 1710
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/green/artifact-unit/source-identity.txt",
+        "docs/project_a/evidence/w3-report-portability/initial-retry-unit/source-identity.txt"
+      ],
+      "bytes_each": 1353,
+      "redundant_bytes": 1353
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/runtime-identity.json",
+        "docs/project_a/evidence/w3-baseline/runtime-identity.json",
+        "docs/project_a/evidence/w3-benchmarks/primary/runtime.json",
+        "docs/project_a/evidence/w3-report-portability/green/artifact-unit/runtime-identity.json",
+        "docs/project_a/evidence/w3-report-portability/initial-retry-unit/runtime-identity.json",
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-unit/runtime-identity.json"
+      ],
+      "bytes_each": 267,
+      "redundant_bytes": 1335
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/legacy/.S6-240m-new-0.52-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/legacy/.S6-240m-repaired-0.52-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/legacy/.S6-240m-repaired-0.52-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/legacy/.S6-240m-repaired-0.52-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/legacy/.S6-240m-repaired-0.53-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/legacy/.S6-240m-repaired-0.53-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-circle-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-circle-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-circle-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-circle-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-ellipse-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-ellipse-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-ellipse-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-ellipse-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-reverse-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-reverse-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-reverse-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-reverse-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-rotated-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-rotated-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-rotated-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S0-rotated-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S1-wall-gaps-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S1-wall-gaps-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S1-wall-gaps-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S1-wall-gaps-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-lower-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-lower-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-lower-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-lower-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-upper-cap-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-upper-cap-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-upper-cap-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-upper-cap-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-upper-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-upper-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-upper-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S2-upper-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S3-notch-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S3-notch-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S3-notch-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S3-notch-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S3-surfaces-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S3-surfaces-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S3-surfaces-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S3-surfaces-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S4-coincident-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S4-coincident-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S4-coincident-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S4-coincident-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S5-planar-connectors-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S5-planar-connectors-new-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S5-planar-connectors-repaired-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S5-planar-connectors-repaired-0.4-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S6-240m-new-0.52-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S6-240m-new-0.52-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S6-240m-new-0.53-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S6-240m-new-0.53-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S6-240m-repaired-0.5-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/primary/legacy/.S6-240m-repaired-0.5-r2.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/legacy/.S0-circle-new-0.4-r1.export.lock.gz",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/legacy/.S0-circle-repaired-0.4-r1.export.lock.gz"
+      ],
+      "bytes_each": 20,
+      "redundant_bytes": 1220
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a03-metrics.json",
+        "docs/project_a/evidence/w3-baseline/a03-metrics.json"
+      ],
+      "bytes_each": 801,
+      "redundant_bytes": 801
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/query-negative.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/query-negative.stdout.txt"
+      ],
+      "bytes_each": 620,
+      "redundant_bytes": 620
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/query-metric.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/query-metric.stdout.txt"
+      ],
+      "bytes_each": 606,
+      "redundant_bytes": 606
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/.tmp-interrupted/reference.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/truncated/reference.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/.tmp-interrupted/reference.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/truncated/reference.json"
+      ],
+      "bytes_each": 200,
+      "redundant_bytes": 600
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/image-id.txt",
+        "docs/project_a/evidence/w3-a09/verification/image-id.txt",
+        "docs/project_a/evidence/w3-baseline/image-id.txt",
+        "docs/project_a/evidence/w3-benchmarks/primary/image-id.txt",
+        "docs/project_a/evidence/w3-report-portability/green/artifact-unit/image-id.txt",
+        "docs/project_a/evidence/w3-report-portability/green/strictlint/image-id.txt",
+        "docs/project_a/evidence/w3-report-portability/initial-retry-unit/image-id.txt",
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-unit/image-id.txt",
+        "docs/project_a/evidence/w3-report-portability/red/local-image-id.txt"
+      ],
+      "bytes_each": 72,
+      "redundant_bytes": 576
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/query-seam.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/query-seam.stdout.txt"
+      ],
+      "bytes_each": 558,
+      "redundant_bytes": 558
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/corrupt-bytes.stdout.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/truncated-content.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/corrupt-bytes.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/truncated-content.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/corrupt-bytes.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/truncated-content.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/corrupt-bytes.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/truncated-content.stdout.txt"
+      ],
+      "bytes_each": 75,
+      "redundant_bytes": 525
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/corrupt-bytes.json",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/truncated-content.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/corrupt-bytes.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/truncated-content.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/corrupt-bytes.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/truncated-content.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/corrupt-bytes.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/truncated-content.json"
+      ],
+      "bytes_each": 74,
+      "redundant_bytes": 518
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a06-cycle-oracle.json",
+        "docs/project_a/evidence/w3-baseline/a06-cycle-oracle.json"
+      ],
+      "bytes_each": 470,
+      "redundant_bytes": 470
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-approval-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-approval-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-approval-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-approval-new-h.stdout.txt"
+      ],
+      "bytes_each": 131,
+      "redundant_bytes": 393
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-approval-new-h.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-approval-new-h.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-approval-new-h.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-approval-new-h.json"
+      ],
+      "bytes_each": 130,
+      "redundant_bytes": 390
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/qp-projected_crossing.json",
+        "docs/project_a/evidence/w3-baseline/qp-projected_crossing.json"
+      ],
+      "bytes_each": 360,
+      "redundant_bytes": 360
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-model-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-model-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-model-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-model-new-h.stdout.txt"
+      ],
+      "bytes_each": 117,
+      "redundant_bytes": 351
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/qp-ellipse.json",
+        "docs/project_a/evidence/w3-baseline/qp-ellipse.json"
+      ],
+      "bytes_each": 351,
+      "redundant_bytes": 351
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-model-new-h.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-model-new-h.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-model-new-h.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-model-new-h.json"
+      ],
+      "bytes_each": 116,
+      "redundant_bytes": 348
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-implementation-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-implementation-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-implementation-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-implementation-new-h.stdout.txt"
+      ],
+      "bytes_each": 113,
+      "redundant_bytes": 339
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-implementation-new-h.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-implementation-new-h.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-implementation-new-h.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-implementation-new-h.json"
+      ],
+      "bytes_each": 112,
+      "redundant_bytes": 336
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/incomplete-stage.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/incomplete-stage.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/incomplete-stage.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/incomplete-stage.stdout.txt"
+      ],
+      "bytes_each": 109,
+      "redundant_bytes": 327
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/incomplete-stage.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/incomplete-stage.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/incomplete-stage.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/incomplete-stage.json"
+      ],
+      "bytes_each": 108,
+      "redundant_bytes": 324
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-policy-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-policy-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-policy-new-h.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-policy-new-h.stdout.txt"
+      ],
+      "bytes_each": 107,
+      "redundant_bytes": 321
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-policy-new-h.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-policy-new-h.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-policy-new-h.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-policy-new-h.json"
+      ],
+      "bytes_each": 106,
+      "redundant_bytes": 318
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/wrong-supplied-occurrence.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/wrong-supplied-occurrence.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/wrong-supplied-occurrence.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/wrong-supplied-occurrence.stdout.txt"
+      ],
+      "bytes_each": 100,
+      "redundant_bytes": 300
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/unsupported-coverage.stdout.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/unsupported-coverage.stdout.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/unsupported-coverage.stdout.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/unsupported-coverage.stdout.txt"
+      ],
+      "bytes_each": 99,
+      "redundant_bytes": 297
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/unsupported-coverage.json",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/unsupported-coverage.json",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/unsupported-coverage.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/unsupported-coverage.json"
+      ],
+      "bytes_each": 98,
+      "redundant_bytes": 294
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/a02-parabola.json",
+        "docs/project_a/evidence/w3-baseline/a02-parabola.json"
+      ],
+      "bytes_each": 292,
+      "redundant_bytes": 292
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/helper-hashes.json",
+        "docs/project_a/evidence/w3-baseline/helper-hashes.json"
+      ],
+      "bytes_each": 276,
+      "redundant_bytes": 276
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/green/artifact-unit-console.log",
+        "docs/project_a/evidence/w3-report-portability/green/artifact-unit/run.log"
+      ],
+      "bytes_each": 272,
+      "redundant_bytes": 272
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/.tmp-interrupted/reference.json",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/truncated/reference.json"
+      ],
+      "bytes_each": 200,
+      "redundant_bytes": 200
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/.tmp-interrupted/reference.json",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/truncated/reference.json"
+      ],
+      "bytes_each": 200,
+      "redundant_bytes": 200
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/legacy-metric.json",
+        "docs/project_a/evidence/w3-baseline/legacy-metric.json"
+      ],
+      "bytes_each": 43,
+      "redundant_bytes": 43
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/verification/legacy-exit-codes.txt",
+        "docs/project_a/evidence/w3-baseline/legacy-exit-codes.txt"
+      ],
+      "bytes_each": 35,
+      "redundant_bytes": 35
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/fresh/fresh-exit-code.txt",
+        "docs/project_a/evidence/w3-a09/source-free/exit-code.txt",
+        "docs/project_a/evidence/w3-a09/verification/exit-code.txt",
+        "docs/project_a/evidence/w3-baseline/exit-code.txt",
+        "docs/project_a/evidence/w3-report-portability/green/artifact-unit/exit-code.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/build-exit-code.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/exit-code.txt",
+        "docs/project_a/evidence/w3-report-portability/green/strictlint/exit-code.txt"
+      ],
+      "bytes_each": 2,
+      "redundant_bytes": 14
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-report-portability/initial-retry-unit/exit-code.txt",
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-installed/exit-code.txt",
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-unit/exit-code.txt",
+        "docs/project_a/evidence/w3-report-portability/red/failed-saved-artifact-replay/exit-code.txt",
+        "docs/project_a/evidence/w3-report-portability/red/fresh-equality.exit-code.txt"
+      ],
+      "bytes_each": 2,
+      "redundant_bytes": 8
+    },
+    {
+      "paths": [
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/corrupt-bytes.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/incomplete-stage.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/query-metric.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/query-negative.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/query-seam.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/references/.lock-8f2e5685669eba6658cc1aca8d550d858fdee9c4fa446089676197efe59962d8",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-approval-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-approval-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-coefficient-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-implementation-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-implementation-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-model-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-model-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-policy-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/reject-policy-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/truncated-content.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/unsupported-coverage.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/wrong-expected-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/exploratory-preflight/runtime-results/w3-installed/wrong-supplied-occurrence.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/corrupt-bytes.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/incomplete-stage.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/query-metric.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/query-negative.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/query-seam.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/references/.lock-f2e283fd673c735a956350e3b73236420e5a353067f2f1b8a54b28ee533b85be",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-approval-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-approval-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-coefficient-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-implementation-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-implementation-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-model-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-model-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-policy-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/reject-policy-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/truncated-content.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/unsupported-coverage.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/wrong-expected-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-installed/wrong-supplied-occurrence.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_reverse_route/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_reverse_route/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_reverse_route/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_reverse_route/public-api.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_reverse_route/query.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_reverse_route/references/.lock-c255aeed5e176c2e3eac04d3e6374ff3a439f17887bfa5ed9edd2843f12d5720",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_reverse_route/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_rotated_route/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_rotated_route/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_rotated_route/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_rotated_route/public-api.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_rotated_route/query.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_rotated_route/references/.lock-316c03a11182dc29e6ecefa2e323ce9393b7b458a4d778c58180cf445dd1b8e5",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_rotated_route/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_route/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_route/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_route/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_route/public-api.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_route/query.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_route/references/.lock-f2e283fd673c735a956350e3b73236420e5a353067f2f1b8a54b28ee533b85be",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s0_route/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_lower_route/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_lower_route/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_lower_route/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_lower_route/public-api.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_lower_route/query.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_lower_route/references/.lock-bd6326711ab1a7ec163fe6e897e5d88e732c8ab80b365dbceea03ce09d803de7",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_lower_route/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_upper_route/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_upper_route/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_upper_route/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_upper_route/public-api.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_upper_route/query.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_upper_route/references/.lock-96b54ad55324aba67adf8b434d68865a67bd59824ce40da671ac8de1cb30f62f",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s2_upper_route/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_notch_route/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_notch_route/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_notch_route/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_notch_route/public-api.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_notch_route/query.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_notch_route/references/.lock-a7dfc23c2b187782ee867a6919725cde32ce94502757926240961fbd3c69c60d",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_notch_route/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_surfaces_route/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_surfaces_route/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_surfaces_route/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_surfaces_route/public-api.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_surfaces_route/query.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_surfaces_route/references/.lock-07489075eb947278ec256ccddfd97d379a306db887dc34302527e081ea9cc69e",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s3_surfaces_route/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s4_repeated_route/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s4_repeated_route/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s4_repeated_route/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s4_repeated_route/public-api.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s4_repeated_route/query.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s4_repeated_route/references/.lock-4a4e0e33c69936391a7b1c0c6f5bf0f5bfc9f269d721e13507658c2bfa19e1c0",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s4_repeated_route/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/public-api.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/query.stderr.txt",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/references/.lock-5cd2661ee51cb124b7ed02ac8d32570da61cc1467a125119fda7d020f27544dd",
+        "docs/project_a/evidence/w3-a09/source-free/results/w3-scenarios/s6_competition_route/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/.legacy.export.lock",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/compile.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/corrupt-bytes.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/export.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/incomplete-stage.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/query-metric.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/query-negative.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/query-seam.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/references/.lock-f2e283fd673c735a956350e3b73236420e5a353067f2f1b8a54b28ee533b85be",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-approval-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-approval-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-coefficient-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-implementation-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-implementation-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-model-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-model-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-policy-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/reject-policy-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/truncated-content.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/unsupported-coverage.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/validate.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/wrong-expected-h.stderr.txt",
+        "docs/project_a/evidence/w3-a09/verification/w3-installed/wrong-supplied-occurrence.stderr.txt",
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/S6-240m-new-0.1-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/S6-240m-new-0.2-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/S6-240m-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/S6-240m-new-0.5-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/S6-240m-new-0.52-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/coarse-retry/S6-240m-new-0.53-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/S6-240m-new-0.52-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/cpu-replay/S6-240m-repaired-0.52-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/S6-240m-repaired-0.52-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/S6-240m-repaired-0.52-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/S6-240m-repaired-0.53-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/matched-coarse/S6-240m-repaired-0.53-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S0-circle-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S0-circle-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S0-circle-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S6-240m-new-0.1-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S6-240m-new-0.2-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S6-240m-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S6-240m-new-0.5-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S6-240m-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S6-240m-repaired-0.5-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S6-240m-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/pilot/S6-240m-stock-0.5-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-circle-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-circle-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-circle-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-circle-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-circle-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-circle-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-ellipse-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-ellipse-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-ellipse-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-ellipse-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-ellipse-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-ellipse-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-reverse-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-reverse-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-reverse-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-reverse-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-reverse-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-reverse-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-rotated-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-rotated-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-rotated-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-rotated-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-rotated-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S0-rotated-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S1-wall-gaps-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S1-wall-gaps-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S1-wall-gaps-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S1-wall-gaps-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S1-wall-gaps-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S1-wall-gaps-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-lower-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-lower-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-lower-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-lower-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-lower-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-lower-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-cap-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-cap-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-cap-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-cap-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-cap-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-cap-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S2-upper-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-notch-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-notch-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-notch-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-notch-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-notch-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-notch-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-surfaces-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-surfaces-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-surfaces-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-surfaces-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-surfaces-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S3-surfaces-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S4-coincident-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S4-coincident-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S4-coincident-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S4-coincident-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S4-coincident-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S4-coincident-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S5-planar-connectors-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S5-planar-connectors-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S5-planar-connectors-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S5-planar-connectors-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S5-planar-connectors-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S5-planar-connectors-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.1-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.1-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.2-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.2-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.5-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.5-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.52-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.52-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.53-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-new-0.53-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-repaired-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-repaired-0.5-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-repaired-0.5-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-stock-0.4-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-stock-0.5-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/primary/S6-240m-stock-0.5-r2.stderr",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/S0-circle-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/S0-circle-repaired-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/ros-probe/S0-circle-stock-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/s4-probe/S4-coincident-new-0.4-r1.stderr",
+        "docs/project_a/evidence/w3-benchmarks/tests/strict_flake8.log",
+        "docs/project_a/evidence/w3-report-portability/green/float32-midpoint/pytest/s0_route0/.lock-2df3761da563db73dfa7c9da849a3864b956b49a465eca0f47adc07899360609",
+        "docs/project_a/evidence/w3-report-portability/green/float32-midpoint/pytest/test_frozen_main_time_controls0/constant-speed/.lock-fdb82a89cc3757c6fd24b2e91d841d5db8008dcc9072f96d52177d7cd72274c1",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/.legacy.export.lock",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/compile.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/corrupt-bytes.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/export.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/incomplete-stage.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/query-metric.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/query-negative.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/query-seam.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/references/.lock-10c39f7a95f8e9630ffdfc28e592d9bfb53bf765bb29d04eb796a89e4322d721",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-approval-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-approval-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-coefficient-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-implementation-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-implementation-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-model-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-model-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-policy-new-h.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/reject-policy-old-h.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/truncated-content.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/unsupported-coverage.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/validate.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/wrong-expected-h.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/green/installed/results/w3-installed/wrong-supplied-occurrence.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-installed/results/w3-installed/compile.stderr.txt",
+        "docs/project_a/evidence/w3-report-portability/red/deterministic-installed/results/w3-installed/references/.lock-1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59",
+        "docs/project_a/evidence/w3-report-portability/red/fresh-equality.stdout.txt"
+      ],
+      "bytes_each": 0,
+      "redundant_bytes": 0
+    }
+  ],
+  "duplicate_redundant_bytes": 12495943,
+  "manifests": [
+    {
+      "path": "docs/project_a/evidence/w3-a07-ci/SHA256SUMS",
+      "entries": 11,
+      "failures": []
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a07/SHA256SUMS",
+      "entries": 11,
+      "failures": []
+    },
+    {
+      "path": "docs/project_a/evidence/w3-a09/files-sha256.json",
+      "entries": 531,
+      "failures": []
+    },
+    {
+      "path": "docs/project_a/evidence/w3-baseline/SHA256SUMS",
+      "entries": 59,
+      "failures": []
+    },
+    {
+      "path": "docs/project_a/evidence/w3-benchmarks/SHA256SUMS",
+      "entries": 966,
+      "failures": []
+    },
+    {
+      "path": "docs/project_a/evidence/w3-report-portability/files-sha256.json",
+      "entries": 186,
+      "failures": []
+    }
+  ],
+  "manifest_coverage": {
+    "covered": 1764,
+    "total": 1780,
+    "uncovered": [
+      "docs/project_a/evidence/w3-a07-ci/SHA256SUMS",
+      "docs/project_a/evidence/w3-a07/SHA256SUMS",
+      "docs/project_a/evidence/w3-a09-publication/README.md",
+      "docs/project_a/evidence/w3-a09-publication/acceptance.json",
+      "docs/project_a/evidence/w3-a09/files-sha256.json",
+      "docs/project_a/evidence/w3-baseline/SHA256SUMS",
+      "docs/project_a/evidence/w3-benchmarks/SHA256SUMS",
+      "docs/project_a/evidence/w3-independent/README.md",
+      "docs/project_a/evidence/w3-independent/archive-download-readback.json",
+      "docs/project_a/evidence/w3-independent/benchmarks.md",
+      "docs/project_a/evidence/w3-independent/corrected-source-attempt.json",
+      "docs/project_a/evidence/w3-independent/corrected-source-hashes.json",
+      "docs/project_a/evidence/w3-independent/installed-timeout.json",
+      "docs/project_a/evidence/w3-independent/publication.json",
+      "docs/project_a/evidence/w3-independent/summary.json",
+      "docs/project_a/evidence/w3-report-portability/files-sha256.json"
+    ]
+  }
+}

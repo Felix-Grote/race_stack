@@ -1,0 +1,25 @@
+{
+  "archive": "dirtyall-attempt-independent.tar.gz",
+  "archive_member_count": 231,
+  "archive_sha256": "d77118613055fd17179b63b3e2a917490e6ecc8422b82b949c15a9c6e965cd18",
+  "archive_size_bytes": 3490634,
+  "completion_records": [
+    {
+      "acceptance": false,
+      "label": "dirtyall-attempt",
+      "mode": "completed-attempt",
+      "verdict": "COMPLETED_ATTEMPT_ONLY; not final acceptance",
+      "verification_exit_code": 1
+    }
+  ],
+  "fixture_only": false,
+  "manifest_sha256": "16a37bbd9892eb82b3d823d141ce8443207711670d7da9d621ba1bc9bfe3a69e",
+  "manifest_size_bytes": 51291,
+  "member_inventory_sha256": "21f9b5116d34f2d92d500d13216c19a51f12c061f58ea905dedfce01521be9be",
+  "member_inventory_size_bytes": 48731,
+  "payload_bytes": 21385519,
+  "payload_file_count": 230,
+  "readback_result": "PASS: full member hashes/sizes, safe paths, regular files, sorted order, normalized metadata; source inventory and bytes rechecked; no extraction or input mutation.",
+  "readback_uncompressed_bytes": 21436810,
+  "schema_version": 1
+}

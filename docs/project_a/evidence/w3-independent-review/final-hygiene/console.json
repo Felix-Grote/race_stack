@@ -1,0 +1,117 @@
+{
+  "totals": {
+    "changed_files": 1836,
+    "added_lines": 295237,
+    "deleted_lines": 49,
+    "binary_changed_files": 665
+  },
+  "diff_breakdown": {
+    "documentation": {
+      "files": 9,
+      "bytes": 208377,
+      "text_files": 9,
+      "physical_lines": 2952,
+      "nonblank_lines": 2514,
+      "added_lines": 1641,
+      "deleted_lines": 3,
+      "binary_files": 0
+    },
+    "evidence": {
+      "files": 1780,
+      "bytes": 109238328,
+      "text_files": 1111,
+      "physical_lines": 273222,
+      "nonblank_lines": 269774,
+      "added_lines": 273226,
+      "deleted_lines": 0,
+      "binary_files": 665
+    },
+    "installed_fixtures_models_policies": {
+      "files": 22,
+      "bytes": 349800,
+      "text_files": 22,
+      "physical_lines": 14311,
+      "nonblank_lines": 14311,
+      "added_lines": 14311,
+      "deleted_lines": 0,
+      "binary_files": 0
+    },
+    "other_integration": {
+      "files": 4,
+      "bytes": 9978,
+      "text_files": 4,
+      "physical_lines": 210,
+      "nonblank_lines": 189,
+      "added_lines": 116,
+      "deleted_lines": 3,
+      "binary_files": 0
+    },
+    "production_python": {
+      "files": 3,
+      "bytes": 84183,
+      "text_files": 3,
+      "physical_lines": 1708,
+      "nonblank_lines": 1537,
+      "added_lines": 1708,
+      "deleted_lines": 0,
+      "binary_files": 0
+    },
+    "test_python": {
+      "files": 7,
+      "bytes": 141112,
+      "text_files": 7,
+      "physical_lines": 2784,
+      "nonblank_lines": 2459,
+      "added_lines": 2784,
+      "deleted_lines": 0,
+      "binary_files": 0
+    },
+    "verification_benchmark_harness": {
+      "files": 11,
+      "bytes": 86806,
+      "text_files": 11,
+      "physical_lines": 1634,
+      "nonblank_lines": 1529,
+      "added_lines": 1451,
+      "deleted_lines": 43,
+      "binary_files": 0
+    }
+  },
+  "all_project_a_production_modules": {
+    "files": 11,
+    "bytes": 258328,
+    "text_files": 11,
+    "physical_lines": 5412,
+    "nonblank_lines": 4815
+  },
+  "all_planner_and_harness_test_python": {
+    "files": 30,
+    "bytes": 338335,
+    "text_files": 30,
+    "physical_lines": 6809,
+    "nonblank_lines": 5978
+  },
+  "manifest_coverage": {
+    "covered": 1764,
+    "total": 1780,
+    "uncovered": [
+      "docs/project_a/evidence/w3-a07-ci/SHA256SUMS",
+      "docs/project_a/evidence/w3-a07/SHA256SUMS",
+      "docs/project_a/evidence/w3-a09-publication/README.md",
+      "docs/project_a/evidence/w3-a09-publication/acceptance.json",
+      "docs/project_a/evidence/w3-a09/files-sha256.json",
+      "docs/project_a/evidence/w3-baseline/SHA256SUMS",
+      "docs/project_a/evidence/w3-benchmarks/SHA256SUMS",
+      "docs/project_a/evidence/w3-independent/README.md",
+      "docs/project_a/evidence/w3-independent/archive-download-readback.json",
+      "docs/project_a/evidence/w3-independent/benchmarks.md",
+      "docs/project_a/evidence/w3-independent/corrected-source-attempt.json",
+      "docs/project_a/evidence/w3-independent/corrected-source-hashes.json",
+      "docs/project_a/evidence/w3-independent/installed-timeout.json",
+      "docs/project_a/evidence/w3-independent/publication.json",
+      "docs/project_a/evidence/w3-independent/summary.json",
+      "docs/project_a/evidence/w3-report-portability/files-sha256.json"
+    ]
+  },
+  "duplicate_redundant_bytes": 12495943
+}

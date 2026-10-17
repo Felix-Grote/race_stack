@@ -10,5 +10,34 @@
     "Same-version unchanged hosted product replay in final installed runtime"
   ],
   "scope": "Offline synthetic planar software; no merge or physical-operation approval",
-  "initial_archive_sha256": "05cb942671a3ffb758541e72aa92281725902b270ad60b5fa66daa0165f90ad4"
+  "initial_archive_sha256": "05cb942671a3ffb758541e72aa92281725902b270ad60b5fa66daa0165f90ad4",
+  "recorded_utc": "2026-10-17T13:53:14.231902+00:00",
+  "implementation_sha": "67fbcc8283e59649d38dc9318291634089df3741",
+  "implementation_report": "https://github.com/Felix-Grote/race_stack/blob/67fbcc8283e59649d38dc9318291634089df3741/docs/project_a/W3_INDEPENDENT_ADVERSARIAL_REVIEW.md",
+  "corrective_commits": [
+    "4a941599ec38195936f5f2b51829cef9cfaf3db8",
+    "72b72c654d9569a21bb11a6f22a3ad53893d63a9",
+    "abdbc4ab232ebe850ec1b8c096fc89a2480c29b9"
+  ],
+  "review_commit": "67fbcc8283e59649d38dc9318291634089df3741",
+  "clean_fresh_gate": "RUNNING required fresh_verify.sh at literal implementation_sha",
+  "hosted_push_ci": {
+    "run_id": 39038300516,
+    "url": "https://github.com/Felix-Grote/race_stack/actions/runs/39038300516",
+    "status": "in_progress"
+  },
+  "hosted_pr_ci": {
+    "run_id": 39038304188,
+    "url": "https://github.com/Felix-Grote/race_stack/actions/runs/39038304188",
+    "status": "in_progress"
+  },
+  "initial_archive_remote_download_verified": true,
+  "dirty_source_attempt": {
+    "status": "SOURCE_GATES_PASS_ENVIRONMENT_BLOCKED_BEFORE_ORDINARY_INSTALL",
+    "tests": 593,
+    "groups": 21,
+    "wrapper_exit_code": 1,
+    "archive_sha256": "d77118613055fd17179b63b3e2a917490e6ecc8422b82b949c15a9c6e965cd18",
+    "installed_or_source_free_acceptance": false
+  }
 }
