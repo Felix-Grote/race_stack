@@ -363,3 +363,32 @@ state estimation and controller tracking remain unverified. Archived maps remain
 software data. Neither a successful comparator nor these internal tests authorize
 physical vehicle operation. Final W3 acceptance requires the separate adversarial
 review with direct PR remediation authority.
+
+## Independent review: bounded legacy failure classification
+
+The independent W3 review reproduced a reporting defect in the repaired legacy
+comparator: its initial bounded spline fit was outside the existing numerical
+exception handler. An actual child timeout on the unchanged S0 input with an
+explicit `.001 s` fit wall budget therefore became `HARNESS_FAILURE` and omitted
+the comparator's partial result, rather than retaining `RESOURCE_LIMIT` with no
+candidate. Moving that initial fit into the existing handler preserves the
+fitting equations, every successful-path value, all limits and prior history.
+The regression executes the actual bounded child; no timeout is mocked.
+
+The 96-job historical campaign and its counts are unchanged. Its exact worker
+and support bytes remain available at Git commit
+`17e4ec4e8fedfa736467d02f6204b04e8552decb`, paths
+`scripts/project_a/benchmark_w3.py` and `scripts/project_a/w3_benchmark_support.py`.
+The frozen manifests authenticate those historical bytes. To repeat the exact
+historical primary or matched-supplement recipe in `evidence/w3-benchmarks/REPRODUCE.md`,
+use a recursive checkout of that exact commit. A corrected current-source primary
+run creates a new manifest with the amended support hash; never edit the frozen
+historical manifests or claim the old helper identity for new source bytes.
+
+Fresh independent mesh/origin/seed/scale challenges additionally demonstrate
+that fixed `.52 m` is not a generally scale-robust solver policy: both `.995`
+and `1.005` geometric scales reject the first QP under the unchanged `1e12`
+condition limit. These are retained fail-closed numerical limitations. Successful
+nearby meshes and separately declared retries do not erase those failures or
+establish arbitrary competition-course feasibility. Exact independent commands,
+inputs, proof outcomes and resources are retained with the independent review.

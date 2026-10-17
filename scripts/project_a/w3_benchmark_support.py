@@ -458,7 +458,6 @@ def legacy_candidate(route, policy, *, repaired=True):
                                'child_seconds': float(values[-1][1])})
         return values[:4]
 
-    x, y, matrix, normals = fit(np.vstack((track[:, :2], track[0, :2])))
     state = {'q': current_q, 'iterations': 0, 'final': None}
 
     def qp(**kwargs):
@@ -503,6 +502,7 @@ def legacy_candidate(route, policy, *, repaired=True):
     ns['tph'] = proxy
     zeros = np.zeros(track.shape)
     try:
+        x, y, matrix, normals = fit(np.vstack((track[:, :2], track[0, :2])))
         alpha, final_track, final_normals, *_ = ns['iqp_handler'](
             track.copy(), normals, matrix, zeros, zeros, zeros, zeros,
             policy.curvature_bound, policy.vehicle_width_m, False, False,

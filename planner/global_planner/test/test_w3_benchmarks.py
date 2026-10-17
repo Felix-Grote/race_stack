@@ -130,6 +130,17 @@ def test_source_authenticated_stock_failure_is_preserved_separately(routes):
     assert not stock['qps']
 
 
+def test_initial_legacy_fit_retains_bounded_resource_failure(routes):
+    """Classify an actual first-fit child timeout as a numerical resource rejection."""
+    policy = replace(adapter.SolverPolicy(), qp_wall_seconds=.001)
+    ordered, result = legacy_candidate(routes['S0-circle'], policy)
+    assert ordered is None
+    assert result['status'] == 'RESOURCE_LIMIT'
+    assert result['iterations'] == 0
+    assert not result['qps']
+    assert 'legacy spline child wall limit' in result['reason']
+
+
 def test_interior_owner_subdivision_has_independent_composition_error_bound(routes, monkeypatch):
     """Bound interior algebraic composition independently with exact fractions."""
     original = seed_curve(routes['S0-circle'])
