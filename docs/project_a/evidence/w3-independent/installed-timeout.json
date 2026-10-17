@@ -1,0 +1,59 @@
+{
+  "reviewed_initial_sha": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "priority": "P2",
+  "finding": {
+    "helper_sha256": "1bb00ed7ed9fd173713ae00def7c0a095c088d15812838bfa770bb45e3c878a5",
+    "actual_exception": "TimeoutExpired",
+    "partial_stdout_captured_by_subprocess": "partial stdout\n",
+    "partial_stderr_captured_by_subprocess": "partial stderr\n",
+    "retained_command_count": 0,
+    "retained_stdout_exists": false,
+    "retained_stderr_exists": false,
+    "instrumentation": "Override only subprocess timeout from 240s to .1s; execute actual reviewed _invoke helper and real subprocess.run against slow process."
+  },
+  "red_command": {
+    "command": [
+      "/workspace/w3-query-venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "/workspace/w3-review/work/independent-review/installed/timeout-regression-red/test_w3_harness.py::test_installed_command_timeout_preserves_partial_evidence",
+      "--junitxml=/workspace/w3-review/work/independent-review/installed/timeout-regression-red/focused.xml"
+    ],
+    "returncode": 1,
+    "note": "Explicit node selection corrects first -k timeout run accidentally selecting unrelated tests through timeout directory name; first attempt retained."
+  },
+  "red_result": {
+    "tests": 2,
+    "failures": 2,
+    "evidence": "installed/timeout-regression-red/focused.xml"
+  },
+  "green_result": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "5",
+    "time": "4.701",
+    "timestamp": "2026-10-17T13:07:32.026592+00:00",
+    "hostname": "5797c1ed0e46"
+  },
+  "standalone_green": {
+    "helper": "scripts/project_a/tests/test_w3_installed.py",
+    "timeout_s": 0.25,
+    "captured_stdout": "partial stdout\n",
+    "captured_stderr": "partial stderr\n",
+    "retained_stdout": true,
+    "retained_stderr": true,
+    "retained_timeout_report": true,
+    "retained_command_count": 1,
+    "instrumentation": "Only subprocess timeout is shortened; real helper and process execute."
+  },
+  "corrected_source_sha256": {
+    "scripts/project_a/tests/test_w3_installed.py": "9a3f3d227cb71f785fb4e08ae9265186394a190c3084477ff6ed14fa77953bff",
+    "scripts/project_a/tests/test_w3_harness.py": "f19cc85ec405bcf3d0c6e079d546f3218054e31849d930097c5fc58898068209"
+  },
+  "scope": "Real subprocesses; shortened regression timeouts only. Timeout still fails acceptance. Full pinned and installed gates recorded separately."
+}

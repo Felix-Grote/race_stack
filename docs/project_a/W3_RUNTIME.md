@@ -306,3 +306,14 @@ mutation coverage. The A09 correction puts each mutation in its own directory as
 hash, parse, context or independent replay reason. Truncation in a normal product
 directory is tested separately from intentional private-stage rejection. The
 independent A07 source artifact mutation suite already used valid product paths.
+
+## Installed command timeout evidence
+
+The installed acceptance helper preserves a real timed-out command's partial
+stdout/stderr bytes and appends its command record before reraising the timeout.
+A separate `*.timeout.json` records RESOURCE_LIMIT, the command, original timeout,
+null return code, retained stream paths and any existing producer-report path.
+It does not overwrite the producer report. The invocation remains failed; the
+existing 240 s limit and all numerical budgets are unchanged. Two actual-process
+failing-first regressions and their corrected results are retained in the
+[independent evidence](evidence/w3-independent/installed-timeout.json).

@@ -72,10 +72,26 @@ def _invoke(product, label, arguments, *, success=True, query=False):
     command = [str(product['executable']), *map(str, arguments)]
     if not query:
         command.extend(('--report', str(report)))
-    completed = subprocess.run(command, cwd=product['output'], capture_output=True,
-                               text=True, timeout=240, check=False)
     stdout = product['output'] / (label + '.stdout.txt')
     stderr = product['output'] / (label + '.stderr.txt')
+    try:
+        completed = subprocess.run(command, cwd=product['output'], capture_output=True,
+                                   text=True, timeout=240, check=False)
+    except subprocess.TimeoutExpired as error:
+        # TimeoutExpired retains bytes even with text=True. Preserve partial output exactly.
+        for path, captured in ((stdout, error.stdout), (stderr, error.stderr)):
+            path.write_bytes(captured if isinstance(captured, bytes) else
+                             (captured or '').encode())
+        timeout_report = product['output'] / (label + '.timeout.json')
+        failure = {'schema_version': 1, 'status': 'RESOURCE_LIMIT',
+                   'reason': 'Installed command exceeded timeout',
+                   'command': command, 'returncode': None, 'timeout_s': error.timeout,
+                   'report': str(timeout_report),
+                   'producer_report': str(report) if report.exists() else None,
+                   'stdout': str(stdout), 'stderr': str(stderr)}
+        timeout_report.write_text(json.dumps(failure, indent=2) + '\n')
+        product['commands'].append(failure)
+        raise
     stdout.write_text(completed.stdout)
     stderr.write_text(completed.stderr)
     value = json.loads(completed.stdout if query else report.read_text())
