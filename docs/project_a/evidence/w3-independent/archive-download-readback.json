@@ -1,0 +1,8 @@
+{
+  "source_commit": "e4ae5922c0d21f3a00395cae3eedebd758b5f086",
+  "url": "https://raw.githubusercontent.com/Felix-Grote/race_stack/e4ae5922c0d21f3a00395cae3eedebd758b5f086/docs/project_a/evidence/w3-independent-review/initial-independent.tar.gz",
+  "bytes": 19274976,
+  "sha256": "05cb942671a3ffb758541e72aa92281725902b270ad60b5fa66daa0165f90ad4",
+  "download_hash_matches_published_archive": true,
+  "initial_API_attempt": "gh raw+json returned transform: short source buffer and two output bytes; not credited. Direct immutable raw URL download passed."
+}

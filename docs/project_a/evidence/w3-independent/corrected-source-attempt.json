@@ -1,0 +1,185 @@
+{
+  "actual_ros_and_installed_tests": "NOT_RUN",
+  "changed_production_file_sha256": {
+    "planner/global_planner/global_planner/route_artifact.py": "2dd9b714afd7e137e13e954a94e62b708b1feeef949a2bc8dad7878177308130",
+    "planner/global_planner/global_planner/route_legacy_export.py": "d06ef255d4cb5697a99239a3873e8dadeb298350c412db4067338324fe79a5aa",
+    "scripts/project_a/w3_benchmark_support.py": "6ba5f671f1152a46eaff3e25cec4979c2c2bfbf8b1b825425a2dc5d27223622b"
+  },
+  "command": "scripts/project_a/setup.sh && scripts/project_a/verify.sh all work/independent-review/installed-final/verification",
+  "completed_groups": {
+    "a01": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 60,
+      "time_s": 2.146
+    },
+    "a02": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 47,
+      "time_s": 43.11
+    },
+    "a03": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 38,
+      "time_s": 47.186
+    },
+    "a04": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 18,
+      "time_s": 60.143
+    },
+    "a05": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 40,
+      "time_s": 96.674
+    },
+    "a05-oracle": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 13,
+      "time_s": 0.361
+    },
+    "a06": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 21,
+      "time_s": 19.156
+    },
+    "a06-ellipse": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 1,
+      "time_s": 2.807
+    },
+    "a06-independent": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 41,
+      "time_s": 18.213
+    },
+    "a06-oracle": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 8,
+      "time_s": 9.841
+    },
+    "a07-artifact": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 112,
+      "time_s": 244.268
+    },
+    "a07-cli": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 68,
+      "time_s": 79.73
+    },
+    "a07-export-pure": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 27,
+      "time_s": 93.425
+    },
+    "a08-regressions": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 14,
+      "time_s": 7.155
+    },
+    "a09-harness": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 5,
+      "time_s": 4.386
+    },
+    "numerical": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 7,
+      "time_s": 0.208
+    },
+    "w2-handoff": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 10,
+      "time_s": 16.485
+    },
+    "w2-novel-pipeline": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 1,
+      "time_s": 17.678
+    },
+    "w2-numerical-oracle": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 3,
+      "time_s": 2.35
+    },
+    "w2-pipeline": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 10,
+      "time_s": 95.538
+    },
+    "w2-shared-cap": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 49,
+      "time_s": 0.226
+    }
+  },
+  "completed_totals": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 593
+  },
+  "groups": 21,
+  "head": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "image_id": "sha256:72059c0caff2aa71e7ee9ff85d718c2e1761488d144857a42167de36ff74d246",
+  "legacy_comparison": "NOT_RUN",
+  "ordinary_selected_package_build": "NOT_RUN",
+  "reason": "Source is a Git worktree: /src/.git points to /workspace/race_stack/.git/worktrees/w3-review outside the isolated source mount; Git reports not a repository and exits128. The required standalone clean recursive clone gate remains pending.",
+  "recorded_utc": "2026-10-17T13:46:03.123538+00:00",
+  "scope": "CORRECTED_DIRTY_SOURCE_STANDARD_ALL_ATTEMPT",
+  "separate_source_free_runtime": "NOT_RUN",
+  "setup_exit_code": 0,
+  "source_hashes": {
+    "after_sha256": "c3b1d82af29fca82eba6a55b86ed91ea8f7c89e0462229f151a32a129fc90f69",
+    "before_sha256": "c3b1d82af29fca82eba6a55b86ed91ea8f7c89e0462229f151a32a129fc90f69",
+    "files": 138,
+    "preflight_equal": true,
+    "unchanged": true
+  },
+  "stopped_phase": "source_manifest.py --build-identity before colcon build",
+  "strict_lint": "PASS for all explicit gates before ordinary build",
+  "verdict": "SOURCE_GATES_PASS_ENVIRONMENT_BLOCKED_BEFORE_ORDINARY_INSTALL",
+  "wrapper_exit_code": 1
+}

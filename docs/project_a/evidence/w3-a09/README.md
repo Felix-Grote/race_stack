@@ -47,3 +47,14 @@ The preserved trusted H values originate from the controlled compile receipts.
 This evidence covers synthetic planar offline software behavior under declared models.
 It does not authorize physical operation or establish real-course geometry,
 3D clearance, contact/tire behavior, localization, controller tracking or safety.
+
+## Lossless storage of large historical JSONs
+
+The two largest `verification/{w2-pipeline,a04-candidates}.json` files are now
+stored as `.json.gz`. [compression.json](compression.json) retains original Git
+blob IDs, raw/stored SHA256, sizes and raw line counts. Each decompression was
+verified byte-for-byte against original 17e4ec4 Git blobs before replacing the
+loose JSON. Restore to scratch with `gzip -dc FILE.json.gz > FILE.json` and check
+the raw SHA256. No acceptance runner consumes these historical paths; original
+experiments and all failed results remain losslessly available. This reduces
+working-tree/review bulk without removing existing Git history.

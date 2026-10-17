@@ -1,0 +1,96 @@
+{
+  "reviewed_head": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "accepted_w2_merge": "9fae5faed6ca62e0c943b6290babc50638477d9b",
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "P2",
+      "summary": "Publication requires trusted output ancestry",
+      "red_tests": 4,
+      "focused_pass": 16,
+      "scoped_pass": 139,
+      "scoped_ros_deselected": 2,
+      "evidence": "publication/finding.json"
+    },
+    {
+      "id": "F2",
+      "severity": "P2",
+      "summary": "Installed timeout retains partial process evidence before failing",
+      "red_tests": 2,
+      "focused_pass": 5,
+      "evidence": "installed/script-audit.json"
+    },
+    {
+      "id": "F3",
+      "severity": "P2",
+      "summary": "Initial legacy fit preserves bounded numerical resource classification",
+      "red_tests": 1,
+      "scoped_pass": 14,
+      "evidence": "benchmarks/REPORT.md"
+    },
+    {
+      "id": "F4",
+      "severity": "P3",
+      "summary": "Compress historical numerical evidence losslessly without history rewrite",
+      "evidence": "hygiene/REPORT.md"
+    }
+  ],
+  "independent_checks": {
+    "serialization_binary64_roundtrips": 10009,
+    "serialization_malformed_rejections": 12,
+    "hosted_unchanged_dual_pass": 9,
+    "query_evaluations": 703,
+    "independent_side_checks": 268,
+    "campaign_checksum_entries": 966,
+    "campaign_attempts": 96,
+    "campaign_pass": 58,
+    "campaign_stock_failures": 28,
+    "campaign_resource_limits": 8,
+    "campaign_condition_failures": 2,
+    "adapted_legacy_composition_proofs": 30,
+    "additional_direct_red_and_environment_partial_attempts": 2,
+    "fresh_benchmark_completed_reports": 19,
+    "fresh_benchmark_pass": 10,
+    "fresh_benchmark_resource_limit": 4,
+    "fresh_benchmark_solver_failure": 4,
+    "fresh_benchmark_inconclusive": 1,
+    "fresh_s6_subset": {
+      "reports": 17,
+      "PASS": 9,
+      "RESOURCE_LIMIT": 3,
+      "SOLVER_FAILURE": 4,
+      "INCONCLUSIVE": 1
+    }
+  },
+  "scope": "Offline synthetic planar software only; final committed clean fresh and exact-head hosted gates separately required.",
+  "recorded_evidence_sha256": {
+    "publication/finding.json": "5645311a89afb054cefd97c5312adc487084f880b1461a1cb9941ab3b8ac6d03",
+    "installed/script-audit.json": "5ab10701933a525037b25a305e8f49fec88bb43d9b5ac4f2b74d83ee8dc4fa81",
+    "benchmarks/REPORT.md": "b368f9afa625733809815779bd77da990064c70b40c10d82043c4084a730089e",
+    "hygiene/REPORT.md": "5541d2616d6c214171f49d50179bb6b3d8bc8f12571cda6c88ccde2f131cf0f8"
+  },
+  "corrective_commits": {
+    "F1": "4a941599ec38195936f5f2b51829cef9cfaf3db8",
+    "F2": "72b72c654d9569a21bb11a6f22a3ad53893d63a9",
+    "F3": "abdbc4ab232ebe850ec1b8c096fc89a2480c29b9"
+  },
+  "initial_independent_archive": {
+    "companion_commit": "e4ae5922c0d21f3a00395cae3eedebd758b5f086",
+    "sha256": "05cb942671a3ffb758541e72aa92281725902b270ad60b5fa66daa0165f90ad4",
+    "bytes": 19274976,
+    "payload_files": 350,
+    "remote_download_hash_verified": true
+  },
+  "corrected_source_attempt": {
+    "tests": 593,
+    "groups": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "source_hashes": 138,
+    "wrapper_exit_code": 1,
+    "stopped_phase": "Git128 while producing build provenance in worktree mount",
+    "installed_and_source_free": "NOT_RUN"
+  },
+  "final_committed_gate_results": "Recorded in companion final-publication.json after exact-SHA gates; no prior acceptance substituted."
+}

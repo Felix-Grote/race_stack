@@ -1,3 +1,32 @@
+# Independent W3 review evidence — 2026-10-17
+
+Initial reviewed SHA `17e4ec4`; accepted W2 merge `9fae5fae`.
+[Full independent report](W3_INDEPENDENT_ADVERSARIAL_REVIEW.md) and
+[checksummed evidence](evidence/w3-independent/README.md).
+
+| Executed independent scope | Actual result |
+| --- | --- |
+| Publication original regressions / corrected focused / corrected pure scope | 4 failures before repair; 16 PASS; 139 PASS with 2 ROS tests separately reserved |
+| Installed timeout original / corrected harness | 2 failures before repair; 5 PASS, real partial outputs retained |
+| Initial legacy fit original / corrected A08 suite | 1 failure before repair; 14 PASS, strict lint |
+| Canonical exact binary64 / malformed parser controls | 10,009 roundtrips / 12 rejections on host and pinned Python |
+| Initial-version unchanged hosted product replay | 9 products; actual fresh geometry and dynamics PASS, original H/C retained |
+| Independent metric/side oracle | 703 queries, 268 side intersections, 2,145 waypoints across 5 cases |
+| Frozen campaign integrity / mathematical oracle | 966 checksums; 96 jobs = 58 PASS / 28 stock / 8 resource / 2 conditioning; 58 independent arc/time audits and 30 rational composition audits |
+| Additional completed benchmark worker reports | 19 = 10 PASS / 4 resource / 4 solver / 1 inconclusive; 2 S0 rows, 17 S6 rows; direct-red/disk-partial attempts separately retained |
+| Corrected approximately 240 m whole path | PASS in 123.957 s, 474 segments, both proofs/publication/query/actual reader-CDR; new-process replay PASS |
+| Corrected dirty-source standard attempt | 593 tests / 21 groups, zero functional failures/errors/skips; strict lint; 138 unchanged source hashes; wrapper1 at worktree Git128 before install |
+| Lossless A09 compaction | 11,979,777 raw bytes / 422,952 lines become 2,104,220 gzip bytes; both restored against exact original Git; all 531 updated ledger entries match |
+
+The dirty-source attempt does not claim ordinary builds, actual installed ROS,
+legacy or separate source-free acceptance. Previous ENOSPC/137, setup/submodule
+errors and every numerical/conditioning/inconclusive result remain retained.
+Exact committed clean fresh acceptance, literal-head hosted CI, artifact source
+identity and final-version hosted replay are recorded only after execution in
+the [completed companion manifest](https://github.com/Felix-Grote/race_stack/blob/w3-independent-review-20261017/docs/project_a/evidence/w3-independent-review/final-publication.json).
+No earlier 552-test checkpoint count is substituted for that actual final matrix.
+The records below retain their historical SHA and limitations.
+
 # W3 current evidence
 
 The extra 811bd708 portability challenge supersedes any inference of general

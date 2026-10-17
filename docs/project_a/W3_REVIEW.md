@@ -1,5 +1,11 @@
 # Independent W3 adversarial review instructions
 
+Independent review findings and ordinary remediations are recorded in
+[W3_INDEPENDENT_ADVERSARIAL_REVIEW.md](W3_INDEPENDENT_ADVERSARIAL_REVIEW.md).
+Its companion publication receipt binds the final exact-SHA gate results.
+The instructions below remain the acceptance contract for this review and any
+subsequent verification.
+
 The implementation's own green tests and internal challenges do not issue final
 ACCEPT. A separate adversarial reviewer must review the exact delivered SHA and
 has the user's authority to commit ordinary remediations directly to

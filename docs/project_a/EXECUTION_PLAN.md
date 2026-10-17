@@ -1,21 +1,15 @@
 # ForzaETH ICRA27 — Project A Codex Cloud execution plan
 
-Version 2026-10-16 | Status: execution authority; implementation evidence in STATUS/RESULTS
-Owner: Global-planner subsystem | Objective: minimum human intervention, maximum verifiable autonomous implementation
+Version 2026-10-16 | Independent review update 2026-10-17
+Owner: Global-planner subsystem | Acceptance specification below remains authoritative.
 
-W3 implementation update: accepted W2 history is preserved; A07–A09 are
-implemented, with complete fresh-candidate and hosted internal verification.
-The original plan below remains the acceptance specification.
-Current results, failures and limitations are recorded in STATUS, RESULTS,
-W3_ARTIFACT, W3_BENCHMARKS and W3_RUNTIME. Independent W3 adversarial review is
-still required; implementation tests do not issue final acceptance.
-
-An additional 811bd708 cross-host artifact replay exposed historical-report
-byte equality as a false rejection despite green full suites. The ordinary
-remediation retains exact authority and both independent validators, adds
-deterministic and real portability regressions, and requires complete new-head
-verification. Fresh-compilation bitwise equality across hosts is unguaranteed;
-STATUS/RESULTS and the separate portability evidence preserve that finding.
+W3 independent review has reproduced and corrected publication ancestry,
+installed timeout evidence and initial legacy-fit classification findings.
+[The review](W3_INDEPENDENT_ADVERSARIAL_REVIEW.md), STATUS and RESULTS record exact
+source checks, failures, numerical limits and the lossless evidence disposition.
+The completed literal-head clean/hosted/source-free gates and release verdict
+are recorded in the separate companion publication manifest linked there;
+no historical implementation checkpoint substitutes for those gates.
 
 # 1\. Executive decision and supersession
 

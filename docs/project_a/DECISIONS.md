@@ -1,5 +1,32 @@
 # Project A decision ledger
 
+## 2026-10-17 — Independent W3 remediation and durable evidence
+
+- Require trusted effective-user/root publication ancestry and no group/other
+  write modes. Root-owned sticky ancestry is permitted only into a private
+  trusted child, never as stage parent. Root/same-UID/filesystem administration
+  remain trusted; loading retains its separate external-H/fresh-proof contract.
+- Preserve actual timeout bytes, command and separate RESOURCE_LIMIT receipt,
+  then propagate failure. Never replace a partial producer report or change
+  the timeout to create acceptance.
+- Catch the initial bounded legacy fit in the existing numerical boundary.
+  Keep fit/QP equations, limits and every historical 96-job outcome unchanged;
+  record the amended helper hash for corrected-source runs.
+- Preserve original red, retry, ENOSPC and Git-worktree provenance failures.
+  The corrected source passes 593 functional tests before Git128 prevents its
+  worktree-mounted build; final acceptance must use the required clean standalone
+  recursive exact-SHA clone, ordinary install and separate source-free runtime.
+- Losslessly gzip only the two largest historical A09 JSONs after restoration
+  matches exact original Git blobs. Bind raw/stored hashes and update the ledger;
+  keep accepted history and the original evidence branch. Durable checksummed
+  companion archives supplement expiring Actions artifacts. A later supervised
+  history-size integration is a recommendation, not part of this release.
+- Record the completed exact delivered SHA, clean/hosted/source identities and
+  final verdict outside the implementation commit in the companion publication
+  manifest. Earlier CI or implementation reviews do not issue acceptance.
+  Preserve planar/model/resource/optimality and physical-operation limits.
+
+
 ## 2026-10-16 — Historical witnesses and independently replayed authority
 
 - Preserve the real 811bd708 cross-host failures despite its green complete

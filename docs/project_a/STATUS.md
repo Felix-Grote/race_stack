@@ -1,4 +1,39 @@
-# Project A status — 2026-10-16
+# Project A status — 2026-10-17
+
+## Independent W3 review — corrections and exact-head publication gates
+
+The independent review starts at `17e4ec4e8fedfa736467d02f6204b04e8552decb`
+and preserves accepted W2 merge `9fae5faed6ca62e0c943b6290babc50638477d9b`.
+Three P2 findings are corrected separately: trusted publication ancestry
+(`4a941599`), retained installed-timeout evidence (`72b72c65`), and initial
+legacy-fit RESOURCE_LIMIT classification (`abdbc4ab`). Original failures remain
+retained. No mathematical tolerance, resource budget, original map, legacy entry
+point, message, accepted W2 source or gitlink changes.
+
+The [independent review](W3_INDEPENDENT_ADVERSARIAL_REVIEW.md) records failing-first
+regressions, independent serialization/metric/benchmark oracles, all sensitivity
+failures and the P3 evidence disposition. The two largest historical A09 JSONs
+are losslessly gzipped with exact restoration against original Git blobs and an
+updated integrity ledger; 422,952 raw text lines remain recoverable. The original
+evidence branch and accepted history are preserved. A new checksummed companion
+archive was pushed and independently downloaded with identical SHA256.
+
+At this report snapshot, corrected-source standard verification completes
+**593 tests / 21 groups / zero functional failures, errors or skips**, strict lint
+and all 138 unchanged source hashes. Its wrapper exits 1 before installation:
+this Git worktree's metadata lies outside the Docker mount (Git128). Builds,
+legacy and separate source-free acceptance are NOT_RUN in that attempt; the
+failed provenance is retained, not called full acceptance.
+
+Next executable gate: `scripts/project_a/fresh_verify.sh EXACT_PR_HEAD work/independent-w3-final`
+in a standalone clean recursive clone, including full install/source-free ROS;
+then exact-head push CI, authenticated artifact/source hashes and final-version
+unchanged hosted-product replay. The completed exact SHA, real matrix and final
+verdict live in the [companion publication manifest](https://github.com/Felix-Grote/race_stack/blob/w3-independent-review-20261017/docs/project_a/evidence/w3-independent-review/final-publication.json),
+without creating a self-referential evidence-commit chain. Earlier records below
+are historical and cannot replace these gates. Offline synthetic software
+handoff does not approve physical racing. No merge is performed.
+
 
 ## W3 report replay remediation — full candidate verification required
 
