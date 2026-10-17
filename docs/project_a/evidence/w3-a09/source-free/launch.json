@@ -1,0 +1,17 @@
+{
+  "expected_commit": "531667abc0ad38236ec46825a544a3644c324b4f",
+  "image_id": "sha256:2cc1f6ad969cdb3256f14b4b45500cb0fcdd4a3f321b4c2a1bbc7c7fb6ca0f88",
+  "source_or_build_mounts": [],
+  "readonly_mounts": [
+    "/work/install",
+    "/work/python",
+    "/runtime-harness"
+  ],
+  "writable_mounts": [
+    "/results",
+    "/tmp"
+  ],
+  "network": "none",
+  "working_directory": "/results",
+  "scope": "Separate container; no repository, source, build or optimizer checkout mounted"
+}

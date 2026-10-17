@@ -1,0 +1,2099 @@
+{
+  "source_commit": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "outcomes": [
+    {
+      "case": "s0_route",
+      "commands": [
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "compile",
+            "--manifest",
+            "/work/install/global_planner/share/global_planner/project_a/fixtures/s0_route.json",
+            "--vehicle-config",
+            "/work/install/global_planner/share/global_planner/project_a/models/s0_route_model.json",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--build-manifest",
+            "/work/install/global_planner/share/global_planner/project_a/build_identity.json",
+            "--output",
+            "/results/w3-scenarios/s0_route/references",
+            "--report",
+            "/results/w3-scenarios/s0_route/compile.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s0_route/compile.json",
+          "stdout": "/results/w3-scenarios/s0_route/compile.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_route/compile.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "validate",
+            "--artifact",
+            "/results/w3-scenarios/s0_route/references/4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909/reference.json",
+            "--expected-h",
+            "4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--report",
+            "/results/w3-scenarios/s0_route/validate.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s0_route/validate.json",
+          "stdout": "/results/w3-scenarios/s0_route/validate.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_route/validate.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "query",
+            "--artifact",
+            "/results/w3-scenarios/s0_route/references/4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909/reference.json",
+            "--expected-h",
+            "4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--s-m",
+            "-0.137"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": null,
+          "stdout": "/results/w3-scenarios/s0_route/query.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_route/query.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "export",
+            "--artifact",
+            "/results/w3-scenarios/s0_route/references/4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909/reference.json",
+            "--expected-h",
+            "4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--step-m",
+            "0.5",
+            "--output",
+            "/results/w3-scenarios/s0_route/legacy",
+            "--report",
+            "/results/w3-scenarios/s0_route/export.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "Existing nine-group reader and ROS CDR roundtrip passed",
+          "report": "/results/w3-scenarios/s0_route/export.json",
+          "stdout": "/results/w3-scenarios/s0_route/export.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_route/export.stderr.txt"
+        }
+      ],
+      "status": "PASS",
+      "H": "4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909",
+      "artifact_path": "/results/w3-scenarios/s0_route/references/4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909/reference.json",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "owner_samples": {
+        "o0": {
+          "H": "4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909",
+          "s": 0.13778082726837174,
+          "segment": 0,
+          "t": 0.49999999999966355,
+          "xy": [
+            5.448544171733141,
+            0.1377706635311974
+          ],
+          "tangent": [
+            -0.02074351345260927,
+            0.9997848301757941
+          ],
+          "left_normal": [
+            -0.9997848301757941,
+            -0.02074351345260927
+          ],
+          "heading": 1.5915413281682833,
+          "curvature": 0.14197339247637122,
+          "occurrence_id": "o0",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 0.045926942422759645,
+          "portal_support": [
+            "p3"
+          ]
+        },
+        "o1": {
+          "H": "4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909",
+          "s": 8.731672922322495,
+          "segment": 25,
+          "t": 0.5000000000012749,
+          "xy": [
+            -0.13986515236219,
+            5.448966831230124
+          ],
+          "tangent": [
+            -0.9998902805958695,
+            -0.014813060788149549
+          ],
+          "left_normal": [
+            0.014813060788149549,
+            -0.9998902805958695
+          ],
+          "heading": -3.1267790510177984,
+          "curvature": 0.11093521973476239,
+          "occurrence_id": "o1",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 2.9105576407742846,
+          "portal_support": [
+            "p0"
+          ]
+        },
+        "o2": {
+          "H": "4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909",
+          "s": 17.323204715156624,
+          "segment": 49,
+          "t": 0.49999999999999706,
+          "xy": [
+            -5.448577057618654,
+            -0.13871997032565594
+          ],
+          "tangent": [
+            0.020152289245481597,
+            -0.9997969219987459
+          ],
+          "left_normal": [
+            0.9997969219987459,
+            0.020152289245481597
+          ],
+          "heading": -1.550642673276386,
+          "curvature": 0.13745948517720394,
+          "occurrence_id": "o2",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 5.774401571718876,
+          "portal_support": [
+            "p1"
+          ]
+        },
+        "o3": {
+          "H": "4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909",
+          "s": 25.77748801936274,
+          "segment": 73,
+          "t": 0.5000000000003871,
+          "xy": [
+            0.00034055150013118384,
+            -5.4499984718428705
+          ],
+          "tangent": [
+            0.9999999775389348,
+            -0.0002119484138320859
+          ],
+          "left_normal": [
+            0.0002119484138320859,
+            0.9999999775389348
+          ],
+          "heading": -0.0002119484154189483,
+          "curvature": 0.09785782777002984,
+          "occurrence_id": "o3",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 8.592496006454247,
+          "portal_support": [
+            "p2"
+          ]
+        }
+      },
+      "query_count": 106,
+      "policy_sha256": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133",
+      "model_sha256": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "fixture_sha256": "3bfddf1726bdf55d53496ddd37d6289cb2808136bfaba49fb0c6228340d85cff",
+      "curve_digest": "239e6c76dee1d3b5c4a438796ba20ede3104da035bc193227a78f637c4d342e8",
+      "length_m": 34.36895019738418,
+      "lap_time_s": 11.456316732461396,
+      "waypoint_count": 235
+    },
+    {
+      "case": "s0_reverse_route",
+      "commands": [
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "compile",
+            "--manifest",
+            "/work/install/global_planner/share/global_planner/project_a/fixtures/s0_reverse_route.json",
+            "--vehicle-config",
+            "/work/install/global_planner/share/global_planner/project_a/models/s0_reverse_route_model.json",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--build-manifest",
+            "/work/install/global_planner/share/global_planner/project_a/build_identity.json",
+            "--output",
+            "/results/w3-scenarios/s0_reverse_route/references",
+            "--report",
+            "/results/w3-scenarios/s0_reverse_route/compile.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s0_reverse_route/compile.json",
+          "stdout": "/results/w3-scenarios/s0_reverse_route/compile.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_reverse_route/compile.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "validate",
+            "--artifact",
+            "/results/w3-scenarios/s0_reverse_route/references/5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98/reference.json",
+            "--expected-h",
+            "5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--report",
+            "/results/w3-scenarios/s0_reverse_route/validate.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s0_reverse_route/validate.json",
+          "stdout": "/results/w3-scenarios/s0_reverse_route/validate.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_reverse_route/validate.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "query",
+            "--artifact",
+            "/results/w3-scenarios/s0_reverse_route/references/5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98/reference.json",
+            "--expected-h",
+            "5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--s-m",
+            "-0.137"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": null,
+          "stdout": "/results/w3-scenarios/s0_reverse_route/query.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_reverse_route/query.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "export",
+            "--artifact",
+            "/results/w3-scenarios/s0_reverse_route/references/5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98/reference.json",
+            "--expected-h",
+            "5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--step-m",
+            "0.5",
+            "--output",
+            "/results/w3-scenarios/s0_reverse_route/legacy",
+            "--report",
+            "/results/w3-scenarios/s0_reverse_route/export.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "Existing nine-group reader and ROS CDR roundtrip passed",
+          "report": "/results/w3-scenarios/s0_reverse_route/export.json",
+          "stdout": "/results/w3-scenarios/s0_reverse_route/export.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_reverse_route/export.stderr.txt"
+        }
+      ],
+      "status": "PASS",
+      "H": "5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98",
+      "artifact_path": "/results/w3-scenarios/s0_reverse_route/references/5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98/reference.json",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "owner_samples": {
+        "o3": {
+          "H": "5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98",
+          "s": 0.13778082726840976,
+          "segment": 0,
+          "t": 0.4999999999996636,
+          "xy": [
+            5.448544171738891,
+            -0.13777066344894193
+          ],
+          "tangent": [
+            -0.02074351339687115,
+            -0.9997848301769505
+          ],
+          "left_normal": [
+            0.9997848301769505,
+            -0.02074351339687115
+          ],
+          "heading": -1.5915413281125332,
+          "curvature": -0.14197339247174381,
+          "occurrence_id": "o3",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 0.04592694242277232,
+          "portal_support": [
+            "p3"
+          ]
+        },
+        "o2": {
+          "H": "5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98",
+          "s": 8.731672922648452,
+          "segment": 25,
+          "t": 0.500000000001275,
+          "xy": [
+            -0.13986515252454465,
+            -5.448966831322309
+          ],
+          "tangent": [
+            -0.9998902805869406,
+            0.01481306139085908
+          ],
+          "left_normal": [
+            -0.01481306139085908,
+            -0.9998902805869406
+          ],
+          "heading": 3.126779050415023,
+          "curvature": -0.11093523060448619,
+          "occurrence_id": "o2",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 2.910557640882936,
+          "portal_support": [
+            "p2"
+          ]
+        },
+        "o1": {
+          "H": "5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98",
+          "s": 17.32320471509396,
+          "segment": 49,
+          "t": 0.4999999999999944,
+          "xy": [
+            -5.448577057632541,
+            0.13871997024663696
+          ],
+          "tangent": [
+            0.020152289154332172,
+            0.9997969220005831
+          ],
+          "left_normal": [
+            -0.9997969220005831,
+            0.020152289154332172
+          ],
+          "heading": 1.5506426733675538,
+          "curvature": -0.13745948574895206,
+          "occurrence_id": "o1",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 5.774401571697987,
+          "portal_support": [
+            "p1"
+          ]
+        },
+        "o0": {
+          "H": "5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98",
+          "s": 25.777488019544034,
+          "segment": 73,
+          "t": 0.49999999999802336,
+          "xy": [
+            0.00034055156319020397,
+            5.449998471846687
+          ],
+          "tangent": [
+            0.999999977538909,
+            0.00021194853530601333
+          ],
+          "left_normal": [
+            -0.00021194853530601333,
+            0.999999977538909
+          ],
+          "heading": 0.00021194853689287843,
+          "curvature": -0.09785782784037102,
+          "occurrence_id": "o0",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 8.59249600651468,
+          "portal_support": [
+            "p0"
+          ]
+        }
+      },
+      "query_count": 106,
+      "policy_sha256": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133",
+      "model_sha256": "49bace7f73d98d96fc6721cabd5e8f1e54c8691d987333fa261b5290154d4702",
+      "fixture_sha256": "eea555e7bd76e911bdf13cf395dd9958d40cdcda46a05681838844b3cc2891c6",
+      "curve_digest": "776117be87c87c61bcc0b69044b4bf1e290897836fb14bba15215f42e0df78b1",
+      "length_m": 34.368950197367155,
+      "lap_time_s": 11.45631673245572,
+      "waypoint_count": 235
+    },
+    {
+      "case": "s0_rotated_route",
+      "commands": [
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "compile",
+            "--manifest",
+            "/work/install/global_planner/share/global_planner/project_a/fixtures/s0_rotated_route.json",
+            "--vehicle-config",
+            "/work/install/global_planner/share/global_planner/project_a/models/s0_rotated_route_model.json",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--build-manifest",
+            "/work/install/global_planner/share/global_planner/project_a/build_identity.json",
+            "--output",
+            "/results/w3-scenarios/s0_rotated_route/references",
+            "--report",
+            "/results/w3-scenarios/s0_rotated_route/compile.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s0_rotated_route/compile.json",
+          "stdout": "/results/w3-scenarios/s0_rotated_route/compile.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_rotated_route/compile.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "validate",
+            "--artifact",
+            "/results/w3-scenarios/s0_rotated_route/references/3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f/reference.json",
+            "--expected-h",
+            "3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--report",
+            "/results/w3-scenarios/s0_rotated_route/validate.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s0_rotated_route/validate.json",
+          "stdout": "/results/w3-scenarios/s0_rotated_route/validate.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_rotated_route/validate.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "query",
+            "--artifact",
+            "/results/w3-scenarios/s0_rotated_route/references/3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f/reference.json",
+            "--expected-h",
+            "3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--s-m",
+            "-0.137"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": null,
+          "stdout": "/results/w3-scenarios/s0_rotated_route/query.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_rotated_route/query.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "export",
+            "--artifact",
+            "/results/w3-scenarios/s0_rotated_route/references/3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f/reference.json",
+            "--expected-h",
+            "3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--step-m",
+            "0.5",
+            "--output",
+            "/results/w3-scenarios/s0_rotated_route/legacy",
+            "--report",
+            "/results/w3-scenarios/s0_rotated_route/export.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "Existing nine-group reader and ROS CDR roundtrip passed",
+          "report": "/results/w3-scenarios/s0_rotated_route/export.json",
+          "stdout": "/results/w3-scenarios/s0_rotated_route/export.stdout.txt",
+          "stderr": "/results/w3-scenarios/s0_rotated_route/export.stderr.txt"
+        }
+      ],
+      "status": "PASS",
+      "H": "3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f",
+      "artifact_path": "/results/w3-scenarios/s0_rotated_route/references/3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f/reference.json",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "owner_samples": {
+        "o1": {
+          "H": "3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f",
+          "s": 0.13778082726876847,
+          "segment": 0,
+          "t": 0.4999999999996635,
+          "xy": [
+            -0.1377706634636096,
+            5.448544171739914
+          ],
+          "tangent": [
+            -0.9997848301768252,
+            -0.020743513402909808
+          ],
+          "left_normal": [
+            0.020743513402909808,
+            -0.9997848301768252
+          ],
+          "heading": -3.1208476522661166,
+          "curvature": 0.1419733924646673,
+          "occurrence_id": "o1",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 0.045926942422891893,
+          "portal_support": [
+            "p0"
+          ]
+        },
+        "o2": {
+          "H": "3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f",
+          "s": 8.731672922605345,
+          "segment": 25,
+          "t": 0.5000000000012749,
+          "xy": [
+            -5.448966831426143,
+            -0.13986515248862158
+          ],
+          "tangent": [
+            0.01481306188766938,
+            -0.9998902805795803
+          ],
+          "left_normal": [
+            0.9998902805795803,
+            0.01481306188766938
+          ],
+          "heading": -1.5559827231232612,
+          "curvature": 0.11093524090474494,
+          "occurrence_id": "o2",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 2.910557640868568,
+          "portal_support": [
+            "p1"
+          ]
+        },
+        "o3": {
+          "H": "3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f",
+          "s": 17.32320471516603,
+          "segment": 49,
+          "t": 0.4999999999999987,
+          "xy": [
+            0.13871997026052396,
+            -5.448577057624849
+          ],
+          "tangent": [
+            0.9997969219999072,
+            0.020152289187863402
+          ],
+          "left_normal": [
+            -0.020152289187863402,
+            0.9997969219999072
+          ],
+          "heading": 0.020153653460880768,
+          "curvature": 0.13745948514437126,
+          "occurrence_id": "o3",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 5.774401571722012,
+          "portal_support": [
+            "p2"
+          ]
+        },
+        "o0": {
+          "H": "3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f",
+          "s": 25.777488019551445,
+          "segment": 73,
+          "t": 0.5000000000003084,
+          "xy": [
+            5.449998471846358,
+            0.0003405515569845524
+          ],
+          "tangent": [
+            0.00021194883350896839,
+            0.9999999775388457
+          ],
+          "left_normal": [
+            -0.9999999775388457,
+            0.00021194883350896839
+          ],
+          "heading": 1.5705843779598008,
+          "curvature": 0.09785782785147558,
+          "occurrence_id": "o0",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 8.59249600651715,
+          "portal_support": [
+            "p3"
+          ]
+        }
+      },
+      "query_count": 106,
+      "policy_sha256": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133",
+      "model_sha256": "d0ffc05d1daf9f0014c53e5ea189a49db65ee76e1a4da0b2a4cfa745c2ccb6a7",
+      "fixture_sha256": "12fa1e23b1078ac1b0720defa8a90e8e4e3e545adc8f73bff6b2cff8a9dae465",
+      "curve_digest": "845249e58bab6a449b0b8d2e999c1b9778cf51e348f4a32b4d083661d01bed66",
+      "length_m": 34.368950197402135,
+      "lap_time_s": 11.45631673246738,
+      "waypoint_count": 235
+    },
+    {
+      "case": "s2_upper_route",
+      "commands": [
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "compile",
+            "--manifest",
+            "/work/install/global_planner/share/global_planner/project_a/fixtures/s2_upper_route.json",
+            "--vehicle-config",
+            "/work/install/global_planner/share/global_planner/project_a/models/s2_upper_route_model.json",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--build-manifest",
+            "/work/install/global_planner/share/global_planner/project_a/build_identity.json",
+            "--output",
+            "/results/w3-scenarios/s2_upper_route/references",
+            "--report",
+            "/results/w3-scenarios/s2_upper_route/compile.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s2_upper_route/compile.json",
+          "stdout": "/results/w3-scenarios/s2_upper_route/compile.stdout.txt",
+          "stderr": "/results/w3-scenarios/s2_upper_route/compile.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "validate",
+            "--artifact",
+            "/results/w3-scenarios/s2_upper_route/references/24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c/reference.json",
+            "--expected-h",
+            "24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--report",
+            "/results/w3-scenarios/s2_upper_route/validate.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s2_upper_route/validate.json",
+          "stdout": "/results/w3-scenarios/s2_upper_route/validate.stdout.txt",
+          "stderr": "/results/w3-scenarios/s2_upper_route/validate.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "query",
+            "--artifact",
+            "/results/w3-scenarios/s2_upper_route/references/24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c/reference.json",
+            "--expected-h",
+            "24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--s-m",
+            "-0.137"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": null,
+          "stdout": "/results/w3-scenarios/s2_upper_route/query.stdout.txt",
+          "stderr": "/results/w3-scenarios/s2_upper_route/query.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "export",
+            "--artifact",
+            "/results/w3-scenarios/s2_upper_route/references/24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c/reference.json",
+            "--expected-h",
+            "24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--step-m",
+            "0.5",
+            "--output",
+            "/results/w3-scenarios/s2_upper_route/legacy",
+            "--report",
+            "/results/w3-scenarios/s2_upper_route/export.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "Existing nine-group reader and ROS CDR roundtrip passed",
+          "report": "/results/w3-scenarios/s2_upper_route/export.json",
+          "stdout": "/results/w3-scenarios/s2_upper_route/export.stdout.txt",
+          "stderr": "/results/w3-scenarios/s2_upper_route/export.stderr.txt"
+        }
+      ],
+      "status": "PASS",
+      "H": "24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c",
+      "artifact_path": "/results/w3-scenarios/s2_upper_route/references/24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c/reference.json",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "owner_samples": {
+        "o0": {
+          "H": "24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c",
+          "s": 0.1304892946812293,
+          "segment": 0,
+          "t": 0.4999999997703068,
+          "xy": [
+            5.44554890700298,
+            0.13897235211068887
+          ],
+          "tangent": [
+            -0.042776076433868396,
+            0.9990846847414507
+          ],
+          "left_normal": [
+            -0.9990846847414507,
+            -0.042776076433868396
+          ],
+          "heading": 1.6135854592075116,
+          "curvature": 0.17960064768926967,
+          "occurrence_id": "o0",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 0.04349643154024613,
+          "portal_support": [
+            "p3"
+          ]
+        },
+        "o1": {
+          "H": "24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c",
+          "s": 7.9656419435357675,
+          "segment": 23,
+          "t": 0.5000000000000464,
+          "xy": [
+            -0.13533993197927519,
+            4.449217059052078
+          ],
+          "tangent": [
+            -0.9999308275585398,
+            -0.011761806752958041
+          ],
+          "left_normal": [
+            0.011761806752958041,
+            -0.9999308275585398
+          ],
+          "heading": -3.1298305756317015,
+          "curvature": 0.08257775112119782,
+          "occurrence_id": "o1",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 2.6552139811785938,
+          "portal_support": [
+            "p0"
+          ]
+        },
+        "o2": {
+          "H": "24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c",
+          "s": 15.714795553168084,
+          "segment": 46,
+          "t": 0.5000000000047556,
+          "xy": [
+            -5.450551710842864,
+            -0.04676200406304037
+          ],
+          "tangent": [
+            -0.013124413356374274,
+            -0.9999138711779385
+          ],
+          "left_normal": [
+            0.9999138711779385,
+            -0.013124413356374274
+          ],
+          "heading": -1.5839211169610068,
+          "curvature": 0.14763760129759265,
+          "occurrence_id": "o2",
+          "surface_id": "ground",
+          "speed_mps": 1.8269233420130842,
+          "acceleration_mps2": 1.5607579527309392,
+          "time_s": 5.518001418432351,
+          "portal_support": [
+            "p1"
+          ]
+        },
+        "o3": {
+          "H": "24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c",
+          "s": 23.76236967231792,
+          "segment": 69,
+          "t": 0.5000000003519112,
+          "xy": [
+            0.02217952187893503,
+            -4.667636059293137
+          ],
+          "tangent": [
+            0.999963822696169,
+            0.00850607423342741
+          ],
+          "left_normal": [
+            -0.00850607423342741,
+            0.999963822696169
+          ],
+          "heading": 0.008506176810522447,
+          "curvature": 0.07591728900007365,
+          "occurrence_id": "o3",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 8.396332877697715,
+          "portal_support": [
+            "p2"
+          ]
+        }
+      },
+      "query_count": 100,
+      "policy_sha256": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133",
+      "model_sha256": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "fixture_sha256": "9abdc88ead71bcff8e170be6b5e4df3935d4a2fac02ee4a493318b7b2a4bb42a",
+      "curve_digest": "c11b66c01d7476889cf8602b1a6c86b24b47f21b0e57571360673ee495ffd2c5",
+      "length_m": 31.79045935820842,
+      "lap_time_s": 11.072362772989473,
+      "waypoint_count": 219
+    },
+    {
+      "case": "s2_lower_route",
+      "commands": [
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "compile",
+            "--manifest",
+            "/work/install/global_planner/share/global_planner/project_a/fixtures/s2_lower_route.json",
+            "--vehicle-config",
+            "/work/install/global_planner/share/global_planner/project_a/models/s2_lower_route_model.json",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--build-manifest",
+            "/work/install/global_planner/share/global_planner/project_a/build_identity.json",
+            "--output",
+            "/results/w3-scenarios/s2_lower_route/references",
+            "--report",
+            "/results/w3-scenarios/s2_lower_route/compile.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s2_lower_route/compile.json",
+          "stdout": "/results/w3-scenarios/s2_lower_route/compile.stdout.txt",
+          "stderr": "/results/w3-scenarios/s2_lower_route/compile.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "validate",
+            "--artifact",
+            "/results/w3-scenarios/s2_lower_route/references/ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182/reference.json",
+            "--expected-h",
+            "ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--report",
+            "/results/w3-scenarios/s2_lower_route/validate.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s2_lower_route/validate.json",
+          "stdout": "/results/w3-scenarios/s2_lower_route/validate.stdout.txt",
+          "stderr": "/results/w3-scenarios/s2_lower_route/validate.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "query",
+            "--artifact",
+            "/results/w3-scenarios/s2_lower_route/references/ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182/reference.json",
+            "--expected-h",
+            "ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--s-m",
+            "-0.137"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": null,
+          "stdout": "/results/w3-scenarios/s2_lower_route/query.stdout.txt",
+          "stderr": "/results/w3-scenarios/s2_lower_route/query.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "export",
+            "--artifact",
+            "/results/w3-scenarios/s2_lower_route/references/ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182/reference.json",
+            "--expected-h",
+            "ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--step-m",
+            "0.5",
+            "--output",
+            "/results/w3-scenarios/s2_lower_route/legacy",
+            "--report",
+            "/results/w3-scenarios/s2_lower_route/export.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "Existing nine-group reader and ROS CDR roundtrip passed",
+          "report": "/results/w3-scenarios/s2_lower_route/export.json",
+          "stdout": "/results/w3-scenarios/s2_lower_route/export.stdout.txt",
+          "stderr": "/results/w3-scenarios/s2_lower_route/export.stderr.txt"
+        }
+      ],
+      "status": "PASS",
+      "H": "ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182",
+      "artifact_path": "/results/w3-scenarios/s2_lower_route/references/ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182/reference.json",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "owner_samples": {
+        "o0": {
+          "H": "ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182",
+          "s": 0.11596658558475717,
+          "segment": 0,
+          "t": 0.500000000000001,
+          "xy": [
+            5.439161383091342,
+            0.09457627232357024
+          ],
+          "tangent": [
+            -0.10547952632589863,
+            0.9944214747912798
+          ],
+          "left_normal": [
+            -0.9944214747912798,
+            -0.10547952632589863
+          ],
+          "heading": 1.6764724319042312,
+          "curvature": 0.2163104979102939,
+          "occurrence_id": "o0",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 0.03865552852825247,
+          "portal_support": [
+            "p3"
+          ]
+        },
+        "o1": {
+          "H": "ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182",
+          "s": 7.461030024462601,
+          "segment": 21,
+          "t": 0.49999999999999994,
+          "xy": [
+            -0.10084644078816506,
+            3.746316453141486
+          ],
+          "tangent": [
+            -0.9999831732389305,
+            -0.0058011411807666734
+          ],
+          "left_normal": [
+            0.0058011411807666734,
+            -0.9999831732389305
+          ],
+          "heading": -3.1357914798706688,
+          "curvature": 0.05638168072143721,
+          "occurrence_id": "o1",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 2.4870100081542006,
+          "portal_support": [
+            "p0"
+          ]
+        },
+        "o2": {
+          "H": "ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182",
+          "s": 14.854543922741625,
+          "segment": 43,
+          "t": 0.49999999999992917,
+          "xy": [
+            -5.459595363484212,
+            -0.15015408475687125
+          ],
+          "tangent": [
+            -0.07243925599515426,
+            -0.9973728260740156
+          ],
+          "left_normal": [
+            0.9973728260740156,
+            -0.07243925599515426
+          ],
+          "heading": -1.6432990863705668,
+          "curvature": 0.13828746611329665,
+          "occurrence_id": "o2",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 4.951514640913869,
+          "portal_support": [
+            "p1"
+          ]
+        },
+        "o3": {
+          "H": "ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182",
+          "s": 23.01970547724982,
+          "segment": 66,
+          "t": 0.5000000000000033,
+          "xy": [
+            0.09455851844948901,
+            -4.744867772713182
+          ],
+          "tangent": [
+            0.9999694966223635,
+            0.007810622562701479
+          ],
+          "left_normal": [
+            -0.007810622562701479,
+            0.9999694966223635
+          ],
+          "heading": 0.007810701980460352,
+          "curvature": 0.07655929355662663,
+          "occurrence_id": "o3",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 7.673235159083274,
+          "portal_support": [
+            "p2"
+          ]
+        }
+      },
+      "query_count": 97,
+      "policy_sha256": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133",
+      "model_sha256": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "fixture_sha256": "5a8c24775d52901231dc7134ddf27d121854501cde7953a41a89f85c111a576f",
+      "curve_digest": "7f0aa5ff09b06a183803ce8b598112d54a9d351febba5e5a0e45eeb5b96c446c",
+      "length_m": 31.105020353339064,
+      "lap_time_s": 10.36834011777969,
+      "waypoint_count": 214
+    },
+    {
+      "case": "s3_surfaces_route",
+      "commands": [
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "compile",
+            "--manifest",
+            "/work/install/global_planner/share/global_planner/project_a/fixtures/s3_surfaces_route.json",
+            "--vehicle-config",
+            "/work/install/global_planner/share/global_planner/project_a/models/s3_surfaces_route_model.json",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--build-manifest",
+            "/work/install/global_planner/share/global_planner/project_a/build_identity.json",
+            "--output",
+            "/results/w3-scenarios/s3_surfaces_route/references",
+            "--report",
+            "/results/w3-scenarios/s3_surfaces_route/compile.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s3_surfaces_route/compile.json",
+          "stdout": "/results/w3-scenarios/s3_surfaces_route/compile.stdout.txt",
+          "stderr": "/results/w3-scenarios/s3_surfaces_route/compile.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "validate",
+            "--artifact",
+            "/results/w3-scenarios/s3_surfaces_route/references/dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177/reference.json",
+            "--expected-h",
+            "dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--report",
+            "/results/w3-scenarios/s3_surfaces_route/validate.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s3_surfaces_route/validate.json",
+          "stdout": "/results/w3-scenarios/s3_surfaces_route/validate.stdout.txt",
+          "stderr": "/results/w3-scenarios/s3_surfaces_route/validate.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "query",
+            "--artifact",
+            "/results/w3-scenarios/s3_surfaces_route/references/dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177/reference.json",
+            "--expected-h",
+            "dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--s-m",
+            "-0.137"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": null,
+          "stdout": "/results/w3-scenarios/s3_surfaces_route/query.stdout.txt",
+          "stderr": "/results/w3-scenarios/s3_surfaces_route/query.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "export",
+            "--artifact",
+            "/results/w3-scenarios/s3_surfaces_route/references/dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177/reference.json",
+            "--expected-h",
+            "dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--step-m",
+            "0.5",
+            "--output",
+            "/results/w3-scenarios/s3_surfaces_route/legacy",
+            "--report",
+            "/results/w3-scenarios/s3_surfaces_route/export.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "Existing nine-group reader and ROS CDR roundtrip passed",
+          "report": "/results/w3-scenarios/s3_surfaces_route/export.json",
+          "stdout": "/results/w3-scenarios/s3_surfaces_route/export.stdout.txt",
+          "stderr": "/results/w3-scenarios/s3_surfaces_route/export.stderr.txt"
+        }
+      ],
+      "status": "PASS",
+      "H": "dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177",
+      "artifact_path": "/results/w3-scenarios/s3_surfaces_route/references/dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177/reference.json",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "owner_samples": {
+        "o0": {
+          "H": "dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177",
+          "s": 0.1418245779245933,
+          "segment": 0,
+          "t": 0.4999999999979778,
+          "xy": [
+            -5.503455359499996,
+            -3.8390523572980335
+          ],
+          "tangent": [
+            0.985343257229569,
+            -0.1705833093600412
+          ],
+          "left_normal": [
+            0.1705833093600412,
+            0.985343257229569
+          ],
+          "heading": -0.17142162477770853,
+          "curvature": 0.22006011391518943,
+          "occurrence_id": "o0",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 0.047274859308004465,
+          "portal_support": [
+            "p3"
+          ]
+        },
+        "o1": {
+          "H": "dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177",
+          "s": 14.519172380377027,
+          "segment": 39,
+          "t": 0.5000000000000001,
+          "xy": [
+            5.738774530508541,
+            3.4646316499592347
+          ],
+          "tangent": [
+            0.9759454647142715,
+            -0.2180147928550829
+          ],
+          "left_normal": [
+            0.2180147928550829,
+            0.9759454647142715
+          ],
+          "heading": -0.21977986934975857,
+          "curvature": -0.1744251970915155,
+          "occurrence_id": "o1",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 4.839724126792343,
+          "portal_support": [
+            "p0"
+          ]
+        },
+        "o2": {
+          "H": "dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177",
+          "s": 24.213892541613863,
+          "segment": 66,
+          "t": 0.49999999999991823,
+          "xy": [
+            5.615558309167577,
+            -3.5880749779560612
+          ],
+          "tangent": [
+            -0.9849654967677133,
+            -0.17275117995872508
+          ],
+          "left_normal": [
+            0.17275117995872508,
+            -0.9849654967677133
+          ],
+          "heading": -2.967970490729428,
+          "curvature": -0.11930015329970992,
+          "occurrence_id": "o2",
+          "surface_id": "upper-deck",
+          "speed_mps": 2.4502048018015654,
+          "acceleration_mps2": -1.3611317731623094,
+          "time_s": 8.142338395166908,
+          "portal_support": [
+            "p1"
+          ]
+        },
+        "o3": {
+          "H": "dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177",
+          "s": 38.522413081673676,
+          "segment": 105,
+          "t": 0.4999999991071726,
+          "xy": [
+            -5.651377777083436,
+            3.7846141090179684
+          ],
+          "tangent": [
+            -0.9888240756444118,
+            -0.14908704647277207
+          ],
+          "left_normal": [
+            0.14908704647277207,
+            -0.9888240756444118
+          ],
+          "heading": -2.991947717159304,
+          "curvature": 0.11534981795125972,
+          "occurrence_id": "o3",
+          "surface_id": "ground",
+          "speed_mps": 2.445190005550955,
+          "acceleration_mps2": 0.7740913202486721,
+          "time_s": 13.966033460289891,
+          "portal_support": [
+            "p2"
+          ]
+        }
+      },
+      "query_count": 142,
+      "policy_sha256": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133",
+      "model_sha256": "afbb0f3e947306aabfeaaf5834c399d4becf184a01453bf4a54d55fd1f64aea7",
+      "fixture_sha256": "f397127bdd14e1713b4a4ace30b5aec76c16b0091d07b41d379c3411746afa98",
+      "curve_digest": "9bedda5b0cb2eca92cbe84385a641e3e76b3bf48e02fb46dc230f2ca485fde96",
+      "length_m": 48.90859029627971,
+      "lap_time_s": 17.564217325770205,
+      "waypoint_count": 329
+    },
+    {
+      "case": "s3_notch_route",
+      "commands": [
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "compile",
+            "--manifest",
+            "/work/install/global_planner/share/global_planner/project_a/fixtures/s3_notch_route.json",
+            "--vehicle-config",
+            "/work/install/global_planner/share/global_planner/project_a/models/s3_notch_route_model.json",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--build-manifest",
+            "/work/install/global_planner/share/global_planner/project_a/build_identity.json",
+            "--output",
+            "/results/w3-scenarios/s3_notch_route/references",
+            "--report",
+            "/results/w3-scenarios/s3_notch_route/compile.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s3_notch_route/compile.json",
+          "stdout": "/results/w3-scenarios/s3_notch_route/compile.stdout.txt",
+          "stderr": "/results/w3-scenarios/s3_notch_route/compile.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "validate",
+            "--artifact",
+            "/results/w3-scenarios/s3_notch_route/references/8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06/reference.json",
+            "--expected-h",
+            "8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--report",
+            "/results/w3-scenarios/s3_notch_route/validate.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s3_notch_route/validate.json",
+          "stdout": "/results/w3-scenarios/s3_notch_route/validate.stdout.txt",
+          "stderr": "/results/w3-scenarios/s3_notch_route/validate.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "query",
+            "--artifact",
+            "/results/w3-scenarios/s3_notch_route/references/8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06/reference.json",
+            "--expected-h",
+            "8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--s-m",
+            "-0.137"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": null,
+          "stdout": "/results/w3-scenarios/s3_notch_route/query.stdout.txt",
+          "stderr": "/results/w3-scenarios/s3_notch_route/query.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "export",
+            "--artifact",
+            "/results/w3-scenarios/s3_notch_route/references/8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06/reference.json",
+            "--expected-h",
+            "8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--step-m",
+            "0.5",
+            "--output",
+            "/results/w3-scenarios/s3_notch_route/legacy",
+            "--report",
+            "/results/w3-scenarios/s3_notch_route/export.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "Existing nine-group reader and ROS CDR roundtrip passed",
+          "report": "/results/w3-scenarios/s3_notch_route/export.json",
+          "stdout": "/results/w3-scenarios/s3_notch_route/export.stdout.txt",
+          "stderr": "/results/w3-scenarios/s3_notch_route/export.stderr.txt"
+        }
+      ],
+      "status": "PASS",
+      "H": "8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06",
+      "artifact_path": "/results/w3-scenarios/s3_notch_route/references/8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06/reference.json",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "owner_samples": {
+        "o0": {
+          "H": "8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06",
+          "s": 0.14182450947278746,
+          "segment": 0,
+          "t": 0.499999999997978,
+          "xy": [
+            -5.503456386994623,
+            -3.8390542182838634
+          ],
+          "tangent": [
+            0.9853425609364035,
+            -0.17058733132120338
+          ],
+          "left_normal": [
+            0.17058733132120338,
+            0.9853425609364035
+          ],
+          "heading": -0.17142570656601297,
+          "curvature": 0.22005931649275254,
+          "occurrence_id": "o0",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 0.04727483649073586,
+          "portal_support": [
+            "p3"
+          ]
+        },
+        "o1": {
+          "H": "8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06",
+          "s": 14.519232589897245,
+          "segment": 40,
+          "t": 0.5000000000000011,
+          "xy": [
+            5.738776645067059,
+            3.464642910199404
+          ],
+          "tangent": [
+            0.9759345336904941,
+            -0.21806371993139498
+          ],
+          "left_normal": [
+            0.21806371993139498,
+            0.9759345336904941
+          ],
+          "heading": -0.2198300026328926,
+          "curvature": -0.17442577555375416,
+          "occurrence_id": "o1",
+          "surface_id": "ground",
+          "speed_mps": 2.9999999999999996,
+          "acceleration_mps2": 0.0,
+          "time_s": 4.839744196632416,
+          "portal_support": [
+            "p0"
+          ]
+        },
+        "o2": {
+          "H": "8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06",
+          "s": 24.21392486360544,
+          "segment": 67,
+          "t": 0.49999999999993844,
+          "xy": [
+            5.615557877135231,
+            -3.5880751172683474
+          ],
+          "tangent": [
+            -0.9849654723552067,
+            -0.17275131915005595
+          ],
+          "left_normal": [
+            0.17275131915005595,
+            -0.9849654723552067
+          ],
+          "heading": -2.96797034941348,
+          "curvature": -0.11930074949245179,
+          "occurrence_id": "o2",
+          "surface_id": "upper-deck",
+          "speed_mps": 2.4502313207422306,
+          "acceleration_mps2": -1.3611153497944695,
+          "time_s": 8.142309012404802,
+          "portal_support": [
+            "p1"
+          ]
+        },
+        "o3": {
+          "H": "8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06",
+          "s": 38.52244610293777,
+          "segment": 106,
+          "t": 0.4999999991130043,
+          "xy": [
+            -5.651378745767804,
+            3.7846139659088642
+          ],
+          "tangent": [
+            -0.988824064693454,
+            -0.14908711910529396
+          ],
+          "left_normal": [
+            0.14908711910529396,
+            -0.988824064693454
+          ],
+          "heading": -2.991947643705872,
+          "curvature": 0.11535077581271236,
+          "occurrence_id": "o3",
+          "surface_id": "ground",
+          "speed_mps": 2.4451922454895256,
+          "acceleration_mps2": 0.7740817767309398,
+          "time_s": 13.965993950635806,
+          "portal_support": [
+            "p2"
+          ]
+        }
+      },
+      "query_count": 143,
+      "policy_sha256": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133",
+      "model_sha256": "afbb0f3e947306aabfeaaf5834c399d4becf184a01453bf4a54d55fd1f64aea7",
+      "fixture_sha256": "d1dcbfe952da8c2aa00b430e986cb8273ae0a0db95eb2869ea63ea444f715ef9",
+      "curve_digest": "07a4c9d7e693aa94c78b059cb63142c3571bddb94247847277f83893dc66ac56",
+      "length_m": 48.90862051285766,
+      "lap_time_s": 17.56417717652297,
+      "waypoint_count": 330
+    },
+    {
+      "case": "s4_repeated_route",
+      "commands": [
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "compile",
+            "--manifest",
+            "/work/install/global_planner/share/global_planner/project_a/fixtures/s4_repeated_route.json",
+            "--vehicle-config",
+            "/work/install/global_planner/share/global_planner/project_a/models/s4_repeated_route_model.json",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--build-manifest",
+            "/work/install/global_planner/share/global_planner/project_a/build_identity.json",
+            "--output",
+            "/results/w3-scenarios/s4_repeated_route/references",
+            "--report",
+            "/results/w3-scenarios/s4_repeated_route/compile.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s4_repeated_route/compile.json",
+          "stdout": "/results/w3-scenarios/s4_repeated_route/compile.stdout.txt",
+          "stderr": "/results/w3-scenarios/s4_repeated_route/compile.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "validate",
+            "--artifact",
+            "/results/w3-scenarios/s4_repeated_route/references/7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71/reference.json",
+            "--expected-h",
+            "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--report",
+            "/results/w3-scenarios/s4_repeated_route/validate.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s4_repeated_route/validate.json",
+          "stdout": "/results/w3-scenarios/s4_repeated_route/validate.stdout.txt",
+          "stderr": "/results/w3-scenarios/s4_repeated_route/validate.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "query",
+            "--artifact",
+            "/results/w3-scenarios/s4_repeated_route/references/7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71/reference.json",
+            "--expected-h",
+            "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--s-m",
+            "-0.137"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": null,
+          "stdout": "/results/w3-scenarios/s4_repeated_route/query.stdout.txt",
+          "stderr": "/results/w3-scenarios/s4_repeated_route/query.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "export",
+            "--artifact",
+            "/results/w3-scenarios/s4_repeated_route/references/7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71/reference.json",
+            "--expected-h",
+            "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/synthetic_policy.json",
+            "--step-m",
+            "0.5",
+            "--output",
+            "/results/w3-scenarios/s4_repeated_route/legacy",
+            "--report",
+            "/results/w3-scenarios/s4_repeated_route/export.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "Existing nine-group reader and ROS CDR roundtrip passed",
+          "report": "/results/w3-scenarios/s4_repeated_route/export.json",
+          "stdout": "/results/w3-scenarios/s4_repeated_route/export.stdout.txt",
+          "stderr": "/results/w3-scenarios/s4_repeated_route/export.stderr.txt"
+        }
+      ],
+      "status": "PASS",
+      "H": "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+      "artifact_path": "/results/w3-scenarios/s4_repeated_route/references/7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71/reference.json",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "owner_samples": {
+        "o0": {
+          "H": "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+          "s": 0.1377841847708666,
+          "segment": 0,
+          "t": 0.4999999999996765,
+          "xy": [
+            5.448541742742291,
+            0.13777398675530056
+          ],
+          "tangent": [
+            -0.0207805216274954,
+            0.9997840616457583
+          ],
+          "left_normal": [
+            -0.9997840616457583,
+            -0.0207805216274954
+          ],
+          "heading": 1.5915783443221485,
+          "curvature": 0.1422890338966237,
+          "occurrence_id": "o0",
+          "surface_id": "ground",
+          "speed_mps": 2.5,
+          "acceleration_mps2": 0.0,
+          "time_s": 0.05511367390831094,
+          "portal_support": [
+            "repeat-p3"
+          ]
+        },
+        "o1": {
+          "H": "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+          "s": 8.594685667063391,
+          "segment": 24,
+          "t": 0.49999999996458533,
+          "xy": [
+            -0.005843785738937755,
+            5.449984557299887
+          ],
+          "tangent": [
+            -0.9999985698348194,
+            0.0016912505183206816
+          ],
+          "left_normal": [
+            -0.0016912505183206816,
+            -0.9999985698348194
+          ],
+          "heading": 3.1399014022652163,
+          "curvature": 0.0995056780669258,
+          "occurrence_id": "o1",
+          "surface_id": "ground",
+          "speed_mps": 3.9293440591691433,
+          "acceleration_mps2": 0.8984109714903111,
+          "time_s": 2.5695006551246307,
+          "portal_support": [
+            "p0"
+          ]
+        },
+        "o2": {
+          "H": "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+          "s": 17.33459092807387,
+          "segment": 50,
+          "t": 0.50000000000064,
+          "xy": [
+            -5.4490646175118975,
+            -0.14002117477062986
+          ],
+          "tangent": [
+            0.014127646402185216,
+            -0.9999001998235297
+          ],
+          "left_normal": [
+            0.9999001998235297,
+            0.014127646402185216
+          ],
+          "heading": -1.5566682103934142,
+          "curvature": 0.1100332014452885,
+          "occurrence_id": "o2",
+          "surface_id": "ground",
+          "speed_mps": 2.350372169493422,
+          "acceleration_mps2": 1.5345216019416517,
+          "time_s": 4.987786020569693,
+          "portal_support": [
+            "p1"
+          ]
+        },
+        "o3": {
+          "H": "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+          "s": 25.940426304058462,
+          "segment": 75,
+          "t": 0.5000000000018611,
+          "xy": [
+            0.13938302271947933,
+            -5.448604135769423
+          ],
+          "tangent": [
+            0.9998495880806735,
+            0.01734362173560813
+          ],
+          "left_normal": [
+            -0.01734362173560813,
+            0.9998495880806735
+          ],
+          "heading": 0.0173444913504063,
+          "curvature": 0.11049768402057217,
+          "occurrence_id": "o3",
+          "surface_id": "ground",
+          "speed_mps": 3.9438366771169435,
+          "acceleration_mps2": 0.7399680111490204,
+          "time_s": 7.547782121892937,
+          "portal_support": [
+            "p2"
+          ]
+        },
+        "repeat-o0": {
+          "H": "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+          "s": 34.52973128756111,
+          "segment": 99,
+          "t": 0.4999999999999888,
+          "xy": [
+            5.44857438427212,
+            0.13871223607441777
+          ],
+          "tangent": [
+            -0.020192400247545993,
+            0.999796112701106
+          ],
+          "left_normal": [
+            -0.999796112701106,
+            -0.020192400247545993
+          ],
+          "heading": 1.5909900994790205,
+          "curvature": 0.1377657204068673,
+          "occurrence_id": "repeat-o0",
+          "surface_id": "repeat-deck",
+          "speed_mps": 2.5,
+          "acceleration_mps2": 0.0,
+          "time_s": 9.944047392242377,
+          "portal_support": [
+            "p3"
+          ]
+        },
+        "repeat-o1": {
+          "H": "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+          "s": 42.98766197733766,
+          "segment": 123,
+          "t": 0.4999999999369808,
+          "xy": [
+            -0.006678493416756507,
+            5.449988475572492
+          ],
+          "tangent": [
+            -0.9999983552012309,
+            0.0018137240233190054
+          ],
+          "left_normal": [
+            -0.0018137240233190054,
+            -0.9999983552012309
+          ],
+          "heading": 3.13977892857207,
+          "curvature": 0.09911991804198537,
+          "occurrence_id": "repeat-o1",
+          "surface_id": "repeat-deck",
+          "speed_mps": 2.5,
+          "acceleration_mps2": 0.0,
+          "time_s": 13.327219668152683,
+          "portal_support": [
+            "repeat-p0"
+          ]
+        },
+        "repeat-o2": {
+          "H": "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+          "s": 51.58806001560582,
+          "segment": 148,
+          "t": 0.4999999999979385,
+          "xy": [
+            -5.449996525726471,
+            -0.0006066659503286447
+          ],
+          "tangent": [
+            0.000645797905298349,
+            -0.999999791472511
+          ],
+          "left_normal": [
+            0.999999791472511,
+            0.000645797905298349
+          ],
+          "heading": -1.5701505288447093,
+          "curvature": 0.09676332581955276,
+          "occurrence_id": "repeat-o2",
+          "surface_id": "repeat-deck",
+          "speed_mps": 2.2572353273266046,
+          "acceleration_mps2": 0.0,
+          "time_s": 16.776314502409093,
+          "portal_support": [
+            "repeat-p1"
+          ]
+        },
+        "repeat-o3": {
+          "H": "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+          "s": 60.33238732015274,
+          "segment": 174,
+          "t": 0.5000000000006865,
+          "xy": [
+            0.13920275755808234,
+            -5.448635905162542
+          ],
+          "tangent": [
+            0.999853568083106,
+            0.017112638355369896
+          ],
+          "left_normal": [
+            -0.017112638355369896,
+            0.999853568083106
+          ],
+          "heading": 0.017113473683110055,
+          "curvature": 0.11067856543476216,
+          "occurrence_id": "repeat-o3",
+          "surface_id": "repeat-deck",
+          "speed_mps": 2.5,
+          "acceleration_mps2": 0.0,
+          "time_s": 20.290663363017526,
+          "portal_support": [
+            "repeat-p2"
+          ]
+        }
+      },
+      "query_count": 206,
+      "policy_sha256": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133",
+      "model_sha256": "71acf61ff91ded134c9e1da99da0e9bbaf014cb835b432424d405e754f836914",
+      "fixture_sha256": "624f66a98d90c75aafd475f3e4daccf55cc2f0ce37aa6f955a2a9ab14432e912",
+      "curve_digest": "d979a10074f4bf97cd6e3afc6f42819690fd4dba2e036918f37ec1fd90f7ad4b",
+      "length_m": 68.78201873651668,
+      "lap_time_s": 23.67051592956302,
+      "waypoint_count": 472
+    },
+    {
+      "case": "s6_competition_route",
+      "commands": [
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "compile",
+            "--manifest",
+            "/work/install/global_planner/share/global_planner/project_a/fixtures/s6_competition_route.json",
+            "--vehicle-config",
+            "/work/install/global_planner/share/global_planner/project_a/models/s6_competition_route_model.json",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/s6_coarse_policy.json",
+            "--build-manifest",
+            "/work/install/global_planner/share/global_planner/project_a/build_identity.json",
+            "--output",
+            "/results/w3-scenarios/s6_competition_route/references",
+            "--report",
+            "/results/w3-scenarios/s6_competition_route/compile.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s6_competition_route/compile.json",
+          "stdout": "/results/w3-scenarios/s6_competition_route/compile.stdout.txt",
+          "stderr": "/results/w3-scenarios/s6_competition_route/compile.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "validate",
+            "--artifact",
+            "/results/w3-scenarios/s6_competition_route/references/229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535/reference.json",
+            "--expected-h",
+            "229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/s6_coarse_policy.json",
+            "--report",
+            "/results/w3-scenarios/s6_competition_route/validate.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": "/results/w3-scenarios/s6_competition_route/validate.json",
+          "stdout": "/results/w3-scenarios/s6_competition_route/validate.stdout.txt",
+          "stderr": "/results/w3-scenarios/s6_competition_route/validate.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "query",
+            "--artifact",
+            "/results/w3-scenarios/s6_competition_route/references/229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535/reference.json",
+            "--expected-h",
+            "229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/s6_coarse_policy.json",
+            "--s-m",
+            "-0.137"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "",
+          "report": null,
+          "stdout": "/results/w3-scenarios/s6_competition_route/query.stdout.txt",
+          "stderr": "/results/w3-scenarios/s6_competition_route/query.stderr.txt"
+        },
+        {
+          "command": [
+            "/work/install/global_planner/lib/global_planner/compile_route",
+            "export",
+            "--artifact",
+            "/results/w3-scenarios/s6_competition_route/references/229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535/reference.json",
+            "--expected-h",
+            "229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535",
+            "--policy",
+            "/work/install/global_planner/share/global_planner/project_a/policies/s6_coarse_policy.json",
+            "--step-m",
+            "0.5",
+            "--output",
+            "/results/w3-scenarios/s6_competition_route/legacy",
+            "--report",
+            "/results/w3-scenarios/s6_competition_route/export.json"
+          ],
+          "returncode": 0,
+          "status": "PASS",
+          "reason": "Existing nine-group reader and ROS CDR roundtrip passed",
+          "report": "/results/w3-scenarios/s6_competition_route/export.json",
+          "stdout": "/results/w3-scenarios/s6_competition_route/export.stdout.txt",
+          "stderr": "/results/w3-scenarios/s6_competition_route/export.stderr.txt"
+        }
+      ],
+      "status": "PASS",
+      "H": "229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535",
+      "artifact_path": "/results/w3-scenarios/s6_competition_route/references/229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535/reference.json",
+      "geometry": "PASS",
+      "dynamics": "PASS",
+      "owner_samples": {
+        "o0": {
+          "H": "229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535",
+          "s": 0.14685898864396213,
+          "segment": 0,
+          "t": 0.5,
+          "xy": [
+            44.83132039209558,
+            0.1468601398009056
+          ],
+          "tangent": [
+            -0.004586807643927394,
+            0.9999894805424894
+          ],
+          "left_normal": [
+            -0.9999894805424894,
+            -0.004586807643927394
+          ],
+          "heading": 1.5753831505224678,
+          "curvature": 0.03040262304254141,
+          "occurrence_id": "o0",
+          "surface_id": "ground",
+          "speed_mps": 3.2,
+          "acceleration_mps2": 0.0,
+          "time_s": 0.04589343395123816,
+          "portal_support": [
+            "p3"
+          ]
+        },
+        "o1": {
+          "H": "229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535",
+          "s": 60.27884828653449,
+          "segment": 118,
+          "t": 0.49999999990856747,
+          "xy": [
+            -0.06699276562940437,
+            30.974638213685818
+          ],
+          "tangent": [
+            -0.9999999295937761,
+            -0.0003752498404432915
+          ],
+          "left_normal": [
+            0.0003752498404432915,
+            -0.9999999295937761
+          ],
+          "heading": -3.1412174037405434,
+          "curvature": 0.006602235034199836,
+          "occurrence_id": "o1",
+          "surface_id": "ground",
+          "speed_mps": 3.2,
+          "acceleration_mps2": 0.0,
+          "time_s": 15.211241836845666,
+          "portal_support": [
+            "p0"
+          ]
+        },
+        "o2": {
+          "H": "229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535",
+          "s": 120.55861859847231,
+          "segment": 237,
+          "t": 0.49999999999999156,
+          "xy": [
+            -44.8314050481954,
+            -0.12927787660758686
+          ],
+          "tangent": [
+            0.0037361887507147465,
+            -0.9999930204224522
+          ],
+          "left_normal": [
+            0.9999930204224522,
+            0.0037361887507147465
+          ],
+          "heading": -1.5670601293518178,
+          "curvature": 0.025776793112649916,
+          "occurrence_id": "o2",
+          "surface_id": "ground",
+          "speed_mps": 3.2,
+          "acceleration_mps2": 0.0,
+          "time_s": 34.04867005933006,
+          "portal_support": [
+            "p1"
+          ]
+        },
+        "o3": {
+          "H": "229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535",
+          "s": 180.7941441349109,
+          "segment": 356,
+          "t": 0.49999999999997513,
+          "xy": [
+            0.1510250131963361,
+            -30.975301892667932
+          ],
+          "tangent": [
+            0.9999995912979545,
+            0.0009041039343346514
+          ],
+          "left_normal": [
+            -0.0009041039343346514,
+            0.9999995912979545
+          ],
+          "heading": 0.0009041040575043806,
+          "curvature": 0.006985043407316465,
+          "occurrence_id": "o3",
+          "surface_id": "ground",
+          "speed_mps": 3.2,
+          "acceleration_mps2": 0.0,
+          "time_s": 49.24043631204709,
+          "portal_support": [
+            "p2"
+          ]
+        }
+      },
+      "query_count": 482,
+      "policy_sha256": "8fb57e0a592504b0e6e31ccd4b486a5db1251bbc16060ecbb041721ef5199b3f",
+      "model_sha256": "39e1275cc05dd9b5569c0782f7963822746df2e177fdb79e17ee81e9f295ce82",
+      "fixture_sha256": "d02e04769f0f1acb3c2aa4c3e52c5815af113908595296bf2a2586d09622d1a2",
+      "curve_digest": "2cbd2d35e40b9221d54204f28e4c907204215a9829801c824fe6c1de9b34e936",
+      "length_m": 240.8560691394369,
+      "lap_time_s": 68.00978787596146,
+      "waypoint_count": 1437
+    }
+  ],
+  "S4_installed_resource": "AVAILABLE",
+  "scope": "Installed synthetic planar software, no physical acceptance"
+}

@@ -1,0 +1,52 @@
+{
+  "S6-240m-new-0.52-r1": {
+    "H": "72e7f5449d7ec61c88f3ef71339544dd46c32a3bcc74385801075c8463caf024",
+    "byte_exact_json_field_matches": {
+      "H": true,
+      "coefficients": true,
+      "dynamics": true,
+      "expected_curve_digest": true,
+      "footprint": true,
+      "geometry": true,
+      "metadata": true,
+      "model": true,
+      "model_sha256": true,
+      "owners": true,
+      "profile": true,
+      "q": true,
+      "solver_policy": true,
+      "source_frozen": true
+    },
+    "expected_curve_digest": "5246eda31c757ae728c7ba9deb03a40569590dd296a941aaacbaf15af2ac58da",
+    "model_sha256": "47b11f0c9ddb8d235e629b482b530ce778aab0527f4ff961c7810d5c4e3b2af2",
+    "original_result_sha256": "bb161c663a986566e27df87710b46a7849989738057880f5f20ffb12941e2f4a",
+    "original_run": "a08-primary",
+    "replay_result_sha256": "90d8146ace962b8af9e6abe9286b5f5a816a521e6eb350e53d10a6584768c04a",
+    "status": "PASS"
+  },
+  "S6-240m-repaired-0.52-r1": {
+    "H": "2daac1aa15deda868187b93917806c80616d24ac7a551ccf2ec8e619213d9846",
+    "byte_exact_json_field_matches": {
+      "H": true,
+      "coefficients": true,
+      "dynamics": true,
+      "expected_curve_digest": true,
+      "footprint": true,
+      "geometry": true,
+      "metadata": true,
+      "model": true,
+      "model_sha256": true,
+      "owners": true,
+      "profile": true,
+      "q": true,
+      "solver_policy": true,
+      "source_frozen": true
+    },
+    "expected_curve_digest": "ea9bace5b6f7c64fb4aa99a8a91a93905fd1953dc5570ae8b7980c965ffc923e",
+    "model_sha256": "47b11f0c9ddb8d235e629b482b530ce778aab0527f4ff961c7810d5c4e3b2af2",
+    "original_result_sha256": "e3e41cf64b50c8ba3fb29aed4b894b02b0c80bec9808443d0a692fe2bd5f74fb",
+    "original_run": "a08-matched-coarse",
+    "replay_result_sha256": "0191294b51a58f8c94ef074304ffcd8b6a7e71c55218302140542d971d2f4613",
+    "status": "PASS"
+  }
+}

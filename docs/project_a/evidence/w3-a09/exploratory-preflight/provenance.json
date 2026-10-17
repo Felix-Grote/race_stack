@@ -1,0 +1,10 @@
+{
+  "scope": "Exploratory corrected A09 test preflight against retained dirty A07 installed prefix; not final exact-candidate acceptance",
+  "prefix_source_commit": "9fae5faed6ca62e0c943b6290babc50638477d9b",
+  "prefix_source_dirty": true,
+  "harness_sha256": {
+    "fresh_verify.sh": "40f95d37687465809e9d3bc78f5558a7a12e45632c787fb46ca09a5d97fd41dc",
+    "tests/test_w3_harness.py": "f4302864baa2fd1e3633333693cd3eb32c49352261ba9632c37589d4f5780de8",
+    "tests/test_w3_installed.py": "a1c0436c66350a19c7d1ede5e4a018749030c001219aba81f16e6c79391439a9"
+  }
+}

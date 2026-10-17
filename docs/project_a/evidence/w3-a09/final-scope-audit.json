@@ -1,0 +1,1529 @@
+{
+  "accepted_w2_commit": "fe53365f86d660b4f6d4389925f9810cf33d41b3",
+  "active_python_lint_scope": {
+    "active_added_or_changed_python": [
+      "planner/global_planner/global_planner/route_artifact.py",
+      "planner/global_planner/global_planner/route_compile.py",
+      "planner/global_planner/global_planner/route_legacy_export.py",
+      "planner/global_planner/setup.py",
+      "planner/global_planner/test/test_route_artifact.py",
+      "planner/global_planner/test/test_route_compile.py",
+      "planner/global_planner/test/test_route_legacy_export.py",
+      "planner/global_planner/test/test_w3_benchmarks.py",
+      "scripts/project_a/benchmark_w3.py",
+      "scripts/project_a/legacy_identity.py",
+      "scripts/project_a/source_manifest.py",
+      "scripts/project_a/tests/test_w3_harness.py",
+      "scripts/project_a/tests/test_w3_installed.py",
+      "scripts/project_a/tests/test_w3_scenario_installed.py",
+      "scripts/project_a/w3_benchmark_support.py",
+      "scripts/project_a/w3_query_probe.py"
+    ],
+    "archived_evidence_python_paths": [
+      "docs/project_a/evidence/w3-benchmarks/check_a08.py",
+      "docs/project_a/evidence/w3-benchmarks/cpu-collector-probe/collect_whole_cpu.py",
+      "docs/project_a/evidence/w3-benchmarks/cpu-replay/collect_whole_cpu.py",
+      "docs/project_a/evidence/w3-benchmarks/cpu-replay/collector-calibration-grandchild.py",
+      "docs/project_a/evidence/w3-benchmarks/cpu-replay/collector-calibration-parent.py",
+      "docs/project_a/evidence/w3-benchmarks/curate_evidence.py",
+      "docs/project_a/evidence/w3-benchmarks/independent_audit.py",
+      "docs/project_a/evidence/w3-benchmarks/matched-coarse/run_manifest.py"
+    ],
+    "archived_evidence_scope": "Exact historical source/probe snapshots and reproduction utilities, hashed with recorded run/source provenance; not installed or imported by active verification and not claimed strict99 active-source lint.",
+    "changed_existing_setup_py": "Existing legacy package full-file lint, outside strict99 new-source gate; metadata change inspected independently",
+    "new_active_files_have_explicit_99_column_flake8_gate": true,
+    "pep257": "Production A07 modules/test files and A08 regression test have explicit scoped pep257; no broader historical-file lint claim",
+    "route_modules_and_tests_gate": "container_verify.sh: glob global_planner/*route*.py and test/test_route*.py",
+    "tools_tests_gates": "container_verify.sh lists benchmark_w3.py, w3_benchmark_support.py, source_manifest.py, legacy_identity.py, w3_query_probe.py and all three new scripts/project_a/tests/test_w3*.py files"
+  },
+  "candidate_commit": "531667abc0ad38236ec46825a544a3644c324b4f",
+  "checkpoint_ancestry": {
+    "0c2d7c35fc50051a2ae96b9260de636610e280f4": {
+      "ancestor_exit_code": 0,
+      "is_ancestor": true
+    },
+    "6a3295753235889389be1374ce1195435afb7b74": {
+      "ancestor_exit_code": 0,
+      "is_ancestor": true
+    },
+    "9fae5faed6ca62e0c943b6290babc50638477d9b": {
+      "ancestor_exit_code": 0,
+      "is_ancestor": true
+    }
+  },
+  "conclusion": "Verified protected scope and exact candidate source identities. Fresh runtime/legacy acceptance still in progress. External W3 adversarial review remains required.",
+  "existing_modified_paths": [
+    "M\t.github/workflows/project-a.yml",
+    "M\tdocs/project_a/DECISIONS.md",
+    "M\tdocs/project_a/EXECUTION_PLAN.md",
+    "M\tdocs/project_a/RESULTS.md",
+    "M\tdocs/project_a/STATUS.md",
+    "M\tplanner/global_planner/package.xml",
+    "M\tplanner/global_planner/setup.py",
+    "M\tscripts/project_a/container_verify.sh",
+    "M\tscripts/project_a/source_manifest.py",
+    "M\tscripts/project_a/unit.sh",
+    "M\tscripts/project_a/verify.sh"
+  ],
+  "fresh_checkout_observed": {
+    "head": "531667abc0ad38236ec46825a544a3644c324b4f",
+    "status_porcelain": ""
+  },
+  "fresh_source_manifest": {
+    "after_manifest_exists": false,
+    "all_match_candidate_or_pinned_optimizer_blobs": true,
+    "entries": 138,
+    "mismatches": [],
+    "path": "work/w3/a09-fresh/verification/source-hashes-before.json",
+    "sha256": "2b6736bebc36d8c7b627db629f3185b13f13babe86906f4af3a99b41c79f9ec6"
+  },
+  "observed_root_head": "531667abc0ad38236ec46825a544a3644c324b4f",
+  "packaging_scope": {
+    "legacy_console_entries": [
+      "global_planner = global_planner.global_planner_node:main",
+      "mapping_node = global_planner.mapping_node:main",
+      "global_trajectory_publisher = global_planner.global_trajectory_publisher:main"
+    ],
+    "new_console_entry": "compile_route = global_planner.route_compile:main",
+    "package_xml": "Only additive declared f110_msgs/std_msgs/visualization_msgs/rosidl_runtime_py exec dependencies",
+    "setup_py": "Only additive explicit project_a resource groups and compile_route console entry; original three legacy entries preserved verbatim"
+  },
+  "protected_all_unchanged": true,
+  "protected_count": 95,
+  "protected_paths": [
+    {
+      "accepted": {
+        "blob": "f8f8c9d4781d44a2959bae013f276410cb4e9da0",
+        "mode": "160000",
+        "type": "commit"
+      },
+      "candidate": {
+        "blob": "f8f8c9d4781d44a2959bae013f276410cb4e9da0",
+        "mode": "160000",
+        "type": "commit"
+      },
+      "path": "base_system/f110_simulator/f1tenth_gym",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "163020c0b631a5bdd9ddc59e6132337cec04cc27",
+        "mode": "160000",
+        "type": "commit"
+      },
+      "candidate": {
+        "blob": "163020c0b631a5bdd9ddc59e6132337cec04cc27",
+        "mode": "160000",
+        "type": "commit"
+      },
+      "path": "base_system/f110_simulator/f1tenth_gym_ros",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "5d6490fc6426deb1254198020133a85c0614f183",
+        "mode": "160000",
+        "type": "commit"
+      },
+      "candidate": {
+        "blob": "5d6490fc6426deb1254198020133a85c0614f183",
+        "mode": "160000",
+        "type": "commit"
+      },
+      "path": "base_system/f1tenth_system",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/__init__.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "cef680483c158b2a76c34ab5d5fdd312ee0d0b83",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "cef680483c158b2a76c34ab5d5fdd312ee0d0b83",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/_route_geometry.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "9334aecf97dca5e2e107a64d3574efd5c7cf0695",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "9334aecf97dca5e2e107a64d3574efd5c7cf0695",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/cyclic_retime.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "a03002db404ef47c3aa91956a279e61abf019e9b",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "a03002db404ef47c3aa91956a279e61abf019e9b",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/global_planner_node.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "c5a8838508703ea187bc8286fdcadf1ca3ce3b6c",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "c5a8838508703ea187bc8286fdcadf1ca3ce3b6c",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/global_planner_utils.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "b1b38ecfefec7200d5bcb243f115af1d795b3766",
+        "mode": "160000",
+        "type": "commit"
+      },
+      "candidate": {
+        "blob": "b1b38ecfefec7200d5bcb243f115af1d795b3766",
+        "mode": "160000",
+        "type": "commit"
+      },
+      "path": "planner/global_planner/global_planner/global_racetrajectory_optimization",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "705669e1d5c9419b48b8eddd661274b76f0da8a4",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "705669e1d5c9419b48b8eddd661274b76f0da8a4",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/global_trajectory_publisher.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "1f0f3216bccf03e57e7fb5ac537a3dd0448aa782",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "1f0f3216bccf03e57e7fb5ac537a3dd0448aa782",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/iqp_route_adapter.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "a2374c2672bbc27eecc22b8254ce1b16487b4909",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "a2374c2672bbc27eecc22b8254ce1b16487b4909",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/mapping_node.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "8885a8126fc29b1dcc5ea74671eec56606e97083",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "8885a8126fc29b1dcc5ea74671eec56606e97083",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/readwrite_global_waypoints.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "04a5a75afbf45f0ceedb65680d1e4efa2318df11",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "04a5a75afbf45f0ceedb65680d1e4efa2318df11",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/route_corridor.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "9ec9f4667bff43dd14975fd1ad60289960a0ae6b",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "9ec9f4667bff43dd14975fd1ad60289960a0ae6b",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/route_input.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "3113b6ddcf4f01c3165a16aed045939989daf51a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "3113b6ddcf4f01c3165a16aed045939989daf51a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/route_reference.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "34c953b87cbfccbf068e6e30192167fa5aa201c2",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "34c953b87cbfccbf068e6e30192167fa5aa201c2",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/route_validate.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "546ae606424f685c5f3dfce5bb54fff65d5aa0fe",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "546ae606424f685c5f3dfce5bb54fff65d5aa0fe",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/global_planner/route_validate_dynamics.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "7b37f94c4e3dfb130bb748b5beabffc56d33bd9e",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "7b37f94c4e3dfb130bb748b5beabffc56d33bd9e",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/dynamics/ggv_dip.csv",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "31b57f8de9dbfc30902bb542ca2327b93488b670",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "31b57f8de9dbfc30902bb542ca2327b93488b670",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/dynamics/motor_dip.csv",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "d06ad822249bcbe94657f5788a3aa8f3499fcdcd",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "d06ad822249bcbe94657f5788a3aa8f3499fcdcd",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/novel_varying_ellipse_route.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "dcc56d607015984a14e65941391cb60105ce2b70",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "dcc56d607015984a14e65941391cb60105ce2b70",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/s0_reverse_route.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "a49f3c679a5be1039b7aa1c8305f26dec3b68a9a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "a49f3c679a5be1039b7aa1c8305f26dec3b68a9a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/s0_rotated_route.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "9cd28224878ed82c4e53579638dfb5e32e70b5f0",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "9cd28224878ed82c4e53579638dfb5e32e70b5f0",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/s0_route.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "dacacaaa57c0c8c7fa7ae362e0d9cff502d1f1d5",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "dacacaaa57c0c8c7fa7ae362e0d9cff502d1f1d5",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/s2_lower_route.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "ef4ad6b713658a5cffbdb23e2bfe83e2d0986fcb",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "ef4ad6b713658a5cffbdb23e2bfe83e2d0986fcb",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/s2_upper_route.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "ac4f75905627a2573075cf2645b4a80fb6a7060d",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "ac4f75905627a2573075cf2645b4a80fb6a7060d",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/s3_notch_route.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "dc6b8336accbeb8e3dfb7a9174b61b53cb7d233a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "dc6b8336accbeb8e3dfb7a9174b61b53cb7d233a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/s3_surfaces_route.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "88ae4cbc30a53fb9301db25c2eb118a251286a03",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "88ae4cbc30a53fb9301db25c2eb118a251286a03",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/fixtures/project_a/w2_a04_candidates.json.gz",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "97a39196e84db97954341162a6d2e7f771d938c0",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "97a39196e84db97954341162a6d2e7f771d938c0",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_copyright.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "047ec61f37ddfc912d30310c76ed5cd151076dab",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "047ec61f37ddfc912d30310c76ed5cd151076dab",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_cyclic_retime.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "27ee1078ff077cc3a0fec75b7d023101a68164d1",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "27ee1078ff077cc3a0fec75b7d023101a68164d1",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_flake8.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "942babd6fcec36794f278769661107825bddf25a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "942babd6fcec36794f278769661107825bddf25a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_iqp_route_adapter.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "b234a3840f4c5bd38f043638c8622b8f240e1185",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "b234a3840f4c5bd38f043638c8622b8f240e1185",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_pep257.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "1de099a1a122c8210c4bfafc9c4d3cb20b5f884f",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "1de099a1a122c8210c4bfafc9c4d3cb20b5f884f",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_corridor.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "5ac3b1dfafba3b4c1dbb419046d6fe55f5b395ba",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "5ac3b1dfafba3b4c1dbb419046d6fe55f5b395ba",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_dynamics_oracle.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "704eb4bab4b3f9d27dcadc3e1c3aa92cb54f3457",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "704eb4bab4b3f9d27dcadc3e1c3aa92cb54f3457",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_ellipse_dynamics.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "41089a3460e06e070e7c324dfe1047101caf3800",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "41089a3460e06e070e7c324dfe1047101caf3800",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_input.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "0d526d5b8a3e6fb93bdb8abcc8ab56162216b3b6",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "0d526d5b8a3e6fb93bdb8abcc8ab56162216b3b6",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_reference.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "c999cecb1ae6d293f86228922131c25f8409567c",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "c999cecb1ae6d293f86228922131c25f8409567c",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_validate_bounds_oracle.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "c50af42f41b54a84bb7bcddebeff8a9b99746365",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "c50af42f41b54a84bb7bcddebeff8a9b99746365",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_validate_dynamics.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "5be7404052dfb4d259f50ef9681309afbbf798c6",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "5be7404052dfb4d259f50ef9681309afbbf798c6",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_validate_geometry.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "4360b77e41246076bf5e0b13b3e2bfcada7e51bd",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "4360b77e41246076bf5e0b13b3e2bfcada7e51bd",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_w2_handoff.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "8453abb08695319f3c557dfc7d9c2067e53149f5",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "8453abb08695319f3c557dfc7d9c2067e53149f5",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_w2_novel_pipeline.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "d6c662708da6ce7cc74136619ec6a4efe6b0774a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "d6c662708da6ce7cc74136619ec6a4efe6b0774a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_w2_numerical_oracle.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "805aff5c9c38fd4495ed1eb1f303bec180f91a48",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "805aff5c9c38fd4495ed1eb1f303bec180f91a48",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_w2_shared_cap.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "5ff7bfef727446fc0fbe3815e9a78d104a96735d",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "5ff7bfef727446fc0fbe3815e9a78d104a96735d",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_route_w2_trace_oracle.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "b803a2d4dd0be7f67543888be3a48923da9f733e",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "b803a2d4dd0be7f67543888be3a48923da9f733e",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "planner/global_planner/test/test_w2_pipeline.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "2fd19be756544693752d3e5b36c128e6157e4bd3",
+        "mode": "160000",
+        "type": "commit"
+      },
+      "candidate": {
+        "blob": "2fd19be756544693752d3e5b36c128e6157e4bd3",
+        "mode": "160000",
+        "type": "commit"
+      },
+      "path": "sensors/vesc",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "26e3f8a7de4e8552048f3602878dc34e62441723",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "26e3f8a7de4e8552048f3602878dc34e62441723",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/GLC_smile_small/GLC_smile_small.pbstream",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "057f39739395921555b3ca3f7e02a617164b692a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "057f39739395921555b3ca3f7e02a617164b692a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/GLC_smile_small/GLC_smile_small.png",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "0e145f1b7c02ac05937f0f5e18f8b37d6a349a15",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "0e145f1b7c02ac05937f0f5e18f8b37d6a349a15",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/GLC_smile_small/GLC_smile_small.yaml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "3dad55c00282fcfe46ba51cba593cce24d380cbf",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "3dad55c00282fcfe46ba51cba593cce24d380cbf",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/GLC_smile_small/global_waypoints.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "6b7d69d09bbb60a44b88be30c236602e0ae83623",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "6b7d69d09bbb60a44b88be30c236602e0ae83623",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/GLC_smile_small/ot_sectors.yaml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "0cd3b0e5d715c5e3a55e48a850d5bb6f5f119c21",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "0cd3b0e5d715c5e3a55e48a850d5bb6f5f119c21",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/GLC_smile_small/pf_map.png",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "1edc5598a66690fc44c908a5c45c3498a5a92cc4",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "1edc5598a66690fc44c908a5c45c3498a5a92cc4",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/GLC_smile_small/pf_map.yaml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "85d625834939c138ece156416a92594fbed20769",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "85d625834939c138ece156416a92594fbed20769",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/GLC_smile_small/speed_scaling.yaml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "0714aceb3b801dfc516c1fec87032dea0041a8c8",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "0714aceb3b801dfc516c1fec87032dea0041a8c8",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/glc_ot_ez/glc_ot_ez.pbstream",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "4565df12a5eb6de197be9581c59bc81c1ad842fd",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "4565df12a5eb6de197be9581c59bc81c1ad842fd",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/glc_ot_ez/glc_ot_ez.png",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "92a1bb8e4572a99dcefc4d41a6c95ce079120520",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "92a1bb8e4572a99dcefc4d41a6c95ce079120520",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/glc_ot_ez/glc_ot_ez.yaml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "62e5e11624c075d85923d98821c4e9462eff5f12",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "62e5e11624c075d85923d98821c4e9462eff5f12",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/glc_ot_ez/global_waypoints.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "838a0d041d981f1f2c963b88cc0117f1e2cb97a5",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "838a0d041d981f1f2c963b88cc0117f1e2cb97a5",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/glc_ot_ez/global_waypoints.json.bak",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "007f07d5a746a9cb84893bbc0f9f0ca9504df22d",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "007f07d5a746a9cb84893bbc0f9f0ca9504df22d",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/glc_ot_ez/ot_sectors.yaml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "d2b0735cfe04ae72a2e50658b3d4762e1b6527b0",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "d2b0735cfe04ae72a2e50658b3d4762e1b6527b0",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/glc_ot_ez/pf_map.png",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "300dd61a8ee39fb5375eabb7e4996124b3a42c89",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "300dd61a8ee39fb5375eabb7e4996124b3a42c89",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/glc_ot_ez/pf_map.yaml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "bba2016a6e48389156ce5516a84043b917e58ff8",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "bba2016a6e48389156ce5516a84043b917e58ff8",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/glc_ot_ez/speed_scaling.yaml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "c56f92d387d56dc340274f2e08c3eebffd3a6174",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "c56f92d387d56dc340274f2e08c3eebffd3a6174",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/hangar_1905_v0/global_waypoints.json",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "cc0deb7bda25653eb09f4ab8293ef9ef458170ed",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "cc0deb7bda25653eb09f4ab8293ef9ef458170ed",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/hangar_1905_v0/hangar_1905_v0.pbstream",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "2b595bc2b0b1e8bb410cbde74a81bfae25b21003",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "2b595bc2b0b1e8bb410cbde74a81bfae25b21003",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/hangar_1905_v0/hangar_1905_v0.png",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "16cb1b59bad623fffd6ba41c0efd021cbddc8f9c",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "16cb1b59bad623fffd6ba41c0efd021cbddc8f9c",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "stack_master/maps/hangar_1905_v0/hangar_1905_v0.yaml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "48a75b95817c02ca020614dc905d0db39a629706",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "48a75b95817c02ca020614dc905d0db39a629706",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/CMakeLists.txt",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "febb0565fa109afc74a440319dcb9394a7641de3",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "febb0565fa109afc74a440319dcb9394a7641de3",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/CarState.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "6645b129e313a2fffca54ecd5200e7ea6491c706",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "6645b129e313a2fffca54ecd5200e7ea6491c706",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/CarStateStamped.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "f7f865dd0f3919ed0facaf04509beb51effd646a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "f7f865dd0f3919ed0facaf04509beb51effd646a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/GapData.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "1edd8245571923f006d52dae6838d0cf1312c7a9",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "1edd8245571923f006d52dae6838d0cf1312c7a9",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/LapData.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "9d1f4a2dde0484b428ad20d7e8b0d24084a520c5",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "9d1f4a2dde0484b428ad20d7e8b0d24084a520c5",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/OTWpntArray.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "44f54b982ccc662d34167793ac1c88197d9b1e6a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "44f54b982ccc662d34167793ac1c88197d9b1e6a",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/Obstacle.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "8f9bd1f547d75a0b91340c9b3d66a963c506bdb4",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "8f9bd1f547d75a0b91340c9b3d66a963c506bdb4",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/ObstacleArray.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "24bfd462d8fa1c3010d2585296a5276b790c402d",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "24bfd462d8fa1c3010d2585296a5276b790c402d",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/OppWpnt.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "3dd9740f627351356fe1c1406c12fd44f790ed22",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "3dd9740f627351356fe1c1406c12fd44f790ed22",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/OpponentTrajectory.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "19ce79c531c9194cb0d81efa47a893a370302808",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "19ce79c531c9194cb0d81efa47a893a370302808",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/PidData.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "ec7a8e7d5dbb323db997e2b55d1c65e0be756ad1",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "ec7a8e7d5dbb323db997e2b55d1c65e0be756ad1",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/Wpnt.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "4012b063d72a757755281365fb9e0eb0043d94a5",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "4012b063d72a757755281365fb9e0eb0043d94a5",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/msg/WpntArray.msg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "97f5f6cacf4e6de2c50a5d1adae9bb8e659e0663",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "97f5f6cacf4e6de2c50a5d1adae9bb8e659e0663",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/my_mapping_rules.yaml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "801582e1db339c4031b12d1c9b158f37a7653505",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "801582e1db339c4031b12d1c9b158f37a7653505",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/f110_msgs/package.xml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "239b5e8d70d82ade17738e2ae9d9c9a59f4a6150",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "239b5e8d70d82ade17738e2ae9d9c9a59f4a6150",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/frenet_conversion/frenet_conversion/__init__.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "28f750f992d8bc86ad95e2bcb364d8369884ecbe",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "28f750f992d8bc86ad95e2bcb364d8369884ecbe",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/frenet_conversion/frenet_conversion/frenet_converter.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "c85536a8db616ae240f7f2597ecfe6173325c9a3",
+        "mode": "100755",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "c85536a8db616ae240f7f2597ecfe6173325c9a3",
+        "mode": "100755",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/frenet_conversion/frenet_conversion/frenet_converter_demo_node.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "e2ad6578ba98532f5c8557ac38622e0eee363f2e",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "e2ad6578ba98532f5c8557ac38622e0eee363f2e",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/frenet_conversion/package.xml",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/frenet_conversion/resource/frenet_conversion",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "86f31a95e22589a94fb02a34745a1e23f89d873d",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "86f31a95e22589a94fb02a34745a1e23f89d873d",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/frenet_conversion/setup.cfg",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "f49b2d6e9b08b780dc7dd57dc281771b932ad977",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "f49b2d6e9b08b780dc7dd57dc281771b932ad977",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/frenet_conversion/setup.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "97a39196e84db97954341162a6d2e7f771d938c0",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "97a39196e84db97954341162a6d2e7f771d938c0",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/frenet_conversion/test/test_copyright.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "27ee1078ff077cc3a0fec75b7d023101a68164d1",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "27ee1078ff077cc3a0fec75b7d023101a68164d1",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/frenet_conversion/test/test_flake8.py",
+      "unchanged": true
+    },
+    {
+      "accepted": {
+        "blob": "b234a3840f4c5bd38f043638c8622b8f240e1185",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "candidate": {
+        "blob": "b234a3840f4c5bd38f043638c8622b8f240e1185",
+        "mode": "100644",
+        "type": "blob"
+      },
+      "path": "utilities/libraries/frenet_conversion/test/test_pep257.py",
+      "unchanged": true
+    }
+  ],
+  "recursive_gitlinks": {
+    "all_exact": true,
+    "expected": {
+      "base_system/f110_simulator/f1tenth_gym": "f8f8c9d4781d44a2959bae013f276410cb4e9da0",
+      "base_system/f110_simulator/f1tenth_gym_ros": "163020c0b631a5bdd9ddc59e6132337cec04cc27",
+      "base_system/f1tenth_system": "5d6490fc6426deb1254198020133a85c0614f183",
+      "base_system/f1tenth_system/ackermann_mux": "ed4eac7284d13cae66628688e6fd32e585a96a62",
+      "base_system/f1tenth_system/teleop_tools": "09938461991ec2260ddab6db8ac962f46d205669",
+      "planner/global_planner/global_planner/global_racetrajectory_optimization": "b1b38ecfefec7200d5bcb243f115af1d795b3766",
+      "sensors/vesc": "2fd19be756544693752d3e5b36c128e6157e4bd3"
+    },
+    "nested_expected_parent_tree_output": "160000 commit ed4eac7284d13cae66628688e6fd32e585a96a62\tackermann_mux\n160000 commit 09938461991ec2260ddab6db8ac962f46d205669\tteleop_tools\n",
+    "observed": {
+      "base_system/f110_simulator/f1tenth_gym": "f8f8c9d4781d44a2959bae013f276410cb4e9da0",
+      "base_system/f110_simulator/f1tenth_gym_ros": "163020c0b631a5bdd9ddc59e6132337cec04cc27",
+      "base_system/f1tenth_system": "5d6490fc6426deb1254198020133a85c0614f183",
+      "base_system/f1tenth_system/ackermann_mux": "ed4eac7284d13cae66628688e6fd32e585a96a62",
+      "base_system/f1tenth_system/teleop_tools": "09938461991ec2260ddab6db8ac962f46d205669",
+      "planner/global_planner/global_planner/global_racetrajectory_optimization": "b1b38ecfefec7200d5bcb243f115af1d795b3766",
+      "sensors/vesc": "2fd19be756544693752d3e5b36c128e6157e4bd3"
+    }
+  },
+  "root_status_porcelain": "",
+  "runtime_context": "Separate source-free container receives installed prefix/wheel and minimal copied harness only, no /src or build mounts and no PROJECT_A_TEST_REPO env; actual runtime facts and mutation reason checks remain to be verified from final emitted results.",
+  "schema_version": 1,
+  "scope": "Read-only internal protected-source, provenance and lint-scope audit; no final independent W3 acceptance",
+  "shell_syntax": {
+    "all_pass": true,
+    "method": "manual read-only bash -n at literal candidate; no new automatic shell syntax gate claimed",
+    "results": [
+      {
+        "candidate_blob": "ed40027e10afc3cd22f910b363c80af9affbfb4d",
+        "command": [
+          "bash",
+          "-n",
+          "scripts/project_a/container_verify.sh"
+        ],
+        "exit_code": 0,
+        "file_sha256": "8ace8b8d03d0890291fc4f0c3b8bdf1b4625363f68a61f0ce5dc17c6ef7ed493",
+        "stderr": "",
+        "stdout": ""
+      },
+      {
+        "candidate_blob": "5c7ec1e09fd6f7ff7c4d2af1ed57ef46f228f28a",
+        "command": [
+          "bash",
+          "-n",
+          "scripts/project_a/fresh_verify.sh"
+        ],
+        "exit_code": 0,
+        "file_sha256": "40f95d37687465809e9d3bc78f5558a7a12e45632c787fb46ca09a5d97fd41dc",
+        "stderr": "",
+        "stdout": ""
+      },
+      {
+        "candidate_blob": "a89c8771a0d937e2d43c8cb3118fe357c2508291",
+        "command": [
+          "bash",
+          "-n",
+          "scripts/project_a/isolated_runtime.sh"
+        ],
+        "exit_code": 0,
+        "file_sha256": "4aa5e7f183b8ce4ba532860291ae59d64db10880c609270d33c246348b6b396b",
+        "stderr": "",
+        "stdout": ""
+      },
+      {
+        "candidate_blob": "103691f759765449538f1a1db058473dbe33bfee",
+        "command": [
+          "bash",
+          "-n",
+          "scripts/project_a/runtime_verify.sh"
+        ],
+        "exit_code": 0,
+        "file_sha256": "390bee5bbfca3da678dca312504c7c115b96ff48215294cf06c220cbf60745a2",
+        "stderr": "",
+        "stdout": ""
+      },
+      {
+        "candidate_blob": "161a7f617bd61c0a5e2b87bb281190683c29f95b",
+        "command": [
+          "bash",
+          "-n",
+          "scripts/project_a/unit.sh"
+        ],
+        "exit_code": 0,
+        "file_sha256": "d1ae058a17378a181fae7573bb118e6528454ffbd9e10482ac85786f51ef5267",
+        "stderr": "",
+        "stdout": ""
+      },
+      {
+        "candidate_blob": "2c5fdb0663604edffb26dafb01d326f12ac905ac",
+        "command": [
+          "bash",
+          "-n",
+          "scripts/project_a/verify.sh"
+        ],
+        "exit_code": 0,
+        "file_sha256": "975dee29597333740346b9498640ecf6a946b6eb3e2bb016eb3a5ed21181f962",
+        "stderr": "",
+        "stdout": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "Expected deterministic installed regression RED on unchanged811 strict historical-report comparator",
+  "exit_code": 1,
+  "junit": {
+    "tests": "1",
+    "failures": "1",
+    "errors": "0",
+    "skipped": "0",
+    "time": "29.615"
+  },
+  "expected_reason": "geometry stored proof differs from independent replay",
+  "H": "1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59",
+  "curve_digest": "f77eb66f8058dea5f99f3cfc85d580f664da853e4b0a455ca0c562b5786e8599",
+  "persisted_file_sha256": "cfb3977e8dcc84b6922537465b982969ae0535ea3f09c8661d8a195dd87066e8",
+  "original_artifact_H_intact": true,
+  "strict99_flake": "PASS"
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "original_commit": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "encoding": "gzip level9; empty filename; mtime0; original bytes preserved",
+  "entries": [
+    {
+      "raw_path": "verification/w2-pipeline.json",
+      "raw_git_blob": "1f4eac66f285dc6865021953855451dbf4835d86",
+      "raw_sha256": "eff52e0cda4da88b31fa02b991376bbb33316b22f46620be92c0ed55f001a8af",
+      "raw_size_bytes": 7465624,
+      "raw_physical_lines": 251743,
+      "stored_path": "verification/w2-pipeline.json.gz",
+      "stored_sha256": "f710bda762fe281ec81f82b5b63ae8e1e08fde0a30f231d6eff155d5f8cabe01",
+      "stored_size_bytes": 1224721,
+      "restoration_verified_against_original_git": true
+    },
+    {
+      "raw_path": "verification/a04-candidates.json",
+      "raw_git_blob": "476468168c3c996052508eca04a6d0ee6d9380e9",
+      "raw_sha256": "43ffa05e06e8cea27fbb335d8f5c29a1452bddfb2917be07d1740178985bcac7",
+      "raw_size_bytes": 4514153,
+      "raw_physical_lines": 171209,
+      "stored_path": "verification/a04-candidates.json.gz",
+      "stored_sha256": "efe80d767f457baf700eb28ea9b8f0673a3acdb60db007a9548dddf38449786b",
+      "stored_size_bytes": 879499,
+      "restoration_verified_against_original_git": true
+    }
+  ],
+  "restore": "gzip -dc STORED_PATH > scratch/ORIGINAL_BASENAME; verify raw_sha256 before using historical paths",
+  "history": "Original blobs remain in accepted review history; no rewrite or force-push."
+}

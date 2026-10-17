@@ -1,0 +1,45 @@
+{
+  "base_commit": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "design_conclusion": "No source/design blocker found in the reviewed remediation. Final numerical/regression/full-CI/source-free and actual cross-host saved-artifact tests are still required.",
+  "main_time_contract": [
+    "Exact persisted historical dynamics.lap_time_s cached as immutable main T",
+    "Main T required inside both stored and fresh independently proved model-time enclosures; no added epsilon or enclosure widening",
+    "Profile/model/digests unchanged; metric-derived accumulated query time is not rescaled",
+    "Unchanged exporter uses immutable main T for terminal row and its exact Float32 projection"
+  ],
+  "original_failure": "Unchanged hosted811 artifact with correct external H reached dual numerical PASS but was falsely rejected by exact stored dynamics report equality in the local811 installed runtime. Original evidence preserved in work/w3/portability.",
+  "pending": [
+    "Genuine constant-u binary32 midpoint regression execution",
+    "Full repaired artifact and installed acceptance suites",
+    "Fresh exact remediation-head local/hosted builds and CI",
+    "Actual hosted-product load/replay/query/export/CDR under matching local implementation"
+  ],
+  "preserved_authority": [
+    "Exact externally expected H checked against persisted canonical payload",
+    "Retained original producer full C at publication and same C supplied to both independent validators",
+    "Exact coefficient/q/owner/model/profile/policy reconstruction; no refit or normalization",
+    "Both actual fresh independent validators must PASS under independently selected supported context and required coverage",
+    "Fresh regenerated reports exposed as quantitative runtime authority",
+    "Stored report snapshots remain H-bound history; only categorical/domain/coherence checks, not historical quantitative recertification",
+    "Unchanged atomic staging/fsync/noreplace publication path"
+  ],
+  "regression_review": [
+    "Numeric-report variation runs both real checkers before conservative metadata changes and checks unchanged H/C/coefficients/q/owners/profile/bytes",
+    "Genuine adaptive refinement test changes the real geometry proof partition and requires independent PASS",
+    "Installed regression rejects fabricated historical rationale and missing fresh required coverage",
+    "Frozen main T excluded from a narrowed fresh enclosure is rejected"
+  ],
+  "reviewed_production_path": "planner/global_planner/global_planner/route_artifact.py",
+  "reviewed_production_sha256": "443e6f7fdfae5fb78899ac3d887c66796574945335ecf45d84d768166b9dc5cb",
+  "scope": "Internal read-only source/design review; not the separate independent W3 acceptance gate. No source changes or numerical test runs performed by this reviewer.",
+  "snapshot_checks_reviewed": [
+    "Exact C, route/coeff/model identity, status/reason, assumptions, coverage and empty failure fields",
+    "Complete canonical exact rational geometry interval coverage of every coefficient segment",
+    "Known ordered owners and applicable portal support; allowed methods and numeric domains",
+    "Fixed profile-edge/cap/support identities, ordered positive distance/time and ordered acceleration bounds",
+    "Necessary overlap of corresponding historical/fresh metric/time/acceleration and lap enclosures",
+    "Historical acceleration enclosure contains the exact immutable-u acceleration range implied by its stored distance enclosure",
+    "Unchanged policy residual gating; two outward ULPS allowed only for rendering historical accepted residuals",
+    "Refinement counts bounded, without requiring identical adaptive subdivisions"
+  ]
+}

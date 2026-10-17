@@ -1,0 +1,220 @@
+{
+  "scope": "W0_THROUGH_A09",
+  "source_free_a09": "SEPARATE_HOST_RUN_FOR_ALL_OR_ROS",
+  "legal_planner_acceptance": "SYNTHETIC_PLANAR_OFFLINE",
+  "independent_w3_adversarial_review": "REQUIRED",
+  "numerical": {
+    "tests": "7",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "ros": {
+    "tests": "4",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a01": {
+    "tests": "60",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a02": {
+    "tests": "47",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a03": {
+    "tests": "38",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a04": {
+    "tests": "18",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a05": {
+    "tests": "40",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a05-oracle": {
+    "tests": "13",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a06": {
+    "tests": "21",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a06-independent": {
+    "tests": "41",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a06-oracle": {
+    "tests": "8",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a06-ellipse": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-handoff": {
+    "tests": "10",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-numerical-oracle": {
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-shared-cap": {
+    "tests": "49",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-pipeline": {
+    "tests": "10",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-novel-pipeline": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w1-installed": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-installed": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a07-artifact": {
+    "tests": "62",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a07-cli": {
+    "tests": "68",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a07-export-pure": {
+    "tests": "24",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a07-export-ros": {
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w3-installed": {
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a08-regressions": {
+    "tests": "13",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a09-harness": {
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "legacy_baseline": [
+    "colcon_test=1",
+    "colcon_test_result=1"
+  ],
+  "w3-source-free": {
+    "tests": "4",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "container_exit_code": 0
+  },
+  "source_free_scenarios": [
+    {
+      "case": "s0_route",
+      "status": "PASS",
+      "H": "1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59"
+    },
+    {
+      "case": "s0_reverse_route",
+      "status": "PASS",
+      "H": "706a47f7b5f7403dec6ea1d3dd71568225c874ddec37353e1e8262cd19f8f46f"
+    },
+    {
+      "case": "s0_rotated_route",
+      "status": "PASS",
+      "H": "3746b58a7a0436338039d68fd43cb7b582b16fe0f40269f23f990a6e28952b34"
+    },
+    {
+      "case": "s2_upper_route",
+      "status": "PASS",
+      "H": "a93310867c801351273a8907b720ec4acea3ee9798a43a9e969ffaf8c8364ad1"
+    },
+    {
+      "case": "s2_lower_route",
+      "status": "PASS",
+      "H": "12612543adc3c8436ac08c0c1941fe95a069fab694ebfb45cb9dcbc327268647"
+    },
+    {
+      "case": "s3_surfaces_route",
+      "status": "PASS",
+      "H": "63a2b79580026049937abfeb36b6d94b98a993f2809c6ed15a8d6fdf4c1719b1"
+    },
+    {
+      "case": "s3_notch_route",
+      "status": "PASS",
+      "H": "01d093b08e577a4e109e40e1bb7f16b0cced88c27e73ba5718b3927c10e7f064"
+    },
+    {
+      "case": "s4_repeated_route",
+      "status": "PASS",
+      "H": "18c16b46c170301295ee40a3dff359db01d613835adb13462e025e834672acc1"
+    },
+    {
+      "case": "s6_competition_route",
+      "status": "PASS",
+      "H": "e17b42550509b88d9121401976dfcf5f7ca74d4002cd3057410b2607295a697d"
+    }
+  ]
+}

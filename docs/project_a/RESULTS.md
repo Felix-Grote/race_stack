@@ -1,3 +1,127 @@
+# Independent W3 review evidence — 2026-10-17
+
+Initial reviewed SHA `17e4ec4`; accepted W2 merge `9fae5fae`.
+[Full independent report](W3_INDEPENDENT_ADVERSARIAL_REVIEW.md) and
+[checksummed evidence](evidence/w3-independent/README.md).
+
+| Executed independent scope | Actual result |
+| --- | --- |
+| Publication original regressions / corrected focused / corrected pure scope | 4 failures before repair; 16 PASS; 139 PASS with 2 ROS tests separately reserved |
+| Installed timeout original / corrected harness | 2 failures before repair; 5 PASS, real partial outputs retained |
+| Initial legacy fit original / corrected A08 suite | 1 failure before repair; 14 PASS, strict lint |
+| Canonical exact binary64 / malformed parser controls | 10,009 roundtrips / 12 rejections on host and pinned Python |
+| Initial-version unchanged hosted product replay | 9 products; actual fresh geometry and dynamics PASS, original H/C retained |
+| Independent metric/side oracle | 703 queries, 268 side intersections, 2,145 waypoints across 5 cases |
+| Frozen campaign integrity / mathematical oracle | 966 checksums; 96 jobs = 58 PASS / 28 stock / 8 resource / 2 conditioning; 58 independent arc/time audits and 30 rational composition audits |
+| Additional completed benchmark worker reports | 19 = 10 PASS / 4 resource / 4 solver / 1 inconclusive; 2 S0 rows, 17 S6 rows; direct-red/disk-partial attempts separately retained |
+| Corrected approximately 240 m whole path | PASS in 123.957 s, 474 segments, both proofs/publication/query/actual reader-CDR; new-process replay PASS |
+| Corrected dirty-source standard attempt | 593 tests / 21 groups, zero functional failures/errors/skips; strict lint; 138 unchanged source hashes; wrapper1 at worktree Git128 before install |
+| Lossless A09 compaction | 11,979,777 raw bytes / 422,952 lines become 2,104,220 gzip bytes; both restored against exact original Git; all 531 updated ledger entries match |
+
+The dirty-source attempt does not claim ordinary builds, actual installed ROS,
+legacy or separate source-free acceptance. Previous ENOSPC/137, setup/submodule
+errors and every numerical/conditioning/inconclusive result remain retained.
+Exact committed clean fresh acceptance, literal-head hosted CI, artifact source
+identity and final-version hosted replay are recorded only after execution in
+the [completed companion manifest](https://github.com/Felix-Grote/race_stack/blob/w3-independent-review-20261017/docs/project_a/evidence/w3-independent-review/final-publication.json).
+No earlier 552-test checkpoint count is substituted for that actual final matrix.
+The records below retain their historical SHA and limitations.
+
+# W3 current evidence
+
+The extra 811bd708 portability challenge supersedes any inference of general
+cross-host byte identity from the historical 531667 equality observation below.
+811bd708 full fresh verification and push CI 38934109447 / PR CI 38934117548 all
+PASS: 552 functional tests / 27 groups, nine installed scenarios, zero functional
+failures/errors/skips and exact inherited legacy 541/0 errors/10 failures/2 skips.
+All 1,173 raw diagnostics and multiplicities match baseline on both hosts.
+
+Its archived hosted artifact 12063605159 is 9,280,836 bytes, SHA256
+`05bc2b23b3e5f71bdea3cc9d729f779549af66e0cfe8674de59c1d6c2fb0b3d9`.
+All nine freshly compiled hosted H/C differ from local H/C under identical build,
+route/model/body/policy/implementation/dependency identities. Maximum coefficient
+difference is 2.790e-9; maximum model-time difference is 6.015e-7 s. Both actual
+outputs are independently valid; their identities are not interchangeable.
+Corresponding-normalized-t coordinate comparison does not establish metric
+alignment or transfer a certificate. Exact CPU/BLAS causation is unrecorded.
+
+More importantly, unchanged hosted S0 fails local independent loading because
+the old loader compares historical and replay report bytes exactly. The failed
+equality assertion and actual source-free saved-artifact load are retained with
+exit code 1. [Red/green reproduction](evidence/w3-report-portability/README.md).
+The focused repair preserves external H/C, actual saved authority and both
+fresh validators: 98 artifact tests PASS in 230.79 s; four source-free installed
+tests PASS in 112.974 s after ordinary builds, with all 138 source hashes
+unchanged. A genuine constant-speed Float32-midpoint regression also PASSes.
+The original red runs and first 96-PASS/one-outdated-test-expectation retry are
+retained without relabeling. Complete new-head acceptance and cross-host artifact replay
+remain required and are published externally in PR #3 after candidate freeze.
+
+A09 implementation `531667abc0ad38236ec46825a544a3644c324b4f` passes a new
+no-hardlink recursive checkout, safe setup, full W0–W3 verification and a separate
+source-free installed runtime: **552 tests / 27 groups / zero functional failures,
+errors or skips**, three ordinary package builds in 17.1 s, and all nine installed
+scenarios PASS. The source-free four-test suite takes 761.19 s and exercises all
+15 intended negative controls. Every wrapper/container exits 0. Before/after
+source manifests match all 138 exact committed blobs; 95 protected W2/legacy/map/
+interface files and all seven recursive pins are unchanged.
+
+Exact-head [candidate CI 38926539747](https://github.com/Felix-Grote/race_stack/actions/runs/38926539747)
+independently confirms all 552 tests and nine source-free cases. Local and hosted
+controlled compiles produce identical H for all nine cases, including S0
+`f2e283fd673c735a956350e3b73236420e5a353067f2f1b8a54b28ee533b85be`
+and S6 `5cd2661ee51cb124b7ed02ac8d32570da61cc1467a125119fda7d020f27544dd`.
+These are the retained **531667 candidate** artifacts; a later containing commit
+has a different build-provenance identity and receives its own exact-head CI.
+Both ledgers retain legacy 541 reports / zero errors / exactly ten inherited
+failures / two original skips. All 1,173 emitted style diagnostics match the
+baseline exactly. [A09 evidence](evidence/w3-a09/README.md), [runbook](W3_RUNTIME.md).
+
+Exploratory dirty-prefix installed preflight, its original noexec scratch guard
+failure and corrected retry remain separately labeled. Content mutations use
+actual reference.json paths and intended parser/hash/context/replay reasons;
+earlier path-only rejections are not credited as content validation.
+
+A07 commit `0c2d7c35fc50051a2ae96b9260de636610e280f4` passes exact-head push
+[CI 38918290086](https://github.com/Felix-Grote/race_stack/actions/runs/38918290086):
+532 functional tests / 24 groups, no functional failures/errors/skips, three
+builds, and exact inherited legacy 528 / zero errors / ten failures / two skips.
+All 1,173 emitted style diagnostics are unchanged from the complete W0–W2
+baseline. [A07 hosted evidence](evidence/w3-a07-ci/REPRODUCE.md),
+[artifact specification](W3_ARTIFACT.md), [baseline](evidence/w3-baseline/REPRODUCE.txt).
+
+A08 completes **92 primary + four separately predeclared matched S6 attempts**:
+58 complete accepted synthetic outputs, 28 original stock preparation failures,
+eight point-budget rejections and two .5 m new-adapter conditioning failures.
+All 151 independent saved-output checks and 13 copied-package regression tests
+pass without tolerance changes. Every S0–S5 variant passes both repeated new
+and adapted repaired paths. S1 physical completeness and S5 3D/contact remain
+unsupported; requiring unavailable physical coverage remains INCONCLUSIVE.
+The [complete result matrix](W3_BENCHMARKS.md) retains every successful,
+unsuccessful and exploratory attempt with its actual provenance.
+
+S6 .52 m completes three iterations (472/474/474 points), 1,184 geometry leaves,
+955 dynamic edges and 2,409 fine metric queries. Its exact final coefficients
+describe 240.856069139 m with model time 68.009787876 s. Repeated complete wall
+time is 117.96–121.53 s, maximum spline-system condition 21448.6713562 and QP
+inequality violation 2.537e-14; QP child peak RSS is about 280 MB. The matched
+adapted repaired .52 m output has 467 cubics, model time 67.912308846 s and wall
+time 110.09–114.44 s. Actual curvature energies are 0.189922802 / 0.189997285 1/m.
+These are common-model diagnostics, not native legacy speed, minimum curvature,
+minimum lap time or measured vehicle performance. The circle's actual energy
+increases despite solver convergence. Default finer meshes and the .5 m
+conditioning failure remain explicit engineering limitations.
+Two additional predeclared resource-only .52 m replays PASS with original
+authority. Linux wait4 collects startup/import through serialization/exit and
+reaped numerical children: whole-worker CPU is **130.628536 / 124.494186 s**
+(new / repaired), with maximum process RSS **278,716,416 / 270,630,912 bytes**.
+These replay wall times are explicitly non-isolated. The original 96-attempt
+outcome matrix and isolated wall measurements remain separate.
+
+The final containing commit's literal SHA, completed exact-head CI and controlled
+artifact identities are recorded externally in the PR/final publication report.
+Separate independent W3 adversarial review is required.
+
 # Project A validation matrix — W0/W1/W2
 
 ## Independent adversarial W2 final implementation — 2026-10-16

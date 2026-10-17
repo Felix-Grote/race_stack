@@ -1,0 +1,122 @@
+{
+  "scope": "W0_THROUGH_A06",
+  "legal_planner_acceptance": "SYNTHETIC_PLANAR_W2",
+  "numerical": {
+    "tests": "7",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "ros": {
+    "tests": "4",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a01": {
+    "tests": "60",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a02": {
+    "tests": "47",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a03": {
+    "tests": "38",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a04": {
+    "tests": "18",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a05": {
+    "tests": "40",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a05-oracle": {
+    "tests": "13",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a06": {
+    "tests": "21",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a06-independent": {
+    "tests": "41",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a06-oracle": {
+    "tests": "8",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "a06-ellipse": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-handoff": {
+    "tests": "10",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-numerical-oracle": {
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-shared-cap": {
+    "tests": "49",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-pipeline": {
+    "tests": "10",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-novel-pipeline": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w1-installed": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "w2-installed": {
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  "legacy_baseline": [
+    "colcon_test=1",
+    "colcon_test_result=1"
+  ]
+}

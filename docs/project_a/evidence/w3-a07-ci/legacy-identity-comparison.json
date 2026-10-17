@@ -1,0 +1,48 @@
+{
+  "identities_equal": true,
+  "baseline": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ],
+  "actual": [
+    "lint_cmake",
+    "xmllint",
+    "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+    "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+    "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+    "f110_msgs.xmllint package.xml",
+    "frenet_conversion.test.test_flake8 test_flake8",
+    "frenet_conversion.test.test_pep257 test_pep257",
+    "global_planner.test.test_flake8 test_flake8",
+    "global_planner.test.test_pep257 test_pep257"
+  ],
+  "skips": [
+    {
+      "identity": "frenet_conversion.test.test_copyright test_copyright",
+      "reason": "No copyright header has been placed in the generated source file."
+    },
+    {
+      "identity": "global_planner.test.test_copyright test_copyright",
+      "reason": "No copyright header has been placed in the generated source file."
+    }
+  ],
+  "summary": [
+    [
+      "528",
+      "0",
+      "10",
+      "2"
+    ]
+  ],
+  "baseline_sha256": "324448f3a61e312fb784e495aa7a219a6b3b966d17c32a38e5ce519edb3b5d55",
+  "actual_sha256": "5fb1cd9035f80a64583b686b64f51d150e4a35e8775cb2189d04b4edbbdb1297",
+  "scope": "Inherited failures remain failures; any new identity rejects the run"
+}

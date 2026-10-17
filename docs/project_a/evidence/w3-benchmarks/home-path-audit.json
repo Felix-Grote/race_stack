@@ -1,0 +1,29 @@
+{
+  "explicit_path_sources_sha256": {
+    "planner/global_planner/global_planner/route_legacy_export.py": "dc6f8a0c5d0b8e025f20f2a0cbc2a171cc6adf39fb0ab2f09118c4cbb44e8ad2",
+    "scripts/project_a/benchmark_w3.py": "9e7f028e40c224afc519c096c9326c52bae836c0c60579fddfe9bc23a02912a5",
+    "scripts/project_a/w3_benchmark_support.py": "29a25360fc2ee4411fb6483ae70dffda30335cbebec1d02a0218ec3a9ae50f59"
+  },
+  "historical_override_required": false,
+  "limitation": "source-free no-override runtime proof belongs to separate A09 acceptance",
+  "paths": {
+    "work/w3/.config": {
+      "exists": false,
+      "is_symlink": false
+    },
+    "work/w3/.ros": {
+      "exists": false,
+      "is_symlink": false
+    },
+    "work/w3/a08-matched-coarse/.ros": {
+      "exists": false,
+      "is_symlink": false
+    },
+    "work/w3/a08-primary/.ros": {
+      "exists": false,
+      "is_symlink": false
+    }
+  },
+  "scope": "read-only audit of historical HOME=/work benchmark output mount; no fresh compile",
+  "source_inspection": "no .ros, expanduser, getenv or HOME lookup in the benchmark/support/export source files; explicit inputs/output/install prefixes"
+}

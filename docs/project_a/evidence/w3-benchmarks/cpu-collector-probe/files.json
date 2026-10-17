@@ -1,0 +1,65 @@
+[
+  {
+    "compression": "none",
+    "evidence_relative_path": "S6-240m-new-0.52-r1.job.json",
+    "evidence_sha256": "2f0431378b8a50139d8383e3c572efe90f2e16576fbd124f5b7ca5a8b39e1323",
+    "original_bytes": 548,
+    "original_sha256": "2f0431378b8a50139d8383e3c572efe90f2e16576fbd124f5b7ca5a8b39e1323",
+    "source_relative_path": "S6-240m-new-0.52-r1.job.json",
+    "stored_bytes": 548
+  },
+  {
+    "compression": "none",
+    "evidence_relative_path": "S6-240m-repaired-0.52-r1.job.json",
+    "evidence_sha256": "5e2b0e816dbbdcf3e7ab9baf27e15b3f44f46b9021d947422c8f403adb0cacd3",
+    "original_bytes": 558,
+    "original_sha256": "5e2b0e816dbbdcf3e7ab9baf27e15b3f44f46b9021d947422c8f403adb0cacd3",
+    "source_relative_path": "S6-240m-repaired-0.52-r1.job.json",
+    "stored_bytes": 558
+  },
+  {
+    "compression": "none",
+    "evidence_relative_path": "collect_whole_cpu.py",
+    "evidence_sha256": "9366468831991ea57d2c2074e9dfca0f9bcc7c8dfbd4951edc6012959b889917",
+    "original_bytes": 7008,
+    "original_sha256": "9366468831991ea57d2c2074e9dfca0f9bcc7c8dfbd4951edc6012959b889917",
+    "source_relative_path": "collect_whole_cpu.py",
+    "stored_bytes": 7008
+  },
+  {
+    "compression": "none",
+    "evidence_relative_path": "collector-calibration.json",
+    "evidence_sha256": "c2c2d95a7ad6b60a8a7354d5be45eb680d188d61485546057739c26be264fe8f",
+    "original_bytes": 497,
+    "original_sha256": "c2c2d95a7ad6b60a8a7354d5be45eb680d188d61485546057739c26be264fe8f",
+    "source_relative_path": "collector-calibration.json",
+    "stored_bytes": 497
+  },
+  {
+    "compression": "none",
+    "evidence_relative_path": "failure-description.json",
+    "evidence_sha256": "779262c09f91c6a46f8cbb3ca551f29cab1cf5ad1b578c08c8aaa2c772097d0c",
+    "original_bytes": 572,
+    "original_sha256": "779262c09f91c6a46f8cbb3ca551f29cab1cf5ad1b578c08c8aaa2c772097d0c",
+    "source_relative_path": "failure-description.json",
+    "stored_bytes": 572
+  },
+  {
+    "compression": "none",
+    "evidence_relative_path": "inputs/S6-240m.json",
+    "evidence_sha256": "d02e04769f0f1acb3c2aa4c3e52c5815af113908595296bf2a2586d09622d1a2",
+    "original_bytes": 19683,
+    "original_sha256": "d02e04769f0f1acb3c2aa4c3e52c5815af113908595296bf2a2586d09622d1a2",
+    "source_relative_path": "inputs/S6-240m.json",
+    "stored_bytes": 19683
+  },
+  {
+    "compression": "none",
+    "evidence_relative_path": "manifest.json",
+    "evidence_sha256": "be4a957a1c038c2a6841eaa05bd572987b6022a19368a28e9d4516305211f698",
+    "original_bytes": 7469,
+    "original_sha256": "be4a957a1c038c2a6841eaa05bd572987b6022a19368a28e9d4516305211f698",
+    "source_relative_path": "manifest.json",
+    "stored_bytes": 7469
+  }
+]

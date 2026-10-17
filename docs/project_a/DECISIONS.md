@@ -1,5 +1,142 @@
 # Project A decision ledger
 
+## 2026-10-17 — Independent W3 remediation and durable evidence
+
+- Require trusted effective-user/root publication ancestry and no group/other
+  write modes. Root-owned sticky ancestry is permitted only into a private
+  trusted child, never as stage parent. Root/same-UID/filesystem administration
+  remain trusted; loading retains its separate external-H/fresh-proof contract.
+- Preserve actual timeout bytes, command and separate RESOURCE_LIMIT receipt,
+  then propagate failure. Never replace a partial producer report or change
+  the timeout to create acceptance.
+- Catch the initial bounded legacy fit in the existing numerical boundary.
+  Keep fit/QP equations, limits and every historical 96-job outcome unchanged;
+  record the amended helper hash for corrected-source runs.
+- Preserve original red, retry, ENOSPC and Git-worktree provenance failures.
+  The corrected source passes 593 functional tests before Git128 prevents its
+  worktree-mounted build; final acceptance must use the required clean standalone
+  recursive exact-SHA clone, ordinary install and separate source-free runtime.
+- Losslessly gzip only the two largest historical A09 JSONs after restoration
+  matches exact original Git blobs. Bind raw/stored hashes and update the ledger;
+  keep accepted history and the original evidence branch. Durable checksummed
+  companion archives supplement expiring Actions artifacts. A later supervised
+  history-size integration is a recommendation, not part of this release.
+- Record the completed exact delivered SHA, clean/hosted/source identities and
+  final verdict outside the implementation commit in the companion publication
+  manifest. Earlier CI or implementation reviews do not issue acceptance.
+  Preserve planar/model/resource/optimality and physical-operation limits.
+
+
+## 2026-10-16 — Historical witnesses and independently replayed authority
+
+- Preserve the real 811bd708 cross-host failures despite its green complete
+  suites. Fresh-compilation C/H differs for all nine cases; CPU/BLAS dispatch is
+  not captured, so record the numerical differences without inventing causation
+  or claiming a general cross-host bitwise compiler guarantee.
+- Do not round coefficients, q, profile/model values or digests to force an
+  identity match. Each controlled producer retains its own trusted C and H;
+  transport a particular product without changing its authority.
+- Replace exact historical/replay report-byte equality with strict historical
+  snapshot coherence. Keep authority IDs, status, rationale, assumptions and
+  coverage claims strict; check supported domains/structure and necessary
+  consistency of corresponding fixed-edge enclosures. Valid adaptive geometry
+  partitions need not be identical. This is not numerical recertification.
+- Both actual independent validators still must PASS on saved authority under
+  the independently selected supported context. Only fresh replay reports
+  authorize the accepted handle. Stored H-bound reports remain immutable audit
+  evidence and cannot approve an incoming artifact themselves.
+- A separately controlled new expected H is a new external approval. Keep
+  original-H and frozen-producer mutation rejection unchanged; a legal changed
+  body under an independently approved new H needs fresh proof, while an unsafe
+  body must fail the actual checker. Correct the initial outdated test expectation
+  and retain its red run alongside the explicit positive and unsafe controls.
+- Freeze the original producer dynamics nominal as the main binary64 lap T;
+  require membership in both historical and fresh certified time enclosures.
+  The legacy Float32 projection and terminal audit use this immutable value.
+  Keep query prefix integration unchanged and preserve the saved W2 profile;
+  fresh replay nominal rounding never changes the published main time.
+- Require deterministic old-loader red cases, genuine alternative certified
+  partitions, semantic/unsupported-coverage negatives and actual new-product
+  cross-host replay after the fix. A changed module hash requires freshly
+  compiled matching products; never bypass implementation identity to load
+  an old artifact under repaired code. No solver/proof budget or policy changes.
+
+## 2026-10-16 — A09 exact installed authority and isolated handoff
+
+- Freeze a committed candidate before fresh acceptance. A no-hardlink recursive
+  clone must retain literal HEAD and a clean tree before setup, after setup and
+  after successful verification. Full verification separately rejects HEAD,
+  source-hash and clean/dirty-state drift.
+- Build selected packages without symlink installation, then enter a different
+  nonroot, network-disabled, read-only-root container. Mount only installed
+  prefix/wheel, minimal harness and explicit results. Use the recorded immutable
+  image ID and explicit installed route/model/policy/build resources.
+- Correct the installed mutation tests to use actual reference.json products
+  and assert precise content/trust rejection reasons. Earlier unsupported-name
+  path rejection is preserved but not credited as content validation.
+- Exercise nine installed scenarios, including original S4 and preferred .52 m
+  S6 bytes, with new-process compile, dual replay, metric queries, original
+  nine-group reader and actual CDR. This is offline synthetic software evidence.
+- Run fresh-clone guard fixtures in explicit executable scratch because /tmp is
+  intentionally noexec. Preserve the red invocation and green retry. Extend the
+  CI ceiling to 90 minutes for full regressions and the separate installed
+  campaign; numerical solver and proof budgets are unchanged.
+- Clean candidate 531667 passes fresh recursive setup/full/source-free acceptance
+  and push CI 38926539747: 552 functional tests, nine installed scenarios, all
+  nine H identities equal across local and hosted runs, unchanged inherited
+  failures and raw diagnostics. Retain the exact candidate artifact checksum.
+  A managed-workspace outage briefly delayed the larger local bundle. Publish
+  its verified receipt through GitHub, then retain the complete 530-file bundle
+  after reconnection and a repeated exact hash check. Preserve both commits;
+  the final containing head requires its own CI. No tested source changed.
+- Record completed fresh-candidate evidence in a later ordinary commit, then
+  verify that literal delivered head in hosted push CI. Record its final SHA,
+  run and H outside that containing commit to avoid self-referential provenance.
+  Independent W3 adversarial review retains final acceptance/remediation authority.
+
+## 2026-10-16 — A08 fair comparison and measured S6 mesh policy
+
+- Freeze the 92-job primary manifest before execution; predeclare a separate
+  four-job .52/.53 m repaired-legacy supplement for comparisons at matching mesh
+  settings. Preserve all stock failures, resource rejections, conditioning
+  failures and exploratory provenance limitations.
+- Authenticate pinned legacy source and apply only declared test-local SciPy
+  parameter and boundary-array repairs. Contain unchanged-equation fits/QPs in
+  fresh children under the accepted A04 budgets. Never patch installed TPH or
+  the optimizer gitlink.
+- Retain raw final legacy coefficients and source-index/t/q history. Missing
+  original ownership anchors make raw geometry approval UNSUPPORTED. Algebraic
+  subdivision/rotation produces a separately identified binary64 authority;
+  coordinate roundoff bounds do not transfer derivative or geometry certificates.
+  Validate the adapted output directly and use common W2 retiming, explicitly
+  excluding native legacy continuous-speed approval.
+- The .5 m S6 anchored mesh is ill-conditioned under unchanged limits; .4/.2/.1 m
+  exceed the unchanged point budget. Explicit .52 m spacing completes a full
+  approximately 240 m synthetic solve and all independent checks twice. Prefer
+  it to the more poorly conditioned .53 m alternative. No sparse backend, larger
+  numerical budget, widened corridor or weakened certificate was necessary.
+- Report actual-coefficient curvature energy and common-model time separately
+  from the frozen-derivative surrogate. Circle energy increases after convergence;
+  neither planner establishes global curvature or lap-time optimality.
+- Phase CPU omits startup and unscoped serialization, so do not sum it as total
+  CPU. Predeclare two resource-only .52 m replays around the unchanged worker;
+  calibrate Linux wait4 descendant accounting, retain exact authority matches
+  and distinguish their concurrent wall times from isolated primary measurements.
+- Preserve original archives as software compatibility data. Synthetic physical
+  coverage declarations, surface labels and ramp annotations provide no approved
+  real-course, 3D/contact, localization, control or vehicle-safety evidence.
+
+## 2026-10-16 — A07 immutable authority and producer trust
+
+- Use three small production modules with existing W2 mathematics. No server, registry, alternate geometry kernel or new production dependency.
+- Artifact JSON preserves W2 float/int spelling, signed zero, booleans and null. A01 normalization applies only to the embedded original route; applying it globally changes accepted W2 authority.
+- Capture C directly at trusted A04 return. Freeze original caller inputs/profile/reports, compare serialized authorities, then freeze H. Publisher requires both separate expectations and replays staged bytes with original C. This repairs a coordinated payload/model/body self-approval gap found in internal review.
+- Bind all 11 kernel/compiler/export module hashes and pinned numerical versions. Later loading requires external H plus independent proof context; stored PASS never authorizes it.
+- Linux fd-relative no-symlink traversal, flock and renameat2 NOREPLACE protect publication. Post-rename fsync failure may leave a complete valid artifact without receipt; uncertain power-loss durability is disclosed, never called transactional rollback.
+- Preserve true-metric u/time/closing acceleration and explicit unavailable ROS groups. Side distances use original owned corridor intersections including existing 1e-9 m inward numerical allowance. Portal tags may conservatively include numerical boundary support; continuous proof reports remain authoritative.
+- Separate run telemetry projects numerical scalar observations to native JSON; immutable curve/model/profile values remain exact. No numerical tolerance, physical margin, legacy behavior, map, message or gitlink changes.
+
+
 ## 2026-10-16 — Independent W2 verification and publication identity
 
 - Technical blockers F1 P1 and F2 P2 are repaired separately with original red

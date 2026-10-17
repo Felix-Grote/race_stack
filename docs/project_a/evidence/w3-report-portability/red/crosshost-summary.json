@@ -1,0 +1,212 @@
+{
+  "bitwise_fresh_compile": "FAIL on all nine cases; no canonicalization or rounding applied",
+  "cases": [
+    {
+      "case": "s0_route",
+      "corresponding_t_exact_coefficient_l1_bound_m": 5.764220359525069e-09,
+      "hosted_C": "239e6c76dee1d3b5c4a438796ba20ede3104da035bc193227a78f637c4d342e8",
+      "hosted_H": "4bf3a0995829b6ecc77258cb52b6ed7daa09308e8b683d49472a2c5604453909",
+      "lap_time_delta_s": -1.5440093648066977e-11,
+      "length_delta_m": -4.632028094420093e-11,
+      "local_C": "f77eb66f8058dea5f99f3cfc85d580f664da853e4b0a455ca0c562b5786e8599",
+      "local_H": "1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59",
+      "max_coefficient_delta": 2.789873582587782e-09,
+      "max_q_delta": 1.6920154166655266e-10,
+      "max_speed_delta_mps": 0.0,
+      "max_u_delta": 0.0,
+      "segments": 98,
+      "solver_iteration_counts": [
+        3,
+        3
+      ]
+    },
+    {
+      "case": "s0_reverse_route",
+      "corresponding_t_exact_coefficient_l1_bound_m": 2.6644361527896525e-09,
+      "hosted_C": "776117be87c87c61bcc0b69044b4bf1e290897836fb14bba15215f42e0df78b1",
+      "hosted_H": "5229cbcae1413defef1d4fc66e6af68da879989e2cfef49f5971e5ffbe1b2e98",
+      "lap_time_delta_s": -6.4215299744319054e-12,
+      "length_delta_m": -1.9262813566456316e-11,
+      "local_C": "74453ab02a08cef268aed0f8f27891674145f1c566a8b3a777353df601f4c954",
+      "local_H": "706a47f7b5f7403dec6ea1d3dd71568225c874ddec37353e1e8262cd19f8f46f",
+      "max_coefficient_delta": 1.2497236127895217e-09,
+      "max_q_delta": 1.5803891528776148e-10,
+      "max_speed_delta_mps": 0.0,
+      "max_u_delta": 0.0,
+      "segments": 98,
+      "solver_iteration_counts": [
+        3,
+        3
+      ]
+    },
+    {
+      "case": "s0_rotated_route",
+      "corresponding_t_exact_coefficient_l1_bound_m": 2.6615482744308952e-09,
+      "hosted_C": "845249e58bab6a449b0b8d2e999c1b9778cf51e348f4a32b4d083661d01bed66",
+      "hosted_H": "3b56f57666c379c660d76d100ede7a3f3662b98b5f1c01e5596166439ca8da4f",
+      "lap_time_delta_s": 6.4925842480079154e-12,
+      "length_delta_m": 1.9475976387184346e-11,
+      "local_C": "283d583b1e1b61bb6265b242779b07d81ec477a70a9cb66da93771c0d72a49db",
+      "local_H": "3746b58a7a0436338039d68fd43cb7b582b16fe0f40269f23f990a6e28952b34",
+      "max_coefficient_delta": 1.2817589632903303e-09,
+      "max_q_delta": 9.581491156041011e-11,
+      "max_speed_delta_mps": 0.0,
+      "max_u_delta": 0.0,
+      "segments": 98,
+      "solver_iteration_counts": [
+        3,
+        3
+      ]
+    },
+    {
+      "case": "s2_upper_route",
+      "corresponding_t_exact_coefficient_l1_bound_m": 1.8876861525929285e-09,
+      "hosted_C": "c11b66c01d7476889cf8602b1a6c86b24b47f21b0e57571360673ee495ffd2c5",
+      "hosted_H": "24410c62bde961bdca29400c705cb2c9bd1dfc87191b80bf2581631bdb49a18c",
+      "lap_time_delta_s": 7.293959214393908e-08,
+      "length_delta_m": -5.282849713239557e-10,
+      "local_C": "2541d73da090da34cf36dd2cffc094a0adf9006cfda9f403877e670456f3a274",
+      "local_H": "a93310867c801351273a8907b720ec4acea3ee9798a43a9e969ffaf8c8364ad1",
+      "max_coefficient_delta": 8.933815909273335e-10,
+      "max_q_delta": 1.0143104134385794e-09,
+      "max_speed_delta_mps": 1.3956634070666496e-07,
+      "max_u_delta": 4.222970657608016e-07,
+      "segments": 92,
+      "solver_iteration_counts": [
+        3,
+        3
+      ]
+    },
+    {
+      "case": "s2_lower_route",
+      "corresponding_t_exact_coefficient_l1_bound_m": 2.1427837423263624e-11,
+      "hosted_C": "7f0aa5ff09b06a183803ce8b598112d54a9d351febba5e5a0e45eeb5b96c446c",
+      "hosted_H": "ace467ac3780a06a670e45c66a8a34eb95ec79a2574cd92bcb25a5efe2f49182",
+      "lap_time_delta_s": -8.615330671091215e-13,
+      "length_delta_m": -2.5863755581667647e-12,
+      "local_C": "4881c205356152af2f59b061e2e4a120e00638e3aad55b2edd38e75641d864a6",
+      "local_H": "12612543adc3c8436ac08c0c1941fe95a069fab694ebfb45cb9dcbc327268647",
+      "max_coefficient_delta": 6.4248198775040954e-12,
+      "max_q_delta": 3.3875124927362776e-12,
+      "max_speed_delta_mps": 0.0,
+      "max_u_delta": 0.0,
+      "segments": 89,
+      "solver_iteration_counts": [
+        3,
+        3
+      ]
+    },
+    {
+      "case": "s3_surfaces_route",
+      "corresponding_t_exact_coefficient_l1_bound_m": 1.2564071202696148e-11,
+      "hosted_C": "9bedda5b0cb2eca92cbe84385a641e3e76b3bf48e02fb46dc230f2ca485fde96",
+      "hosted_H": "dcfb494278d25c01a78b107ab3e81261f0cd22bd1899f889c5315bd17bb8c177",
+      "lap_time_delta_s": -7.691625114603085e-12,
+      "length_delta_m": -4.050093593832571e-13,
+      "local_C": "e0838daf59b5c3564f1f6d8a545b01c9371e57e0ae31848677ec5feb70ef16b1",
+      "local_H": "63a2b79580026049937abfeb36b6d94b98a993f2809c6ed15a8d6fdf4c1719b1",
+      "max_coefficient_delta": 4.87025610812486e-12,
+      "max_q_delta": 8.562039965909207e-13,
+      "max_speed_delta_mps": 3.362954359431569e-11,
+      "max_u_delta": 1.6608048269972642e-10,
+      "segments": 134,
+      "solver_iteration_counts": [
+        3,
+        3
+      ]
+    },
+    {
+      "case": "s3_notch_route",
+      "corresponding_t_exact_coefficient_l1_bound_m": 7.288242546369533e-12,
+      "hosted_C": "07a4c9d7e693aa94c78b059cb63142c3571bddb94247847277f83893dc66ac56",
+      "hosted_H": "8460e97dc5e0214027bce3a3af64fa844a9bd78cdc8cb2261624b49a0f2adc06",
+      "lap_time_delta_s": -1.3095302620058646e-11,
+      "length_delta_m": -6.892264536872972e-13,
+      "local_C": "0f633fa6a420afdf69b3a47520f782b0efcfc837bcfd31d4c6b713ddfcd2f11e",
+      "local_H": "01d093b08e577a4e109e40e1bb7f16b0cced88c27e73ba5718b3927c10e7f064",
+      "max_coefficient_delta": 1.9828583219805296e-12,
+      "max_q_delta": 6.394884621840902e-13,
+      "max_speed_delta_mps": 5.0311754762333294e-11,
+      "max_u_delta": 3.014690719282953e-10,
+      "segments": 135,
+      "solver_iteration_counts": [
+        3,
+        3
+      ]
+    },
+    {
+      "case": "s4_repeated_route",
+      "corresponding_t_exact_coefficient_l1_bound_m": 2.965313572163633e-09,
+      "hosted_C": "d979a10074f4bf97cd6e3afc6f42819690fd4dba2e036918f37ec1fd90f7ad4b",
+      "hosted_H": "7b329d023cc8f4642c48a99da8a7fa128fb274948aff9952a08d6392204d0f71",
+      "lap_time_delta_s": -6.014596927172988e-07,
+      "length_delta_m": -3.765876499528531e-11,
+      "local_C": "c384751977750e8a814a38ada348fcc520173149b7f443edae35dd0ba2fb77ba",
+      "local_H": "18c16b46c170301295ee40a3dff359db01d613835adb13462e025e834672acc1",
+      "max_coefficient_delta": 1.493345666743473e-09,
+      "max_q_delta": 1.6011298953344522e-09,
+      "max_speed_delta_mps": 6.992807358496833e-06,
+      "max_u_delta": 3.156887251343221e-05,
+      "segments": 198,
+      "solver_iteration_counts": [
+        3,
+        3
+      ]
+    },
+    {
+      "case": "s6_competition_route",
+      "corresponding_t_exact_coefficient_l1_bound_m": 1.889723191513329e-09,
+      "hosted_C": "2cbd2d35e40b9221d54204f28e4c907204215a9829801c824fe6c1de9b34e936",
+      "hosted_H": "229053a0240447a28a797038800ced53b41c12e0d74d799a2ca84533defbd535",
+      "lap_time_delta_s": -1.2562395568238571e-11,
+      "length_delta_m": 1.8607693164085504e-10,
+      "local_C": "5246eda31c757ae728c7ba9deb03a40569590dd296a941aaacbaf15af2ac58da",
+      "local_H": "e17b42550509b88d9121401976dfcf5f7ca74d4002cd3057410b2607295a697d",
+      "max_coefficient_delta": 1.370818125678852e-09,
+      "max_q_delta": 1.219291334564332e-10,
+      "max_speed_delta_mps": 1.2948606631368875e-09,
+      "max_u_delta": 1.0225971180943816e-08,
+      "segments": 474,
+      "solver_iteration_counts": [
+        3,
+        3
+      ]
+    }
+  ],
+  "commit": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "dependency_source_input_identity": "Byte-identical source/build manifests, OS/package inventories, helpers, route/model/footprint/policies/provenance/implementation and owners.",
+  "detailed_report": "work/w3/final-crosshost-review.json",
+  "detailed_report_sha256": "6b59bf144aeeaa9f3c30e9ef1ab7d34ffb3bc351b5ce42957c03df95d61d6bc4",
+  "functional_tests": {
+    "both_hosts": 552,
+    "errors": 0,
+    "failures": 0,
+    "groups": 27,
+    "skips": 0
+  },
+  "independent_dispatch_evidence": {
+    "conclusion": "Exact cause is not established; CPU/BLAS dispatch is a hypothesis.",
+    "not_recorded": "CPU model/features, lscpu/cpuinfo, NumPy show_config/show_runtime, BLAS architecture/dispatch or selected SIMD path.",
+    "observer": "a09_installed read-only retained evidence review",
+    "recorded": "Both runtime x86_64/glibc2.35/Python3.10.12; kernels differ; OS libblas3/liblapack3 versions both3.10.0-2ubuntu1. Outer host metadata differs, while installed artifact dependency/module/helper/resource identities match."
+  },
+  "legacy_diagnostic_multiset": {
+    "both_hosts": 1173,
+    "new": 0,
+    "removed": 0
+  },
+  "numeric_delta_scope": "Exact binary64 coefficient L1 sum bounds position difference only at corresponding segment and normalized t in [0,1]; not a metric-alignment bound or cross-host hash equivalence.",
+  "per_host_receipt_bindings": "All nine actual H/C values recomputed and match each host controlled compile, persisted bytes, fresh validate, query/API/export and dual PASS reports.",
+  "saved_artifact_replay": {
+    "console": "work/w3/portability/console.log",
+    "console_sha256": "a941a6e1192f0ce800e642f96cef81bb7ae33eea37112973592df27447575083",
+    "error": "dynamics stored proof differs from independent replay",
+    "reason": "Loader requires exact binary64 replay report equality after both independent validators PASS. Valid fixed-artifact proof replay can differ in numeric report metadata across hosts.",
+    "remediation_status": "Root assigned smallest production loader repair and regression tests; no final W3 acceptance claim.",
+    "reproducer": "work/w3/portability/harness/verify.py",
+    "reproducer_sha256": "5c6642b6d8d7054f6bed25f596d99d14666823ec22d33a6f1a208f4c6f077a08",
+    "scope": "Saved hosted811 artifact under its correct externally trusted H loaded in localfinal811 installed runtime",
+    "status": "FAIL_FALSE_REJECTION"
+  },
+  "scope": "Internal persisted-evidence audit. No acceptance tolerance, coefficient, policy or source change; no numerical rerun. External W3 review remains pending."
+}

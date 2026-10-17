@@ -1,0 +1,47 @@
+28.4.0
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.37kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.5s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/ros:humble-ros-base-jammy@sha256:860e53793ccf575e5369b5e9a19939de2bfcfb46a299954d06f54f2af54fed19
+#4 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [stage-0 1/6] FROM docker.io/library/ros:humble-ros-base-jammy@sha256:860e53793ccf575e5369b5e9a19939de2bfcfb46a299954d06f54f2af54fed19
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 70.70kB 0.0s done
+#7 DONE 0.0s
+
+#8 [stage-0 2/6] RUN --mount=type=secret,id=system_ca,required=true     apt-get -o Acquire::https::CaInfo=/run/secrets/system_ca update &&     apt-get -o Acquire::https::CaInfo=/run/secrets/system_ca install -y --no-install-recommends python3-venv=3.10.6-1~22.04.1     python3.10-venv=3.10.12-1~22.04.18     python3-pip-whl=22.0.2+dfsg-1ubuntu0.7     python3-setuptools-whl=59.6.0-1.2ubuntu0.22.04.3 &&     rm -rf /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [stage-0 3/6] RUN python3 -m venv --system-site-packages /opt/project-a
+#9 CACHED
+
+#10 [stage-0 5/6] RUN --mount=type=secret,id=system_ca,required=true     PIP_CERT=/run/secrets/system_ca python -m pip install --require-hashes -r /tmp/requirements.build.lock &&     PIP_CERT=/run/secrets/system_ca python -m pip install --require-hashes --no-build-isolation -r /tmp/requirements.lock &&     python -m pip check
+#10 CACHED
+
+#11 [stage-0 4/6] COPY scripts/project_a/requirements*.lock /tmp/
+#11 CACHED
+
+#12 [stage-0 6/6] WORKDIR /work
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 writing image sha256:2cc1f6ad969cdb3256f14b4b45500cb0fcdd4a3f321b4c2a1bbc7c7fb6ca0f88 done
+#13 naming to docker.io/library/project-a-humble:w0 done
+#13 DONE 0.0s

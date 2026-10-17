@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="32.355" timestamp="2026-10-16T17:53:49.007636+00:00" hostname="028f1d99db7c"><testcase classname="test.test_route_legacy_export" name="test_frozen_main_time_controls_float32_projection_across_bounded_replay" time="32.113" /></testsuite></testsuites>

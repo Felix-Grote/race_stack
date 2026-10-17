@@ -1,0 +1,1 @@
+{"image_id":"sha256:2cc1f6ad969cdb3256f14b4b45500cb0fcdd4a3f321b4c2a1bbc7c7fb6ca0f88","network_mode":"none","read_only_root":true,"memory_bytes":4294967296,"nano_cpus":2000000000,"pids_limit":256,"cap_drop":["ALL"],"security_options":["no-new-privileges"],"user":"1000:1000"}

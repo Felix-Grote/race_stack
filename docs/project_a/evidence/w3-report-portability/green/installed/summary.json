@@ -1,0 +1,34 @@
+{
+  "scope": "Exploratory dirty811 remediation; final clean candidate acceptance still required",
+  "source_commit": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "source_dirty": true,
+  "image_id": "sha256:2cc1f6ad969cdb3256f14b4b45500cb0fcdd4a3f321b4c2a1bbc7c7fb6ca0f88",
+  "build_exit_code": 0,
+  "runtime_exit_code": 0,
+  "tests": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "test_names": [
+    "test_installed_w3_origins_resources_and_isolation",
+    "test_installed_w3_persist_revalidate_query_export_cdr",
+    "test_installed_w3_corruption_and_context_fail_closed",
+    "test_installed_w3_replays_numeric_proofs_without_rewriting_authority"
+  ],
+  "strict_flake8": "PASS; max-line-length99; runtime command is set-e",
+  "source_hashes_before_build_after_build_after_runtime_identical": true,
+  "source_manifest_entries": 138,
+  "source_manifest_sha256": "bc14338e91912dc8a38a646ef107b40f2e25f2736116888845fa34da46a9fa82",
+  "H": "10c39f7a95f8e9630ffdfc28e592d9bfb53bf765bb29d04eb796a89e4322d721",
+  "curve_digest": "f77eb66f8058dea5f99f3cfc85d580f664da853e4b0a455ca0c562b5786e8599",
+  "unchanged_artifact_sha256": "f45d5c705d02cf3514fbd6f49c373b3381b47b39b9c0e64207d521aea7aca454",
+  "positive_real_validator_calls": {
+    "geometry": 1,
+    "dynamics": 1
+  },
+  "stored_contract_rejection": "geometry stored historical authority differs from replay",
+  "missing_fresh_required_coverage": "dynamics lacks independently required coverage",
+  "elapsed_pytest_s": 112.974
+}

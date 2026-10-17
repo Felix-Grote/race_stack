@@ -1,0 +1,7 @@
+{
+  "scope": "Focused deterministic installed regression RED against unmodified retained 811 strict loader; not corrected acceptance",
+  "source_commit": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "test_sha256": "fa07c11b39f02184e5f525b739bf69310cd53f38fe54c13ed21d1834e3e7dc49",
+  "installed_prefix": "work/w3/final-fresh/verification/install",
+  "image_id": "sha256:2cc1f6ad969cdb3256f14b4b45500cb0fcdd4a3f321b4c2a1bbc7c7fb6ca0f88"
+}

@@ -1,0 +1,19 @@
+{
+  "scope": "Numerical values of the passing genuine-validator constant-u regression",
+  "junit": "midpoint.xml",
+  "tests_passed": 1,
+  "constant_speed_mps": 2.148059259305098,
+  "constant_squared_speed": 4.614158581486365,
+  "float32_midpoint_s": 16.000000953674316,
+  "frozen_producer_main_time_s": 16.000000953674313,
+  "profile_time_s": 16.000000953674313,
+  "replay_nominal_from_verified_shifted_edge_distances_s": 16.00000095367433,
+  "producer_main_float32_s": 16.0,
+  "fresh_nominal_float32_s": 16.000001907348633,
+  "unchanged_lap_time_enclosure_s": [
+    16.000000953581065,
+    16.00000095376756
+  ],
+  "test_sha256": "7c38d9c155ced33b682657a29b3d5668b73f3cdeebacd05c2cb0c77ecfcfaf3f",
+  "perturbation": "Each actual checker nominal edge distance advanced eight binary64 ulps inside unchanged certified bounds; actual checkers recompute PASS."
+}

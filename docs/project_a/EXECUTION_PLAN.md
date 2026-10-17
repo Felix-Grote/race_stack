@@ -1,7 +1,15 @@
 # ForzaETH ICRA27 — Project A Codex Cloud execution plan
 
-Version 2026-10-16 | Status: current execution authority, proposed implementation (not implemented)  
-Owner: Global-planner subsystem | Objective: minimum human intervention, maximum verifiable autonomous implementation
+Version 2026-10-16 | Independent review update 2026-10-17
+Owner: Global-planner subsystem | Acceptance specification below remains authoritative.
+
+W3 independent review has reproduced and corrected publication ancestry,
+installed timeout evidence and initial legacy-fit classification findings.
+[The review](W3_INDEPENDENT_ADVERSARIAL_REVIEW.md), STATUS and RESULTS record exact
+source checks, failures, numerical limits and the lossless evidence disposition.
+The completed literal-head clean/hosted/source-free gates and release verdict
+are recorded in the separate companion publication manifest linked there;
+no historical implementation checkpoint substitutes for those gates.
 
 # 1\. Executive decision and supersession
 

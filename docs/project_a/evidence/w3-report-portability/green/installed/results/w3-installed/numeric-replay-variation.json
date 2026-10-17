@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "H": "10c39f7a95f8e9630ffdfc28e592d9bfb53bf765bb29d04eb796a89e4322d721",
+  "curve_digest": "f77eb66f8058dea5f99f3cfc85d580f664da853e4b0a455ca0c562b5786e8599",
+  "unchanged_artifact_sha256": "f45d5c705d02cf3514fbd6f49c373b3381b47b39b9c0e64207d521aea7aca454",
+  "positive_real_validator_calls": {
+    "geometry": 1,
+    "dynamics": 1
+  },
+  "numeric_changes": {
+    "geometry": {
+      "historical": 0.1588726718030671,
+      "independent_replay": 0.1588726718030671,
+      "conservative_replay": 0.15887267180306713
+    },
+    "dynamics": {
+      "historical": 11.456316732589919,
+      "independent_replay": 11.456316732589919,
+      "conservative_replay": 11.45631673258992,
+      "historical_nominal": 11.456316732476836,
+      "simulated_replay_nominal": 11.456316732476838
+    }
+  },
+  "stored_contract_rejection": "geometry stored historical authority differs from replay",
+  "missing_fresh_required_coverage": "dynamics lacks independently required coverage",
+  "scope": "Deterministic conservative report-variation injection after both real checks"
+}

@@ -1,0 +1,169 @@
+{
+  "accepted_persisted_query_ros_paths": 58,
+  "all_retained_attempts": 119,
+  "artifact_mutation_and_wrong_H_rejections": 58,
+  "condition_definition": "binary64 2-norm condition of TUM spline equality system A; not QP Hessian",
+  "final_frozen_attempts": 96,
+  "final_frozen_statuses": {
+    "PASS": 58,
+    "RESOURCE_LIMIT": 8,
+    "SOLVER_FAILURE": 2,
+    "STOCK_PREPARATION_FAILURE": 28
+  },
+  "functional_tests": {
+    "copied_package_path": "/work/a08-tests/copied/global_planner/test/test_w3_benchmarks.py",
+    "failures": 0,
+    "passes": 13,
+    "seconds": 8.41,
+    "strict_flake8_exit": 0,
+    "strict_pep257_exit": 0
+  },
+  "independent_oracle_absolute_error_maxima": {
+    "composition_roundoff_bound_m": 2.7987749448754545e-15,
+    "energy48_vs96_per_m": 2.220446049250313e-16,
+    "length_m": 7.105427357601002e-15,
+    "max_normal_error": 3.3306690738754696e-16,
+    "max_reference_coefficient_error_m": 1.5090532989869843e-13,
+    "max_shifted_coefficient_error_m": 2.935256204761316e-13,
+    "max_source_point_error_m": 7.105427357601002e-15,
+    "model_time_s": 8.526512829121202e-14,
+    "profile_distance_sum_m": 7.105427357601002e-15
+  },
+  "independent_saved_output_audits": {
+    "matched-coarse": {
+      "checks": 10,
+      "statuses": {
+        "PASS": 10
+      }
+    },
+    "primary": {
+      "checks": 141,
+      "statuses": {
+        "PASS": 141
+      }
+    }
+  },
+  "native_legacy_continuous_speed_authorization": "UNSUPPORTED",
+  "preferred_full_course": {
+    "H": "72e7f5449d7ec61c88f3ef71339544dd46c32a3bcc74385801075c8463caf024",
+    "dynamic_bound_intervals": 955,
+    "expected_curve_digest": "5246eda31c757ae728c7ba9deb03a40569590dd296a941aaacbaf15af2ac58da",
+    "fine_query_count": 2409,
+    "geometry_leaves": 1184,
+    "id": "S6-240m-new-0.52-r1",
+    "iterations": 3,
+    "lap_time_s": 68.00978787597407,
+    "length_m": 240.85606913925082,
+    "model_sha256": "47b11f0c9ddb8d235e629b482b530ce778aab0527f4ff961c7810d5c4e3b2af2",
+    "qp_condition_max": 21448.671356240695,
+    "qp_primal_residual_max": 2.5368596112684827e-14,
+    "retime_edges": 955,
+    "route_sha256": "d02e04769f0f1acb3c2aa4c3e52c5815af113908595296bf2a2586d09622d1a2",
+    "segments": 474
+  },
+  "raw_legacy_geometry_authorization": "UNSUPPORTED",
+  "runs": {
+    "coarse-retry": {
+      "acceptance_scope": "exploratory failure history; read development-provenance.json",
+      "attempts": 6,
+      "manifest_sha256": "7906da25ebf9fddcacb83fb635708480dc87bfc27ec79630a892874006fdb543",
+      "statuses": {
+        "PASS": 2,
+        "RESOURCE_LIMIT": 3,
+        "SOLVER_FAILURE": 1
+      },
+      "sum_worker_wall_seconds": 251.6511812370004
+    },
+    "matched-coarse": {
+      "acceptance_scope": "frozen final source and isolated performance",
+      "attempts": 4,
+      "manifest_sha256": "b51896f8e9e044bc767a529f97da75bb87afe99e1cb05f6064803f98ef95fcf5",
+      "statuses": {
+        "PASS": 4
+      },
+      "sum_worker_wall_seconds": 442.65058162399964
+    },
+    "pilot": {
+      "acceptance_scope": "exploratory failure history; read development-provenance.json",
+      "attempts": 11,
+      "manifest_sha256": "80b1f870e8eae2f8e59bf0020f7a964a63dbdb50303cba20d5bc9da091f555c2",
+      "statuses": {
+        "PASS": 3,
+        "RESOURCE_LIMIT": 4,
+        "SOLVER_FAILURE": 1,
+        "STOCK_PREPARATION_FAILURE": 3
+      },
+      "sum_worker_wall_seconds": 249.07757376000018
+    },
+    "primary": {
+      "acceptance_scope": "frozen final source and isolated performance",
+      "attempts": 92,
+      "manifest_sha256": "a0ac91282fa72287d98c1c986c4b66be7082b5d1731dc1fc844d7c4e2f1706bf",
+      "statuses": {
+        "PASS": 54,
+        "RESOURCE_LIMIT": 8,
+        "SOLVER_FAILURE": 2,
+        "STOCK_PREPARATION_FAILURE": 28
+      },
+      "sum_worker_wall_seconds": 2087.4320075450037
+    },
+    "ros-probe": {
+      "acceptance_scope": "exploratory failure history; read development-provenance.json",
+      "attempts": 3,
+      "manifest_sha256": "481f4b2b4a7498d1f9c6d9b532295ab13a0cc53474159bf458d420ada59f406e",
+      "statuses": {
+        "PASS": 2,
+        "STOCK_PREPARATION_FAILURE": 1
+      },
+      "sum_worker_wall_seconds": 61.66225773400015
+    },
+    "s4-probe": {
+      "acceptance_scope": "exploratory failure history; read development-provenance.json",
+      "attempts": 1,
+      "manifest_sha256": "7a95e0cc60aebb40825e955c4e3fa2927da858f01a89d13716d2d34c5470a0d9",
+      "statuses": {
+        "PASS": 1
+      },
+      "sum_worker_wall_seconds": 72.41622475200006
+    }
+  },
+  "schema_version": 1,
+  "scope": "offline planar synthetic engineering evidence; independent W3 review remains required",
+  "separate_collector_calibrations": {
+    "failed_bootstrap_controls": 1,
+    "passed_corrected_calibrations": 1,
+    "planner_attempts_before_calibration_pass": 0
+  },
+  "separate_resource_replay": {
+    "attempts": 2,
+    "counting": "additional resource-only repeats, outside the 96 primary+matched matrix",
+    "identity_match_status": "PASS for both original C/model/policy/profile/report/H authorities",
+    "manifest_sha256": "f42286607e076a6b1964544d1d4cf43aff2fe1e5be55ad2cc157bd37a98ef94a",
+    "measurements": [
+      {
+        "H": "2daac1aa15deda868187b93917806c80616d24ac7a551ccf2ec8e619213d9846",
+        "expected_curve_digest": "ea9bace5b6f7c64fb4aa99a8a91a93905fd1953dc5570ae8b7980c965ffc923e",
+        "id": "S6-240m-repaired-0.52-r1",
+        "outer_wall_seconds": 124.72941929600074,
+        "whole_worker_cpu_seconds": 124.494186,
+        "whole_worker_peak_process_rss_bytes": 270630912,
+        "whole_worker_system_seconds": 1.004897,
+        "whole_worker_user_seconds": 123.489289
+      },
+      {
+        "H": "72e7f5449d7ec61c88f3ef71339544dd46c32a3bcc74385801075c8463caf024",
+        "expected_curve_digest": "5246eda31c757ae728c7ba9deb03a40569590dd296a941aaacbaf15af2ac58da",
+        "id": "S6-240m-new-0.52-r1",
+        "outer_wall_seconds": 130.85373665099996,
+        "whole_worker_cpu_seconds": 130.628536,
+        "whole_worker_peak_process_rss_bytes": 278716416,
+        "whole_worker_system_seconds": 0.973753,
+        "whole_worker_user_seconds": 129.654783
+      }
+    ],
+    "statuses": {
+      "PASS": 2
+    },
+    "wall_time_scope": "non-isolated concurrent; retain original isolated wall times"
+  }
+}

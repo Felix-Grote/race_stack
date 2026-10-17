@@ -1,0 +1,7 @@
+{
+  "scope": "Raw emitted style diagnostics, including repeated pytest report copies; exact text and multiplicity comparison",
+  "baseline_entries": 1173,
+  "a07_entries": 1173,
+  "new": [],
+  "removed": []
+}

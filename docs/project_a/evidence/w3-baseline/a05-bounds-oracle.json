@@ -1,0 +1,123 @@
+{
+  "oracle": "100-digit Decimal derivative arithmetic on exact binary64 inputs",
+  "scope": "sampled independent regression oracle; production interval certificate required",
+  "controls": [
+    {
+      "scale": 0.0009765625,
+      "angle": 0.0,
+      "oracle_maximum": [
+        0.0019871607172973274,
+        539.4521495132184,
+        305643.67285036057
+      ],
+      "bound_speed_lower": 0.001364787583923211,
+      "bound_speed_upper": 0.0019871607172973287,
+      "bound_curvature": 1594.3873065908779,
+      "bound_curvature_rate": 2265433.757869671
+    },
+    {
+      "scale": 0.0009765625,
+      "angle": 0.37,
+      "oracle_maximum": [
+        0.0019871607172973274,
+        539.4521495132184,
+        305643.6728503605
+      ],
+      "bound_speed_lower": 0.0011805643398420315,
+      "bound_speed_upper": 0.0019871607172973287,
+      "bound_curvature": 2463.3154709006403,
+      "bound_curvature_rate": 5407590.300238432
+    },
+    {
+      "scale": 0.0009765625,
+      "angle": 1.5707963267948966,
+      "oracle_maximum": [
+        0.0019871607172973274,
+        539.4521495132184,
+        305643.67285036057
+      ],
+      "bound_speed_lower": 0.001364787583923211,
+      "bound_speed_upper": 0.0019871607172973287,
+      "bound_curvature": 1594.3873065908776,
+      "bound_curvature_rate": 2265433.7578696706
+    },
+    {
+      "scale": 1.0,
+      "angle": 0.0,
+      "oracle_maximum": [
+        2.0348525745124633,
+        0.5268087397590023,
+        0.29148452076946313
+      ],
+      "bound_speed_lower": 1.397542485937368,
+      "bound_speed_upper": 2.0348525745124646,
+      "bound_curvature": 1.5570188540926542,
+      "bound_curvature_rate": 2.1604859904000007
+    },
+    {
+      "scale": 1.0,
+      "angle": 0.37,
+      "oracle_maximum": [
+        2.0348525745124633,
+        0.5268087397590023,
+        0.2914845207694631
+      ],
+      "bound_speed_lower": 1.2088978839982403,
+      "bound_speed_upper": 2.0348525745124646,
+      "bound_curvature": 2.4055815145514066,
+      "bound_curvature_rate": 5.157079982984955
+    },
+    {
+      "scale": 1.0,
+      "angle": 1.5707963267948966,
+      "oracle_maximum": [
+        2.0348525745124633,
+        0.5268087397590023,
+        0.29148452076946313
+      ],
+      "bound_speed_lower": 1.397542485937368,
+      "bound_speed_upper": 2.0348525745124646,
+      "bound_curvature": 1.557018854092654,
+      "bound_curvature_rate": 2.1604859904000002
+    },
+    {
+      "scale": 1024.0,
+      "angle": 0.0,
+      "oracle_maximum": [
+        2083.6890363007624,
+        0.0005144616599209007,
+        2.7798130108782113e-07
+      ],
+      "bound_speed_lower": 1431.0835055998648,
+      "bound_speed_upper": 2083.6890363007637,
+      "bound_curvature": 0.0015205262246998576,
+      "bound_curvature_rate": 2.0604000000000006e-06
+    },
+    {
+      "scale": 1024.0,
+      "angle": 0.37,
+      "oracle_maximum": [
+        2083.6890363007624,
+        0.0005144616599209007,
+        2.779813010878211e-07
+      ],
+      "bound_speed_lower": 1237.911433214198,
+      "bound_speed_upper": 2083.6890363007637,
+      "bound_curvature": 0.002349200697804108,
+      "bound_curvature_rate": 4.9181747274255325e-06
+    },
+    {
+      "scale": 1024.0,
+      "angle": 1.5707963267948966,
+      "oracle_maximum": [
+        2083.6890363007624,
+        0.0005144616599209007,
+        2.7798130108782113e-07
+      ],
+      "bound_speed_lower": 1431.0835055998648,
+      "bound_speed_upper": 2083.6890363007637,
+      "bound_curvature": 0.0015205262246998574,
+      "bound_curvature_rate": 2.0604000000000002e-06
+    }
+  ]
+}

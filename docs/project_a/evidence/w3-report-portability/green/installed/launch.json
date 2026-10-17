@@ -1,0 +1,21 @@
+{
+  "image_id": "sha256:2cc1f6ad969cdb3256f14b4b45500cb0fcdd4a3f321b4c2a1bbc7c7fb6ca0f88",
+  "source_commit": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "source_dirty": true,
+  "source_or_build_mounts": [],
+  "readonly_mounts": [
+    "/work/install",
+    "/work/python",
+    "/runtime-harness"
+  ],
+  "writable_mounts": [
+    "/results",
+    "/tmp"
+  ],
+  "network": "none",
+  "uid": 1000,
+  "cap_drop": "ALL",
+  "no_new_privileges": true,
+  "expected_tests": 4,
+  "scope": "Exploratory source-free installed regression; final clean candidate still required"
+}

@@ -1,0 +1,101 @@
+{
+  "accepted_w2_numerical_kernel_diff_paths": [],
+  "campaign_integrity": {
+    "entries": 966,
+    "index_sha256": "38b11ee4e1cfcdc21666de527bb06a81ff77337b3ab5221412bc6dadfe367f12",
+    "mismatches": [],
+    "unchanged_expected_index_sha256": "38b11ee4e1cfcdc21666de527bb06a81ff77337b3ab5221412bc6dadfe367f12"
+  },
+  "claims": {
+    "frozen_primary_matched_outcome_counts_unchanged": {
+      "PASS": 58,
+      "RESOURCE_LIMIT": 8,
+      "SOLVER_FAILURE": 2,
+      "STOCK_PREPARATION_FAILURE": 28,
+      "attempts": 96
+    },
+    "numerical_outcomes_fairness_objectives_and_resource_observations_need_retraction": false,
+    "old_artifacts_supported_under_new_implementation_identity": false,
+    "postfix_fresh_compile_guarantees_old_H_or_cross_host_C": false,
+    "repeat_byte_identity_is_observed_original_same_host_repeat_evidence_only": true,
+    "resource_numbers_scope": "Actual historical frozen implementation; producer kernels unchanged, but modified A07 publication/check costs are not remeasured by this audit."
+  },
+  "head": "811bd708b32d4d61c2c3db69964bfd78c804caa6",
+  "historical_main_time_audit": {
+    "conclusion": "All historical exports already project stored producer dynamics nominal T; saved retimer profile nominal is a distinct bounded numeric summary.",
+    "maximum_absolute_difference_s": 8.526512829121202e-14,
+    "preferred_S6_052": {
+      "difference_s": -4.263256414560601e-14,
+      "id": "S6-240m-new-0.52-r1",
+      "producer_main_T_s": 68.00978787597403,
+      "retimer_profile_nominal_s": 68.00978787597407
+    },
+    "producer_T_export_or_Float32_mismatches": [],
+    "producer_vs_profile_nominal_difference_count": 42,
+    "products_checked": 58
+  },
+  "historical_vs_current_behavior_module_differences": {
+    "route_artifact": {
+      "current": "443e6f7fdfae5fb78899ac3d887c66796574945335ecf45d84d768166b9dc5cb",
+      "historical": "5ef3153aff5b601eadeabfc4d3a99e4493a6afa4ededb78aa4afb73ce34d2597"
+    }
+  },
+  "mutations": [
+    "work/w3/postfix-benchmark-audit.json only"
+  ],
+  "not_run": [
+    "No numerical campaign rerun",
+    "No artifact migration or implementation-identity bypass",
+    "No new local/CI portability acceptance claim"
+  ],
+  "portability_readme_sha256": "a48181da85575872e87941513961efaa960f95c5d27c63a3f75d2917e3809b0d",
+  "production_diff_sha256": "a8ebc7637c3949a7e3e2cd3ca560c6f137378258011da2086d5d0af3c0bd3a3a",
+  "reproduction_limits": [
+    "Exact historical A08 implementation replay uses checkpoint 6a3295753235889389be1374ce1195435afb7b74 and recorded image/context; retain original archived bytes/H unchanged.",
+    "Current repaired implementation changes route_artifact source identity, so freshly generated H changes even if all numerical authority remains identical. Never patch historical implementation IDs to bypass support checks.",
+    "Fresh recompilation on another host need not reproduce binary64 coefficients/q/C/H; capture each actual trusted A04 C immediately at producer return and each controlled H, then independently validate that same saved authority.",
+    "Archived REPRODUCE.md lines 5 and 107 describe original A07 product bytes; interpret those as historical scope. The current-candidate protocol needs this external clarification without editing the frozen checksum inventory.",
+    "Saved coefficient/history independent A08 oracles remain reproducible because their accepted W2 sources and archived inputs are unchanged; fresh runtime portability still requires upcoming exact-candidate local/hosted saved-artifact replay."
+  ],
+  "schema_version": 1,
+  "scope": "read-only post-portability-remediation A08 evidence and semantic audit; not a replacement acceptance run",
+  "snapshot_semantics_review": {
+    "fresh_Reference_validation_fields_use_replay_reports": true,
+    "fresh_actual_geometry_and_dynamics_PASS_required": true,
+    "historical_numeric_snapshots_not_recertified_by_snapshot_checks": true,
+    "historical_typed_authority_coverage_coherence_checks_retained": true,
+    "metric_prefix_queries_not_rescaled": true,
+    "numerical_kernel_or_proof_policy_change_found": false,
+    "producer_T_checked_inside_historical_and_fresh_enclosures": true,
+    "same_H_authorized_curve_expectation_passed_to_both_validators": true
+  },
+  "status": "PASS_WITH_HISTORICAL_SCOPE_CLARIFICATION",
+  "suggested_doc_clarification": {
+    "after_line": 185,
+    "path": "docs/project_a/W3_BENCHMARKS.md",
+    "precise_related_wording": [
+      {
+        "line": 245,
+        "meaning": "Retimer profile nominal; original stored producer main T is 68.00978787597403 s.",
+        "text": "model time 68.00978787597407 s"
+      },
+      {
+        "line": 321,
+        "meaning": "Observed frozen same-host repeated runs; no universal fresh-compilation or cross-host identity guarantee.",
+        "text": "Every repeated pair has byte-exact coefficient/q/model/report/H authority."
+      }
+    ],
+    "text": "Model-time figures use the saved retimer-profile nominal; the immutable exported main T is the producer dynamics-report nominal, differing by at most 8.53e-14 s in this campaign."
+  },
+  "timestamp_utc": "2026-10-16T18:07:15.834309+00:00",
+  "unchanged_harness": {
+    "scripts/project_a/benchmark_w3.py": {
+      "matches_frozen_manifest": true,
+      "sha256": "9e7f028e40c224afc519c096c9326c52bae836c0c60579fddfe9bc23a02912a5"
+    },
+    "scripts/project_a/w3_benchmark_support.py": {
+      "matches_frozen_manifest": true,
+      "sha256": "29a25360fc2ee4411fb6483ae70dffda30335cbebec1d02a0218ec3a9ae50f59"
+    }
+  }
+}

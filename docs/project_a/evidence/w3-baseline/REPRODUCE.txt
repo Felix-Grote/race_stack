@@ -1,0 +1,5 @@
+Accepted W2 baseline: 9fae5faed6ca62e0c943b6290babc50638477d9b (merged fe53365f86d660b4f6d4389925f9810cf33d41b3)
+Commands: scripts/project_a/setup.sh; scripts/project_a/verify.sh all work/w3/baseline
+Both exit0. 373 functional tests / 19 groups, 3 package builds, unchanged92-file manifest.
+Legacy:372 reports /0 errors / exact10 inherited failures /2 original skips.
+Independent raw-label comparison against accepted w2-adversarial/review-index/legacy-raw-comparison.json: exact match.

@@ -1,0 +1,12 @@
+[
+  {
+    "source": "benchmark_w3.py",
+    "original_sha256": "580a77ca1b7b09a737fe8c3d6d1f1ffab9510274271f0fe647dff52ad1245a0f",
+    "stored_sha256": "e0162c29600d6b2469ff8b7de437029f443313f215a5210e262f8116d6868229"
+  },
+  {
+    "source": "w3_benchmark_support.py",
+    "original_sha256": "20949fae5a0723fa6f5a78c2d2abb8c5c725f05e447a989b13280dd8406241ac",
+    "stored_sha256": "1c519ba91ef2d2644e93b8a5b0ea7c5a968b04d2e4597fd07ce943ddb78bc314"
+  }
+]

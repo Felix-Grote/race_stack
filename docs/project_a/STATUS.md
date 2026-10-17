@@ -1,4 +1,161 @@
-# Project A status — 2026-10-16
+# Project A status — 2026-10-17
+
+## Independent W3 review — corrections and exact-head publication gates
+
+The independent review starts at `17e4ec4e8fedfa736467d02f6204b04e8552decb`
+and preserves accepted W2 merge `9fae5faed6ca62e0c943b6290babc50638477d9b`.
+Three P2 findings are corrected separately: trusted publication ancestry
+(`4a941599`), retained installed-timeout evidence (`72b72c65`), and initial
+legacy-fit RESOURCE_LIMIT classification (`abdbc4ab`). Original failures remain
+retained. No mathematical tolerance, resource budget, original map, legacy entry
+point, message, accepted W2 source or gitlink changes.
+
+The [independent review](W3_INDEPENDENT_ADVERSARIAL_REVIEW.md) records failing-first
+regressions, independent serialization/metric/benchmark oracles, all sensitivity
+failures and the P3 evidence disposition. The two largest historical A09 JSONs
+are losslessly gzipped with exact restoration against original Git blobs and an
+updated integrity ledger; 422,952 raw text lines remain recoverable. The original
+evidence branch and accepted history are preserved. A new checksummed companion
+archive was pushed and independently downloaded with identical SHA256.
+
+At this report snapshot, corrected-source standard verification completes
+**593 tests / 21 groups / zero functional failures, errors or skips**, strict lint
+and all 138 unchanged source hashes. Its wrapper exits 1 before installation:
+this Git worktree's metadata lies outside the Docker mount (Git128). Builds,
+legacy and separate source-free acceptance are NOT_RUN in that attempt; the
+failed provenance is retained, not called full acceptance.
+
+Next executable gate: `scripts/project_a/fresh_verify.sh EXACT_PR_HEAD work/independent-w3-final`
+in a standalone clean recursive clone, including full install/source-free ROS;
+then exact-head push CI, authenticated artifact/source hashes and final-version
+unchanged hosted-product replay. The completed exact SHA, real matrix and final
+verdict live in the [companion publication manifest](https://github.com/Felix-Grote/race_stack/blob/w3-independent-review-20261017/docs/project_a/evidence/w3-independent-review/final-publication.json),
+without creating a self-referential evidence-commit chain. Earlier records below
+are historical and cannot replace these gates. Offline synthetic software
+handoff does not approve physical racing. No merge is performed.
+
+
+## W3 report replay remediation — full candidate verification required
+
+An additional actual cross-host test found a loader false rejection after
+`811bd708b32d4d61c2c3db69964bfd78c804caa6` passed 552 tests / 27 groups in
+both a clean fresh checkout and exact-head push CI 38934109447 (PR CI 38934117548
+also SUCCESS). All nine fresh hosted/local products independently PASS, but
+their exact binary64 curves/q and C/H differ. Identical build inputs and
+source/dependency identities do not establish bit-identical fresh compilation
+across hosts.
+
+Loading unchanged hosted S0 under its actual externally retained hosted H in
+the local source-free installed context fails solely on exact historical-report
+equality. The original artifact, failed process, host catalogs and quantitative
+comparison are retained in [the portability evidence](evidence/w3-report-portability/README.md).
+CPU/BLAS dispatch was not captured; the cause of the numerical drift is unproven.
+
+The remediation keeps exact payload/H/C authority and both actual validators.
+Historical snapshots receive strict typed/categorical/coherence checks; fresh
+dual PASS reports decide acceptance. No coefficient/q/model rounding, additional
+closeness tolerance, relaxed policy or alternate geometry kernel is introduced.
+Deterministic numeric-witness and genuinely recertified partition regressions
+reproduce the old rejection before the repair. The corrected full artifact suite
+passes 98 tests; the separate source-free installed preflight passes four tests
+in 112.974 s with all 138 source hashes unchanged. Original failures and the
+initial 96-PASS/one-outdated-expectation retry are retained. Complete new-candidate
+fresh/exact-head CI and actual post-fix unchanged-artifact portability are gates
+before review readiness; final literal head and results are recorded in PR #3.
+The earlier checkpoint records below remain historical. Independent W3
+adversarial review still has final acceptance and direct remediation authority.
+
+## W3 A07–A09 implemented — independent adversarial review pending
+
+A07 is `0c2d7c35fc50051a2ae96b9260de636610e280f4`; A08 is
+`6a3295753235889389be1374ce1195435afb7b74`; A09 implementation is
+`531667abc0ad38236ec46825a544a3644c324b4f`. A fresh no-hardlink recursive
+checkout of that exact clean candidate passed safe setup and full verification:
+**552 functional tests / 27 groups / zero failures, errors or skips**, three
+ordinary non-symlink package builds (17.1 s), and a separate source-free runtime.
+The wrapper, full runner and runtime all exit 0. All 138 source hashes match exact
+Git before and after; 95 protected existing files and all seven pins are unchanged.
+
+All nine installed cases PASS through compile, new-process dual replay, metric and
+occurrence queries, export, actual nine-group reader and CDR: forward/reverse/
+rotated S0, both S2 alternatives, S3 surfaces/notch, repeated-location S4 and full
+S6 at explicit .52 m spacing. The source-free suite passes 4 tests in 761.19 s,
+including all 15 content/trust negative controls. It mounts installed products
+and a minimal harness only, with no repository/build tree, network or hardware.
+
+Exact-candidate [push CI 38926539747](https://github.com/Felix-Grote/race_stack/actions/runs/38926539747)
+also passes all 552 tests and nine scenarios. Its original downloaded artifact
+SHA256 is `764a255ec0cad9456805e1480f9b30dab81823393a4f05014821b4c059f62595`.
+All nine artifact H values match byte-for-byte across local fresh and hosted
+compilation. Both runs retain legacy **541 / zero errors / ten inherited failures /
+two original skips**, with all 1,173 emitted style diagnostics unchanged.
+[Complete A09 evidence](evidence/w3-a09/README.md), [runtime contract](W3_RUNTIME.md).
+
+Exploratory preflight against the retained dirty A07 prefix passes **3 installed
+tests in 85.04 s**, 21 CLI processes and all 15 content/trust negative controls.
+The three exact-candidate guard regressions pass in 0.19 s. Their initial attempt
+hit the intentionally noexec /tmp mount; explicit executable scratch fixes the
+test invocation and the original failures remain retained. Preflight is kept
+separate from the completed clean-candidate evidence above.
+
+The containing evidence/documentation commit requires its own literal-head push
+CI; its final SHA, completed run and controlled artifact H values are recorded in
+the PR/final publication report, outside that self-referential commit. No earlier
+CI is substituted for it. The next ownership gate is the separate adversarial
+review with direct remediation authority. [Review instructions](W3_REVIEW.md).
+Do not auto-merge or operate a physical car.
+
+## W3 A08 checkpoint — campaign complete, independent release review pending
+
+The frozen 92-attempt primary campaign completed with **54 PASS, 28 stock
+preparation failures, eight point-budget rejections and two conditioning
+rejections**. A separately predeclared four-attempt matched S6 supplement passed
+all four complete paths. All 58 accepted outputs pass both continuous validators,
+staged persisted-byte replay, fine metric queries and actual legacy reader/CDR
+export. All 151 saved-output independent history/metric/control checks pass;
+the copied-package A08 regression suite passes **13 tests in 8.42 s** with strict
+new-source lint. [Protocol and complete outcomes](W3_BENCHMARKS.md),
+[reproduction and evidence](evidence/w3-benchmarks/REPRODUCE.md).
+
+Full approximately 240 m synthetic S6 succeeds at explicit .52 m spacing with
+iteration point counts 472/474/474, unchanged solver/proof budgets, maximum TUM
+spline-system condition 21448.6714 and QP inequality residual 2.537e-14.
+End-to-end repeated wall time is 117.96–121.53 s, including proof replay, fine
+queries and actual ROS export. The .5 m ill-conditioned mesh and .4/.2/.1 m
+point-budget rejections remain unresolved limitations. Raw legacy coefficients
+and native speed lack the required authority; certificates apply only to its
+declared algebraically adapted binary64 output with common W2 retiming.
+Two separately predeclared .52 m resource replays also PASS with identical
+authority. External whole-worker CPU is 130.628536 s new / 124.494186 s repaired;
+peak process RSS is 278,716,416 / 270,630,912 bytes. These concurrent replays
+provide whole-process CPU accounting, not isolated wall-time comparisons.
+
+A07 exact-head push [CI 38918290086](https://github.com/Felix-Grote/race_stack/actions/runs/38918290086)
+at `0c2d7c35fc50051a2ae96b9260de636610e280f4` passes **532 functional tests
+in 24 groups**, three builds, and exact legacy **528 / 0 errors / 10 failures /
+2 skips**. All 1,173 emitted legacy style diagnostics also match the baseline
+exactly. [Downloaded hosted evidence](evidence/w3-a07-ci/REPRODUCE.md).
+
+A09 clean fresh/source-free results above supersede this checkpoint's pending
+verification state. Independent W3 adversarial review remains the final release
+gate. No physical-course or vehicle readiness is claimed.
+
+## W3 A07 checkpoint — implemented and internally verified
+
+Branch `project-a/w3-reference-benchmarks` starts at actual PR #2 merge
+`9fae5faed6ca62e0c943b6290babc50638477d9b`, containing independently accepted W2
+`fe53365f86d660b4f6d4389925f9810cf33d41b3` with an identical tree. All seven recursive pins remain unchanged.
+
+Fresh safe setup and complete W0–W2 baseline exit 0: **373 functional tests  / 19 groups**,3 builds, exact 92-file manifest, unchanged legacy **372 tests / 0 errors / 10 inherited failures / 2 skips**. Independently compared raw failure identities; no new failure is relabeled inherited. [Baseline evidence](evidence/w3-baseline/REPRODUCE.txt).
+
+A07 adds exact immutable references, true-metric cyclic queries, explicit installed compile/validate/query/export, and original ROS nine-group export. Final three module bytes match both combined-test snapshot and actual non-symlink install. **156 new tests pass together in 348.90 s, 0 failures/errors/skips**;3 package builds,9 installed tests (6 inherited + 3 new), and2 actual ROS export tests pass. The latter two also belong to 156 and are not added twice. Strict 99-column flake8 and strict pep257 pass. [Contract](W3_ARTIFACT.md), [evidence](evidence/w3-a07/summary.json).
+
+An internal challenge closed a producer publication gap: stage approval now requires separately retained C and frozen H, after exact comparison with original route/model/body/policies/profile/proofs. Both staged validators use original C. Loader still requires external H and an independent context. Internal high-precision boundary review ran 1,566 queries with no omitted portal support in tested controls; tiny conservative tag differences are within station allowance. This is not the final independent W3 review.
+
+The A08 section above supersedes the preliminary overlapping-work pilot timings.
+A09 installed release verification remains separate. No real-course or vehicle
+readiness is claimed.
+
 
 ## Independent W2 review closeout — implementation verified, publication pending
 

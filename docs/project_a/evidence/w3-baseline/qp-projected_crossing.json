@@ -1,0 +1,12 @@
+{
+  "scenario": "projected_crossing",
+  "knots": 64,
+  "width_m": 0.75,
+  "vehicle_width_m": 0.3,
+  "curvature_bound_per_m": 1.0,
+  "offset_tolerance_m": 1e-08,
+  "max_abs_alpha_m": 0.600000000000008,
+  "curvature_linearization_error_per_m": 0.3629228282846315,
+  "verdict": "FINITE_NODALLY_BOUNDED_QP_ONLY",
+  "legal_footprint_validation": "NOT_IMPLEMENTED"
+}

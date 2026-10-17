@@ -1,0 +1,180 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_installed_w3_replays_numeric_proofs_without_rewriting_authority _____
+
+product = {'H': '1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59', 'artifact': PosixPath('/results/w3-installed... 'returncode': 0, ...}], 'executable': PosixPath('/work/install/global_planner/lib/global_planner/compile_route'), ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f3e21730f10>
+
+    def test_installed_w3_replays_numeric_proofs_without_rewriting_authority(product, monkeypatch):
+        """Replay both real checks despite conservative report drift and reject false contracts."""
+        from global_planner import route_artifact as artifact
+        from global_planner.route_compile import load_policy
+    
+        assert str(Path(artifact.__file__).resolve()).startswith('/work/install/')
+        original_bytes = product['artifact'].read_bytes()
+        envelope = json.loads(original_bytes)
+        payload = envelope['payload']
+        approved = product['receipt']['geometry']['curve_digest']
+        assert approved == payload['approved_curve_digest']
+        _, context, _ = load_policy(product['share'] / 'policies/synthetic_policy.json')
+        context = replace(context, required_geometry_coverage=('legal_planar_geometry',),
+                          required_dynamics_coverage=('declared_planar_diamond',))
+        real_geometry, real_dynamics = artifact.validate_geometry, artifact.validate_dynamics
+        calls = {'geometry': 0, 'dynamics': 0}
+        fresh, changes = {}, {}
+    
+        def geometry(*arguments, **keywords):
+            assert keywords['expected_curve_digest'] == approved
+            report = real_geometry(*arguments, **keywords)
+            assert report.status == 'PASS' and report.curve_digest == approved
+            calls['geometry'] += 1
+            previous = payload['validation']['geometry']['intervals'][0]['curvature_upper']
+            upper = math.nextafter(max(report.intervals[0].curvature_upper, previous), math.inf)
+            assert upper < context.geometry_policy.max_curvature
+            changed = replace(report.intervals[0], curvature_upper=upper)
+            changes['geometry'] = {'historical': previous,
+                                   'independent_replay': report.intervals[0].curvature_upper,
+                                   'conservative_replay': upper}
+            fresh['geometry'] = replace(report, intervals=(changed, *report.intervals[1:]))
+            return fresh['geometry']
+    
+        def dynamics(*arguments, **keywords):
+            assert keywords['expected_curve_digest'] == approved
+            report = real_dynamics(*arguments, **keywords)
+            assert report.status == 'PASS' and report.curve_digest == approved
+            calls['dynamics'] += 1
+            previous = payload['validation']['dynamics']['lap_time_upper_s']
+            upper = math.nextafter(max(report.lap_time_upper_s, previous), math.inf)
+            error = max(report.lap_time_error_s, upper - report.lap_time_s)
+            changes['dynamics'] = {'historical': previous,
+                                   'independent_replay': report.lap_time_upper_s,
+                                   'conservative_replay': upper}
+            fresh['dynamics'] = replace(report, lap_time_upper_s=upper, lap_time_error_s=error)
+            return fresh['dynamics']
+    
+        # The producer was the compile CLI subprocess; this installed pytest process is a consumer.
+        monkeypatch.setattr(artifact, 'validate_geometry', geometry)
+        monkeypatch.setattr(artifact, 'validate_dynamics', dynamics)
+>       reference = artifact.load_reference(product['artifact'], expected_H=product['H'],
+                                            validation_context=context)
+
+/runtime-harness/test_w3_installed.py:374: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_artifact.py:761: in load_reference
+    return _load_bytes(raw, expected_H, validation_context, path)
+/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_artifact.py:736: in _load_bytes
+    return _decode_reference(raw, expected_H, context, path, expected_curve_digest)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+raw = b'{"H":"1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59","payload":{"approved_curve_digest":"f77eb66f...oute_sha256":"29212981a9b9247829967846f3883d32494eb3decfbc0765e623e3f1cc061648","status":"PASS"}}},"schema_version":1}'
+expected_H = '1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59'
+context = ValidationContext(numeric_policy=NumericPolicy(arc_abs=1e-10, station_abs=1e-08, join_abs=1e-08, min_speed=1e-07, quad...anar_geometry',), required_dynamics_coverage=('declared_planar_diamond',), contract_id='forzaeth.offline-reference.v1')
+path = PosixPath('/results/w3-installed/references/1c83f948296361a052ab220f2a8e4c76e00d4ab7e44ff563eab55c5f4f7f1f59/reference.json')
+expected_curve_digest = None
+
+    def _decode_reference(raw, expected_H, context, path, expected_curve_digest=None):
+        _sha(expected_H, 'externally trusted artifact H')
+        implementation = _supported_context(context)
+        envelope = _parse_json(raw)
+        _keys(envelope, ('schema_version', 'H', 'payload'), 'reference envelope')
+        if type(envelope['schema_version']) is not int or envelope['schema_version'] != SCHEMA_VERSION:
+            raise ArtifactError('unsupported reference schema version', 'UNSUPPORTED')
+        _sha(envelope['H'], 'embedded H')
+        payload = envelope['payload']
+        if envelope['H'] != expected_H or artifact_identity(payload) != expected_H:
+            raise ArtifactError('externally trusted artifact H mismatch')
+        _keys(payload, ('conventions', 'approved_route', 'curve', 'approved_curve_digest', 'model',
+                        'footprint', 'speed_profile', 'policies', 'implementation', 'validation',
+                        'provenance'), 'reference payload')
+        if canonical_bytes(payload['conventions']) != canonical_bytes(_CONVENTIONS):
+            raise ArtifactError('unsupported reference conventions', 'UNSUPPORTED')
+        if canonical_bytes(payload['implementation']) != canonical_bytes(implementation):
+            raise ArtifactError('unsupported or changed kernel/checker/dependency identity',
+                                'UNSUPPORTED')
+        policies = decode_record(PolicySet, payload['policies'], 'policies')
+        for actual, expected in ((policies.numeric, context.numeric_policy),
+                                 (policies.geometry, context.geometry_policy),
+                                 (policies.dynamics, context.dynamics_policy)):
+            if canonical_bytes(asdict(actual)) != canonical_bytes(asdict(expected)):
+                raise ArtifactError('artifact differs from independent acceptance policy',
+                                    'UNSUPPORTED')
+        provenance = payload['provenance']
+        if (type(provenance) is not dict or any(type(key) is not str or type(value) is not str
+                                                for key, value in provenance.items()) or
+                len(canonical_bytes(provenance)) > 256 * 1024):
+            raise ArtifactError('expected bounded informational string provenance')
+        approval = _sha(payload['approved_curve_digest'], 'trusted embedded A04 approval')
+        if expected_curve_digest is not None:
+            _sha(expected_curve_digest, 'independently retained producer A04 approval')
+            if approval != expected_curve_digest:
+                raise ArtifactError('staged payload differs from independently retained A04 approval')
+            approval = expected_curve_digest
+        _route_preflight(payload['approved_route'], context)
+        route = validate_route(payload['approved_route'])
+        if canonical_bytes(route.payload) != canonical_bytes(payload['approved_route']):
+            raise ArtifactError('approved route is not its exact A01 canonical authority')
+        curve_data = payload['curve']
+        _keys(curve_data, ('coefficients', 'owners', 'q'), 'curve')
+        coefficients = _array(curve_data['coefficients'], 'coefficients', min(
+            context.geometry_policy.max_segments, context.dynamics_policy.max_segments), 2)
+        count = len(coefficients)
+        owners = _array(curve_data['owners'], 'owners', count, count)
+        q = _array(curve_data['q'], 'q', count + 1, count + 1)
+        for coefficient in coefficients:
+            _array(coefficient, 'coefficient axes', 2, 2)
+            for row in coefficient:
+                _array(row, 'coefficient powers', 4, 4)
+                if any(type(value) is not float for value in row):
+                    raise ArtifactError('actual W2 coefficients must retain binary64 float types')
+        if any(type(value) is not float for value in q):
+            raise ArtifactError('actual W2 q must retain binary64 float types')
+        for owner in owners:
+            _array(owner, 'owner', 2, 2)
+            if any(type(value) is not str for value in owner):
+                raise ArtifactError('invalid occurrence/surface owner')
+        model_data = payload['model']
+        if type(model_data) is not dict:
+            raise ArtifactError('invalid model')
+        _array(model_data.get('regions'), 'model regions',
+               context.dynamics_policy.max_model_regions, 1)
+        model = decode_record(DynamicsModel, model_data, 'model')
+        footprint = decode_record(Footprint, payload['footprint'], 'footprint')
+        profile_data = payload['speed_profile']
+        if type(profile_data) is not dict:
+            raise ArtifactError('invalid profile')
+        _array(profile_data.get('knots'), 'profile knots', context.dynamics_policy.max_knots, 2)
+        profile = decode_record(SpeedProfile, profile_data, 'speed_profile')
+        validation = payload['validation']
+        _keys(validation, ('geometry', 'dynamics'), 'validation')
+        if type(validation['geometry']) is not dict or type(validation['dynamics']) is not dict:
+            raise ArtifactError('invalid stored validation records')
+        _array(validation['geometry'].get('intervals'), 'geometry intervals',
+               context.geometry_policy.max_intervals)
+        _array(validation['geometry'].get('gates'), 'geometry gates', len(route.portals))
+        _array(validation['dynamics'].get('edges'), 'dynamics edges',
+               context.dynamics_policy.max_knots)
+        stored_geometry = decode_record(ValidationReport, validation['geometry'], 'geometry report')
+        stored_dynamics = decode_record(DynamicsValidationReport, validation['dynamics'],
+                                        'dynamics report')
+        ordered = OrderedCurve(route, Curve(coefficients, owners, context.numeric_policy), q)
+        geometry = validate_geometry(ordered, route, footprint, context.geometry_policy,
+                                     expected_curve_digest=approval)
+        dynamics = validate_dynamics(ordered, profile, model, context.dynamics_policy,
+                                     expected_curve_digest=approval)
+        for name, report, stored, required in (
+                ('geometry', geometry, stored_geometry, context.required_geometry_coverage),
+                ('dynamics', dynamics, stored_dynamics, context.required_dynamics_coverage)):
+            if report.status != 'PASS' or report.curve_digest != approval:
+                raise ArtifactError(name + ' replay ' + report.status + ': ' + report.reason,
+                                    report.status)
+            if not set(required) <= set(report.coverage):
+                raise ArtifactError(name + ' lacks independently required coverage', 'UNSUPPORTED')
+            if canonical_bytes(asdict(report)) != canonical_bytes(asdict(stored)):
+>               raise ArtifactError(name + ' stored proof differs from independent replay')
+E               global_planner.route_artifact.ArtifactError: geometry stored proof differs from independent replay
+
+/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_artifact.py:729: ArtifactError
+-------------- generated xml file: /results/installed-replay.xml ---------------
+=========================== short test summary info ============================
+FAILED ../runtime-harness/test_w3_installed.py::test_installed_w3_replays_numeric_proofs_without_rewriting_authority
+1 failed, 3 deselected in 29.61s

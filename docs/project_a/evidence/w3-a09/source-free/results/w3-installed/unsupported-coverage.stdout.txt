@@ -1,0 +1,1 @@
+{"reason":"unsupported independently required coverage","schema_version":1,"status":"UNSUPPORTED"}

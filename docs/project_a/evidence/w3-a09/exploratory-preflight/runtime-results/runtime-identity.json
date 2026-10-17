@@ -1,0 +1,88 @@
+{
+  "source_commit": "9fae5faed6ca62e0c943b6290babc50638477d9b",
+  "source_dirty": true,
+  "uid": 1000,
+  "cap_eff": "0000000000000000",
+  "no_new_privileges": "1",
+  "interfaces": [
+    [
+      1,
+      "lo"
+    ]
+  ],
+  "verified_readonly_paths": [
+    "/",
+    "/work",
+    "/work/install",
+    "/work/python",
+    "/runtime-harness"
+  ],
+  "verified_absent_paths": [
+    "/src",
+    "/workspace",
+    "/work/src",
+    "/work/build",
+    "/work/optimizer"
+  ],
+  "modules": {
+    "global_planner.route_input": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_input.py",
+      "sha256": "fb834bcb3d26c0078575f10768771f842111ca9c92b0a3b179206b61678aeeb8"
+    },
+    "global_planner.route_reference": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_reference.py",
+      "sha256": "9302188ac655c12c773383f45b99246425c51d6f59f2fde6b99f29a2284fa6b8"
+    },
+    "global_planner.route_corridor": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_corridor.py",
+      "sha256": "50b97011b805642287cd41f9fbb8f262b7b69124f5f43031b5e1409548fe770d"
+    },
+    "global_planner.iqp_route_adapter": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/iqp_route_adapter.py",
+      "sha256": "2af86a21c10c16a8202ec70265b323c5a999bbfa3100631240605cae040ea9dd"
+    },
+    "global_planner.route_validate": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_validate.py",
+      "sha256": "3d19294aa72dea9c3c2d66c47cbf115f83661ab360b0922d6fdf91e8cd52c651"
+    },
+    "global_planner.route_validate_dynamics": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_validate_dynamics.py",
+      "sha256": "9e8f8b787f2f0468b4cfeb18860c83bc54956e698b91fd7442fd9b38aae436d2"
+    },
+    "global_planner.cyclic_retime": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/cyclic_retime.py",
+      "sha256": "7ff74dbf3f57500731e5eebb069882d35efc6ed6d2b5805e22c796556286ceb3"
+    },
+    "global_planner.route_artifact": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_artifact.py",
+      "sha256": "5ef3153aff5b601eadeabfc4d3a99e4493a6afa4ededb78aa4afb73ce34d2597"
+    },
+    "global_planner.route_compile": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_compile.py",
+      "sha256": "7abbd29f6c3e21757abe8e74046da12ab918bf2baf7d08529b55a6be7b697a50"
+    },
+    "global_planner.route_legacy_export": {
+      "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_legacy_export.py",
+      "sha256": "dc6f8a0c5d0b8e025f20f2a0cbc2a171cc6adf39fb0ab2f09118c4cbb44e8ad2"
+    }
+  },
+  "console_script": "/work/install/global_planner/lib/global_planner/compile_route",
+  "installed_resource_hashes": {
+    "fixtures/s0_reverse_route.json": "eea555e7bd76e911bdf13cf395dd9958d40cdcda46a05681838844b3cc2891c6",
+    "fixtures/s0_rotated_route.json": "12fa1e23b1078ac1b0720defa8a90e8e4e3e545adc8f73bff6b2cff8a9dae465",
+    "fixtures/s0_route.json": "3bfddf1726bdf55d53496ddd37d6289cb2808136bfaba49fb0c6228340d85cff",
+    "fixtures/s2_lower_route.json": "5a8c24775d52901231dc7134ddf27d121854501cde7953a41a89f85c111a576f",
+    "fixtures/s2_upper_route.json": "9abdc88ead71bcff8e170be6b5e4df3935d4a2fac02ee4a493318b7b2a4bb42a",
+    "fixtures/s3_notch_route.json": "d1dcbfe952da8c2aa00b430e986cb8273ae0a0db95eb2869ea63ea444f715ef9",
+    "fixtures/s3_surfaces_route.json": "f397127bdd14e1713b4a4ace30b5aec76c16b0091d07b41d379c3411746afa98",
+    "models/s0_reverse_route_model.json": "49bace7f73d98d96fc6721cabd5e8f1e54c8691d987333fa261b5290154d4702",
+    "models/s0_rotated_route_model.json": "d0ffc05d1daf9f0014c53e5ea189a49db65ee76e1a4da0b2a4cfa745c2ccb6a7",
+    "models/s0_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+    "models/s2_lower_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+    "models/s2_upper_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+    "models/s3_notch_route_model.json": "afbb0f3e947306aabfeaaf5834c399d4becf184a01453bf4a54d55fd1f64aea7",
+    "models/s3_surfaces_route_model.json": "afbb0f3e947306aabfeaaf5834c399d4becf184a01453bf4a54d55fd1f64aea7",
+    "models/synthetic_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+    "policies/synthetic_policy.json": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133"
+  }
+}

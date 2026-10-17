@@ -1,0 +1,8 @@
+{
+  "status": "FAIL before either numerical worker launched",
+  "scope": "collector calibration control, not planner attempt",
+  "observed_tool_stderr": "SyntaxError: unterminated string literal (detected at line 8); RuntimeError: wait4 descendant CPU calibration failed",
+  "stderr_provenance": "transcribed from completed execution-tool output; original calibration resource JSON and exact source remain unmodified",
+  "repair": "explicit standalone parent/grandchild source files; new manifest declared before numerical execution",
+  "successor": "a08-cpu-replay-v2"
+}
