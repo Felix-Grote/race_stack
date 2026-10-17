@@ -1,0 +1,20 @@
+{
+  "archive": "initial-independent.tar.gz",
+  "archive_member_count": 351,
+  "archive_sha256": "05cb942671a3ffb758541e72aa92281725902b270ad60b5fa66daa0165f90ad4",
+  "archive_size_bytes": 19274976,
+  "deterministic_rebuild_archive_sha256": "05cb942671a3ffb758541e72aa92281725902b270ad60b5fa66daa0165f90ad4",
+  "deterministic_rebuild_verified": true,
+  "exact_committed_candidate_fresh_gate": "PENDING",
+  "exact_delivered_head_hosted_CI_gate": "PENDING",
+  "manifest_sha256": "483050ad13cbf0aaa429cf5a81f029f69d8561cf2021f5793e40c827f199e572",
+  "manifest_size_bytes": 68142,
+  "payload_bytes": 30995245,
+  "payload_file_count": 350,
+  "readback_member_count": 351,
+  "readback_result": "PASS: all archive members read in full, exact SHA256/size, regular-only, safe paths, no duplicates, complete member set; all selected source files rehashed after readback.",
+  "readback_uncompressed_bytes": 31063387,
+  "schema_version": 1,
+  "selected_special_files": 0,
+  "selected_symlinks": 0
+}

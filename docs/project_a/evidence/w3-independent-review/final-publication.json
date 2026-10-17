@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "status": "PENDING_FINAL_COMMITTED_GATES",
+  "reviewed_initial_sha": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "implementation_branch": "project-a/w3-reference-benchmarks",
+  "pull_request": "https://github.com/Felix-Grote/race_stack/pull/3",
+  "required": [
+    "Clean recursive exact-SHA fresh_verify.sh all/install/source-free",
+    "Exact delivered-head push CI and authenticated artifact source identity",
+    "Same-version unchanged hosted product replay in final installed runtime"
+  ],
+  "scope": "Offline synthetic planar software; no merge or physical-operation approval",
+  "initial_archive_sha256": "05cb942671a3ffb758541e72aa92281725902b270ad60b5fa66daa0165f90ad4"
+}
