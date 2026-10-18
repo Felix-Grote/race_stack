@@ -1,0 +1,16 @@
+{
+  "reviewed_sha": "17e4ec4e8fedfa736467d02f6204b04e8552decb",
+  "source_sha256": {
+    "route_reference": "9302188ac655c12c773383f45b99246425c51d6f59f2fde6b99f29a2284fa6b8",
+    "route_artifact": "443e6f7fdfae5fb78899ac3d887c66796574945335ecf45d84d768166b9dc5cb",
+    "cyclic_retime": "7ff74dbf3f57500731e5eebb069882d35efc6ed6d2b5805e22c796556286ceb3",
+    "route_validate_dynamics": "9e8f8b787f2f0468b4cfeb18860c83bc54956e698b91fd7442fd9b38aae436d2",
+    "route_legacy_export": "dc6f8a0c5d0b8e025f20f2a0cbc2a171cc6adf39fb0ab2f09118c4cbb44e8ad2"
+  },
+  "pinned_public_red_command": "docker --host=unix:///var/run/docker.sock exec -e PYTHONPATH=/src/planner/global_planner forza-independent-probes /opt/project-a/bin/python3 /records/numerical/query_zero_repro.py --repo /src --output /records/numerical/pinned-publication --publish",
+  "pinned_expected_H": "66ab322e8626ba1baed81a6074dc4351f4a5af4ed2c41d32a53ba1676c901597",
+  "pinned_runtime": "CPython 3.10.12",
+  "expected_result": "sample speed >= positive endpoint minimum 1e-6 m/s",
+  "observed_result": "0.0 m/s; positive moving speed assertion failed",
+  "production_changes_by_reviewer": false
+}

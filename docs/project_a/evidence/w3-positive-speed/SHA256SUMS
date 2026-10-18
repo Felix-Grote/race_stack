@@ -1,0 +1,13 @@
+8ea2bafd063b7cddaaf4c428926d5ee24417c7b111719aac5b77e46207b5304c  docs/project_a/evidence/w3-positive-speed/phase-i/latest67-identity.json
+5dfcaa0edb17a73f8fa5f36ce3ccb53cc9a763387ea9dc3ea3faad1bb8f42e14  docs/project_a/evidence/w3-positive-speed/phase-i/latest67-regression-red.log
+7cac9986fc8ac33bc3ea9802e08417b5e22410210760621bba50b48f39a5e543  docs/project_a/evidence/w3-positive-speed/phase-i/latest67-regression-red.xml
+1ef945f8a96f002b7d934b50be9e553800b4fac6355a4b8f9cf3b92d7271d1e8  docs/project_a/evidence/w3-positive-speed/phase-i/original-source-identity.json
+f1eb80b971f15ab333baa94a7bce2698d4eefaaac030af6a41341f38c469ef14  docs/project_a/evidence/w3-positive-speed/phase-i/query_zero_repro.pinned.log
+98248f634901e97e885fcf1029c3f3a6517764c42e3b757c21bcc4b46acccb79  docs/project_a/evidence/w3-positive-speed/phase-i/query_zero_repro.py
+cf5ef8429da2a69960a9017446b5bd47e6df05e892a1d0e98956061b16e87be3  docs/project_a/evidence/w3-positive-speed/phase-ii/RESULTS.json
+6db0f887e528501695548f597a5b24dd995d9b57a2ecc3349ada475df3a71e7a  docs/project_a/evidence/w3-positive-speed/phase-ii/REVIEW.md
+8faba274dd070f47ae269a30ddb14df3e7516cbc6054133c63c331e3644b29cc  docs/project_a/evidence/w3-positive-speed/phase-ii/artifact-export-harness-first.log
+46aa416de4f46733d777bcdc2457b534b4276711bb7e2b55c7edc0ca070790ef  docs/project_a/evidence/w3-positive-speed/phase-ii/artifact-export-regressions.log
+ece8a31226c1c44edf9de0fe770d8fa82f861a567ebebcc3baf41755e6e70815  docs/project_a/evidence/w3-positive-speed/phase-ii/artifact-export-regressions.xml
+5a595827d05352a4e2dcea197e4510c50d977993f599439748468d2bd87fc72c  docs/project_a/evidence/w3-positive-speed/phase-ii/query-regression-green.log
+2000f0a4e03a99537f8333e33d947a5792adb06355ebfc701446c24040577571  docs/project_a/evidence/w3-positive-speed/phase-ii/query-regression-green.xml

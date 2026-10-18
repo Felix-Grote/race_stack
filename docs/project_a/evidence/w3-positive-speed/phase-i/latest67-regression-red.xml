@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="27.058" timestamp="2026-10-18T07:54:15.847741+00:00" hostname="6403764784f7"><testcase classname="test.test_route_artifact" name="test_loaded_positive_profile_keeps_positive_speed_at_nextafter_boundaries" time="26.395"><failure message="AssertionError: assert 1e-06 &lt;= 0.0&#10; +  where 0.0 = ReferenceSample(H='225804f19f9fb8d516850b6dbb3b23c6fae994ac05f8e1aee53a06a351428f7f', s=0.2760027237149405, segment=0,...d='ground', speed_mps=0.0, acceleration_mps2=-1811576325298.9016, time_s=5.520054474298811e-07, portal_support=('p3',)).speed_mps">tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_loaded_positive_profile_k0')
+
+    def test_loaded_positive_profile_keeps_positive_speed_at_nextafter_boundaries(tmp_path):
+        """Preserve positive approved speed through a bounded inverse endpoint rounding."""
+        route_data = json.loads((FIX / 's0_route.json').read_text())
+        for occurrence in route_data['occurrences']:
+            for cap in occurrence['caps']:
+                cap['max_speed_mps'] = 1e7
+        route = validate_route(route_data)
+        archived = json.loads(gzip.decompress(
+            (FIX / 'w2_a04_candidates.json.gz').read_bytes()))['candidates']['s0_route']
+        ordered = OrderedCurve(route, Curve(archived['coefficients'], archived['owners']),
+                               archived['q'])
+        expected_curve = curve_digest(ordered)
+        limits = RegionLimits(0., 1e7, 1e30, 1e30, 1e30, 1e30, 0.,
+                              'Explicit synthetic numerical dynamic range')
+        model = DynamicsModel(tuple(ModelRegion(o.id, o.surface_id, limits)
+                                    for o in route.occurrences), 'Positive-speed query regression')
+        knots = tuple(SpeedKnot(i, 0., 1e12 if i % 2 == 0 else 1e-12)
+                      for i in range(len(ordered.curve.segments)))
+        lap_time = math.fsum(2 * segment.length / (
+            math.sqrt(knots[i].u) + math.sqrt(knots[(i + 1) % len(knots)].u))
+            for i, segment in enumerate(ordered.curve.segments))
+        profile = SpeedProfile(knots, expected_curve, model_digest(model), lap_time)
+        footprint = Footprint(.1, .1, .12, .01)
+        gp, dp = GeometryValidationPolicy(), DynamicsValidationPolicy()
+        geometry = validate_geometry(ordered, route, footprint, gp,
+                                     expected_curve_digest=expected_curve)
+        dynamics = validate_dynamics(ordered, profile, model, dp,
+                                     expected_curve_digest=expected_curve)
+        assert geometry.status == dynamics.status == 'PASS'
+        payload = build_payload(
+            ordered, profile, model, footprint, solver_policy=SolverPolicy(),
+            retime_policy=RetimePolicy(), geometry_policy=gp, dynamics_policy=dp,
+            approved_curve_digest=expected_curve, geometry_report=geometry,
+            dynamics_report=dynamics, provenance={'purpose': 'Positive-speed query regression'})
+        expected_h = artifact_identity(payload)
+        produced = publish_reference(payload, tmp_path / 'positive-profile', expected_H=expected_h,
+                                     expected_curve_digest=expected_curve)
+        loaded = load_reference(produced.path, expected_H=expected_h,
+                                validation_context=ValidationContext())
+        for index in range(0, len(knots), 2):
+            station = math.nextafter(loaded.ordered.curve.cumulative[index + 1], 0.)
+            sample = loaded.sample(station)
+            assert sample.segment == index
+            # An affine positive profile lies within its endpoint range, independently
+            # of the permitted inverse station residual or its returned parameter.
+&gt;           assert 1e-6 &lt;= sample.speed_mps &lt;= 1e6
+E           AssertionError: assert 1e-06 &lt;= 0.0
+E            +  where 0.0 = ReferenceSample(H='225804f19f9fb8d516850b6dbb3b23c6fae994ac05f8e1aee53a06a351428f7f', s=0.2760027237149405, segment=0,...d='ground', speed_mps=0.0, acceleration_mps2=-1811576325298.9016, time_s=5.520054474298811e-07, portal_support=('p3',)).speed_mps
+
+/records/final-checkout/planner/global_planner/test/test_route_artifact.py:977: AssertionError</failure></testcase></testsuite></testsuites>

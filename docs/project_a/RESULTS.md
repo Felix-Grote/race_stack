@@ -1,5 +1,21 @@
 # Independent W3 review evidence — 2026-10-17
 
+## Additional independent Q1 query result
+
+On exact W3 base `67fbcc8283e59649d38dc9318291634089df3741`, the new public
+positive-profile regression fails at its intended query assertion: 1 failed /
+112 deselected in 27.05 s, after both actual independent proofs and persisted
+public publication/load. Earlier exact 17e4ec4 reproductions agree. The new
+nearest-endpoint interpolation passes the focused original regression in 27.98 s
+with strict flake8. The expanded artifact/export regression run passes 141 tests /
+two actual-ROS cases deselected in 521.84 s, with strict flake8/pep257. Independent
+pinned 65-digit/public checks pass 4,442 queries and 496 endpoint assertions,
+including both new public publication/load profiles. Full final gates remain pending.
+Original failures, identities and commands are retained in
+[evidence](evidence/w3-positive-speed/README.md). Prior hosted 67fbcc verification
+independently audits to 610 tests / 27 groups, not a final corrected-source result.
+
+
 Initial reviewed SHA `17e4ec4`; accepted W2 merge `9fae5fae`.
 [Full independent report](W3_INDEPENDENT_ADVERSARIAL_REVIEW.md) and
 [checksummed evidence](evidence/w3-independent/README.md).

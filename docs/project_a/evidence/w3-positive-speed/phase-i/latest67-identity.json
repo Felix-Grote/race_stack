@@ -1,0 +1,8 @@
+{
+  "reviewed_base": "67fbcc8283e59649d38dc9318291634089df3741",
+  "runtime": "CPython 3.10.12 / supported locked numerical environment",
+  "original_query_sha256": "2dd9b714afd7e137e13e954a94e62b708b1feeef949a2bc8dad7878177308130",
+  "regression_result": "1 failed,112 deselected; speed0.0 against positive endpoint minimum1e-6",
+  "H": "225804f19f9fb8d516850b6dbb3b23c6fae994ac05f8e1aee53a06a351428f7f",
+  "production_source_changed_before_red": false
+}

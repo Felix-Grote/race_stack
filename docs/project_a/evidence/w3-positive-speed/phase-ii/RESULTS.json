@@ -1,0 +1,53 @@
+{
+  "source_base": "67fbcc8283e59649d38dc9318291634089df3741",
+  "source_state": "uncommitted reviewed correction",
+  "route_artifact_sha256": "076a5283865ec02fa720692bcf9dfd4fcf82e891035ff70111b86733da6339bc",
+  "runtime": {
+    "python": "3.10.12",
+    "numpy": "1.26.4",
+    "scipy": "1.11.4",
+    "test_only_mpmath": "1.3.0",
+    "mpmath_decimal_digits": 65
+  },
+  "commands_exit_codes": {
+    "ordinary_oracle.py": 0,
+    "interior_profile_oracle.py": 0,
+    "public_query_boundaries.py": 0,
+    "public_interior_boundaries.py": 0
+  },
+  "ordinary_queries": 1452,
+  "interior_queries": 630,
+  "ordinary_maxima": {
+    "station_error_m": 1.5014473790711193e-10,
+    "speed_error_mps": 1.470420676197636e-16,
+    "acceleration_error_mps2": 3.361567297482676e-18,
+    "elapsed_error_s": 6.510017194989982e-15,
+    "curvature_error_per_m": 1.5721753562858495e-16,
+    "unit_tangent_error": 1.455804746382494e-16
+  },
+  "interior_maxima": {
+    "station_error_m": 1.5262595051232765e-10,
+    "speed_error_mps": 2.2420895518063924e-12,
+    "acceleration_error_mps2": 3.573540461647536e-18,
+    "elapsed_error_s": 1.5250234172453997e-10,
+    "curvature_error_per_m": 9.612368141538606e-17,
+    "unit_tangent_error": 1.3386588232365966e-16
+  },
+  "public_coefficient": {
+    "runtime": "3.10.12",
+    "H": "37ec8e558b11d22ad008ec3911c9a62bd11e29efa654db29fa715b2ee84841f4",
+    "queries": 788,
+    "strict_endpoint_checks": 199,
+    "positive_speed_range": "PASS",
+    "owner_checks": "PASS"
+  },
+  "public_interior": {
+    "runtime": "3.10.12",
+    "H": "1d0bcd9d51a8ea445bc211876305cdb0d15326a14bbcde5af0765fee4752e5c9",
+    "queries": 1572,
+    "strict_endpoint_checks": 297,
+    "positive_speed_range": "PASS",
+    "owner_checks": "PASS"
+  },
+  "verdict": "Independent numerical query repair controls PASS for reviewed source hash; final exact-commit identity pending from root. Not a full W3 release verdict."
+}

@@ -1,5 +1,17 @@
 # Project A decision ledger
 
+## Independent positive-speed query arithmetic
+
+Evaluate arc-affine squared speed from the nearer endpoint. Computing
+`u0 + (u1-u0)*fraction` can erase a small positive u1 and return zero at a valid
+rounded inverse endpoint. Near the upper endpoint use the separately available
+end-arc minus current-arc, rather than subtracting the rounded local fraction
+from one. Retain exact profile/coefficient authority, moving policy, half-open
+ownership, geometry/inversion allowance and immutable producer main time.
+Synthetic large-ratio inputs expose arithmetic correctness; they are not vehicle
+calibration. Preserve original red evidence and require final independent gates.
+
+
 ## 2026-10-17 — Independent W3 remediation and durable evidence
 
 - Require trusted effective-user/root publication ancestry and no group/other

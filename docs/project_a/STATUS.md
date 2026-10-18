@@ -1,5 +1,26 @@
 # Project A status — 2026-10-17
 
+## Additional independent query correction — final gates pending
+
+The original positive-profile query regression also fails on current W3 base
+`67fbcc8283e59649d38dc9318291634089df3741`: real dual validation and public
+publication/load PASS, then a nextafter query returns zero instead of a positive
+speed. [Q1 original finding](W3_INDEPENDENT_FINDINGS.md) and its
+[failing-first evidence](evidence/w3-positive-speed/README.md) retain both original
+17e4ec4 and latest-base observations. The three existing corrections below remain.
+
+The correction evaluates the same affine squared speed from its nearer endpoint,
+using the direct remaining metric arc near the upper endpoint. Approved bytes,
+policies, ownership, main lap time and all acceptance bounds remain unchanged.
+The permanent public regression covers coefficient and interior profile knots,
+both acceleration directions and closing edges. Strict source lint and all 141 focused artifact/export regressions pass
+(two actual ROS cases run in the full installed gate). Independent pinned
+65-digit/public oracles pass 4,442 queries and 496 endpoint checks. Fresh
+exact-candidate installation/source-free acceptance, exact-head push CI and final
+matching hosted replay remain gates.
+No final ACCEPT or merge is claimed by this source snapshot.
+
+
 ## Independent W3 review — corrections and exact-head publication gates
 
 The independent review starts at `17e4ec4e8fedfa736467d02f6204b04e8552decb`

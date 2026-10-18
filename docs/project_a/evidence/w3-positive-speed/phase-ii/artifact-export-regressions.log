@@ -1,0 +1,7 @@
+checking /records/final-checkout/planner/global_planner/global_planner/route_artifact.py
+checking /records/final-checkout/planner/global_planner/test/test_route_artifact.py
+No problems found
+........................................................................ [ 51%]
+.....................................................................    [100%]
+- generated xml file: /records/resume-numerical/artifact-export-regressions.xml -
+141 passed, 2 deselected in 521.84s (0:08:41)

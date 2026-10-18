@@ -577,16 +577,29 @@ class Reference:
         distance = self._edge_lengths[index]
         if geometric.s == self._stations[index]:
             local = 0.
+            remaining = distance
         else:
             if geometric.segment != knot.segment:
                 raise ArtifactError('metric profile/coefficient ownership disagreement')
-            local = (self.ordered.curve.segments[knot.segment].arc(geometric.t) -
-                     self._start_arcs[index])
+            segment = self.ordered.curve.segments[knot.segment]
+            current_arc = segment.arc(geometric.t)
+            local = current_arc - self._start_arcs[index]
+            end_arc = (self._start_arcs[index + 1] if index + 1 < len(self.profile.knots) and
+                       following.segment == knot.segment else segment.length)
+            remaining = end_arc - current_arc
             allowance = self.policies.numeric.station_abs
-            if local < -allowance or local > distance + allowance:
+            if (local < -allowance or local > distance + allowance or
+                    remaining < -allowance or remaining > distance + allowance):
                 raise ArtifactError('metric query exceeds local arc inversion allowance')
             local = min(distance, max(0., local))
-        squared = knot.u + (following.u - knot.u) * (local / distance)
+            remaining = min(distance, max(0., remaining))
+        # Evaluate the same affine squared speed from its nearer endpoint.
+        # Subtracting a much smaller positive terminal u from the initial u can
+        # otherwise erase it and make a certified moving profile query as zero.
+        if local <= distance / 2:
+            squared = knot.u + (following.u - knot.u) * (local / distance)
+        else:
+            squared = following.u + (knot.u - following.u) * (remaining / distance)
         speed = math.sqrt(squared)
         acceleration = (following.u - knot.u) / (2 * distance)
         elapsed = self._times[index] + 2 * local / (math.sqrt(knot.u) + speed)

@@ -1,0 +1,7 @@
+{"python": "3.10.12", "geometry": "PASS", "geometry_reason": "continuous planar geometry and swept footprint certified", "dynamics": "PASS", "dynamics_reason": "continuous cyclic planar dynamics and metadata certified", "q_rebased_for_runtime": false}
+{"public_publish": "PASS", "public_load": "PASS", "H": "66ab322e8626ba1baed81a6074dc4351f4a5af4ed2c41d32a53ba1676c901597", "path": "/records/numerical/pinned-publication/66ab322e8626ba1baed81a6074dc4351f4a5af4ed2c41d32a53ba1676c901597/reference.json"}
+{"station": 0.2760027237149405, "next_boundary": 0.27600272371494056, "segment": 0, "t": 1.0, "actual_speed": 0.0, "minimum_endpoint_speed": 1e-06, "exact_endpoint_speed": "9.9999999999999998994332381462780763305805380434866610757436671812296722403893483E-7", "actual_time": 5.520054474298811e-07, "actual_acceleration": -1811576325298.9016}
+Traceback (most recent call last):
+  File "/records/numerical/query_zero_repro.py", line 60, in <module>
+    assert sample.speed_mps>0.,'BUG: accepted positive moving profile queried as zero speed'
+AssertionError: BUG: accepted positive moving profile queried as zero speed

@@ -18,14 +18,14 @@ import pytest
 import global_planner.route_artifact as artifact
 import global_planner.route_validate as geometry_checker
 from global_planner.cyclic_retime import (
-    DynamicsModel, ModelRegion, RegionLimits, RetimePolicy, curve_digest,
+    DynamicsModel, ModelRegion, RegionLimits, RetimePolicy, SpeedKnot, SpeedProfile, curve_digest,
     model_digest, retime)
 from global_planner.iqp_route_adapter import SolverPolicy
 from global_planner.route_artifact import (
     ArtifactError, Reference, ValidationContext, artifact_identity, build_payload,
     canonical_bytes, decode_record, load_reference, publish_reference, read_json)
 from global_planner.route_corridor import OrderedCurve
-from global_planner.route_input import load_route
+from global_planner.route_input import load_route, validate_route
 from global_planner.route_reference import Curve, GeometryError, NumericPolicy
 from global_planner.route_validate import Footprint, GeometryValidationPolicy, validate_geometry
 from global_planner.route_validate_dynamics import DynamicsValidationPolicy, validate_dynamics
@@ -928,3 +928,66 @@ def test_publication_allows_private_tmp_child_but_rejects_shared_parent(tmp_path
     os.close(descriptor)
     with pytest.raises(ArtifactError, match='publication directory'):
         artifact._open_directory('/tmp', publication=True)
+
+
+@pytest.mark.parametrize('interior_knots', [False, True])
+def test_loaded_positive_profile_keeps_positive_speed_at_nextafter_boundaries(
+        tmp_path, interior_knots):
+    """Preserve positive approved speed through a bounded inverse endpoint rounding."""
+    route_data = json.loads((FIX / 's0_route.json').read_text())
+    for occurrence in route_data['occurrences']:
+        for cap in occurrence['caps']:
+            cap['max_speed_mps'] = 1e7
+    route = validate_route(route_data)
+    archived = json.loads(gzip.decompress(
+        (FIX / 'w2_a04_candidates.json.gz').read_bytes()))['candidates']['s0_route']
+    ordered = OrderedCurve(route, Curve(archived['coefficients'], archived['owners']),
+                           archived['q'])
+    expected_curve = curve_digest(ordered)
+    limits = RegionLimits(0., 1e7, 1e30, 1e30, 1e30, 1e30, 0.,
+                          'Explicit synthetic numerical dynamic range')
+    model = DynamicsModel(tuple(ModelRegion(o.id, o.surface_id, limits)
+                                for o in route.occurrences), 'Positive-speed query regression')
+    parameters = (0., .37) if interior_knots else (0.,)
+    locations = tuple((i, t) for i in range(len(ordered.curve.segments)) for t in parameters)
+    knots = tuple(SpeedKnot(i, t, 1e12 if j % 2 == 0 else 1e-12)
+                  for j, (i, t) in enumerate(locations))
+    edge_times = []
+    for index, knot in enumerate(knots):
+        following = knots[(index + 1) % len(knots)]
+        end = following.t if following.segment == knot.segment else 1.
+        segment = ordered.curve.segments[knot.segment]
+        distance = segment.arc(end) - segment.arc(knot.t)
+        edge_times.append(2 * distance / (math.sqrt(knot.u) + math.sqrt(following.u)))
+    lap_time = math.fsum(edge_times)
+    profile = SpeedProfile(knots, expected_curve, model_digest(model), lap_time)
+    footprint = Footprint(.1, .1, .12, .01)
+    gp, dp = GeometryValidationPolicy(), DynamicsValidationPolicy()
+    geometry = validate_geometry(ordered, route, footprint, gp,
+                                 expected_curve_digest=expected_curve)
+    dynamics = validate_dynamics(ordered, profile, model, dp,
+                                 expected_curve_digest=expected_curve)
+    assert geometry.status == dynamics.status == 'PASS'
+    payload = build_payload(
+        ordered, profile, model, footprint, solver_policy=SolverPolicy(),
+        retime_policy=RetimePolicy(), geometry_policy=gp, dynamics_policy=dp,
+        approved_curve_digest=expected_curve, geometry_report=geometry,
+        dynamics_report=dynamics, provenance={'purpose': 'Positive-speed query regression'})
+    expected_h = artifact_identity(payload)
+    produced = publish_reference(payload, tmp_path / 'positive-profile', expected_H=expected_h,
+                                 expected_curve_digest=expected_curve)
+    loaded = load_reference(produced.path, expected_H=expected_h,
+                            validation_context=ValidationContext())
+    for index, knot in enumerate(knots):
+        following = knots[(index + 1) % len(knots)]
+        boundary = (loaded.ordered.curve.station(following.segment, following.t)
+                    if index + 1 < len(knots) else loaded.length)
+        station = math.nextafter(boundary, 0.)
+        sample = loaded.sample(station)
+        assert sample.segment == knot.segment
+        # An affine positive profile lies within its endpoint range, independently
+        # of the permitted inverse station residual or its returned parameter.
+        assert 1e-6 <= sample.speed_mps <= 1e6
+        end = following.t if following.segment == knot.segment else 1.
+        if sample.t == end:
+            assert sample.speed_mps == math.sqrt(following.u)
