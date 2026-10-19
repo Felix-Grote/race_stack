@@ -1,0 +1,13 @@
+{
+  "archive": "03-final-hosted-ci-and96.tar.gz",
+  "archive_sha256": "390ec57637373333f68139b59b384e248cf17b8a34bf3fe7cf64d539e5363b44",
+  "archive_bytes": 58518581,
+  "manifest_sha256": "806624c4469505e1e92cfab8a552bb34ba7cf20a0645a849c5bb140b6cf49531",
+  "payload_files": 886,
+  "payload_bytes": 109704090,
+  "verified_regular_safe_unique_members": 887,
+  "readback": "PASS every member size/hash, then every selected source file rehashed unchanged",
+  "duplicate_groups": 62,
+  "repeated_payload_bytes": 23258429,
+  "scope": "Retained independent audit evidence; consult source-specific acceptance report for verdict. Archive existence/integrity is not acceptance."
+}

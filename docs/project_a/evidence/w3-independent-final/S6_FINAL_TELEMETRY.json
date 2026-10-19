@@ -1,0 +1,156 @@
+{
+  "scope": "Authenticated final96 descriptive per-worker telemetry. Outer wall recorded by runner in summary.json and attempts.jsonl; phase sums omit uninstrumented overhead. Nested optimizer subphases excluded from sums. Parent/child max RSS are separate per-process maxima, not aggregate live process-tree RSS; do not add them. CPU deltas retain tiny signed floating subtraction roundoff. Not an isolated real-time performance promise.",
+  "source": "b961d20ce4a803e55336fb5590c30574e23b2fad",
+  "rows": [
+    {
+      "id": "S6-240m-new-0.52-r1",
+      "status": "PASS",
+      "iterations": 3,
+      "length_m": 240.8560691394369,
+      "lap_time_s": 68.00978787596144,
+      "qp_condition_max": 21448.67136224065,
+      "qp_primal_residual_max": 3.708144902248023e-14,
+      "parent_peak_rss_bytes": 163160064,
+      "child_peak_rss_bytes": 274575360,
+      "qp_peak_rss_bytes": 274575360,
+      "nonoverlapping_top_level_phases": [
+        {
+          "name": "strict_route_topology_validation",
+          "wall_seconds": 0.04208825899991098,
+          "parent_cpu_seconds": 0.04147518499999997,
+          "child_cpu_seconds": -4.336808689942018e-19
+        },
+        {
+          "name": "seed_curve_and_directed_owned_portal_control",
+          "wall_seconds": 0.23142269499999202,
+          "parent_cpu_seconds": 0.23046768400000006,
+          "child_cpu_seconds": -4.336808689942018e-19
+        },
+        {
+          "name": "whole_lap_optimize",
+          "wall_seconds": 22.17874288200005,
+          "parent_cpu_seconds": 9.728488274,
+          "child_cpu_seconds": 12.539428000000001
+        },
+        {
+          "name": "independent_continuous_geometry",
+          "wall_seconds": 32.77109604700013,
+          "parent_cpu_seconds": 32.76797073,
+          "child_cpu_seconds": 4.440892098500626e-16
+        },
+        {
+          "name": "common_cyclic_squared_speed_retime",
+          "wall_seconds": 3.9661498840000604,
+          "parent_cpu_seconds": 3.9751425150000017,
+          "child_cpu_seconds": 4.440892098500626e-16
+        },
+        {
+          "name": "independent_continuous_dynamics",
+          "wall_seconds": 3.4018716020000284,
+          "parent_cpu_seconds": 3.401554722,
+          "child_cpu_seconds": 4.440892098500626e-16
+        },
+        {
+          "name": "encode_stage_reload_dual_validation_atomic_publish",
+          "wall_seconds": 38.61727407600006,
+          "parent_cpu_seconds": 38.61466108,
+          "child_cpu_seconds": 4.440892098500626e-16
+        },
+        {
+          "name": "fine_true_metric_queries_without_refit",
+          "wall_seconds": 6.945448227000043,
+          "parent_cpu_seconds": 6.944395349000004,
+          "child_cpu_seconds": 4.440892098500626e-16
+        },
+        {
+          "name": "corrupt_artifact_and_external_identity_negative_controls",
+          "wall_seconds": 0.3316603389998818,
+          "parent_cpu_seconds": 0.330541341,
+          "child_cpu_seconds": 4.440892098500626e-16
+        },
+        {
+          "name": "legacy_ros_export_without_refit",
+          "wall_seconds": 26.066459717000043,
+          "parent_cpu_seconds": 26.063383674999997,
+          "child_cpu_seconds": 4.440892098500626e-16
+        }
+      ],
+      "outer_worker_wall_s": 135.32048072800012,
+      "sum_top_level_wall_s": 134.5522137280002,
+      "sum_top_level_parent_cpu_s": 122.098080555,
+      "sum_top_level_child_cpu_s": 12.539428000000004
+    },
+    {
+      "id": "S6-240m-new-0.52-r2",
+      "status": "PASS",
+      "iterations": 3,
+      "length_m": 240.8560691394369,
+      "lap_time_s": 68.00978787596144,
+      "qp_condition_max": 21448.67136224065,
+      "qp_primal_residual_max": 3.708144902248023e-14,
+      "parent_peak_rss_bytes": 163147776,
+      "child_peak_rss_bytes": 273977344,
+      "qp_peak_rss_bytes": 273977344,
+      "nonoverlapping_top_level_phases": [
+        {
+          "name": "strict_route_topology_validation",
+          "wall_seconds": 0.041890865999903326,
+          "parent_cpu_seconds": 0.04158062000000001,
+          "child_cpu_seconds": 0.0
+        },
+        {
+          "name": "seed_curve_and_directed_owned_portal_control",
+          "wall_seconds": 0.22912836299997252,
+          "parent_cpu_seconds": 0.22853929500000003,
+          "child_cpu_seconds": 0.0
+        },
+        {
+          "name": "whole_lap_optimize",
+          "wall_seconds": 22.211806015999855,
+          "parent_cpu_seconds": 9.703369211,
+          "child_cpu_seconds": 12.59698
+        },
+        {
+          "name": "independent_continuous_geometry",
+          "wall_seconds": 32.973835506999876,
+          "parent_cpu_seconds": 32.970083542,
+          "child_cpu_seconds": 6.661338147750939e-16
+        },
+        {
+          "name": "common_cyclic_squared_speed_retime",
+          "wall_seconds": 3.9816588500000307,
+          "parent_cpu_seconds": 3.990932520000001,
+          "child_cpu_seconds": 6.661338147750939e-16
+        },
+        {
+          "name": "independent_continuous_dynamics",
+          "wall_seconds": 3.443608814000072,
+          "parent_cpu_seconds": 3.4435633180000025,
+          "child_cpu_seconds": 6.661338147750939e-16
+        },
+        {
+          "name": "encode_stage_reload_dual_validation_atomic_publish",
+          "wall_seconds": 38.829976419999866,
+          "parent_cpu_seconds": 38.825581807999995,
+          "child_cpu_seconds": 6.661338147750939e-16
+        },
+        {
+          "name": "fine_true_metric_queries_without_refit",
+          "wall_seconds": 6.918453635999867,
+          "parent_cpu_seconds": 6.916744858000001,
+          "child_cpu_seconds": 6.661338147750939e-16
+        },
+        {
+          "name": "legacy_ros_export_without_refit",
+          "wall_seconds": 26.051590872999896,
+          "parent_cpu_seconds": 26.043412425,
+          "child_cpu_seconds": 6.661338147750939e-16
+        }
+      ],
+      "outer_worker_wall_s": 135.44744620000006,
+      "sum_top_level_wall_s": 134.68194934499934,
+      "sum_top_level_parent_cpu_s": 122.163807597,
+      "sum_top_level_child_cpu_s": 12.596980000000004
+    }
+  ]
+}

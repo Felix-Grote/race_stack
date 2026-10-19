@@ -1,0 +1,21 @@
+{
+  "bundles": 8,
+  "new_bundles": [
+    "05-final-runtime-and-complete-fresh.tar.gz",
+    "06-final-acceptance-and-metadata.tar.gz"
+  ],
+  "no_further_archive_preparation_writes": true,
+  "publish_external_control_records": [
+    "final-bundle-index.json",
+    "final-coverage-audit.json",
+    "final-selection-inventory.json",
+    "final-duplication-accounting.json",
+    "final-ARCHIVE_REPORT.md",
+    "final-SHA256SUMS",
+    "final-WRITERS_STOPPED.json",
+    "final-package-console.log"
+  ],
+  "scope": "Publication remote readback remains parent responsibility.",
+  "status": "SEALED_FINAL_ARCHIVE_WRITERS_STOPPED",
+  "writers_stopped": true
+}

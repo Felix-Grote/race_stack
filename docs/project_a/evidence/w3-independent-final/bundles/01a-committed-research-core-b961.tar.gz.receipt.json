@@ -1,0 +1,13 @@
+{
+  "archive": "01a-committed-research-core-b961.tar.gz",
+  "archive_sha256": "f173726352ed7149c9b28a8b8d8f613ec9aa02ece73ba9199c6ea0c4dd022011",
+  "archive_bytes": 34544690,
+  "manifest_sha256": "5fa2a7b81539e9d7b9b05cf2dc75d2297f3ad1d0efb4dcb1b44030ec330eae28",
+  "payload_files": 735,
+  "payload_bytes": 49016536,
+  "verified_regular_safe_unique_members": 736,
+  "readback": "PASS every member size/hash, then every selected source file rehashed unchanged",
+  "duplicate_groups": 47,
+  "repeated_payload_bytes": 642429,
+  "scope": "Retained independent audit evidence; consult source-specific acceptance report for verdict. Archive existence/integrity is not acceptance."
+}

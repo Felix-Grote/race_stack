@@ -1,0 +1,13 @@
+{
+  "archive": "04-original-local-attempts-and-upstream.tar.gz",
+  "archive_sha256": "611ecf48944eee22a057473297bd6bee7c8b52a636ce1467bf3cbcdf9079edd1",
+  "archive_bytes": 18238589,
+  "manifest_sha256": "b2787e212aba84bc520b9c271f8c1e165348a692a3452b4319ec6d8cd44059be",
+  "payload_files": 750,
+  "payload_bytes": 102844425,
+  "verified_regular_safe_unique_members": 751,
+  "readback": "PASS every member size/hash, then every selected source file rehashed unchanged",
+  "duplicate_groups": 107,
+  "repeated_payload_bytes": 16522429,
+  "scope": "Retained independent audit evidence; consult source-specific acceptance report for verdict. Archive existence/integrity is not acceptance."
+}

@@ -1,0 +1,60 @@
+{
+  "new_bundles": [
+    {
+      "archive": "05-final-runtime-and-complete-fresh.tar.gz",
+      "archive_sha256": "daf26ad9b51129bb7845f8d7bb971984998741676b027bb036315c0e82b4dd06",
+      "archive_bytes": 14202193,
+      "manifest_sha256": "431926acc42b94639cb422448217a563b737983d51441030ff4015c6e4307399",
+      "payload_files": 582,
+      "payload_bytes": 70871904,
+      "verified_regular_safe_unique_members": 583,
+      "readback": "PASS every member size/hash, then every selected source file rehashed unchanged",
+      "duplicate_groups": 73,
+      "repeated_payload_bytes": 15268915,
+      "scope": "Retained independent audit evidence; consult source-specific acceptance report for verdict. Archive existence/integrity is not acceptance."
+    },
+    {
+      "archive": "06-final-acceptance-and-metadata.tar.gz",
+      "archive_sha256": "7c78ad1c665611516b07d4655b01a50f01c3f8469fb5231562ffc0f60079851b",
+      "archive_bytes": 996707,
+      "manifest_sha256": "ae0d5791c6ec0e1b596ab9721042d59c881b423aa8917516a0bdeca7a4d4603c",
+      "payload_files": 73,
+      "payload_bytes": 13824756,
+      "verified_regular_safe_unique_members": 74,
+      "readback": "PASS every member size/hash, then every selected source file rehashed unchanged",
+      "duplicate_groups": 0,
+      "repeated_payload_bytes": 0,
+      "scope": "Retained independent audit evidence; consult source-specific acceptance report for verdict. Archive existence/integrity is not acceptance."
+    }
+  ],
+  "coverage": {
+    "PASS": true,
+    "bundles": 8,
+    "unique_selected_regular_files": 5240,
+    "archive_bytes": 204836947,
+    "all_archives_under_90MB": true,
+    "original_and_member_size_hash_readback": "PASS all eight bundles",
+    "all_selected_sources_rehashed_unchanged": true,
+    "selected_symlinks_or_specials": 0,
+    "final_determinism_second_serialization": {
+      "05-final-runtime-and-complete-fresh.tar.gz": {
+        "PASS": true,
+        "second_serialization_sha256": "daf26ad9b51129bb7845f8d7bb971984998741676b027bb036315c0e82b4dd06",
+        "bytes": 14202193
+      },
+      "06-final-acceptance-and-metadata.tar.gz": {
+        "PASS": true,
+        "second_serialization_sha256": "7c78ad1c665611516b07d4655b01a50f01c3f8469fb5231562ffc0f60079851b",
+        "bytes": 996707
+      }
+    },
+    "final_salvaged_actual_build_result_files": 10,
+    "prior_salvaged_actual_build_result_files": 20,
+    "final_sensitive_matches": 0,
+    "final_deferred_evidence_roots": [],
+    "immutable_handoff_selected": "HANDOFF-at-W3-ACCEPT.md",
+    "mutable_handoff_excluded": "HANDOFF.md",
+    "scope": "Archival completeness/integrity; research acceptance authority remains release-preparation/W3_ACCEPTANCE.json."
+  },
+  "report": "/workspace/forza-audit-records/archive-preparation/final-ARCHIVE_REPORT.md"
+}

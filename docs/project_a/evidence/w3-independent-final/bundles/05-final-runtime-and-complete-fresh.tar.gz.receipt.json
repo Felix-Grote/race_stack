@@ -1,0 +1,13 @@
+{
+  "archive": "05-final-runtime-and-complete-fresh.tar.gz",
+  "archive_sha256": "daf26ad9b51129bb7845f8d7bb971984998741676b027bb036315c0e82b4dd06",
+  "archive_bytes": 14202193,
+  "manifest_sha256": "431926acc42b94639cb422448217a563b737983d51441030ff4015c6e4307399",
+  "payload_files": 582,
+  "payload_bytes": 70871904,
+  "verified_regular_safe_unique_members": 583,
+  "readback": "PASS every member size/hash, then every selected source file rehashed unchanged",
+  "duplicate_groups": 73,
+  "repeated_payload_bytes": 15268915,
+  "scope": "Retained independent audit evidence; consult source-specific acceptance report for verdict. Archive existence/integrity is not acceptance."
+}

@@ -1,0 +1,13 @@
+{
+  "archive": "01b-committed-benchmarks-b961.tar.gz",
+  "archive_sha256": "efdbfdd968be3b4131bba8f686636b3352694f6fdac453d807f6009806dcf4b7",
+  "archive_bytes": 33166909,
+  "manifest_sha256": "55556b9bf29dbc21b51966906af1463f90ed95e3812ad6f06392c7c6d6ee5e44",
+  "payload_files": 967,
+  "payload_bytes": 34955221,
+  "verified_regular_safe_unique_members": 968,
+  "readback": "PASS every member size/hash, then every selected source file rehashed unchanged",
+  "duplicate_groups": 70,
+  "repeated_payload_bytes": 9542857,
+  "scope": "Retained independent audit evidence; consult source-specific acceptance report for verdict. Archive existence/integrity is not acceptance."
+}

@@ -1,0 +1,13 @@
+{
+  "archive": "06-final-acceptance-and-metadata.tar.gz",
+  "archive_sha256": "7c78ad1c665611516b07d4655b01a50f01c3f8469fb5231562ffc0f60079851b",
+  "archive_bytes": 996707,
+  "manifest_sha256": "ae0d5791c6ec0e1b596ab9721042d59c881b423aa8917516a0bdeca7a4d4603c",
+  "payload_files": 73,
+  "payload_bytes": 13824756,
+  "verified_regular_safe_unique_members": 74,
+  "readback": "PASS every member size/hash, then every selected source file rehashed unchanged",
+  "duplicate_groups": 0,
+  "repeated_payload_bytes": 0,
+  "scope": "Retained independent audit evidence; consult source-specific acceptance report for verdict. Archive existence/integrity is not acceptance."
+}

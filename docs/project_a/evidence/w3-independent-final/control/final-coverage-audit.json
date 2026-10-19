@@ -1,0 +1,29 @@
+{
+  "PASS": true,
+  "all_archives_under_90MB": true,
+  "all_selected_sources_rehashed_unchanged": true,
+  "archive_bytes": 204836947,
+  "bundles": 8,
+  "final_deferred_evidence_roots": [],
+  "final_determinism_second_serialization": {
+    "05-final-runtime-and-complete-fresh.tar.gz": {
+      "PASS": true,
+      "bytes": 14202193,
+      "second_serialization_sha256": "daf26ad9b51129bb7845f8d7bb971984998741676b027bb036315c0e82b4dd06"
+    },
+    "06-final-acceptance-and-metadata.tar.gz": {
+      "PASS": true,
+      "bytes": 996707,
+      "second_serialization_sha256": "7c78ad1c665611516b07d4655b01a50f01c3f8469fb5231562ffc0f60079851b"
+    }
+  },
+  "final_salvaged_actual_build_result_files": 10,
+  "final_sensitive_matches": 0,
+  "immutable_handoff_selected": "HANDOFF-at-W3-ACCEPT.md",
+  "mutable_handoff_excluded": "HANDOFF.md",
+  "original_and_member_size_hash_readback": "PASS all eight bundles",
+  "prior_salvaged_actual_build_result_files": 20,
+  "scope": "Archival completeness/integrity; research acceptance authority remains release-preparation/W3_ACCEPTANCE.json.",
+  "selected_symlinks_or_specials": 0,
+  "unique_selected_regular_files": 5240
+}

@@ -1,0 +1,13 @@
+{
+  "archive": "01c-committed-runtime-publication-b961.tar.gz",
+  "archive_sha256": "93e58929d8ef2eb5b58eaab8a892127be70f42c1563b3f813dcc3bee902f7abc",
+  "archive_bytes": 30991053,
+  "manifest_sha256": "7f2e89c397a55a23a13fb6ee8d849af2b09efe4e6de4c0c95caf8c5e10bffac9",
+  "payload_files": 719,
+  "payload_bytes": 68268603,
+  "verified_regular_safe_unique_members": 720,
+  "readback": "PASS every member size/hash, then every selected source file rehashed unchanged",
+  "duplicate_groups": 56,
+  "repeated_payload_bytes": 2589736,
+  "scope": "Retained independent audit evidence; consult source-specific acceptance report for verdict. Archive existence/integrity is not acceptance."
+}

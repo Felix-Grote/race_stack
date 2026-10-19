@@ -1,0 +1,13 @@
+{
+  "archive": "02-independent-investigations.tar.gz",
+  "archive_sha256": "937fbbdb40a67156536b3fa275bb7371839b182db9e3e8b6d0226132d7d1feac",
+  "archive_bytes": 14178225,
+  "manifest_sha256": "816fe9b9b20b96f314c06fc4020927081cb3e8765fb6b2fb83067e4ec8a4b887",
+  "payload_files": 528,
+  "payload_bytes": 33158544,
+  "verified_regular_safe_unique_members": 529,
+  "readback": "PASS every member size/hash, then every selected source file rehashed unchanged",
+  "duplicate_groups": 37,
+  "repeated_payload_bytes": 1082338,
+  "scope": "Retained independent audit evidence; consult source-specific acceptance report for verdict. Archive existence/integrity is not acceptance."
+}
