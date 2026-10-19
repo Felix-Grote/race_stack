@@ -1,0 +1,98 @@
+{
+  "status": "PASS",
+  "merge_commit": "4bfcf35fcc08a80abbe72bdbc294cf3400e99df2",
+  "accepted_source": "b961d20ce4a803e55336fb5590c30574e23b2fad",
+  "tree": "c15b269c58ff82a12f6fae6c2481a56ce317f9fb",
+  "merge_tree_identical_to_accepted_source": true,
+  "merge_parents": [
+    "9fae5faed6ca62e0c943b6290babc50638477d9b",
+    "b961d20ce4a803e55336fb5590c30574e23b2fad"
+  ],
+  "run_id": 39302290392,
+  "run_url": "https://github.com/Felix-Grote/race_stack/actions/runs/39302290392",
+  "artifact_id": 12214159622,
+  "artifact_name": "project-a-4bfcf35fcc08a80abbe72bdbc294cf3400e99df2",
+  "original_zip_bytes": 9328436,
+  "original_zip_sha256": "08fcbae63fc062bddcb7ec1b4428c62f5bab7bd088de9395aca2650bd8af8f21",
+  "functional_tests": 612,
+  "functional_groups": 27,
+  "functional_failures_errors_skips": 0,
+  "inherited_legacy_failures": 10,
+  "inherited_copyright_skips": 2,
+  "legacy_status": "EXPECTED_FAILURES_RETAINED",
+  "legacy_raw_summary": [
+    597,
+    0,
+    10,
+    2
+  ],
+  "source_free_tests": 5,
+  "source_free_scenarios": 9,
+  "source_free_queries": 1488,
+  "source_free_scenario_cli_commands": 36,
+  "literal_source_hashes": 138,
+  "installed_resource_hashes": 21,
+  "dependency_locks": 2,
+  "recursive_gitlinks": 7,
+  "installed_module_origins": 10,
+  "source_before_after_equal": true,
+  "trusted_producer_validator_H_C_bindings": [
+    {
+      "case": "s0_route",
+      "H": "963bcd8a7b0441c55926a7c69226dacb32202d163f8d536a732f3d78f217b14d",
+      "curve_digest": "239e6c76dee1d3b5c4a438796ba20ede3104da035bc193227a78f637c4d342e8",
+      "artifact_sha256": "016a63ab1725fcc3e80c7ae451cbfabfc834c3d9cd5ef3347eb990ef7578f125"
+    },
+    {
+      "case": "s0_reverse_route",
+      "H": "dfaa3eedf22b66d95b13b1ed0dcab0b714104d5e034aba55f533cb98d920f184",
+      "curve_digest": "776117be87c87c61bcc0b69044b4bf1e290897836fb14bba15215f42e0df78b1",
+      "artifact_sha256": "e73118e97c7ac6c7480702431d954983f45416a98c23c737dec6f46650c38a3e"
+    },
+    {
+      "case": "s0_rotated_route",
+      "H": "d60527656484c29ad3b68f670134533a44303034b6e4f45bd9bdf7062d9d25ca",
+      "curve_digest": "845249e58bab6a449b0b8d2e999c1b9778cf51e348f4a32b4d083661d01bed66",
+      "artifact_sha256": "ac71dcdc80557de1ed25c871022d65c945aeb3231b0f2ff2144a05409d10135a"
+    },
+    {
+      "case": "s2_upper_route",
+      "H": "95182f033213c279ce32ddf957193781e8318450a33fac94d2d007ffd727e7f5",
+      "curve_digest": "c11b66c01d7476889cf8602b1a6c86b24b47f21b0e57571360673ee495ffd2c5",
+      "artifact_sha256": "88045606e354b75fed1bba211a9e88878d7250d87bb9a369fbef9933ec728a22"
+    },
+    {
+      "case": "s2_lower_route",
+      "H": "77aee38f89f3ea0f18afccdc988b79be34e7c3e9bc711da66227d43af7e3426f",
+      "curve_digest": "7f0aa5ff09b06a183803ce8b598112d54a9d351febba5e5a0e45eeb5b96c446c",
+      "artifact_sha256": "84c92078f7a5e397664468f775bdca9a5e1623caf35d8269191e8b96db6c836c"
+    },
+    {
+      "case": "s3_surfaces_route",
+      "H": "0bdda6bf2ad0e0e3ee357d17bbed8c055f3a9270950824773aaeaa34d45e5495",
+      "curve_digest": "9bedda5b0cb2eca92cbe84385a641e3e76b3bf48e02fb46dc230f2ca485fde96",
+      "artifact_sha256": "e35d478262cf7bbe8c9708b01bfd4f5fd5762d988c99389d3a19f63ebde8a374"
+    },
+    {
+      "case": "s3_notch_route",
+      "H": "1c047ace58e401fc110dc415e60486af3a6df86e3e61f249fde9979aa5d90e4f",
+      "curve_digest": "07a4c9d7e693aa94c78b059cb63142c3571bddb94247847277f83893dc66ac56",
+      "artifact_sha256": "411ce84b73a61b61b9908baf928fa9f67e1e424446a28feeb5bffd7c02b8b6ee"
+    },
+    {
+      "case": "s4_repeated_route",
+      "H": "6418d69a3688d51c3cc52e3d8c32fd6c01b2aad9e1ec4d566b48c7fa8f358530",
+      "curve_digest": "d979a10074f4bf97cd6e3afc6f42819690fd4dba2e036918f37ec1fd90f7ad4b",
+      "artifact_sha256": "f36ad10073e0468b392f2f75ded819c114d765984bd72023ef7c8e109a319ef3"
+    },
+    {
+      "case": "s6_competition_route",
+      "H": "2f889295ff2594f6fe5f45ff70925e00165a0f3dc2412afa9f447343346a1a9d",
+      "curve_digest": "2cbd2d35e40b9221d54204f28e4c907204215a9829801c824fe6c1de9b34e936",
+      "artifact_sha256": "5b8516d8ad66b53add5d2317c4498e5cda5380718fb13343a00f2d961539fc6a"
+    }
+  ],
+  "initial_archive_commit": "4b222ff37101c72d79cd6da0467a562214817d79",
+  "archive_append_publication_status": "PENDING_ROOT_PUBLICATION_AND_REMOTE_READBACK",
+  "scope": "Exact research merge CI byte/provenance closure. Fresh H values bind actual merge identity; no H equality to accepted-source builds is required. No new numerical replay, production acceptance or physical claim."
+}

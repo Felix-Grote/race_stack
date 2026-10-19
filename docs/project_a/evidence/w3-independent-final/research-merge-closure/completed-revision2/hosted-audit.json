@@ -1,0 +1,449 @@
+{
+  "PASS": true,
+  "implementation": "4bfcf35fcc08a80abbe72bdbc294cf3400e99df2",
+  "run_id": 39302290392,
+  "artifact_id": 12214159622,
+  "zip_sha256": "08fcbae63fc062bddcb7ec1b4428c62f5bab7bd088de9395aca2650bd8af8f21",
+  "zip_bytes": 9328436,
+  "zip_files": 295,
+  "functional_groups": [
+    {
+      "group": "numerical",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "ros",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a01",
+      "tests": 60,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a02",
+      "tests": 47,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a03",
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a04",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a05",
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a05-oracle",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a06",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a06-independent",
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a06-oracle",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a06-ellipse",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "w2-handoff",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "w2-numerical-oracle",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "w2-shared-cap",
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "w2-pipeline",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "w2-novel-pipeline",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "w1-installed",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "w2-installed",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a07-artifact",
+      "tests": 114,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a07-cli",
+      "tests": 68,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a07-export-pure",
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a07-export-ros",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "w3-installed",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a08-regressions",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "a09-harness",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "group": "w3-source-free",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "tests": 612,
+  "groups": 27,
+  "source_hashes_equal_literal_git": 138,
+  "source_before_after_equal": true,
+  "installed_resources_exact_Git": 21,
+  "dependency_locks_exact_Git": 2,
+  "recursive_gitlinks_exact_Git": 7,
+  "source_free_launch": {
+    "expected_commit": "4bfcf35fcc08a80abbe72bdbc294cf3400e99df2",
+    "image_id": "sha256:2507fa4e882267b75f45b55bad4dc9cd3463a257c940f46f3d999b258f0adcb1",
+    "source_or_build_mounts": [],
+    "readonly_mounts": [
+      "/work/install",
+      "/work/python",
+      "/runtime-harness"
+    ],
+    "writable_mounts": [
+      "/results",
+      "/tmp"
+    ],
+    "network": "none",
+    "working_directory": "/results",
+    "scope": "Separate container; no repository, source, build or optimizer checkout mounted"
+  },
+  "source_free_runtime": {
+    "source_commit": "4bfcf35fcc08a80abbe72bdbc294cf3400e99df2",
+    "source_dirty": false,
+    "uid": 1001,
+    "cap_eff": "0000000000000000",
+    "no_new_privileges": "1",
+    "interfaces": [
+      [
+        1,
+        "lo"
+      ]
+    ],
+    "verified_readonly_paths": [
+      "/",
+      "/work",
+      "/work/install",
+      "/work/python",
+      "/runtime-harness"
+    ],
+    "verified_absent_paths": [
+      "/src",
+      "/workspace",
+      "/work/src",
+      "/work/build",
+      "/work/optimizer"
+    ],
+    "modules": {
+      "global_planner.route_input": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_input.py",
+        "sha256": "fb834bcb3d26c0078575f10768771f842111ca9c92b0a3b179206b61678aeeb8"
+      },
+      "global_planner.route_reference": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_reference.py",
+        "sha256": "9302188ac655c12c773383f45b99246425c51d6f59f2fde6b99f29a2284fa6b8"
+      },
+      "global_planner.route_corridor": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_corridor.py",
+        "sha256": "50b97011b805642287cd41f9fbb8f262b7b69124f5f43031b5e1409548fe770d"
+      },
+      "global_planner.iqp_route_adapter": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/iqp_route_adapter.py",
+        "sha256": "2af86a21c10c16a8202ec70265b323c5a999bbfa3100631240605cae040ea9dd"
+      },
+      "global_planner.route_validate": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_validate.py",
+        "sha256": "3d19294aa72dea9c3c2d66c47cbf115f83661ab360b0922d6fdf91e8cd52c651"
+      },
+      "global_planner.route_validate_dynamics": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_validate_dynamics.py",
+        "sha256": "9e8f8b787f2f0468b4cfeb18860c83bc54956e698b91fd7442fd9b38aae436d2"
+      },
+      "global_planner.cyclic_retime": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/cyclic_retime.py",
+        "sha256": "7ff74dbf3f57500731e5eebb069882d35efc6ed6d2b5805e22c796556286ceb3"
+      },
+      "global_planner.route_artifact": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_artifact.py",
+        "sha256": "076a5283865ec02fa720692bcf9dfd4fcf82e891035ff70111b86733da6339bc"
+      },
+      "global_planner.route_compile": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_compile.py",
+        "sha256": "7abbd29f6c3e21757abe8e74046da12ab918bf2baf7d08529b55a6be7b697a50"
+      },
+      "global_planner.route_legacy_export": {
+        "path": "/work/install/global_planner/lib/python3.10/site-packages/global_planner/route_legacy_export.py",
+        "sha256": "d06ef255d4cb5697a99239a3873e8dadeb298350c412db4067338324fe79a5aa"
+      }
+    },
+    "console_script": "/work/install/global_planner/lib/global_planner/compile_route",
+    "installed_resource_hashes": {
+      "fixtures/s0_reverse_route.json": "eea555e7bd76e911bdf13cf395dd9958d40cdcda46a05681838844b3cc2891c6",
+      "fixtures/s0_rotated_route.json": "12fa1e23b1078ac1b0720defa8a90e8e4e3e545adc8f73bff6b2cff8a9dae465",
+      "fixtures/s0_route.json": "3bfddf1726bdf55d53496ddd37d6289cb2808136bfaba49fb0c6228340d85cff",
+      "fixtures/s2_lower_route.json": "5a8c24775d52901231dc7134ddf27d121854501cde7953a41a89f85c111a576f",
+      "fixtures/s2_upper_route.json": "9abdc88ead71bcff8e170be6b5e4df3935d4a2fac02ee4a493318b7b2a4bb42a",
+      "fixtures/s3_notch_route.json": "d1dcbfe952da8c2aa00b430e986cb8273ae0a0db95eb2869ea63ea444f715ef9",
+      "fixtures/s3_surfaces_route.json": "f397127bdd14e1713b4a4ace30b5aec76c16b0091d07b41d379c3411746afa98",
+      "fixtures/s4_repeated_route.json": "624f66a98d90c75aafd475f3e4daccf55cc2f0ce37aa6f955a2a9ab14432e912",
+      "fixtures/s6_competition_route.json": "d02e04769f0f1acb3c2aa4c3e52c5815af113908595296bf2a2586d09622d1a2",
+      "models/s0_reverse_route_model.json": "49bace7f73d98d96fc6721cabd5e8f1e54c8691d987333fa261b5290154d4702",
+      "models/s0_rotated_route_model.json": "d0ffc05d1daf9f0014c53e5ea189a49db65ee76e1a4da0b2a4cfa745c2ccb6a7",
+      "models/s0_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "models/s2_lower_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "models/s2_upper_route_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "models/s3_notch_route_model.json": "afbb0f3e947306aabfeaaf5834c399d4becf184a01453bf4a54d55fd1f64aea7",
+      "models/s3_surfaces_route_model.json": "afbb0f3e947306aabfeaaf5834c399d4becf184a01453bf4a54d55fd1f64aea7",
+      "models/s4_repeated_route_model.json": "71acf61ff91ded134c9e1da99da0e9bbaf014cb835b432424d405e754f836914",
+      "models/s6_competition_route_model.json": "39e1275cc05dd9b5569c0782f7963822746df2e177fdb79e17ee81e9f295ce82",
+      "models/synthetic_model.json": "06a153f550a477437fb71d57c62350c0b7a09add3eca945e1e505641c43163f1",
+      "policies/s6_coarse_policy.json": "8fb57e0a592504b0e6e31ccd4b486a5db1251bbc16060ecbb041721ef5199b3f",
+      "policies/synthetic_policy.json": "c19fdb53414182bdc96b4364a25a2f517572d524fa261f475427c3cd042fc133"
+    }
+  },
+  "legacy_failures_exact": {
+    "identities_equal": true,
+    "baseline": [
+      "lint_cmake",
+      "xmllint",
+      "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+      "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+      "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+      "f110_msgs.xmllint package.xml",
+      "frenet_conversion.test.test_flake8 test_flake8",
+      "frenet_conversion.test.test_pep257 test_pep257",
+      "global_planner.test.test_flake8 test_flake8",
+      "global_planner.test.test_pep257 test_pep257"
+    ],
+    "actual": [
+      "lint_cmake",
+      "xmllint",
+      "f110_msgs.lint_cmake whitespace/mismatch (CMakeLists.txt:29)",
+      "f110_msgs.lint_cmake whitespace/eol (CMakeLists.txt:42)",
+      "f110_msgs.lint_cmake whitespace/indent (CMakeLists.txt:45)",
+      "f110_msgs.xmllint package.xml",
+      "frenet_conversion.test.test_flake8 test_flake8",
+      "frenet_conversion.test.test_pep257 test_pep257",
+      "global_planner.test.test_flake8 test_flake8",
+      "global_planner.test.test_pep257 test_pep257"
+    ],
+    "skips": [
+      {
+        "identity": "frenet_conversion.test.test_copyright test_copyright",
+        "reason": "No copyright header has been placed in the generated source file."
+      },
+      {
+        "identity": "global_planner.test.test_copyright test_copyright",
+        "reason": "No copyright header has been placed in the generated source file."
+      }
+    ],
+    "summary": [
+      [
+        "597",
+        "0",
+        "10",
+        "2"
+      ]
+    ],
+    "baseline_sha256": "324448f3a61e312fb784e495aa7a219a6b3b966d17c32a38e5ce519edb3b5d55",
+    "actual_sha256": "713be3f2bf7b3494531a4900586dfbdf5263ce02b7d67f4d666ba04d14d5f0cc",
+    "scope": "Inherited failures remain failures; any new identity rejects the run"
+  },
+  "controlled_catalog": [
+    {
+      "case": "s0_route",
+      "H": "963bcd8a7b0441c55926a7c69226dacb32202d163f8d536a732f3d78f217b14d",
+      "curve_digest": "239e6c76dee1d3b5c4a438796ba20ede3104da035bc193227a78f637c4d342e8",
+      "relative_artifact": "w3-scenarios/s0_route/references/963bcd8a7b0441c55926a7c69226dacb32202d163f8d536a732f3d78f217b14d/reference.json",
+      "artifact_sha256": "016a63ab1725fcc3e80c7ae451cbfabfc834c3d9cd5ef3347eb990ef7578f125",
+      "bytes": 233387,
+      "authority_source": "Authenticated original push CI compile/validate receipts and campaign; never embedded artifact hash alone"
+    },
+    {
+      "case": "s0_reverse_route",
+      "H": "dfaa3eedf22b66d95b13b1ed0dcab0b714104d5e034aba55f533cb98d920f184",
+      "curve_digest": "776117be87c87c61bcc0b69044b4bf1e290897836fb14bba15215f42e0df78b1",
+      "relative_artifact": "w3-scenarios/s0_reverse_route/references/dfaa3eedf22b66d95b13b1ed0dcab0b714104d5e034aba55f533cb98d920f184/reference.json",
+      "artifact_sha256": "e73118e97c7ac6c7480702431d954983f45416a98c23c737dec6f46650c38a3e",
+      "bytes": 233291,
+      "authority_source": "Authenticated original push CI compile/validate receipts and campaign; never embedded artifact hash alone"
+    },
+    {
+      "case": "s0_rotated_route",
+      "H": "d60527656484c29ad3b68f670134533a44303034b6e4f45bd9bdf7062d9d25ca",
+      "curve_digest": "845249e58bab6a449b0b8d2e999c1b9778cf51e348f4a32b4d083661d01bed66",
+      "relative_artifact": "w3-scenarios/s0_rotated_route/references/d60527656484c29ad3b68f670134533a44303034b6e4f45bd9bdf7062d9d25ca/reference.json",
+      "artifact_sha256": "ac71dcdc80557de1ed25c871022d65c945aeb3231b0f2ff2144a05409d10135a",
+      "bytes": 233371,
+      "authority_source": "Authenticated original push CI compile/validate receipts and campaign; never embedded artifact hash alone"
+    },
+    {
+      "case": "s2_upper_route",
+      "H": "95182f033213c279ce32ddf957193781e8318450a33fac94d2d007ffd727e7f5",
+      "curve_digest": "c11b66c01d7476889cf8602b1a6c86b24b47f21b0e57571360673ee495ffd2c5",
+      "relative_artifact": "w3-scenarios/s2_upper_route/references/95182f033213c279ce32ddf957193781e8318450a33fac94d2d007ffd727e7f5/reference.json",
+      "artifact_sha256": "88045606e354b75fed1bba211a9e88878d7250d87bb9a369fbef9933ec728a22",
+      "bytes": 205065,
+      "authority_source": "Authenticated original push CI compile/validate receipts and campaign; never embedded artifact hash alone"
+    },
+    {
+      "case": "s2_lower_route",
+      "H": "77aee38f89f3ea0f18afccdc988b79be34e7c3e9bc711da66227d43af7e3426f",
+      "curve_digest": "7f0aa5ff09b06a183803ce8b598112d54a9d351febba5e5a0e45eeb5b96c446c",
+      "relative_artifact": "w3-scenarios/s2_lower_route/references/77aee38f89f3ea0f18afccdc988b79be34e7c3e9bc711da66227d43af7e3426f/reference.json",
+      "artifact_sha256": "84c92078f7a5e397664468f775bdca9a5e1623caf35d8269191e8b96db6c836c",
+      "bytes": 199281,
+      "authority_source": "Authenticated original push CI compile/validate receipts and campaign; never embedded artifact hash alone"
+    },
+    {
+      "case": "s3_surfaces_route",
+      "H": "0bdda6bf2ad0e0e3ee357d17bbed8c055f3a9270950824773aaeaa34d45e5495",
+      "curve_digest": "9bedda5b0cb2eca92cbe84385a641e3e76b3bf48e02fb46dc230f2ca485fde96",
+      "relative_artifact": "w3-scenarios/s3_surfaces_route/references/0bdda6bf2ad0e0e3ee357d17bbed8c055f3a9270950824773aaeaa34d45e5495/reference.json",
+      "artifact_sha256": "e35d478262cf7bbe8c9708b01bfd4f5fd5762d988c99389d3a19f63ebde8a374",
+      "bytes": 295866,
+      "authority_source": "Authenticated original push CI compile/validate receipts and campaign; never embedded artifact hash alone"
+    },
+    {
+      "case": "s3_notch_route",
+      "H": "1c047ace58e401fc110dc415e60486af3a6df86e3e61f249fde9979aa5d90e4f",
+      "curve_digest": "07a4c9d7e693aa94c78b059cb63142c3571bddb94247847277f83893dc66ac56",
+      "relative_artifact": "w3-scenarios/s3_notch_route/references/1c047ace58e401fc110dc415e60486af3a6df86e3e61f249fde9979aa5d90e4f/reference.json",
+      "artifact_sha256": "411ce84b73a61b61b9908baf928fa9f67e1e424446a28feeb5bffd7c02b8b6ee",
+      "bytes": 297757,
+      "authority_source": "Authenticated original push CI compile/validate receipts and campaign; never embedded artifact hash alone"
+    },
+    {
+      "case": "s4_repeated_route",
+      "H": "6418d69a3688d51c3cc52e3d8c32fd6c01b2aad9e1ec4d566b48c7fa8f358530",
+      "curve_digest": "d979a10074f4bf97cd6e3afc6f42819690fd4dba2e036918f37ec1fd90f7ad4b",
+      "relative_artifact": "w3-scenarios/s4_repeated_route/references/6418d69a3688d51c3cc52e3d8c32fd6c01b2aad9e1ec4d566b48c7fa8f358530/reference.json",
+      "artifact_sha256": "f36ad10073e0468b392f2f75ded819c114d765984bd72023ef7c8e109a319ef3",
+      "bytes": 478886,
+      "authority_source": "Authenticated original push CI compile/validate receipts and campaign; never embedded artifact hash alone"
+    },
+    {
+      "case": "s6_competition_route",
+      "H": "2f889295ff2594f6fe5f45ff70925e00165a0f3dc2412afa9f447343346a1a9d",
+      "curve_digest": "2cbd2d35e40b9221d54204f28e4c907204215a9829801c824fe6c1de9b34e936",
+      "relative_artifact": "w3-scenarios/s6_competition_route/references/2f889295ff2594f6fe5f45ff70925e00165a0f3dc2412afa9f447343346a1a9d/reference.json",
+      "artifact_sha256": "5b8516d8ad66b53add5d2317c4498e5cda5380718fb13343a00f2d961539fc6a",
+      "bytes": 1141783,
+      "authority_source": "Authenticated original push CI compile/validate receipts and campaign; never embedded artifact hash alone"
+    }
+  ],
+  "scope": "Independent read-only byte/provenance audit of this exact original hosted push run. Numerical unchanged-artifact replay and independent acceptance decision are separate."
+}

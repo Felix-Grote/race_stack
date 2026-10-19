@@ -1,0 +1,9 @@
+{
+  "scope": "Audit tooling correction only; research CI passed unchanged",
+  "initial_observed": "summary.json stores test counts as JSON strings; auditor incorrectly compared string5 to integer5",
+  "correction": "Parse exact integer count before requiring5; no test requirement altered",
+  "failed_attempt_retained_locally": "/workspace/forza-audit-records/research-merge-closure/completed",
+  "original_input_ZIP_sha256": "08fcbae63fc062bddcb7ec1b4428c62f5bab7bd088de9395aca2650bd8af8f21",
+  "successful_audit": "completed-revision2/closure.json",
+  "omitted_duplicate_failed_input_copy": "Identical ZIP and decoded products are retained in successful audit; failed duplicate local copy is reconstructible"
+}

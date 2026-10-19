@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "merge_commit": "4bfcf35fcc08a80abbe72bdbc294cf3400e99df2",
+  "parents": [
+    "9fae5faed6ca62e0c943b6290babc50638477d9b",
+    "b961d20ce4a803e55336fb5590c30574e23b2fad"
+  ],
+  "merged_tree": "c15b269c58ff82a12f6fae6c2481a56ce317f9fb",
+  "tree_identical_to_accepted_source": true,
+  "accepted_w2_is_ancestor": true,
+  "pr_state": "closed",
+  "merged_at": "2026-10-19T18:24:51Z",
+  "merge_ci": "PENDING separate exact-merge push run"
+}

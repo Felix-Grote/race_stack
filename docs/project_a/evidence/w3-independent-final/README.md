@@ -29,9 +29,15 @@ Use literal b961d20 for reproduction; fresh build provenance legitimately change
   [earlier independent evidence676e59ab](https://github.com/Felix-Grote/race_stack/tree/676e59ab101e8209840e566e36c5daf0fd624381)
   remain intact. Original failures, interrupted attempts and unsupported outcomes
   are preserved rather than relabeled as success.
-- [Research PR3](https://github.com/Felix-Grote/race_stack/pull/3): premerge source
-  accepted; publication precedes its authorized merge. The subsequent closure
-  record will identify the actual merge commit/tree and its CI.
+- [Research PR3](https://github.com/Felix-Grote/race_stack/pull/3) merged as
+  `4bfcf35fcc08a80abbe72bdbc294cf3400e99df2`, with the exact accepted source tree.
+  [Merge push CI39302290392](https://github.com/Felix-Grote/race_stack/actions/runs/39302290392)
+  passed. Its [authenticated original artifact audit](research-merge-closure/completed-revision2/REPORT.md)
+  verifies 612 tests/27 groups, five source-free tests, nine scenarios, 1,488 queries
+  and 36 scenario CLI commands. Ten inherited failures/two skips remain separate.
+  Actual build provenance binds the merge SHA; H equality across builds is not claimed.
+  The native ZIP and decoded authority products are retained together as an explicitly
+  redundant convenience, alongside the original archive remote-readback receipt.
 
 The full96 records distinguish raw stock failures, adapted repaired legacy
 geometry and the new planner. Adapted certificates do not approve native legacy
@@ -111,3 +117,14 @@ The [predeclared production equivalence protocol](PRODUCTION_EQUIVALENCE_PROTOCO
 is a later integration test plan, not a production acceptance declaration. Lean
 production extraction must start from actual current official ros2-humble, retain its
 optimizer/QoS/node/launch behavior, and link this archive without importing its history.
+
+## Research closure identity
+
+The new immutable annotated tag `project-a/w3-research-archive-final-b961d20`
+identifies this research evidence publication. The accepted implementation tag
+remains unchanged. All eight original bundles are preserved byte for byte.
+A separate remote fetch must verify every manifest blob before that final tag
+is published; its receipt is retained separately from the commit it verifies
+and accompanies the final delivery evidence. Archive commits remain distinct
+from accepted build source. Production extraction and physical validation are
+separate gates.

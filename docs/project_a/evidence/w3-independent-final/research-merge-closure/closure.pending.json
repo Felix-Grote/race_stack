@@ -1,0 +1,20 @@
+{
+  "status": "PENDING_MERGE_CI_EVIDENCE",
+  "accepted_source": "b961d20ce4a803e55336fb5590c30574e23b2fad",
+  "merge_commit": "4bfcf35fcc08a80abbe72bdbc294cf3400e99df2",
+  "tree": "c15b269c58ff82a12f6fae6c2481a56ce317f9fb",
+  "merge_tree_verification": "PASS recorded research-merge-verification.json; auditor rechecks literal Git objects",
+  "merge_ci_run_id": 39302290392,
+  "merge_ci_status": "Await root-provided completed API snapshots and native original ZIP; no success claimed",
+  "initial_archive_commit": "4b222ff37101c72d79cd6da0467a562214817d79",
+  "initial_archive_remote_readback": "PASS recorded remote-archive-readback.json",
+  "completion_requires": [
+    "Exact-merge successful push run and authenticated artifact digest/size",
+    "All 612 functional tests in 27 groups with no failure/error/skip",
+    "Ten inherited legacy failures and two copyright skips retained",
+    "Five source-free tests, nine scenarios, 1488 queries and 36 scenario CLI calls",
+    "138 source hashes, 21 installed resources, two dependency locks, seven recursive gitlinks and nine H/C authority bindings",
+    "Root publishes closure append, verifies new remote archive bytes and creates new immutable archive tag"
+  ],
+  "publication_owner": "Root; no network, Git mutation or workload run by preparer"
+}

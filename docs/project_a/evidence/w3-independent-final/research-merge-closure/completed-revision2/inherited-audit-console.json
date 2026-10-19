@@ -1,0 +1,5 @@
+{
+  "exit_code": 0,
+  "stdout": "{\"PASS\": true, \"implementation\": \"4bfcf35fcc08a80abbe72bdbc294cf3400e99df2\", \"run_id\": 39302290392, \"artifact_id\": 12214159622, \"zip_sha256\": \"08fcbae63fc062bddcb7ec1b4428c62f5bab7bd088de9395aca2650bd8af8f21\", \"zip_bytes\": 9328436, \"zip_files\": 295, \"tests\": 612, \"groups\": 27, \"source_hashes_equal_literal_git\": 138, \"source_before_after_equal\": true, \"installed_resources_exact_Git\": 21, \"dependency_locks_exact_Git\": 2, \"recursive_gitlinks_exact_Git\": 7, \"scope\": \"Independent read-only byte/provenance audit of this exact original hosted push run. Numerical unchanged-artifact replay and independent acceptance decision are separate.\"}\n",
+  "stderr": ""
+}

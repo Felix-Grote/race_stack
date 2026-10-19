@@ -1,0 +1,50 @@
+[
+  {
+    "source": "/workspace/forza-audit-records/research-merge-preflight.json",
+    "snapshot": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/research-merge-preflight.json",
+    "bytes": 21475,
+    "sha256": "b20ff0a9d3c3d747ff54b80b7cca5f1a458f286ecb0e3a790a743da766d90758"
+  },
+  {
+    "source": "/workspace/forza-audit-records/research-merge-request.json",
+    "snapshot": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/research-merge-request.json",
+    "bytes": 358,
+    "sha256": "0820635144bf929dd8d18888d4474d06abf02d11ff815e477609b34a3da3f564"
+  },
+  {
+    "source": "/workspace/forza-audit-records/research-merge-response.json",
+    "snapshot": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/research-merge-response.json",
+    "bytes": 109,
+    "sha256": "0ef9dbd1a80d3d0b05b753fbe9e552618dca9bcfd352fcc2105641b990c7d061"
+  },
+  {
+    "source": "/workspace/forza-audit-records/research-merge-verification.json",
+    "snapshot": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/research-merge-verification.json",
+    "bytes": 459,
+    "sha256": "369dc17ed4bd899638fb28db42b652bc250a790d1e219a224d892e6781970968"
+  },
+  {
+    "source": "/workspace/forza-audit-records/remote-archive-readback.json",
+    "snapshot": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/remote-archive-readback.json",
+    "bytes": 7480,
+    "sha256": "70680dfbc50f541823ca2e668dff2322f361cbdb4358c1df5d4d6183fb29a27a"
+  },
+  {
+    "source": "/workspace/forza-audit-records/release-preparation/W3_ACCEPTANCE.json",
+    "snapshot": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/W3_ACCEPTANCE.json",
+    "bytes": 84090,
+    "sha256": "ac14be7ba677c8a608bbb988d1686b067c736578ac5e9919a4fc851231fa336a"
+  },
+  {
+    "source": "/workspace/forza-audit-records/archive-preparation/final-bundle-index.json",
+    "snapshot": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/final-bundle-index.json",
+    "bytes": 6838,
+    "sha256": "394fd58e91bdc1fcc5635813afe64d2864779c36cbe82c944ebd7c3a2168b825"
+  },
+  {
+    "source": "/workspace/forza-audit-records/archive-preparation/final-coverage-audit.json",
+    "snapshot": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/final-coverage-audit.json",
+    "bytes": 1160,
+    "sha256": "7cc4f08a51b5e837efebb43f3980ad515aab161fcfb49ca8ba4d775819deb52e"
+  }
+]

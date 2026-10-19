@@ -1,0 +1,140 @@
+{
+  "status": "PREPARED_PENDING_ACTUAL_MERGE_CI",
+  "existing_archive_commit": "4b222ff37101c72d79cd6da0467a562214817d79",
+  "archive_base": "docs/project_a/evidence/w3-independent-final",
+  "preserve_existing_bundles_unchanged": true,
+  "prepared_files": [
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/README-update-proposal.md",
+      "destination_relative": "research-merge-closure/README-update-proposal.md",
+      "bytes": 2868,
+      "sha256": "2f3b11b34deb0a22e237337273758554d987794c514198b30779c21729871dc2",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/README.md",
+      "destination_relative": "research-merge-closure/README.md",
+      "bytes": 3541,
+      "sha256": "a7ff8712d8dc61bd2f3d5c648c8afbb4392a08cfc4194989e78dc3c8cb4fcf8c",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/audit_hosted_inherited.py",
+      "destination_relative": "research-merge-closure/audit_hosted_inherited.py",
+      "bytes": 7083,
+      "sha256": "522fb94e8129393bf53216d6061ec14005e8907b2066c415c3da4ea0e00bd422",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/audit_merge.py",
+      "destination_relative": "research-merge-closure/audit_merge.py",
+      "bytes": 13544,
+      "sha256": "57d9884fd8132e6a11654404f38e25122956850fd5f3d2c1c4dbdc963d88c1bf",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/closure.pending.json",
+      "destination_relative": "research-merge-closure/closure.pending.json",
+      "bytes": 1304,
+      "sha256": "fa02ca6545db997c2abbfcd1d162b165393ed06408bd7d1030baa7dd5ca31e74",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/W3_ACCEPTANCE.json",
+      "destination_relative": "research-merge-closure/prepared-inputs/W3_ACCEPTANCE.json",
+      "bytes": 84090,
+      "sha256": "ac14be7ba677c8a608bbb988d1686b067c736578ac5e9919a4fc851231fa336a",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/final-bundle-index.json",
+      "destination_relative": "research-merge-closure/prepared-inputs/final-bundle-index.json",
+      "bytes": 6838,
+      "sha256": "394fd58e91bdc1fcc5635813afe64d2864779c36cbe82c944ebd7c3a2168b825",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/final-coverage-audit.json",
+      "destination_relative": "research-merge-closure/prepared-inputs/final-coverage-audit.json",
+      "bytes": 1160,
+      "sha256": "7cc4f08a51b5e837efebb43f3980ad515aab161fcfb49ca8ba4d775819deb52e",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/initial-PUBLICATION_SHA256SUMS",
+      "destination_relative": "research-merge-closure/prepared-inputs/initial-PUBLICATION_SHA256SUMS",
+      "bytes": 4285,
+      "sha256": "ac371eff1646f825495de2085ec3ce4c4c47a50faa384bf17ef9725a7f21f603",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/remote-archive-readback.json",
+      "destination_relative": "research-merge-closure/prepared-inputs/remote-archive-readback.json",
+      "bytes": 7480,
+      "sha256": "70680dfbc50f541823ca2e668dff2322f361cbdb4358c1df5d4d6183fb29a27a",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/research-merge-preflight.json",
+      "destination_relative": "research-merge-closure/prepared-inputs/research-merge-preflight.json",
+      "bytes": 21475,
+      "sha256": "b20ff0a9d3c3d747ff54b80b7cca5f1a458f286ecb0e3a790a743da766d90758",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/research-merge-request.json",
+      "destination_relative": "research-merge-closure/prepared-inputs/research-merge-request.json",
+      "bytes": 358,
+      "sha256": "0820635144bf929dd8d18888d4474d06abf02d11ff815e477609b34a3da3f564",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/research-merge-response.json",
+      "destination_relative": "research-merge-closure/prepared-inputs/research-merge-response.json",
+      "bytes": 109,
+      "sha256": "0ef9dbd1a80d3d0b05b753fbe9e552618dca9bcfd352fcc2105641b990c7d061",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs/research-merge-verification.json",
+      "destination_relative": "research-merge-closure/prepared-inputs/research-merge-verification.json",
+      "bytes": 459,
+      "sha256": "369dc17ed4bd899638fb28db42b652bc250a790d1e219a224d892e6781970968",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    },
+    {
+      "source_path": "/workspace/forza-audit-records/research-merge-closure/prepared-inputs-inventory.json",
+      "destination_relative": "research-merge-closure/prepared-inputs-inventory.json",
+      "bytes": 2466,
+      "sha256": "660cc66773db29256144c3d68aba79d9909471687cd645f6b0b1ec389fe6dcd4",
+      "classification": "PREPARATORY_SNAPSHOT_OR_AUDITOR_NOT_CI_SUCCESS"
+    }
+  ],
+  "future_actual_inputs": [
+    "completed/push-run.json",
+    "completed/push-artifacts.json",
+    "completed/original-push.zip"
+  ],
+  "future_auditor_outputs": [
+    "completed/hosted-audit.json",
+    "completed/controlled-hosted-catalog.json",
+    "completed/hosted-inputs/**",
+    "completed/inherited-audit-console.json",
+    "completed/closure.json",
+    "completed/REPORT.md",
+    "completed/append-inventory.json"
+  ],
+  "root_publication_outputs": [
+    "Updated README.md",
+    "Refreshed PUBLICATION_SHA256SUMS",
+    "Final archive remote readback receipt outside the commit being verified",
+    "New immutable annotated archive tag only after readback"
+  ],
+  "exclusions": [
+    "No production integration stages",
+    "No reconstructible build/install/worktree/dependency trees",
+    "No Git internals",
+    "No mutable root HANDOFF.md"
+  ],
+  "manifest_self_reference": "append-plan.json is retained alongside listed preparatory files; its hash is supplied by root final PUBLICATION_SHA256SUMS, not by itself."
+}
