@@ -38,9 +38,9 @@ class Controller(Node):
                          automatically_declare_parameters_from_overrides=True)
 
         # remote parameters
-        self.map_path = get_remote_parameter(self, 'global_parameters', 'map_path')
-        self.racecar_version = get_remote_parameter(self, 'global_parameters', 'racecar_version')
-        self.sim = get_remote_parameter(self, 'global_parameters', 'sim')
+        self.map_path = get_remote_parameter(self, '/global_parameters', 'map_path')
+        self.racecar_version = get_remote_parameter(self, '/global_parameters', 'racecar_version')
+        self.sim = get_remote_parameter(self, '/global_parameters', 'sim')
         self.state_machine_rate = get_remote_parameter(self, 'state_machine', 'rate_hz')
 
         # variables
@@ -61,8 +61,6 @@ class Controller(Node):
         self.waypoint_pub = self.create_publisher(MarkerArray, 'my_waypoints', 10)
         self.l1_pub = self.create_publisher(Point, 'l1_distance', 10)
         self.gap_data = self.create_publisher(PidData, '/trailing/gap_data', 10)
-        # Publisher for steering and speed command
-        self.publish_topic = '/vesc/high_level/ackermann_cmd_mux/input/nav_1'
 
         self.track_length = None
         self.opponent = None
@@ -324,7 +322,7 @@ class Controller(Node):
         Notices the change in the parameters and alters the spline params accordingly
         """
 
-        if parameter_event.node != "/controller" or self.mode == "FTG":
+        if parameter_event.node != self.get_fully_qualified_name() or self.mode == "FTG":
             return
 
         if self.mode == "MAP":
