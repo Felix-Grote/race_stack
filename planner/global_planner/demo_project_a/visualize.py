@@ -149,7 +149,13 @@ def exact_occurrence_boundaries(ref, samples, iterations=40):
             else:
                 hi = mid
         exact.append(hi)
-    return exact
+    # Ownership can toggle within a portal-support sample, making two
+    # adjacent grid pairs bracket the same physical transition.
+    deduped = []
+    for s_at in exact:
+        if not deduped or s_at - deduped[-1] > 1e-3:
+            deduped.append(s_at)
+    return deduped
 
 
 def plot_velocity(ref, model_limits, out, title="Velocity profile",
