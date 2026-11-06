@@ -300,16 +300,20 @@ def test_s2_compile_ownership_at_crossing(manifests, tmp_path):
     samples = [s for s in ref.window(0.0, ref.length, 0.05)
                if s.s < ref.length - 1e-9]  # drop cyclic seam repeat
     # Route ordering: owners appear exactly in declared cycle order,
-    # so the XY overlap creates no undeclared transition.
+    # so the XY overlap creates no undeclared transition. The lap
+    # seam lies inside o0 (finish gate p3 is the o3->o0 portal), so
+    # the cyclic owner sequence starts and ends with o0.
     sequence = []
     for s in samples:
         if not sequence or sequence[-1] != s.occurrence_id:
             sequence.append(s.occurrence_id)
-    assert sequence == ["o0", "o1", "o2", "o3"]
+    assert sequence == ["o0", "o1", "o2", "o3", "o0"]
     # The optimized o0 and o2 sections genuinely intersect in XY.
+    # Segments are consecutive sample pairs only, so the two disjoint
+    # o0 chunks are never joined by a spurious cross-lap segment.
     def segments(occ):
-        pts = [s for s in samples if s.occurrence_id == occ]
-        return list(zip(pts, pts[1:]))
+        return [(a, b) for a, b in zip(samples, samples[1:])
+                if a.occurrence_id == occ and b.occurrence_id == occ]
     hits = []
     for a, b in segments("o0"):
         for c, d in segments("o2"):
@@ -429,13 +433,16 @@ def test_s3_cli_failure_path_wrong_adversarial_expectation(tmp_path):
     """If an adversarial case does not reject *as specified*, CLI fails.
 
     Runs a copy of the real runner (real compiler, real CLI) whose A1
-    expected-reason string is sabotaged, in a scratch tree that symlinks
-    the planner package. A1 still raises RouteError, but not with the
-    expected reason, so the case must flip to not-ok and exit nonzero.
+    expected-reason string is sabotaged, in a scratch tree holding a
+    plain copy of the planner package (the trusted loader rejects
+    symlinked directories). A1 still raises RouteError, but not with
+    the expected reason, so the case must flip to not-ok and exit 1.
     """
     root = tmp_path / "tree"
     (root / "scripts").mkdir(parents=True)
-    (root / "planner").symlink_to(ROOT / "planner", target_is_directory=True)
+    shutil.copytree(ROOT / "planner" / "global_planner",
+                    root / "planner" / "global_planner",
+                    ignore=shutil.ignore_patterns("output", "__pycache__"))
     source = (ROOT / "scripts" / "run_project_a_demo.py").read_text()
     sabotaged = source.replace('"disconnected portal seeds"',
                                '"nonexistent expected reason"', 1)
