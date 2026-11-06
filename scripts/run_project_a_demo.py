@@ -117,10 +117,41 @@ def compile_one(name, manifest_path, out_dir, policies, context, spacing):
         b = ref.sample(ref.length)
         row["cyclic_closure"] = bool(
             abs(a.xy[0] - b.xy[0]) < 1e-6 and abs(a.xy[1] - b.xy[1]) < 1e-6)
-        speeds = [s.speed_mps for s in ref.window(0.0, ref.length, 0.25)]
+        samples = ref.window(0.0, ref.length, 0.25)
+        speeds = [s.speed_mps for s in samples]
         row["speed_min_mps"] = round(min(speeds), 3)
         row["speed_max_mps"] = round(max(speeds), 3)
+        row["occurrence_transitions_s"] = [
+            round(s_at, 4)
+            for s_at in viz.exact_occurrence_boundaries(ref, samples)]
+        row.update(_lateral_displacement(route, ref))
     return row, ref, route
+
+
+def _lateral_displacement(route, ref, stations=256):
+    """Initial-vs-optimized displacement at equal normalized progress.
+
+    Method (exactly as reported): both the seed curve and the accepted
+    reference are evaluated at `stations` equal fractions of their own
+    total arclength; the metric is the RMS and maximum Euclidean
+    distance between corresponding points. This measures how far the
+    optimizer moved the line at comparable relative locations; it is
+    not a closest-point (perpendicular) distance.
+    """
+    from global_planner.route_corridor import seed_curve
+    seed = seed_curve(route).curve
+    seed_samples = seed.window(0.0, seed.length, seed.length / 2048)
+    dists = []
+    for i in range(stations):
+        frac = i / stations
+        opt = ref.sample(frac * ref.length)
+        j = round(frac * (len(seed_samples) - 1))
+        ini = seed_samples[j]
+        dists.append(((opt.xy[0] - ini.xy[0]) ** 2
+                      + (opt.xy[1] - ini.xy[1]) ** 2) ** 0.5)
+    rms = (sum(d * d for d in dists) / len(dists)) ** 0.5
+    return {"lateral_displacement_rms_m": round(rms, 4),
+            "lateral_displacement_max_m": round(max(dists), 4)}
 
 
 def _expect_route_error(doc, reason_substring):
@@ -225,29 +256,68 @@ def adversarial(paths, out_dir, context, policies, spacing, good):
                             output_dir=str(out_dir / "s3_wide_footprint"),
                             retime_spacing_m=spacing,
                             validation_context=context)
+    geo = res.geometry
+    report = res.run_report if isinstance(res.run_report, dict) else {}
+    phases = set((report.get("phases") or {}).keys())
     results["D_validator_geometry_rejection"] = {
-        "expected": "FAIL at independent geometry validation, no artifact",
+        "expected": ("optimizer candidate produced, then FAIL at "
+                     "independent geometry validation (footprint "
+                     "rectangle containment), no artifact"),
         "observed": res.status, "reason": (res.reason or "")[:200],
-        "geometry": res.geometry.status if res.geometry else None,
+        "geometry": geo.status if geo else None,
+        "geometry_coverage": list(geo.coverage) if geo else None,
+        "offending_interval": (list(geo.offending_interval)
+                               if geo and geo.offending_interval else None),
+        "solver_iterations": report.get("solver_iteration_count"),
+        "phases": sorted(phases),
         "artifact": res.artifact_path,
-        "ok": bool(res.status == "FAIL"
-                   and res.geometry is not None
-                   and res.geometry.status != "PASS"
-                   and res.artifact_path is None)}
+        "ok": bool(
+            res.status == "FAIL"
+            and geo is not None and geo.status == "FAIL"
+            # the intended violation: footprint (reference-aligned
+            # rectangle) containment with an identified interval
+            and "reference_aligned_rectangle" in geo.coverage
+            and geo.offending_interval
+            and "rectangle" in (res.reason or "")
+            and "exit" in (res.reason or "")
+            # optimizer produced a candidate before validation ran
+            and (report.get("solver_iteration_count") or 0) >= 1
+            and {"optimization", "geometry"} <= phases
+            and res.artifact_path is None)}
     return results
 
 
 def adversarial_ok(adv):
-    """True only if every specified case ran and rejected as specified."""
-    return bool(adv) and all(
-        adv.get(case, {}).get("ok") for case in ADVERSARIAL_CASES)
+    """True only if exactly the specified cases ran and all rejected."""
+    return (set(adv) == set(ADVERSARIAL_CASES)
+            and all(adv[case].get("ok") for case in ADVERSARIAL_CASES))
 
 
-def suite_ok(rows, adv, need_adversarial, need_rows):
-    """Exit-status predicate for the whole requested suite."""
-    if need_rows and not rows:
-        return False
-    if not all(r["compile"] == "PASS" for r in rows):
+def _row_accepted(row):
+    """A positive scenario counts only if it compiled AND its published
+    artifact independently reloaded with PASS geometry and dynamics."""
+    return (row.get("compile") == "PASS"
+            and row.get("reload") == "PASS"
+            and row.get("geo_reload") == "PASS"
+            and row.get("dyn_reload") == "PASS"
+            and row.get("cyclic_closure") is True)
+
+
+def suite_ok(rows, adv, expected_scenarios, need_adversarial):
+    """Exit-status predicate for the whole requested suite.
+
+    The actual scenario identifiers must match the expected set exactly
+    (missing, duplicate or unexpected results fail), every expected
+    scenario must be accepted per _row_accepted, and -- when required --
+    every adversarial case must have rejected as specified. An empty
+    or partially executed suite is therefore never ok.
+    """
+    actual = [r.get("scenario") for r in rows]
+    if len(actual) != len(set(actual)):
+        return False  # duplicate scenario results
+    if set(actual) != set(expected_scenarios):
+        return False  # missing or unexpected scenarios (covers empty)
+    if not all(_row_accepted(r) for r in rows):
         return False
     if need_adversarial and not adversarial_ok(adv):
         return False
@@ -339,8 +409,8 @@ def main(argv=None):
             print(json.dumps({"adversarial": adv}, indent=1))
 
     viz.plot_report(rows, str(fig_dir))
-    ok = suite_ok(rows, adv, need_adversarial=want_adversarial,
-                  need_rows=bool(wanted))
+    ok = suite_ok(rows, adv, expected_scenarios=wanted,
+                  need_adversarial=want_adversarial)
     summary = {"git_head": _git_head(), "python": sys.version.split()[0],
                "scenarios": rows, "adversarial": adv, "suite_ok": ok}
     (out / "summary.json").write_text(json.dumps(summary, indent=1, default=str))
