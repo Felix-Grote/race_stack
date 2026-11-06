@@ -4,12 +4,19 @@
 Usage (requires the pinned Python 3.10.12 environment, see DEMO_README.md):
   .venv-demo/bin/python scripts/run_project_a_demo.py --all
   .venv-demo/bin/python scripts/run_project_a_demo.py --scenario s2
+  .venv-demo/bin/python scripts/run_project_a_demo.py --scenario s3
 
 Writes only into a NEW run-specific output directory (immutable artifacts
 are never overwritten). No ROS node, vehicle, LiDAR or actuation is used.
+
+Exit status is 0 only when every requested positive scenario compiles
+PASS *and* (for --all / --scenario s3) every adversarial case rejects
+exactly as specified -- exception class and reason, or non-PASS status
+with no published artifact. An empty or partially-run suite is nonzero.
 """
 import argparse
 import copy
+import dataclasses
 import json
 import shutil
 import sys
@@ -21,18 +28,62 @@ sys.path.insert(0, str(ROOT / "planner" / "global_planner"))
 
 from demo_project_a import fixtures as fx  # noqa: E402
 from demo_project_a import visualize as viz  # noqa: E402
-from global_planner.route_artifact import load_reference  # noqa: E402
+from global_planner.route_artifact import ArtifactError, load_reference  # noqa: E402
 from global_planner.route_compile import (  # noqa: E402
     load_policy, load_vehicle_config, compile_reference)
 from global_planner.route_input import RouteError, load_route, validate_route  # noqa: E402
 
 CONFIG = ROOT / "planner/global_planner/config/project_a"
 MODELS = {"s0": "s0_route_model.json", "s1_route_a": "s0_route_model.json",
-          "s1_route_b": "s0_route_model.json", "s2": "s3_surfaces_route_model.json"}
+          "s1_route_b": "s0_route_model.json", "s2": "s3_surfaces_route_model.json",
+          "s4": "s0_route_model.json"}
 TITLES = {"s0": "S0 conventional closed circuit (ellipse, varied curvature)",
           "s1_route_a": "S1 Route A (compact northern branch)",
           "s1_route_b": "S1 Route B (taller northern branch)",
-          "s2": "S2 bridge / overlapping XY (lemniscate, o2 on upper-deck)"}
+          "s2": "S2 bridge / overlapping XY (lemniscate, o2 on upper-deck)",
+          "s4": "S4 braking/acceleration-rich circuit (eccentric ellipse, narrow corridor)"}
+ALL_POSITIVE = ["s0", "s1_route_a", "s1_route_b", "s2", "s4"]
+ADVERSARIAL_CASES = ["A1_disconnected", "A2_reversed_gate_endcaps",
+                     "B_tampered_artifact", "C_optimizer_geometry_failure",
+                     "D_validator_geometry_rejection"]
+
+
+def summarize_run_report(run):
+    """Trim CompileResult.run_report to JSON-safe diagnostics.
+
+    Keeps phase timings, solver iteration count and per-iteration
+    curvature energies, and retimer stats. Drops the bulk per-iteration
+    coefficient/corridor tuples, which are neither small nor evidence
+    a reader can check by eye.
+    """
+    if not isinstance(run, dict):
+        return {}
+    iterations = []
+    for trace in run.get("solver_iterations") or []:
+        if isinstance(trace, dict):
+            iterations.append({
+                "number": trace.get("number"),
+                "source_curvature_energy": trace.get("source_curvature_energy"),
+                "reference_curvature_energy": trace.get("reference_curvature_energy"),
+                "shifted_curvature_energy": trace.get("shifted_curvature_energy"),
+                "shifted_curvature_max": trace.get("shifted_curvature_max")})
+    return {"phases": run.get("phases"),
+            "wall_seconds": run.get("wall_seconds"),
+            "cpu_seconds": run.get("cpu_seconds"),
+            "solver_iteration_count": run.get("solver_iteration_count"),
+            "solver_iterations": iterations,
+            "retimer": run.get("retimer")}
+
+
+def _energy_delta_pct(summary):
+    its = summary.get("solver_iterations") or []
+    if not its:
+        return None
+    src = its[0].get("source_curvature_energy")
+    opt = its[-1].get("shifted_curvature_energy")
+    if not src or opt is None:
+        return None
+    return round(100.0 * (opt - src) / src, 1)
 
 
 def compile_one(name, manifest_path, out_dir, policies, context, spacing):
@@ -45,11 +96,15 @@ def compile_one(name, manifest_path, out_dir, policies, context, spacing):
                             retime_spacing_m=spacing,
                             validation_context=context)
     wall = time.monotonic() - began
+    report = summarize_run_report(res.run_report)
     row = {"scenario": name, "compile": res.status, "reason": res.reason,
            "geo": res.geometry.status if res.geometry else None,
            "dyn": res.dynamics.status if res.dynamics else None,
            "H": res.H, "runtime_s": round(wall, 2),
-           "artifact_path": res.artifact_path}
+           "artifact_path": res.artifact_path,
+           "solver_iters": report.get("solver_iteration_count"),
+           "curv_energy_delta_pct": _energy_delta_pct(report),
+           "run_report": report}
     ref = None
     if res.status == "PASS":
         ref = load_reference(res.artifact_path, expected_H=res.H,
@@ -62,71 +117,147 @@ def compile_one(name, manifest_path, out_dir, policies, context, spacing):
         b = ref.sample(ref.length)
         row["cyclic_closure"] = bool(
             abs(a.xy[0] - b.xy[0]) < 1e-6 and abs(a.xy[1] - b.xy[1]) < 1e-6)
+        speeds = [s.speed_mps for s in ref.window(0.0, ref.length, 0.25)]
+        row["speed_min_mps"] = round(min(speeds), 3)
+        row["speed_max_mps"] = round(max(speeds), 3)
     return row, ref, route
 
 
+def _expect_route_error(doc, reason_substring):
+    try:
+        validate_route(doc)
+    except RouteError as exc:
+        return reason_substring in str(exc), f"RouteError: {exc}"
+    return False, "ACCEPTED!"
+
+
 def adversarial(paths, out_dir, context, policies, spacing, good):
-    """Three distinct rejection mechanisms; none may yield an accepted ref."""
+    """Five negative cases across four stages; each records its own ok flag.
+
+    A1 input validation (portal continuity), A2 input validation (portal
+    end caps), B trusted loading (artifact integrity), C optimizer-prep
+    geometry failure, D independent geometry-validator rejection. None
+    may yield an accepted reference; a wrong exception class, wrong
+    reason, PASS status or published artifact flips that case's ok flag.
+    """
     results = {}
     base = json.loads(Path(paths["s0"]).read_text())
-    # Case A1: disconnected transition (shift o1 seed away from shared gate)
+    # Case A1: true disconnected transition. Translate the WHOLE o1
+    # occurrence (seed and both corridors), so o1 stays internally valid
+    # and only inter-occurrence portal continuity is broken.
     bad = copy.deepcopy(base)
-    for pt in bad["occurrences"][1]["seed"]:
-        pt[0] += 5.0
-    try:
-        validate_route(bad)
-        results["A1_disconnected"] = {"expected": "RouteError", "observed": "ACCEPTED!"}
-    except RouteError as exc:
-        results["A1_disconnected"] = {"expected": "RouteError", "observed": str(exc)}
-    # Case A2: wrong directed portal (reverse gate point order)
+    for key in ("seed", "left", "right"):
+        for pt in bad["occurrences"][1][key]:
+            pt[0] += 5.0
+    ok, observed = _expect_route_error(bad, "disconnected portal seeds")
+    results["A1_disconnected"] = {
+        "expected": "RouteError: disconnected portal seeds",
+        "observed": observed, "ok": ok}
+    # Case A2: reversed portal gate. The validator checks end-cap
+    # correspondence before gate direction, and with seeds confined to
+    # their ribbons the travel vector's gate-normal component is forced
+    # positive -- so the 'wrong directed gate' check is unreachable by
+    # gate reversal (defence in depth). This case is named for the check
+    # that actually fires.
     bad = copy.deepcopy(base)
     bad["transitions"][0]["gate"] = bad["transitions"][0]["gate"][::-1]
-    try:
-        validate_route(bad)
-        results["A2_wrong_direction"] = {"expected": "RouteError", "observed": "ACCEPTED!"}
-    except RouteError as exc:
-        results["A2_wrong_direction"] = {"expected": "RouteError", "observed": str(exc)}
-    # Case B: tampered artifact copy loaded under the original expected H
-    src = Path(good.artifact_path)
+    ok, observed = _expect_route_error(bad, "invalid portal end caps")
+    results["A2_reversed_gate_endcaps"] = {
+        "expected": "RouteError: invalid portal end caps",
+        "observed": observed, "ok": ok}
+    # Case B: tampered artifact copy loaded under the original expected
+    # H. The mutation is syntactically valid JSON (asserted), so the
+    # rejection must come from the trusted-H check, not a parse error.
+    src = Path(good["artifact_path"])
     dst = out_dir / "tampered" / src.parent.name
     shutil.copytree(src.parent, dst)
     target = dst / "reference.json"
     target.chmod(0o644)
     data = target.read_text()
-    target.write_text(data.replace('"speed_max_mps":3.0', '"speed_max_mps":9.0', 1)
-                      if '"speed_max_mps":3.0' in data else data[:-20] + "0" + data[-19:])
+    mutated = data.replace('"speed_max_mps":3.0', '"speed_max_mps":9.0', 1)
+    mutation_valid = mutated != data
+    if mutation_valid:
+        json.loads(mutated)  # must stay parseable; raises if not
+        target.write_text(mutated)
     try:
-        load_reference(str(dst), expected_H=good.H, validation_context=context)
-        results["B_tampered_artifact"] = {"expected": "ArtifactError", "observed": "ACCEPTED!"}
-    except Exception as exc:  # ArtifactError from trusted loading
-        results["B_tampered_artifact"] = {"expected": "ArtifactError",
-                                          "observed": f"{type(exc).__name__}: {exc}"[:200]}
-    # Case C: genuine curvature-infeasible geometry reaches compiler, no artifact
+        load_reference(str(dst), expected_H=good["H"],
+                       validation_context=context)
+        results["B_tampered_artifact"] = {
+            "expected": "ArtifactError: externally trusted artifact H mismatch",
+            "observed": "ACCEPTED!", "ok": False}
+    except ArtifactError as exc:
+        results["B_tampered_artifact"] = {
+            "expected": "ArtifactError: externally trusted artifact H mismatch",
+            "observed": f"ArtifactError: {exc}"[:200],
+            "ok": bool(mutation_valid
+                       and "externally trusted artifact H mismatch" in str(exc))}
+    except Exception as exc:  # wrong rejection mechanism: still a failure
+        results["B_tampered_artifact"] = {
+            "expected": "ArtifactError: externally trusted artifact H mismatch",
+            "observed": f"{type(exc).__name__}: {exc}"[:200], "ok": False}
+    model, footprint = load_vehicle_config(
+        str(CONFIG / "models" / "s0_route_model.json"))
+    # Case C: curvature-infeasible hairpin. Fails inside the optimizer's
+    # corridor/geometry preparation (folded local chart), i.e. BEFORE the
+    # independent geometry validator runs. Named accordingly.
     tight = fx.build_manifest("demo-s3", "s3-tight-hairpin",
                               fx.ellipse_points(a=3.0, b=1.1),
                               ["ground"] * 4)
-    try:
-        route = validate_route(tight)
-        model, footprint = load_vehicle_config(
-            str(CONFIG / "models" / "s0_route_model.json"))
-        res = compile_reference(route, model, footprint, policies,
-                                output_dir=str(out_dir / "s3_tight"),
-                                retime_spacing_m=spacing,
-                                validation_context=context)
-        results["C_infeasible_geometry"] = {
-            "expected": "non-PASS, no artifact", "observed": res.status,
-            "reason": res.reason[:200], "artifact": res.artifact_path}
-    except RouteError as exc:
-        results["C_infeasible_geometry"] = {
-            "expected": "non-PASS, no artifact", "observed": "RouteError",
-            "reason": str(exc), "artifact": None}
+    route = validate_route(tight)
+    res = compile_reference(route, model, footprint, policies,
+                            output_dir=str(out_dir / "s3_tight"),
+                            retime_spacing_m=spacing,
+                            validation_context=context)
+    results["C_optimizer_geometry_failure"] = {
+        "expected": "GEOMETRY_FAILURE (folded/degenerate local chart), no artifact",
+        "observed": res.status, "reason": (res.reason or "")[:200],
+        "artifact": res.artifact_path,
+        "ok": bool(res.status == "GEOMETRY_FAILURE"
+                   and "folded/degenerate local chart" in (res.reason or "")
+                   and res.artifact_path is None)}
+    # Case D: candidate that survives optimization but is rejected by the
+    # independent geometry validator. The optimizer plans for the policy
+    # vehicle width; compiling the valid S0 route against an oversized
+    # footprint makes the validator's footprint-containment check fail.
+    route = validate_route(base)
+    wide = dataclasses.replace(footprint, width_m=1.9)
+    res = compile_reference(route, model, wide, policies,
+                            output_dir=str(out_dir / "s3_wide_footprint"),
+                            retime_spacing_m=spacing,
+                            validation_context=context)
+    results["D_validator_geometry_rejection"] = {
+        "expected": "FAIL at independent geometry validation, no artifact",
+        "observed": res.status, "reason": (res.reason or "")[:200],
+        "geometry": res.geometry.status if res.geometry else None,
+        "artifact": res.artifact_path,
+        "ok": bool(res.status == "FAIL"
+                   and res.geometry is not None
+                   and res.geometry.status != "PASS"
+                   and res.artifact_path is None)}
     return results
+
+
+def adversarial_ok(adv):
+    """True only if every specified case ran and rejected as specified."""
+    return bool(adv) and all(
+        adv.get(case, {}).get("ok") for case in ADVERSARIAL_CASES)
+
+
+def suite_ok(rows, adv, need_adversarial, need_rows):
+    """Exit-status predicate for the whole requested suite."""
+    if need_rows and not rows:
+        return False
+    if not all(r["compile"] == "PASS" for r in rows):
+        return False
+    if need_adversarial and not adversarial_ok(adv):
+        return False
+    return True
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--all", action="store_true")
-    parser.add_argument("--scenario", choices=["s0", "s1", "s2", "s3"])
+    parser.add_argument("--scenario", choices=["s0", "s1", "s2", "s3", "s4"])
     parser.add_argument("--out", default=None,
                         help="output dir (default: new demo_project_a/output/run-*)")
     args = parser.parse_args(argv)
@@ -145,14 +276,16 @@ def main(argv=None):
     policies, context, spacing = load_policy(
         str(CONFIG / "policies" / "synthetic_policy.json"))
 
-    wanted = (["s0", "s1_route_a", "s1_route_b", "s2"] if args.all or
-              args.scenario in ("s0", "s1", "s2") else [])
-    if args.scenario == "s0":
+    want_adversarial = bool(args.all or args.scenario == "s3")
+    if args.all:
+        wanted = list(ALL_POSITIVE)
+    elif args.scenario == "s3":
+        # S3 standalone: build its S0 prerequisite internally.
         wanted = ["s0"]
-    elif args.scenario == "s2":
-        wanted = ["s2"]
     elif args.scenario == "s1":
         wanted = ["s1_route_a", "s1_route_b"]
+    else:
+        wanted = [args.scenario]
 
     rows, refs, routes = [], {}, {}
     for name in wanted:
@@ -160,26 +293,32 @@ def main(argv=None):
                                       policies, context, spacing)
         rows.append(row)
         routes[name] = route
-        print(json.dumps(row))
+        print(json.dumps({k: v for k, v in row.items() if k != "run_report"}))
         if ref is not None:
             refs[name] = ref
             manifest = json.loads(Path(fixture_paths[name]).read_text())
+            model_doc = viz.load_json(str(CONFIG / "models" / MODELS[name]))
             (fig_dir / name).mkdir(exist_ok=True)
             figs = viz.plot_track(manifest, ref, str(fig_dir / name), TITLES[name])
             figs += viz.plot_velocity(
-                ref, viz.model_limits_from_json(viz.load_json(
-                    str(CONFIG / "models" / MODELS[name]))),
-                str(fig_dir / name), f"Velocity — {name}")
+                ref, viz.model_limits_from_json(model_doc),
+                str(fig_dir / name), f"Velocity — {name}",
+                ay_limits=viz.model_ay_from_json(model_doc))
+            energies = None
+            its = row["run_report"].get("solver_iterations") or []
+            if its:
+                energies = (its[0]["source_curvature_energy"],
+                            its[-1]["shifted_curvature_energy"])
             figs += viz.plot_curvature(route, ref, str(fig_dir / name),
-                                       f"Curvature — {name}")
+                                       f"Curvature — {name}", energies=energies)
             row["figures"] = figs
     if "s1_route_a" in refs and "s1_route_b" in refs:
         (fig_dir / "s1").mkdir(exist_ok=True)
         a, b = refs["s1_route_a"], refs["s1_route_b"]
+        runtime = {r["scenario"]: r["runtime_s"] for r in rows}
         stats = {"length_m": (round(a.length, 2), round(b.length, 2)),
                  "lap_s": (round(a.lap_time_s, 2), round(b.lap_time_s, 2)),
-                 "runtime_s": (next(r["runtime_s"] for r in rows if r["scenario"] == "s1_route_a"),
-                               next(r["runtime_s"] for r in rows if r["scenario"] == "s1_route_b")),
+                 "runtime_s": (runtime["s1_route_a"], runtime["s1_route_b"]),
                  "validation": ("PASS/PASS", "PASS/PASS")}
         viz.plot_split(json.loads(Path(fixture_paths["s1_route_a"]).read_text()), a,
                        json.loads(Path(fixture_paths["s1_route_b"]).read_text()), b,
@@ -188,26 +327,25 @@ def main(argv=None):
         viz.plot_bridge(json.loads(Path(fixture_paths["s2"]).read_text()),
                         refs["s2"], str(fig_dir / "s2"))
     adv = {}
-    if (args.all or args.scenario == "s3") and "s0" in refs:
-        good_row = next(r for r in rows if r["scenario"] == "s0")
-        from dataclasses import dataclass
-
-        @dataclass
-        class _Good:
-            artifact_path: str
-            H: str
-        adv = adversarial(fixture_paths, out, context, policies, spacing,
-                          _Good(good_row["artifact_path"], good_row["H"]))
-        print(json.dumps({"adversarial": adv}, indent=1))
-    elif args.scenario == "s3":
-        print("S3 requires a valid S0 artifact; run --all or --scenario s0 first")
+    if want_adversarial:
+        good_row = next((r for r in rows
+                         if r["scenario"] == "s0" and r["compile"] == "PASS"), None)
+        if good_row is None:
+            print("S3 cannot run: internal S0 prerequisite did not compile PASS")
+        else:
+            adv = adversarial(fixture_paths, out, context, policies, spacing,
+                              {"artifact_path": good_row["artifact_path"],
+                               "H": good_row["H"]})
+            print(json.dumps({"adversarial": adv}, indent=1))
 
     viz.plot_report(rows, str(fig_dir))
+    ok = suite_ok(rows, adv, need_adversarial=want_adversarial,
+                  need_rows=bool(wanted))
     summary = {"git_head": _git_head(), "python": sys.version.split()[0],
-               "scenarios": rows, "adversarial": adv}
+               "scenarios": rows, "adversarial": adv, "suite_ok": ok}
     (out / "summary.json").write_text(json.dumps(summary, indent=1, default=str))
     print(f"summary: {out / 'summary.json'}")
-    ok = all(r["compile"] == "PASS" for r in rows) if rows else True
+    print(f"suite_ok={ok}")
     return 0 if ok else 1
 
 

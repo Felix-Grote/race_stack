@@ -36,17 +36,14 @@ def _chain(points, half=HALF_WIDTH):
     return seed, left, right
 
 
-def _occurrence(oid, surface, points):
-    seed, left, right = _chain(points)
+def _occurrence(oid, surface, points, half=HALF_WIDTH):
+    seed, left, right = _chain(points, half)
     return {"id": oid, "surface_id": surface, "seed": seed, "left": left,
             "right": right, "caps": [{"at_m": 0, "max_speed_mps": 3.0}],
             "provenance": dict(PROV)}
 
 
 def _support(gate, travel):
-    gx = gate[1][0] - gate[0][0]
-    gy = gate[1][1] - gate[0][1]
-    gl = math.hypot(gx, gy)
     tx, ty = travel[0], travel[1]
     tl = math.hypot(tx, ty)
     tx, ty = tx / tl, ty / tl
@@ -57,9 +54,10 @@ def _support(gate, travel):
             _pt((gate[0][0] + tx * d, gate[0][1] + ty * d))]
 
 
-def build_manifest(course_id, route_id, occ_points, surfaces):
+def build_manifest(course_id, route_id, occ_points, surfaces,
+                   half_width=HALF_WIDTH):
     """Assemble a schema-v1 manifest from per-occurrence (x,y,tx,ty) points."""
-    occs = [_occurrence(f"o{i}", surfaces[i], pts)
+    occs = [_occurrence(f"o{i}", surfaces[i], pts, half_width)
             for i, pts in enumerate(occ_points)]
     transitions = []
     count = len(occs)
@@ -165,6 +163,14 @@ def generate_all(out_dir):
                                      split_points("B"), ["ground"] * 4),
         "s2": build_manifest("demo-s2", "s2-lemniscate", lemniscate_points(),
                              ["ground", "ground", "upper-deck", "ground"]),
+        # Braking/acceleration-rich: eccentric ellipse (kappa_max = a/b^2
+        # = 0.75/m -> lateral bound sqrt(4/0.75) = 2.31 m/s at the ends vs
+        # the 3.0 m/s static cap on the straights) inside a narrow 0.35 m
+        # half-width corridor so the optimizer cannot straighten the
+        # hairpins away. Produces a genuinely non-flat cyclic v(s).
+        "s4": build_manifest("demo-s4", "s4-braking-ellipse",
+                             ellipse_points(a=12.0, b=4.0), ["ground"] * 4,
+                             half_width=0.35),
     }
     paths = {}
     for name, manifest in specs.items():

@@ -11,22 +11,20 @@ algorithm, tolerance, or safety check was modified for this demo.
 `route_artifact._supported_context` only accepts CPython **3.10.12** with
 numpy 1.26.4, scipy 1.11.4, quadprog 0.1.7 and
 trajectory-planning-helpers 0.79 (it also hash-checks the helper sources).
-Setup used for the verified run:
+One scripted step creates the whole environment from a clean machine:
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-uv python install 3.10.12
-~/.local/share/uv/python/cpython-3.10.12-linux-x86_64-gnu/bin/python3.10 -m venv .venv-demo
-.venv-demo/bin/pip install "numpy==1.26.4" "scipy==1.11.4" \
-  "trajectory-planning-helpers==0.79" matplotlib pytest
-# quadprog 0.1.7's sdist is declared language='c++', which mangles the
-# Fortran qpgen2_ symbol on modern toolchains; build it locally as C
-# (version and sources unchanged; the planner re-hashes helpers itself):
-.venv-demo/bin/pip download quadprog==0.1.7 --no-binary :all: -d /tmp/qp --no-deps
-tar xzf /tmp/qp/quadprog-0.1.7.tar.gz -C /tmp/qpx
-sed -i "s/language='c++'/language='c'/" /tmp/qpx/quadprog-0.1.7/setup.py
-.venv-demo/bin/pip install --no-build-isolation --no-deps /tmp/qpx/quadprog-0.1.7
+scripts/setup_project_a_demo.sh   # creates .venv-demo, ends with a QP self-check
 ```
+
+Prerequisites: bash, curl, tar, sha256sum, a C compiler, and
+[uv](https://astral.sh/uv) (or set `PYTHON_BIN` to any CPython 3.10.12).
+The script additionally pins matplotlib 3.10.9, pytest 8.3.4 and
+Cython 0.29.37. quadprog 0.1.7 is fetched as an sdist whose SHA-256 is
+verified in the script, then built locally with two documented patches
+(`language='c++'`→`'c'`, which otherwise mangles the Fortran `qpgen2_`
+symbol, and a `/`→`//` work-array size fix that newer Cython semantics
+require); version and algorithm sources are unchanged.
 
 No ROS 2 runtime, vehicle, LiDAR or actuation is required; the planner
 core is pure Python + numpy/scipy. `PYTHONPATH=planner/global_planner` is
@@ -37,8 +35,17 @@ required because the IQP child process re-imports `global_planner`.
 ```bash
 PYTHONPATH=planner/global_planner .venv-demo/bin/python scripts/run_project_a_demo.py --all
 PYTHONPATH=planner/global_planner .venv-demo/bin/python scripts/run_project_a_demo.py --scenario s2
+PYTHONPATH=planner/global_planner .venv-demo/bin/python scripts/run_project_a_demo.py --scenario s3
+PYTHONPATH=planner/global_planner .venv-demo/bin/python scripts/run_project_a_demo.py --scenario s4
 PYTHONPATH=planner/global_planner .venv-demo/bin/python -m pytest planner/global_planner/test/test_project_a_demo.py -q
 ```
+
+`--scenario s3` is standalone: it compiles its S0 prerequisite
+internally, then runs every adversarial case. The exit status is 0 only
+when all requested positive scenarios compile PASS **and** (for `--all`
+and `s3`) every adversarial case rejects exactly as specified —
+exception class and reason, or non-PASS status with no artifact. An
+empty or partially-run suite exits nonzero.
 
 Each run writes a **new** `demo_project_a/output/run-<timestamp>/`
 (fixtures, immutable `<H>/reference.json` artifacts, `figures/*.png|svg`,
@@ -52,7 +59,8 @@ itself refuses existing targets).
 | S0 | Ellipse (a=8, b=5), 4 occurrences, varied curvature | Full compile → validate → reload → query; corridor adherence; cyclic speed profile |
 | S1 | Two whole laps sharing o0/o3, differing northern branch o1/o2 | Two **manually selected** routes independently optimized and compared. The E1 planner does **not** select branches; no shortest-path claim is made |
 | S2 | Gerono lemniscate; o0 (ground) and o2 (**upper-deck**, 2.5 m/s limit) both cross the origin in XY | Distinct surface/occurrence ownership at overlapping XY, ordered directed transitions, surface-dependent speed limit. XY overlap is not a connection and proves **no 3D bridge clearance** |
-| S3 | Mutated inputs / tampered artifact / tight hairpin (a=3, b=1.1) | Three distinct rejections: input validation (`RouteError`), trusted-loading integrity (`ArtifactError: externally trusted artifact H mismatch`), geometry-stage failure (`GEOMETRY_FAILURE`, no artifact) |
+| S3 | Five negative cases across four stages | A1 whole-occurrence translation → input validation `RouteError: disconnected portal seeds`; A2 reversed gate → `RouteError: invalid portal end caps` (the validator checks end caps before direction, so this case is named for the check that fires); B valid-JSON tampered artifact → `ArtifactError: externally trusted artifact H mismatch`; C tight hairpin (a=3, b=1.1) → optimizer-prep geometry failure `GEOMETRY_FAILURE: folded/degenerate local chart`, no artifact; D valid S0 route vs oversized footprint → independent geometry-validator `FAIL`, no artifact. Every case is enforced in the exit status |
+| S4 | Eccentric ellipse (a=12, b=4) in a narrow 0.35 m corridor | Braking/acceleration-rich circuit: κmax=0.75/m gives a lateral bound of ≈2.31 m/s at the ends vs the 3.0 m/s static cap on the straights, producing a non-flat cyclic v(s) with real braking and acceleration zones |
 
 ## Interpreting the figures
 
@@ -64,12 +72,24 @@ itself refuses existing targets).
 - `fig3_bridge_topology`: XY overlap (left) plus occurrence-vs-arclength
   ownership (right) — overlapping surfaces are ordered occurrences, not
   inferred connections.
-- `fig4_velocity`: `v(s)` vs true metric arclength, static model limits,
-  occurrence transitions, accel/braking shading, lap seam.
-- `fig5_curvature`: optimized `κ(s)` vs seed `κ(s)` over the full lap.
+- `fig4_velocity`: `v(s)` vs true metric arclength, occurrence
+  transitions (drawn where ownership changes between samples),
+  accel/braking shading, lap seam. The dashed limit is the **static
+  model maximum only — not the full feasibility envelope** (the retimer
+  also enforces speed_min, ax, ay, motor and drag); the dotted
+  `sqrt(ay/|κ|)` curve is a curvature/lateral-acceleration diagnostic.
+- `fig5_curvature`: top panel optimized `κ(s)` on true arclength;
+  bottom panel seed vs optimized on **normalized progress** (equal x =
+  equal relative location, which raw arclength cannot show after
+  optimization changes the length), annotated with the measured
+  curvature-energy delta from the solver trace.
 - `fig6_validation_report`: measured compile/geometry/dynamics status,
-  length, lap time, runtime and artifact identity `H`. Metrics the
+  length, lap time, runtime, solver iteration count, curvature-energy
+  delta and artifact identity `H` (short form). Metrics the
   implementation does not expose are shown as `-`, never invented.
+  Full per-scenario diagnostics (phase timings, per-iteration curvature
+  energies, retimer stats) are persisted in `summary.json` under each
+  scenario's `run_report`.
 
 ## Capability boundaries
 

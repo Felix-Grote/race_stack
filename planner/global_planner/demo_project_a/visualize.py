@@ -123,8 +123,22 @@ def plot_bridge(manifest, ref, out):
     return _save(fig, out, "fig3_bridge_topology")
 
 
-def plot_velocity(ref, model_limits, out, title="Velocity profile"):
-    """Figure 4: v(s), static limits, transitions, accel/braking shading."""
+def occurrence_boundaries(samples):
+    """Arclengths where ownership changes between consecutive samples."""
+    return [cur.s for prev, cur in zip(samples, samples[1:])
+            if cur.occurrence_id != prev.occurrence_id]
+
+
+def plot_velocity(ref, model_limits, out, title="Velocity profile",
+                  ay_limits=None):
+    """Figure 4: v(s), static limits, transitions, accel/braking shading.
+
+    Only the static per-region speed_max is drawn as a hard model limit;
+    it is NOT the full feasibility envelope (the retimer also enforces
+    speed_min, ax_pos/ax_neg, ay, motor and drag). When ay_limits are
+    given, the curvature/lateral-acceleration bound sqrt(ay/|kappa|) is
+    drawn as an additional diagnostic (not a validator tolerance).
+    """
     samples = _samples(ref, 0.2)
     ss = np.array([s.s for s in samples])
     vs = np.array([s.speed_mps for s in samples])
@@ -135,13 +149,17 @@ def plot_velocity(ref, model_limits, out, title="Velocity profile"):
     ax.fill_between(ss, 0, vs.max() * 1.1, where=acc < -0.05,
                     color="red", alpha=0.12, label="braking")
     ax.plot(ss, vs, "k-", lw=1.4, label="v(s) accepted ref")
-    limits = [model_limits[s.occurrence_id] for s in samples]
-    ax.plot(ss, limits, "b--", lw=1.0, label="static speed_max (model)")
-    seen = set()
-    for s in samples:
-        if s.occurrence_id not in seen and s.s > 0:
-            seen.add(s.occurrence_id)
-            ax.axvline(s.s, color="gray", ls=":", lw=0.8)
+    limits = np.array([model_limits[s.occurrence_id] for s in samples])
+    ax.plot(ss, limits, "b--", lw=1.0,
+            label="static model maximum (not the full feasibility envelope)")
+    if ay_limits:
+        bound = [min(lim, float(np.sqrt(ay_limits[s.occurrence_id] /
+                                         max(abs(s.curvature), 1e-9))))
+                 for s, lim in zip(samples, limits)]
+        ax.plot(ss, bound, "r:", lw=1.0,
+                label="curvature/ay bound sqrt(ay/|kappa|) (diagnostic)")
+    for s_at in occurrence_boundaries(samples):
+        ax.axvline(s_at, color="gray", ls=":", lw=0.8)
     ax.axvline(ref.length, color="purple", ls="-", lw=1.0,
                label="lap seam (cyclic)")
     ax.set_xlabel("true metric arclength s [m]")
@@ -152,33 +170,74 @@ def plot_velocity(ref, model_limits, out, title="Velocity profile"):
     return _save(fig, out, "fig4_velocity")
 
 
-def plot_curvature(manifest_route, ref, out, title="Curvature profile"):
-    """Figure 5: optimized kappa(s) vs seed kappa over the full lap."""
+def plot_curvature(manifest_route, ref, out, title="Curvature profile",
+                   energies=None):
+    """Figure 5: optimized kappa over true arclength + aligned comparison.
+
+    Top panel keeps the accepted reference on its true metric arclength.
+    Bottom panel compares seed vs optimized on normalized progress
+    (s/length of each curve): equal x there means equal relative location,
+    which raw arclength cannot show once optimization changes the length.
+    energies=(seed_energy, optimized_energy) annotates the numeric
+    curvature-energy delta from the solver trace when available.
+    """
     from global_planner.route_corridor import seed_curve
     samples = _samples(ref, 0.2)
-    fig, ax = plt.subplots(figsize=(9, 4))
-    ax.plot([s.s for s in samples], [s.curvature for s in samples],
-            "k-", lw=1.2, label="optimized kappa(s)")
     seed = seed_curve(manifest_route)
     ssamples = seed.curve.window(0.0, seed.curve.length, 0.2)
-    ax.plot([s.s for s in ssamples], [s.curvature for s in ssamples],
-            color="gray", ls="--", lw=0.9, label="seed kappa(s)")
+    fig, (ax, ax2) = plt.subplots(2, 1, figsize=(9, 6), sharex=False)
+    ax.plot([s.s for s in samples], [s.curvature for s in samples],
+            "k-", lw=1.2, label="optimized kappa(s), true arclength")
     ax.axvline(ref.length, color="purple", lw=1.0, label="lap seam")
     ax.set_xlabel("true metric arclength s [m]")
-    ax.set_ylabel("curvature kappa [1/m]")
+    ax.set_ylabel("kappa [1/m]")
     ax.set_title(title)
     ax.legend(fontsize=7)
     ax.grid(alpha=0.3)
+    ax2.plot([s.s / ref.length for s in samples],
+             [s.curvature for s in samples], "k-", lw=1.2,
+             label="optimized (normalized progress)")
+    ax2.plot([s.s / seed.curve.length for s in ssamples],
+             [s.curvature for s in ssamples], color="gray", ls="--", lw=0.9,
+             label="seed (normalized progress)")
+    if energies:
+        src, opt = energies
+        ax2.set_title(
+            f"curvature energy: seed {src:.3f} -> optimized {opt:.3f} "
+            f"({100.0 * (opt - src) / src:+.1f}%)", fontsize=8)
+    ax2.set_xlabel("normalized progress s/length of each curve [-]")
+    ax2.set_ylabel("kappa [1/m]")
+    ax2.legend(fontsize=7)
+    ax2.grid(alpha=0.3)
     return _save(fig, out, "fig5_curvature")
+
+
+REPORT_COLS = ["scenario", "compile", "geo", "dyn", "length_m", "lap_s",
+               "runtime_s", "solver_iters", "curv_energy_delta_pct",
+               "H (short)"]
+
+
+def report_rows(rows):
+    """Pure row->table mapping for fig6 (unit-testable, no rendering)."""
+    table = []
+    for r in rows:
+        cells = []
+        for c in REPORT_COLS:
+            if c == "H (short)":
+                cells.append(str(r["H"])[:12] if r.get("H") else "-")
+            else:
+                value = r.get(c, "-")
+                cells.append("-" if value is None else str(value))
+        table.append(cells)
+    return table
 
 
 def plot_report(rows, out):
     """Figure 6: validation/performance table rendered as a figure."""
-    fig, ax = plt.subplots(figsize=(10, 0.6 + 0.45 * len(rows)))
+    fig, ax = plt.subplots(figsize=(12, 0.6 + 0.45 * len(rows)))
     ax.axis("off")
-    cols = ["scenario", "compile", "geo", "dyn", "length_m", "lap_s",
-            "runtime_s", "H (short)"]
-    table = [[str(r.get(c, "-")) for c in cols] for r in rows]
+    cols = REPORT_COLS
+    table = report_rows(rows)
     tbl = ax.table(cellText=table, colLabels=cols, loc="center")
     tbl.auto_set_font_size(False)
     tbl.set_fontsize(7)
@@ -190,6 +249,11 @@ def plot_report(rows, out):
 
 def model_limits_from_json(model_doc):
     return {r["occurrence_id"]: r["limits"]["speed_max_mps"]
+            for r in model_doc["model"]["regions"]}
+
+
+def model_ay_from_json(model_doc):
+    return {r["occurrence_id"]: r["limits"]["ay_mps2"]
             for r in model_doc["model"]["regions"]}
 
 
