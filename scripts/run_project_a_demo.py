@@ -123,12 +123,12 @@ def compile_one(name, manifest_path, out_dir, policies, context, spacing):
         row["speed_max_mps"] = round(max(speeds), 3)
         row["occurrence_transitions_s"] = [
             round(s_at, 4)
-            for s_at in viz.exact_occurrence_boundaries(ref, samples)]
-        row.update(_lateral_displacement(route, ref))
+            for s_at in viz.refined_occurrence_boundaries(ref, samples)]
+        row.update(_normalized_progress_position(route, ref))
     return row, ref, route
 
 
-def _lateral_displacement(route, ref, stations=256):
+def _normalized_progress_position(route, ref, stations=256):
     """Initial-vs-optimized displacement at equal normalized progress.
 
     Method (exactly as reported): both the seed curve and the accepted
@@ -150,8 +150,8 @@ def _lateral_displacement(route, ref, stations=256):
         dists.append(((opt.xy[0] - ini.xy[0]) ** 2
                       + (opt.xy[1] - ini.xy[1]) ** 2) ** 0.5)
     rms = (sum(d * d for d in dists) / len(dists)) ** 0.5
-    return {"lateral_displacement_rms_m": round(rms, 4),
-            "lateral_displacement_max_m": round(max(dists), 4)}
+    return {"normalized_progress_position_rms_m": round(rms, 4),
+            "normalized_progress_position_max_m": round(max(dists), 4)}
 
 
 def _expect_route_error(doc, reason_substring):
@@ -312,6 +312,10 @@ def suite_ok(rows, adv, expected_scenarios, need_adversarial):
     every adversarial case must have rejected as specified. An empty
     or partially executed suite is therefore never ok.
     """
+    if not expected_scenarios:
+        return False  # empty expectation is never ok
+    if len(expected_scenarios) != len(set(expected_scenarios)):
+        return False  # duplicate expectations
     actual = [r.get("scenario") for r in rows]
     if len(actual) != len(set(actual)):
         return False  # duplicate scenario results

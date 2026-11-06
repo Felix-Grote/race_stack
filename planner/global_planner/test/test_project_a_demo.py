@@ -69,25 +69,43 @@ def test_fixture_determinism(manifests, tmp_path):
 def test_committed_fixtures_match_generator(manifests):
     """Byte-equivalence gate: committed JSON == freshly generated JSON.
 
-    On the logic PR alone there is intentionally no fixtures directory
-    and the gate skips -- that is the only skip path. Once the fixtures
-    directory exists (the combined stack) every missing, extra or
-    differing file FAILS. Setting PROJECT_A_REQUIRE_FIXTURES=1 (the
-    final stacked verification configuration) also turns a missing
-    directory into a failure instead of a skip.
+    Fail-by-default: a missing fixtures directory (or no fixture
+    files) FAILS unless PROJECT_A_ALLOW_MISSING_FIXTURES=1 is set, in
+    which case the gate skips for logic-PR-alone runs. Standalone
+    PR #5 runs therefore need PROJECT_A_ALLOW_MISSING_FIXTURES=1
+    until PR #6's fixtures are present. On the combined stack every
+    missing, extra or differing file FAILS.
     """
     import os
     committed = sorted(COMMITTED_FIXTURES.glob("*.json"))
     if not committed:
-        if os.environ.get("PROJECT_A_REQUIRE_FIXTURES") == "1":
-            pytest.fail("committed fixtures required but none present")
-        if COMMITTED_FIXTURES.is_dir():
-            pytest.fail("fixtures directory present but empty")
-        pytest.skip("no committed fixtures directory (logic PR alone)")
+        if os.environ.get("PROJECT_A_ALLOW_MISSING_FIXTURES") == "1":
+            pytest.skip("no committed fixtures (logic PR alone; "
+                        "opt-out PROJECT_A_ALLOW_MISSING_FIXTURES=1)")
+        pytest.fail("committed fixtures missing: no fixture files under "
+                    f"{COMMITTED_FIXTURES}")
     assert {p.stem for p in committed} == set(manifests), (
         "committed fixture set must equal generator scenario set")
     for path in committed:
         assert path.read_bytes() == Path(manifests[path.stem]).read_bytes(), path.name
+
+
+def test_committed_fixtures_gate_fails_by_default(monkeypatch, tmp_path):
+    """Missing fixtures directory FAILS unless the opt-out var is set."""
+    monkeypatch.setattr(sys.modules[__name__], "COMMITTED_FIXTURES",
+                        tmp_path / "no-such-dir")
+    monkeypatch.delenv("PROJECT_A_ALLOW_MISSING_FIXTURES", raising=False)
+    with pytest.raises(pytest.fail.Exception):
+        test_committed_fixtures_match_generator({"s0": "dummy"})
+
+
+def test_committed_fixtures_gate_opt_out_skips(monkeypatch, tmp_path):
+    """PROJECT_A_ALLOW_MISSING_FIXTURES=1 restores the logic-alone skip."""
+    monkeypatch.setattr(sys.modules[__name__], "COMMITTED_FIXTURES",
+                        tmp_path / "no-such-dir")
+    monkeypatch.setenv("PROJECT_A_ALLOW_MISSING_FIXTURES", "1")
+    with pytest.raises(pytest.skip.Exception):
+        test_committed_fixtures_match_generator({"s0": "dummy"})
 
 
 def test_all_manifests_validate(manifests):
@@ -153,14 +171,14 @@ def test_occurrence_boundaries_only_on_change():
     assert viz.occurrence_boundaries(samples) == [0.4, 0.8]
 
 
-def test_exact_occurrence_boundaries_refine_grid():
+def test_refined_occurrence_boundaries_refine_grid():
     class FakeRef:
         def sample(self, s):
             return SimpleNamespace(
                 occurrence_id="o0" if s < 0.31 else "o1")
     samples = [SimpleNamespace(s=s, occurrence_id=o) for s, o in
                [(0.0, "o0"), (0.2, "o0"), (0.4, "o1"), (0.6, "o1")]]
-    exact = viz.exact_occurrence_boundaries(FakeRef(), samples)
+    exact = viz.refined_occurrence_boundaries(FakeRef(), samples)
     assert exact == pytest.approx([0.31], abs=1e-9)
 
 
@@ -218,6 +236,12 @@ def test_suite_ok_exact_expected_set():
     assert not runner.suite_ok(rows, bad_adv, expected, True)
     extra_adv = dict(good_adv, Z_extra={"ok": True})
     assert not runner.suite_ok(rows, extra_adv, expected, True)
+    # empty expected set is never ok (even against an empty suite)
+    assert not runner.suite_ok(rows, good_adv, [], True)
+    assert not runner.suite_ok([], good_adv, [], True)
+    # duplicate expected scenarios are never ok
+    single = [_accepted_row("s0")]
+    assert not runner.suite_ok(single, good_adv, ["s0", "s0"], True)
 
 
 @pytest.mark.slow

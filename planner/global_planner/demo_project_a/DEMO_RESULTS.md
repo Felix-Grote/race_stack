@@ -16,7 +16,7 @@
 
 ## Evidence matrix (measured)
 
-| Scenario | Compile | Geometry | Dynamics | Reload | Length [m] | Model lap [s] | Runtime [s] | Solver iters | Curvature energy seed→opt | Lateral displacement RMS/max [m] | Speed range [m/s] | Artifact H (short) | Cyclic closure |
+| Scenario | Compile | Geometry | Dynamics | Reload | Length [m] | Model lap [s] | Runtime [s] | Solver iters | Curvature energy seed→opt | Normalized-progress position RMS/max [m] | Speed range [m/s] | Artifact H (short) | Cyclic closure |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | S0 ellipse | PASS | PASS | PASS | PASS | 41.287 | 13.762 | 10.8 | 3 | 1.208→1.007 (−16.6%) | 0.680 / 0.844 | 3.00–3.00 | `b26dd9942cfa` | yes |
 | S1 Route A | PASS | PASS | PASS | PASS | 41.886 | 13.962 | 9.8 | 3 | 1.141→0.988 (−13.4%) | 0.649 / 0.844 | 3.00–3.00 | `ae60fefb832a` | yes |
@@ -24,11 +24,11 @@
 | S2 bridge lemniscate | PASS | PASS | PASS | PASS | 49.216 | 18.222 | 11.3 | 3 | 2.397→2.362 (−1.4%) | 0.689 / 0.982 | 2.07–3.00 | `7a7f9279b94b` | yes |
 | S4 braking circuit | PASS | PASS | PASS | PASS | 53.867 | 18.607 | 23.6 | 3 | 2.194→1.848 (−15.8%) | 0.182 / 0.194 | 2.287–3.00 | `dc91087401f2` | yes |
 
-Lateral displacement: RMS/max Euclidean distance between the seed
-curve and the accepted reference, both evaluated at equal fractions
-of their own total arclength (256 stations). It measures how far the
-optimizer moved the line at comparable relative locations; it is not
-a closest-point (perpendicular) distance.
+Normalized-progress position: RMS/max Euclidean distance between the
+seed curve and the accepted reference, both evaluated at equal
+fractions of their own total arclength (256 stations). It measures
+how far the optimizer moved the line at comparable relative
+locations; it is not a closest-point (perpendicular) distance.
 
 S1 comparison (same model/policy, manually selected routes — no branch
 selection by the planner): Route B is 0.63 m longer and 0.21 s slower
@@ -56,18 +56,21 @@ exit nonzero.
 
 ## Tests
 
-`PROJECT_A_REQUIRE_FIXTURES=1 pytest planner/global_planner/test/test_project_a_demo.py -q`
-on the stacked head → **19 passed, 0 skipped** on the pinned
+`pytest planner/global_planner/test/test_project_a_demo.py -q`
+on the stacked head → **21 passed, 0 skipped** on the pinned
 environment (deterministic fixtures and mandatory committed-fixture
 byte equivalence; schema/portal validation; isolated A1/A2 rejection
-reasons; S0/S1/S2/S4 compile→reload→query with cyclic closure; S2
-proven XY intersection of the optimized o0/o2 sections with
-occurrence+surface identity, declared owner ordering and the 2.5 m/s
+reasons; S0/S1/S2/S4 compile→reload→query with cyclic closure; S2:
+Dense 0.05 m sampling of the accepted optimized reference produces
+intersecting XY chord segments near the origin, with distinct
+occurrence and surface ownership on each passage, declared owner
+ordering and the 2.5 m/s
 upper-deck cap; S4 non-flat braking profile; valid-JSON tamper
 H-mismatch; hairpin and structured footprint-validator rejections;
-figure-table mapping and exact occurrence boundaries; run_report
+figure-table mapping and refined occurrence boundaries; run_report
 trimming; exact suite acceptance predicate including
-missing/duplicate/unexpected results; real `--scenario s3` CLI
+missing/duplicate/unexpected results and empty/duplicate expectations;
+real `--scenario s3` CLI
 subprocess tests for both the success path and a sabotaged
 expectation failure path). Clean-room environment setup was also
 re-run from scratch (`scripts/setup_project_a_demo.sh`, QP

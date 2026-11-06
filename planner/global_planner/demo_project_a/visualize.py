@@ -129,13 +129,19 @@ def occurrence_boundaries(samples):
             if cur.occurrence_id != prev.occurrence_id]
 
 
-def exact_occurrence_boundaries(ref, samples, iterations=40):
-    """Exact occurrence-transition arclengths of the accepted reference.
+def refined_occurrence_boundaries(ref, samples, iterations=40):
+    """Refined occurrence-transition arclengths of the accepted reference.
 
     Each ownership change bracketed by the sample grid is refined by
     bisection on Reference.sample(s).occurrence_id, so the returned
     locations are properties of the accepted coefficients (to
     bracket/2**iterations), not of the sampling grid.
+
+    Assumes each bracketing grid pair straddles a single physical
+    transition: bisection converges to the one crossing inside the
+    bracket, so a pair spanning two transitions would locate only one
+    of them. Adjacent pairs bracketing the same transition (ownership
+    flicker inside portal support) are deduplicated below.
     """
     exact = []
     for prev, cur in zip(samples, samples[1:]):
@@ -187,7 +193,7 @@ def plot_velocity(ref, model_limits, out, title="Velocity profile",
                  for s, lim in zip(samples, limits)]
         ax.plot(ss, bound, "r:", lw=1.0,
                 label="curvature/ay bound sqrt(ay/|kappa|) (diagnostic)")
-    for s_at in exact_occurrence_boundaries(ref, samples):
+    for s_at in refined_occurrence_boundaries(ref, samples):
         ax.axvline(s_at, color="gray", ls=":", lw=0.8)
     ax.axvline(ref.length, color="purple", ls="-", lw=1.0,
                label="lap seam (cyclic)")
