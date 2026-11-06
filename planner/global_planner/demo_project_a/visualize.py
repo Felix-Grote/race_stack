@@ -124,9 +124,32 @@ def plot_bridge(manifest, ref, out):
 
 
 def occurrence_boundaries(samples):
-    """Arclengths where ownership changes between consecutive samples."""
+    """Sample-grid arclengths where ownership changes (approximate)."""
     return [cur.s for prev, cur in zip(samples, samples[1:])
             if cur.occurrence_id != prev.occurrence_id]
+
+
+def exact_occurrence_boundaries(ref, samples, iterations=40):
+    """Exact occurrence-transition arclengths of the accepted reference.
+
+    Each ownership change bracketed by the sample grid is refined by
+    bisection on Reference.sample(s).occurrence_id, so the returned
+    locations are properties of the accepted coefficients (to
+    bracket/2**iterations), not of the sampling grid.
+    """
+    exact = []
+    for prev, cur in zip(samples, samples[1:]):
+        if prev.occurrence_id == cur.occurrence_id:
+            continue
+        lo, hi = prev.s, cur.s
+        for _ in range(iterations):
+            mid = 0.5 * (lo + hi)
+            if ref.sample(mid).occurrence_id == prev.occurrence_id:
+                lo = mid
+            else:
+                hi = mid
+        exact.append(hi)
+    return exact
 
 
 def plot_velocity(ref, model_limits, out, title="Velocity profile",
@@ -158,7 +181,7 @@ def plot_velocity(ref, model_limits, out, title="Velocity profile",
                  for s, lim in zip(samples, limits)]
         ax.plot(ss, bound, "r:", lw=1.0,
                 label="curvature/ay bound sqrt(ay/|kappa|) (diagnostic)")
-    for s_at in occurrence_boundaries(samples):
+    for s_at in exact_occurrence_boundaries(ref, samples):
         ax.axvline(s_at, color="gray", ls=":", lw=0.8)
     ax.axvline(ref.length, color="purple", ls="-", lw=1.0,
                label="lap seam (cyclic)")

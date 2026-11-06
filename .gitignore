@@ -64,3 +64,6 @@ bags/
 # Project A demo (local pinned env + generated runs)
 .venv-demo/
 planner/global_planner/demo_project_a/output/
+
+# state estimation eval results
+state_estimation/eval/results/
