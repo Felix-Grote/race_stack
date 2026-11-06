@@ -1,8 +1,8 @@
 # Project A Demo — Results (technical meeting summary)
 
-- Git HEAD measured: `00befb01116e` (branch
-  `ao/implement-the-hardening/pr1-logic`, clean tree; this results file
-  is refreshed in the commit immediately following the measured head)
+- Git HEAD measured: `0069d10cb368` (stacked PR #5 + PR #6 head,
+  clean tree; the runner/planner code measured is identical on the
+  PR #5 head — this results refresh is a docs-only commit on top)
 - Runtime: CPython 3.10.12, numpy 1.26.4, scipy 1.11.4, quadprog 0.1.7
   (SHA-256-verified sdist, documented build patches — see
   `scripts/setup_project_a_demo.sh`), trajectory-planning-helpers
@@ -16,13 +16,19 @@
 
 ## Evidence matrix (measured)
 
-| Scenario | Compile | Geometry | Dynamics | Reload | Length [m] | Model lap [s] | Runtime [s] | Solver iters | Curvature energy seed→opt | Speed range [m/s] | Artifact H (short) | Cyclic closure |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| S0 ellipse | PASS | PASS | PASS | PASS | 41.287 | 13.762 | 11.0 | 3 | 1.208→1.007 (−16.6%) | 3.00–3.00 | `b26dd9942cfa` | yes |
-| S1 Route A | PASS | PASS | PASS | PASS | 41.886 | 13.962 | 9.3 | 3 | 1.141→0.988 (−13.4%) | 3.00–3.00 | `ae60fefb832a` | yes |
-| S1 Route B | PASS | PASS | PASS | PASS | 42.518 | 14.173 | 10.5 | 3 | 1.005→0.963 (−4.1%) | 3.00–3.00 | `63e93ab10ee8` | yes |
-| S2 bridge lemniscate | PASS | PASS | PASS | PASS | 49.216 | 18.222 | 10.9 | 3 | 2.397→2.362 (−1.4%) | 2.07–3.00 | `7a7f9279b94b` | yes |
-| S4 braking circuit | PASS | PASS | PASS | PASS | 53.867 | 18.607 | 22.3 | 3 | 2.194→1.848 (−15.8%) | 2.29–3.00 | `dc91087401f2` | yes |
+| Scenario | Compile | Geometry | Dynamics | Reload | Length [m] | Model lap [s] | Runtime [s] | Solver iters | Curvature energy seed→opt | Lateral displacement RMS/max [m] | Speed range [m/s] | Artifact H (short) | Cyclic closure |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| S0 ellipse | PASS | PASS | PASS | PASS | 41.287 | 13.762 | 10.8 | 3 | 1.208→1.007 (−16.6%) | 0.680 / 0.844 | 3.00–3.00 | `b26dd9942cfa` | yes |
+| S1 Route A | PASS | PASS | PASS | PASS | 41.886 | 13.962 | 9.8 | 3 | 1.141→0.988 (−13.4%) | 0.649 / 0.844 | 3.00–3.00 | `ae60fefb832a` | yes |
+| S1 Route B | PASS | PASS | PASS | PASS | 42.518 | 14.173 | 10.9 | 3 | 1.005→0.963 (−4.1%) | 0.844 / 1.024 | 3.00–3.00 | `63e93ab10ee8` | yes |
+| S2 bridge lemniscate | PASS | PASS | PASS | PASS | 49.216 | 18.222 | 11.3 | 3 | 2.397→2.362 (−1.4%) | 0.689 / 0.982 | 2.07–3.00 | `7a7f9279b94b` | yes |
+| S4 braking circuit | PASS | PASS | PASS | PASS | 53.867 | 18.607 | 23.6 | 3 | 2.194→1.848 (−15.8%) | 0.182 / 0.194 | 2.287–3.00 | `dc91087401f2` | yes |
+
+Lateral displacement: RMS/max Euclidean distance between the seed
+curve and the accepted reference, both evaluated at equal fractions
+of their own total arclength (256 stations). It measures how far the
+optimizer moved the line at comparable relative locations; it is not
+a closest-point (perpendicular) distance.
 
 S1 comparison (same model/policy, manually selected routes — no branch
 selection by the planner): Route B is 0.63 m longer and 0.21 s slower
@@ -50,16 +56,23 @@ exit nonzero.
 
 ## Tests
 
-`pytest planner/global_planner/test/test_project_a_demo.py -q` →
-**15 passed, 1 skipped** on the pinned environment (deterministic
-fixtures; schema/portal validation; isolated A1/A2 rejection reasons;
-S0/S1/S2/S4 compile→reload→query with cyclic closure; S2 accepted-ref
-ownership at the XY crossing with the 2.5 m/s upper-deck cap; S4
-non-flat braking profile; valid-JSON tamper H-mismatch; hairpin and
-footprint-validator rejections; figure-table mapping and occurrence
-boundaries; run_report trimming; suite exit-status predicate). The
-skipped test is the committed-fixture byte-equivalence gate, which
-activates once the stacked fixtures PR lands the JSON files.
+`PROJECT_A_REQUIRE_FIXTURES=1 pytest planner/global_planner/test/test_project_a_demo.py -q`
+on the stacked head → **19 passed, 0 skipped** on the pinned
+environment (deterministic fixtures and mandatory committed-fixture
+byte equivalence; schema/portal validation; isolated A1/A2 rejection
+reasons; S0/S1/S2/S4 compile→reload→query with cyclic closure; S2
+proven XY intersection of the optimized o0/o2 sections with
+occurrence+surface identity, declared owner ordering and the 2.5 m/s
+upper-deck cap; S4 non-flat braking profile; valid-JSON tamper
+H-mismatch; hairpin and structured footprint-validator rejections;
+figure-table mapping and exact occurrence boundaries; run_report
+trimming; exact suite acceptance predicate including
+missing/duplicate/unexpected results; real `--scenario s3` CLI
+subprocess tests for both the success path and a sabotaged
+expectation failure path). Clean-room environment setup was also
+re-run from scratch (`scripts/setup_project_a_demo.sh`, QP
+self-check passed) before the final `--all` and `--scenario s3`
+runs, both exit 0 with `suite_ok=true`.
 
 ## Verified vs unverified
 
