@@ -406,18 +406,21 @@ def build_lap(branch_a="A1", branch_b="B1"):
     else:
         # Subtle west bulge: per-piece heading steps stay under ~5 degrees so
         # bezier mid-piece overshoot cannot tighten the tip below the wall
-        # offset. Control distances equal a third of each chord.
+        # offset. Control distances equal a third of each chord. The tip
+        # runs at 0.62 (portal caps unchanged): the optimizer otherwise
+        # cuts the wide 0.75 bulge and the refit overshoots past the
+        # curvature limit downstream.
         e9a = bezier_points(pe, (0, 1), (pe[0] - 0.06, pe[1] + 0.75),
-                            (-0.09, 0.996), 0.25, 0.25, 4, 0.675, 0.75)
+                            (-0.09, 0.996), 0.25, 0.25, 4, 0.675, 0.62)
         qe = (pe[0] - 0.06, pe[1] + 0.75)
         m9a = bezier_points(qe, (-0.09, 0.996),
                             (pe[0] - 0.19, pe[1] + 1.5), (-0.14, 0.99),
-                            0.25, 0.25, 8, 0.75, 0.75)
+                            0.25, 0.25, 8, 0.62, 0.62)
         qm = (pe[0] - 0.19, pe[1] + 1.5)
         # Single piece from the bulge to the exit portal: no interior joint
         # kink near the rejoin, control distances match a third of the chord.
         m9b = bezier_points(qm, (-0.14, 0.99), (pe[0], pe[1] + 3.0), (0, 1),
-                            0.5, 0.5, 12, 0.75, 0.7)
+                            0.5, 0.5, 12, 0.62, 0.7)
         o9 = _concat(e9a, m9a, m9b)
     occs.append(("o9", "ground", "planar", o9))
     q9 = (o9[-1][0], o9[-1][1])
@@ -454,13 +457,15 @@ def build_lap(branch_a="A1", branch_b="B1"):
     # tangent; the exit leans slightly southwest so the end does not whip,
     # leaving a mild documented kink into the straight bridge approach.
     # First control distance matches the arc's end curvature (C2 joint, so
-    # the inner wall continues without a miter spike).
+    # the inner wall continues without a miter spike). The diagonal runs
+    # at 0.62 mid-piece (portal caps unchanged) so the optimizer cannot
+    # cut inside the bend and refit past the curvature limit.
     mid = (pt2[0] + 0.8, pt2[1] - 2.55)
     o16b1 = bezier_points(qt, (0, -1), mid, (-0.7, -0.7), 0.6, 0.55, 8,
-                          0.7, 0.7)
+                          0.7, 0.62)
     west = (pt2[0] - 0.9, pt2[1] - 2.9)
     o16b2 = bezier_points(mid, (-0.7, -0.7), west, (-1, 0), 0.7, 0.7, 8,
-                          0.7, 0.7)
+                          0.62, 0.7)
     o16b = _concat(o16b1, o16b2)
     occs.append(("o16a", "ground", "planar", o16a))
     occs.append(("o16b", "ground", "planar", o16b))

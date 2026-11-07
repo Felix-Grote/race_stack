@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "planner" / "global_planner"))
 
 from demo_project_a import fixtures as fx  # noqa: E402
+from demo_project_a.s5_stress import generator as s5gen  # noqa: E402
 from demo_project_a import visualize as viz  # noqa: E402
 from global_planner.route_artifact import ArtifactError, load_reference  # noqa: E402
 from global_planner.route_compile import (  # noqa: E402
@@ -28,6 +29,8 @@ from global_planner.route_input import RouteError, validate_route  # noqa: E402
 
 CONFIG = ROOT / "planner/global_planner/config/project_a"
 POLICY = CONFIG / "policies" / "synthetic_policy.json"
+S5_POLICY = CONFIG / "policies" / "s5_stress_policy.json"
+S5_ROUTES = ["s5_p1", "s5_p2", "s5_p3", "s5_p4"]
 COMMITTED_FIXTURES = (ROOT / "planner/global_planner/demo_project_a"
                       / "fixtures")
 
@@ -50,8 +53,8 @@ def manifests(tmp_path_factory):
 
 
 def _compile(name, manifest_doc, out, model_name="s0_route_model.json",
-             footprint=None):
-    policies, context, spacing = load_policy(str(POLICY))
+             policy_path=POLICY, footprint=None):
+    policies, context, spacing = load_policy(str(policy_path))
     model, fp = load_vehicle_config(str(CONFIG / "models" / model_name))
     route = validate_route(manifest_doc)
     res = compile_reference(route, model, footprint or fp, policies,
@@ -95,6 +98,33 @@ def test_all_manifests_validate(manifests):
         route = validate_route(json.loads(Path(path).read_text()))
         assert [o.id for o in route.occurrences] == ["o0", "o1", "o2", "o3"], name
         assert len(route.portals) == 4
+
+
+def test_s5_manifests_shape_via_generator(tmp_path):
+    """S5 Grand Challenge: 24 occurrences, 24 portals, cyclic closure shape.
+
+    Fast (no optimizer): builds all four route variants from the
+    deterministic generator and checks validated route shape — occurrence
+    and portal counts, gate sequence, closing finish and init origin.
+    """
+    out = s5gen.generate_all(str(tmp_path / "s5gen"))
+    assert set(out) == set(S5_ROUTES) | {"world"}
+    committed = (ROOT / "planner/global_planner/demo_project_a"
+                 / "s5_stress" / "fixtures")
+    for rid in S5_ROUTES:
+        assert (committed / f"{rid}.json").read_bytes() == Path(out[rid]).read_bytes(), rid
+    assert (committed / "s5_world.json").read_bytes() == Path(out["world"]).read_bytes()
+    for rid in S5_ROUTES:
+        doc = json.loads(Path(out[rid]).read_text())
+        route = validate_route(doc)
+        assert [o.id for o in route.occurrences] == [
+            "o0", "o1", "o2", "o3", "o4", "o5", "o6", "o7", "o8", "o9",
+            "o10", "o11", "o12", "o13", "o14", "o15", "o16a", "o16b",
+            "o17", "o18", "o19", "o20", "o21", "o22"], rid
+        assert len(route.portals) == 24, rid
+        assert doc["gate_sequence"] == [f"p{i}" for i in range(24)], rid
+        assert doc["finish"] == "p23", rid
+        assert doc["initialization"]["occurrence_id"] == "o0", rid
 
 
 def test_s2_overlapping_xy_distinct_surfaces(manifests):
@@ -353,6 +383,63 @@ def test_s4_braking_rich_nonflat_profile(manifests, tmp_path):
 
 
 @pytest.mark.slow
+@pytest.mark.parametrize("route_id", S5_ROUTES)
+def test_s5_compile_reload_query(route_id, tmp_path):
+    """S5 Grand Challenge: compile -> reload -> query for each route.
+
+    Mirrors the S0/S2/S4 slow tests with the S5 policy and per-route
+    model: PASS compile, PASS geometry/dynamics on the trusted reload,
+    cyclic closure, and per-sample compliance with the declared
+    occurrence caps (spotlighting the A1/A2 and B1/B2 discriminators).
+    Requires the pinned environment; publication needs a namespace the
+    publisher controls (see route_artifact publication rules).
+    """
+    ba, bb = s5gen.ROUTES[route_id]
+    doc = s5gen.build_manifest(f"demo-s5-{route_id}", ba, bb)
+    res, context = _compile(route_id, doc, tmp_path / route_id,
+                            model_name=f"{route_id}_model.json",
+                            policy_path=S5_POLICY)
+    assert res.status == "PASS", res.reason
+    ref = load_reference(res.artifact_path, expected_H=res.H,
+                         validation_context=context)
+    assert ref.geometry_report.status == "PASS"
+    assert ref.dynamics_report.status == "PASS"
+    a, b = ref.sample(0.0), ref.sample(ref.length)
+    assert a.xy == pytest.approx(b.xy, abs=1e-6)  # cyclic closure
+    caps = s5gen.caps_for(ba, bb)
+    samples = ref.window(0.0, ref.length, 0.25)
+    assert samples
+    for s in samples:
+        assert 0 < s.speed_mps <= caps[s.occurrence_id] + 1e-9, (
+            route_id, s.occurrence_id, s.speed_mps)
+    by_occ = {}
+    for s in samples:
+        by_occ.setdefault(s.occurrence_id, []).append(s.speed_mps)
+    assert max(by_occ["o0"]) <= 7.0 + 1e-9
+    o7_cap = 4.0 if ba == "A1" else 5.5
+    o9_cap = 4.5 if bb == "B1" else 5.0
+    assert max(by_occ["o7"]) <= o7_cap + 1e-9, (route_id, ba)
+    assert max(by_occ["o9"]) <= o9_cap + 1e-9, (route_id, bb)
+
+
+@pytest.mark.slow
+def test_s5_cli_end_to_end(tmp_path):
+    """Real runner subprocess: --scenario s5 compiles all four routes."""
+    script = ROOT / "scripts" / "run_project_a_demo.py"
+    out = tmp_path / "s5_run"
+    proc = _run_cli(script, out, "s5")
+    assert proc.returncode == 0, proc.stdout[-2000:] + proc.stderr[-2000:]
+    summary = json.loads((out / "summary.json").read_text())
+    assert summary["suite_ok"] is True
+    assert [r["scenario"] for r in summary["scenarios"]] == S5_ROUTES
+    for row in summary["scenarios"]:
+        assert row["compile"] == "PASS", row
+        assert row["reload"] == "PASS", row
+        assert row["geo_reload"] == "PASS", row
+        assert row["dyn_reload"] == "PASS", row
+
+
+@pytest.mark.slow
 def test_c_tight_hairpin_optimizer_geometry_failure(tmp_path):
     doc = fx.build_manifest("demo-s3", "s3-tight-hairpin",
                             fx.ellipse_points(a=3.0, b=1.1), ["ground"] * 4)
@@ -387,15 +474,19 @@ def test_d_oversized_footprint_rejected_by_geometry_validator(
     assert res.artifact_path is None
 
 
-def _run_s3_cli(script, out_dir):
+def _run_cli(script, out_dir, scenario):
     import os
     import subprocess
     env = dict(os.environ)
     env["PYTHONPATH"] = str(ROOT / "planner" / "global_planner")
     return subprocess.run(
-        [sys.executable, str(script), "--scenario", "s3",
+        [sys.executable, str(script), "--scenario", scenario,
          "--out", str(out_dir)], capture_output=True, text=True,
         timeout=900, env=env)
+
+
+def _run_s3_cli(script, out_dir):
+    return _run_cli(script, out_dir, "s3")
 
 
 @pytest.mark.slow

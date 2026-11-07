@@ -115,11 +115,12 @@ def build_manifest(route_id, branch_a, branch_b):
 # Document shape must match the vehicle-config schema exactly: no per-field
 # provenance inside footprint/steering/limits; the S5 hypothesis note lives
 # once in model.provenance.
-# Effective clearance width 0.50 = 0.30 body + 2x0.10 margin, matching the
-# S5 solver policy's vehicle_width_m. Both optimizer erosion (0.25/side)
-# and validator footprint+margin (0.15+0.10) then demand the same 0.25
-# clearance, following the S0-S4 pattern of eroding beyond the bare body.
-FOOTPRINT = {"front_m": 0.30, "rear_m": 0.30, "width_m": 0.30, "margin_m": 0.10}
+# Erosion width 0.70 = 0.35/side in the S5 solver policy. It must exceed
+# body+margin (0.15+0.10 = 0.25/side) by the validator margin (0.10):
+# the time-optimal line hugs the eroded wall at the R=1.2-1.7 hairpins,
+# and only erosion >= 0.25 + 0.10 keeps the hugging corners' clearance
+# provable. Follows the S0-S4 pattern of eroding beyond the bare body.
+FOOTPRINT = {"front_m": 0.20, "rear_m": 0.20, "width_m": 0.30, "margin_m": 0.10}
 STEERING = {"wheelbase_m": 0.32, "angle_max_rad": 0.45, "rate_max_radps": 3.2}
 
 def limits_for(branch_a, branch_b):
@@ -144,7 +145,7 @@ def build_model(branch_a, branch_b):
     return {"schema_version": 1,
             "model": {"regions": limits_for(branch_a, branch_b),
                       "provenance": ("Synthetic S5 planar offline; 7.0m/s synthetic hypothesis, "
-                                     "conservative 568x296mm-center footprint approx; no physical certification"),
+                                     "conservative 368x296mm-center footprint approx; no physical certification"),
                       "steering": dict(STEERING)},
             "footprint": dict(FOOTPRINT)}
 

@@ -13,7 +13,7 @@
  },
  "solver": {
   "spacing_m": 0.2,
-  "vehicle_width_m": 0.62,
+  "vehicle_width_m": 0.7,
   "curvature_bound": 1.0,
   "curvature_error": 0.1,
   "min_iterations": 6,

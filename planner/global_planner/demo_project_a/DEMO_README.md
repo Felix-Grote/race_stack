@@ -37,6 +37,7 @@ PYTHONPATH=planner/global_planner .venv-demo/bin/python scripts/run_project_a_de
 PYTHONPATH=planner/global_planner .venv-demo/bin/python scripts/run_project_a_demo.py --scenario s2
 PYTHONPATH=planner/global_planner .venv-demo/bin/python scripts/run_project_a_demo.py --scenario s3
 PYTHONPATH=planner/global_planner .venv-demo/bin/python scripts/run_project_a_demo.py --scenario s4
+PYTHONPATH=planner/global_planner .venv-demo/bin/python scripts/run_project_a_demo.py --scenario s5
 PYTHONPATH=planner/global_planner .venv-demo/bin/python -m pytest planner/global_planner/test/test_project_a_demo.py -q
 ```
 
@@ -61,6 +62,7 @@ itself refuses existing targets).
 | S2 | Gerono lemniscate; o0 (ground) and o2 (**upper-deck**, 2.5 m/s limit) both cross the origin in XY | Distinct surface/occurrence ownership at overlapping XY, ordered directed transitions, surface-dependent speed limit. XY overlap is not a connection and proves **no 3D bridge clearance** |
 | S3 | Five negative cases across four stages | A1 whole-occurrence translation → input validation `RouteError: disconnected portal seeds`; A2 reversed gate → `RouteError: invalid portal end caps` (the validator checks end caps before direction, so this case is named for the check that fires); B valid-JSON tampered artifact → `ArtifactError: externally trusted artifact H mismatch`; C tight hairpin (a=3, b=1.1) → optimizer-prep geometry failure `GEOMETRY_FAILURE: folded/degenerate local chart`, no artifact; D valid S0 route vs oversized footprint → independent geometry-validator `FAIL`, no artifact. Every case is enforced in the exit status |
 | S4 | Eccentric ellipse (a=12, b=4) in a narrow 0.35 m corridor | Braking/acceleration-rich circuit: κmax=0.75/m gives a lateral bound of ≈2.31 m/s at the ends vs the 3.0 m/s static cap on the straights, producing a non-flat cyclic v(s) with real braking and acceleration zones |
+| S5 | Grand Challenge world (deterministic, 24 occurrences, ~180 m seed, 38×18 m envelope): four routes s5_p1..s5_p4 crossing the branch-A discriminator (o7: A1 dips south/narrow, 4.0 m/s vs A2 climbs north/wide, 5.5 m/s) with the branch-B discriminator (o9: B1 tight straight, 4.5 m/s vs B2 west-bulge detour, 5.0 m/s); two bridges on distinct surfaces over ground occurrences | Four independently compiled stress routes proving branch-discriminator cap compliance, cyclic closure, and reload/query under the synthetic S5 model/policy |
 
 ## Interpreting the figures
 

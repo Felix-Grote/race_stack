@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "planner" / "global_planner"))
 
 from demo_project_a import fixtures as fx  # noqa: E402
+from demo_project_a.s5_stress import generator as s5gen  # noqa: E402
 from demo_project_a import visualize as viz  # noqa: E402
 from global_planner.route_artifact import ArtifactError, load_reference  # noqa: E402
 from global_planner.route_compile import (  # noqa: E402
@@ -36,12 +37,19 @@ from global_planner.route_input import RouteError, load_route, validate_route  #
 CONFIG = ROOT / "planner/global_planner/config/project_a"
 MODELS = {"s0": "s0_route_model.json", "s1_route_a": "s0_route_model.json",
           "s1_route_b": "s0_route_model.json", "s2": "s3_surfaces_route_model.json",
-          "s4": "s0_route_model.json"}
+          "s4": "s0_route_model.json", "s5_p1": "s5_p1_model.json",
+          "s5_p2": "s5_p2_model.json", "s5_p3": "s5_p3_model.json",
+          "s5_p4": "s5_p4_model.json"}
+S5_IDS = ["s5_p1", "s5_p2", "s5_p3", "s5_p4"]
 TITLES = {"s0": "S0 conventional closed circuit (ellipse, varied curvature)",
           "s1_route_a": "S1 Route A (compact northern branch)",
           "s1_route_b": "S1 Route B (taller northern branch)",
           "s2": "S2 bridge / overlapping XY (lemniscate, o2 on upper-deck)",
-          "s4": "S4 braking/acceleration-rich circuit (eccentric ellipse, narrow corridor)"}
+          "s4": "S4 braking/acceleration-rich circuit (eccentric ellipse, narrow corridor)",
+          "s5_p1": "S5 stress P1 (branches A1/B1)",
+          "s5_p2": "S5 stress P2 (branches A2/B1)",
+          "s5_p3": "S5 stress P3 (branches A1/B2)",
+          "s5_p4": "S5 stress P4 (branches A2/B2)"}
 ALL_POSITIVE = ["s0", "s1_route_a", "s1_route_b", "s2", "s4"]
 ADVERSARIAL_CASES = ["A1_disconnected", "A2_reversed_gate_endcaps",
                      "B_tampered_artifact", "C_optimizer_geometry_failure",
@@ -327,7 +335,8 @@ def suite_ok(rows, adv, expected_scenarios, need_adversarial):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--all", action="store_true")
-    parser.add_argument("--scenario", choices=["s0", "s1", "s2", "s3", "s4"])
+    parser.add_argument("--scenario", choices=["s0", "s1", "s2", "s3", "s4", "s5",
+                                               "s5_p1", "s5_p2", "s5_p3", "s5_p4"])
     parser.add_argument("--out", default=None,
                         help="output dir (default: new demo_project_a/output/run-*)")
     args = parser.parse_args(argv)
@@ -343,8 +352,13 @@ def main(argv=None):
     print(f"python={sys.version.split()[0]} out={out}")
 
     fixture_paths = fx.generate_all(str(out / "fixtures"))
-    policies, context, spacing = load_policy(
+    s5_paths = s5gen.generate_all(str(out / "fixtures"))
+    s5_paths.pop("world", None)  # sidecar, not a compile target
+    fixture_paths.update(s5_paths)
+    base_policies, base_context, base_spacing = load_policy(
         str(CONFIG / "policies" / "synthetic_policy.json"))
+    s5_policies, s5_context, s5_spacing = load_policy(
+        str(CONFIG / "policies" / "s5_stress_policy.json"))
 
     want_adversarial = bool(args.all or args.scenario == "s3")
     if args.all:
@@ -354,13 +368,20 @@ def main(argv=None):
         wanted = ["s0"]
     elif args.scenario == "s1":
         wanted = ["s1_route_a", "s1_route_b"]
+    elif args.scenario == "s5":
+        wanted = list(S5_IDS)
+    elif args.scenario in S5_IDS:
+        wanted = [args.scenario]
     else:
         wanted = [args.scenario]
 
     rows, refs, routes = [], {}, {}
     for name in wanted:
-        row, ref, route = compile_one(name, fixture_paths[name], out,
-                                      policies, context, spacing)
+        if name in S5_IDS:
+            sel = (s5_policies, s5_context, s5_spacing)
+        else:
+            sel = (base_policies, base_context, base_spacing)
+        row, ref, route = compile_one(name, fixture_paths[name], out, *sel)
         rows.append(row)
         routes[name] = route
         print(json.dumps({k: v for k, v in row.items() if k != "run_report"}))
@@ -403,7 +424,8 @@ def main(argv=None):
         if good_row is None:
             print("S3 cannot run: internal S0 prerequisite did not compile PASS")
         else:
-            adv = adversarial(fixture_paths, out, context, policies, spacing,
+            adv = adversarial(fixture_paths, out, base_context, base_policies,
+                              base_spacing,
                               {"artifact_path": good_row["artifact_path"],
                                "H": good_row["H"]})
             print(json.dumps({"adversarial": adv}, indent=1))
