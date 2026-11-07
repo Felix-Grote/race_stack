@@ -427,7 +427,10 @@ def test_s5_cli_end_to_end(tmp_path):
     """Real runner subprocess: --scenario s5 compiles all four routes."""
     script = ROOT / "scripts" / "run_project_a_demo.py"
     out = tmp_path / "s5_run"
-    proc = _run_cli(script, out, "s5")
+    # Measured serial compile total is 268.1 + 247.8 + 259.7 + 231.9 =
+    # 1007.5 s on the pinned env, before figure rendering; 1500 s covers
+    # that plus rendering/startup overhead and machine variance.
+    proc = _run_cli(script, out, "s5", timeout=1500)
     assert proc.returncode == 0, proc.stdout[-2000:] + proc.stderr[-2000:]
     summary = json.loads((out / "summary.json").read_text())
     assert summary["suite_ok"] is True
@@ -474,7 +477,7 @@ def test_d_oversized_footprint_rejected_by_geometry_validator(
     assert res.artifact_path is None
 
 
-def _run_cli(script, out_dir, scenario):
+def _run_cli(script, out_dir, scenario, timeout=900):
     import os
     import subprocess
     env = dict(os.environ)
@@ -482,7 +485,7 @@ def _run_cli(script, out_dir, scenario):
     return subprocess.run(
         [sys.executable, str(script), "--scenario", scenario,
          "--out", str(out_dir)], capture_output=True, text=True,
-        timeout=900, env=env)
+        timeout=timeout, env=env)
 
 
 def _run_s3_cli(script, out_dir):
