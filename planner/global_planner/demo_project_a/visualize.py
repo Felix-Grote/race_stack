@@ -14,7 +14,12 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 
-COLORS = {"o0": "#1b9e77", "o1": "#d95f02", "o2": "#7570b3", "o3": "#e7298a"}
+COLORS = {"o0": "#1b9e77", "o1": "#d95f02", "o2": "#7570b3", "o3": "#e7298a",
+          "o4": "#66a61e", "o5": "#e6ab02", "o6": "#a6761d", "o7": "#666666",
+          "o8": "#1f78b4", "o9": "#33a02c", "o10": "#fb9a99", "o11": "#fdbf6f",
+          "o12": "#cab2d6", "o13": "#6a3d9a", "o14": "#ffff99", "o15": "#b15928",
+          "o16a": "#8dd3c7", "o16b": "#ffffb3", "o17": "#bebada", "o18": "#fb8072",
+          "o19": "#80b1d3", "o20": "#fdb462", "o21": "#b3de69", "o22": "#fccde5"}
 SURF_STYLE = {"ground": "-", "upper-deck": "--"}
 
 
