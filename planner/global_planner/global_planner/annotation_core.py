@@ -1,0 +1,489 @@
+# Copyright 2026 ForzaETH
+"""Dependency-light core for the minimal Project A map-annotation tool.
+
+Pipeline (MVP1, planar single loop only):
+
+1. Load a Cartographer occupancy PNG/YAML read-only. Never write to it.
+2. Raster-patch a *copy* with the operator's manual boundary strokes
+   (occupied/black), exactly reproducing the legacy black=occupied,
+   white=free convention.
+3. Extract legal boundaries as the two loops of the free-space region
+   (outer boundary + one hole). This replaces the legacy
+   skeleton -> centerline -> watershed chain for this tool: it needs no
+   approximate centerline length, no initial pose, and fails closed when
+   the free space is not one enclosed annulus (open gap, split, or
+   extra island all change the loop count and are rejected).
+4. Build a strict Project A schema-v1 manifest from those two loops and
+   the operator's directed rough loop: the loop is split into four
+   occurrences whose left/right chains are arcs of the extracted loops,
+   so adjacent occurrences share end-cap points exactly by construction.
+
+Coordinate convention (verified against ``global_planner_node.py``,
+which vertically flips the file image on load and then applies
+``x = origin_x + u * res``, ``y = origin_y + v_internal * res``):
+for a file pixel ``(u, v)`` with ``v = 0`` at the top row,
+
+    x = origin_x + u * resolution
+    y = origin_y + (height - 1 - v) * resolution
+
+Only zero-yaw maps are supported; a nonzero ``origin[2]`` is rejected
+instead of being silently approximated.
+"""
+import hashlib
+import json
+import math
+from pathlib import Path
+
+import numpy as np
+
+try:
+    import cv2
+except ImportError as exc:  # pragma: no cover - exercised by env check
+    raise ImportError(
+        'annotation_core needs opencv-python-headless (cv2)') from exc
+
+PROVENANCE_KEYS = ('author', 'source', 'revision', 'approval')
+
+
+class AnnotationError(ValueError):
+    """Operator-correctable annotation or unsupported-geometry failure."""
+
+
+# --------------------------------------------------------------------------
+# Map loading and pixel/world conversion
+# --------------------------------------------------------------------------
+
+def _parse_map_yaml(text):
+    """Parse the small flat subset of map YAML this tool accepts."""
+    meta, origin = {}, []
+    lines = text.splitlines()
+    for i, line in enumerate(lines):
+        if ':' not in line:
+            continue
+        key, _, rest = line.partition(':')
+        key, rest = key.strip(), rest.strip()
+        if key == 'origin':
+            if rest.startswith('['):
+                origin = [float(x) for x in rest.strip('[]').split(',') if x.strip()]
+            else:  # block sequence "- value" lines
+                for nxt in lines[i + 1:]:
+                    nxt = nxt.strip()
+                    if nxt.startswith('- '):
+                        origin.append(float(nxt[2:]))
+                    else:
+                        break
+        elif key in ('image', 'resolution', 'negate', 'occupied_thresh',
+                     'free_thresh'):
+            meta[key] = rest
+    if 'image' not in meta or 'resolution' not in meta or len(origin) != 3:
+        raise AnnotationError('map YAML missing image/resolution/origin')
+    meta['resolution'] = float(meta['resolution'])
+    meta['origin'] = origin
+    return meta
+
+
+class TrackMap:
+    """Read-only occupancy map plus its pixel/world transform."""
+
+    def __init__(self, yaml_path):
+        yaml_path = Path(yaml_path)
+        meta = _parse_map_yaml(yaml_path.read_text(encoding='utf-8'))
+        if abs(float(meta['origin'][2])) > 1e-12:
+            raise AnnotationError('UNSUPPORTED: nonzero map yaw (origin[2])')
+        png_path = (yaml_path.parent / meta['image']).resolve()
+        image = cv2.imread(str(png_path), cv2.IMREAD_GRAYSCALE)
+        if image is None:
+            raise AnnotationError(f'cannot read map image: {png_path}')
+        self.yaml_path, self.png_path = yaml_path, png_path
+        self.resolution = float(meta['resolution'])
+        self.origin = (float(meta['origin'][0]), float(meta['origin'][1]))
+        self.image = image  # uint8, file order: row 0 = top
+        self.height, self.width = image.shape
+        self.sha256 = hashlib.sha256(png_path.read_bytes()).hexdigest()
+
+    def pixel_to_world(self, uv):
+        """Convert file pixel (u, v) to world (x, y) in metres."""
+        u, v = float(uv[0]), float(uv[1])
+        return (self.origin[0] + u * self.resolution,
+                self.origin[1] + (self.height - 1 - v) * self.resolution)
+
+    def world_to_pixel(self, xy):
+        """Convert world (x, y) to file pixel (u, v); inverse of above."""
+        x, y = float(xy[0]), float(xy[1])
+        return ((x - self.origin[0]) / self.resolution,
+                (self.height - 1) - (y - self.origin[1]) / self.resolution)
+
+
+# --------------------------------------------------------------------------
+# Session persistence (annotation_project.json - the editable truth)
+# --------------------------------------------------------------------------
+
+SESSION_VERSION = 1
+
+
+def new_session(track_map, author='operator'):
+    """Create an empty session dict bound to one map by hash."""
+    return {
+        'version': SESSION_VERSION,
+        'map_yaml': track_map.yaml_path.name,
+        'map_png': track_map.png_path.name,
+        'map_sha256': track_map.sha256,
+        'image_size': [int(track_map.width), int(track_map.height)],
+        'resolution': track_map.resolution,
+        'origin': list(track_map.origin),
+        'boundary_strokes_px': [],   # list of polylines [[u, v], ...]
+        'route_px': [],              # one directed closed rough loop
+        'stroke_width_px': 5,
+        'approval': 'none',
+        'author': author,
+    }
+
+
+def check_session_map(session, track_map):
+    """Reject a session reopened against a different map (identity)."""
+    if session.get('map_sha256') != track_map.sha256:
+        raise AnnotationError('map identity mismatch: session was created '
+                              'for a different map PNG (sha256 differs)')
+    if list(session.get('image_size', [])) != [track_map.width, track_map.height]:
+        raise AnnotationError('map identity mismatch: image size differs')
+
+
+def save_session(session, path):
+    """Write a session atomically; validates map-independent shape."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + '.tmp')
+    tmp.write_text(json.dumps(session, indent=1), encoding='utf-8')
+    tmp.replace(path)
+
+
+def load_session(path, track_map):
+    """Load a session and bind it to the map it was created for."""
+    try:
+        session = json.loads(Path(path).read_text(encoding='utf-8'))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise AnnotationError(f'cannot load session: {exc}') from exc
+    if session.get('version') != SESSION_VERSION:
+        raise AnnotationError('unsupported session version')
+    check_session_map(session, track_map)
+    return session
+
+
+# --------------------------------------------------------------------------
+# Raster patch + free-space boundary extraction
+# --------------------------------------------------------------------------
+
+def patched_free_mask(track_map, boundary_strokes_px, stroke_width_px=5):
+    """Return uint8 free mask (255=free) of the patched in-memory copy."""
+    occupied = track_map.image < 128
+    patched = occupied.copy()
+    for stroke in boundary_strokes_px:
+        pts = np.array(stroke, dtype=np.int32).reshape(-1, 1, 2)
+        if len(pts) >= 2:
+            cv2.polylines(patched.view(np.uint8), [pts], False, 1,
+                          thickness=int(stroke_width_px), lineType=cv2.LINE_8)
+        elif len(pts) == 1:
+            cv2.circle(patched.view(np.uint8), tuple(pts[0, 0]), 
+                       max(1, int(stroke_width_px) // 2), 1, -1)
+    return np.where(patched, 0, 255).astype(np.uint8)
+
+
+def extract_boundaries(track_map, boundary_strokes_px=(), stroke_width_px=5):
+    """Extract (outer, inner) closed loops in file-pixel coordinates.
+
+    The free space must be exactly one connected region with exactly one
+    hole (a planar annulus). Any other topology is rejected - an open
+    gap merges the hole with the outside, a split adds regions - rather
+    than being guessed at.
+    """
+    free = patched_free_mask(track_map, boundary_strokes_px, stroke_width_px)
+    contours, hierarchy = cv2.findContours(
+        free, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
+    if hierarchy is None or len(contours) == 0:
+        raise AnnotationError('extraction failed: no free space found')
+    hier = hierarchy[0]
+    outer_idx = [i for i in range(len(contours)) if hier[i][3] == -1]
+    if len(outer_idx) != 1:
+        raise AnnotationError(
+            f'UNSUPPORTED: free space has {len(outer_idx)} separate regions '
+            '(expected 1 enclosed track; check gaps or splits)')
+    holes = [i for i in range(len(contours)) if hier[i][3] == outer_idx[0]]
+    if len(holes) != 1:
+        raise AnnotationError(
+            f'extraction failed: enclosed track needs exactly 1 inner '
+            f'boundary, found {len(holes)} (draw a boundary stroke to '
+            'close any open section, or remove stray marks)')
+    outer = contours[outer_idx[0]].reshape(-1, 2).astype(float)
+    inner = contours[holes[0]].reshape(-1, 2).astype(float)
+    return outer, inner
+
+
+def _arc(chain_closed, start_idx, end_idx, step_sign):
+    """Walk a closed chain from start to end (inclusive) in step_sign dir."""
+    n = len(chain_closed)
+    out, i = [], start_idx
+    while True:
+        out.append(chain_closed[i])
+        if i == end_idx:
+            break
+        i = (i + step_sign) % n
+        if len(out) > n + 1:  # pragma: no cover - defensive
+            raise AnnotationError('boundary arc walk failed')
+    return out
+
+
+def _simplify(points, min_spacing_px):
+    """Drop consecutive points closer than min_spacing_px (keep last)."""
+    out = [points[0]]
+    for p in points[1:]:
+        if math.hypot(*(np.array(p) - np.array(out[-1]))) >= min_spacing_px:
+            out.append(p)
+    if np.linalg.norm(np.array(points[-1]) - np.array(out[-1])) > 1e-9:
+        out.append(points[-1])
+    return out
+
+
+def _resample_closed(points_px, spacing_px):
+    """Resample a closed polyline at near-uniform spacing (pixel units)."""
+    pts = [np.array(p, float) for p in points_px]
+    if len(pts) < 3:
+        raise AnnotationError('route loop needs at least 3 points')
+    if np.linalg.norm(pts[0] - pts[-1]) < 1e-9:
+        pts = pts[:-1]
+    seg, total = [], 0.0
+    for a, b in zip(pts, pts[1:] + pts[:1]):
+        d = float(np.linalg.norm(b - a))
+        if d < 1e-9:
+            raise AnnotationError('route loop has a zero-length segment')
+        seg.append(d)
+        total += d
+    count = max(12, int(total / spacing_px))
+    out, target, acc, i = [], 0.0, 0.0, 0
+    while len(out) < count:
+        while acc + seg[i] < target:
+            acc += seg[i]
+            i = (i + 1) % len(pts)
+        f = (target - acc) / seg[i]
+        out.append(pts[i] + f * (pts[(i + 1) % len(pts)] - pts[i]))
+        target += total / count
+    return out, total
+
+
+# --------------------------------------------------------------------------
+# Manifest construction
+# --------------------------------------------------------------------------
+
+def build_manifest(track_map, outer_px, inner_px, route_px, *,
+                   author='operator', approval='none',
+                   max_speed_mps=2.5, n_occurrences=4, spacing_m=0.75,
+                   _smoothing_passes=4):
+    """Build a strict schema-v1 payload from extracted loops + rough lap.
+
+    ``approval`` must be ``'operator-approved'`` for an export intended
+    as legal geometry; anything else is recorded verbatim so a draft
+    can never masquerade as approved.
+    """
+    if approval not in ('operator-approved', 'none'):
+        raise AnnotationError("approval must be 'operator-approved' or 'none'")
+    prov = {'author': author, 'source': 'annotation-tool',
+            'revision': '1', 'approval': approval}
+    spacing_px = spacing_m / track_map.resolution
+    seed_px, _ = _resample_closed(route_px, spacing_px)
+    # Smooth the operator's rough loop (circular moving average). The
+    # drawing order/direction is untouched; only pixel jitter that would
+    # fold the corridor chart (curvature x half-width >= 1) is removed.
+    arr = np.array(seed_px, float)
+    kernel = np.array([1., 2., 3., 2., 1.])
+    kernel /= kernel.sum()
+    for _ in range(_smoothing_passes):
+        arr = np.stack([sum(kernel[k] * np.roll(arr[:, c], k - 2)
+                            for k in range(5)) for c in range(2)], axis=1)
+    seed = [np.array(track_map.pixel_to_world(p)) for p in arr]
+    # Direction comes from the operator's drawing order, untouched.
+    # Project each seed point into the corridor between the two loops:
+    # smoothing may cut a corner across a boundary, so clamp the lateral
+    # offset to the middle half of the local width. Longitudinal intent
+    # and direction are preserved; a point still outside after this is
+    # rejected later by the strict validator, never hidden.
+    outer_w = np.array([track_map.pixel_to_world(p) for p in outer_px])
+    inner_w = np.array([track_map.pixel_to_world(p) for p in inner_px])
+
+    def _nearest(chain, p):
+        return chain[int(np.argmin(np.linalg.norm(chain - p, axis=1)))]
+
+    corrected = []
+    for i, p in enumerate(seed):
+        lo = _nearest(outer_w, p)
+        li = _nearest(inner_w, p)
+        mid, half = (lo + li) / 2.0, (lo - li) / 2.0
+        denom = float(np.dot(half, half))
+        alpha = 0.0 if denom < 1e-12 else float(
+            np.clip(np.dot(p - mid, half) / denom, -0.5, 0.5))
+        corrected.append(mid + alpha * half)
+    seed = corrected
+
+    def nearest(chain, p):
+        d = np.linalg.norm(chain - np.array(p), axis=1)
+        return int(np.argmin(d))
+
+    outer = np.array([track_map.pixel_to_world(p) for p in outer_px])
+    inner = np.array([track_map.pixel_to_world(p) for p in inner_px])
+    # Classify each seed sample's left/right chain by the travel normal.
+    # Place split joints on locally straight seed points near each
+    # quarter of the lap: gates on straights keep portal charts unfolded.
+    turn = []
+    for i, p in enumerate(seed):
+        a = seed[i] - seed[i - 1]
+        b = seed[(i + 1) % len(seed)] - p
+        turn.append(abs(math.atan2(a[0] * b[1] - a[1] * b[0],
+                                   float(np.dot(a, b)))))
+    joint_at = []
+    for k in range(n_occurrences):
+        target = int(round(k * len(seed) / n_occurrences))
+        window = range(target - len(seed) // 8, target + len(seed) // 8)
+        joint_at.append(min(window, key=lambda j: turn[j % len(seed)]) % len(seed))
+    joint_at = sorted(set(joint_at))
+    if len(joint_at) != n_occurrences:
+        raise AnnotationError('could not place distinct split joints; '
+                              'redraw the route loop more evenly')
+    joints = []  # (seed_idx, left_pt, right_pt, left_chain, left_idx, ...)
+    for idx in joint_at:
+        p = seed[idx]
+        nxt = seed[(idx + 1) % len(seed)]
+        prv = seed[(idx - 1) % len(seed)]
+        tangent = nxt - prv
+        norm = np.linalg.norm(tangent)
+        if norm < 1e-12:
+            raise AnnotationError('degenerate route loop at a split point')
+        tangent /= norm
+        normal = np.array([-tangent[1], tangent[0]])  # left of travel
+        cand = []
+        for name, chain in (('outer', outer), ('inner', inner)):
+            j = nearest(chain, p)
+            cand.append((name, chain, j, chain[j]))
+        # Left = the candidate whose offset from the seed points left.
+        cand.sort(key=lambda c: float(np.dot(c[3] - p, normal)), reverse=True)
+        (lname, lchain, lj, lpt), (rname, rchain, rj, rpt) = cand
+        if joints:  # left/right chain identity is global for a simple lap
+            lchain = joints[0]['lchain']
+            rchain = joints[0]['rchain']
+            lj, rj = nearest(lchain, p), nearest(rchain, p)
+            lpt, rpt = lchain[lj], rchain[rj]
+        if float(np.dot(lpt - p, normal)) <= 0 or float(np.dot(rpt - p, normal)) >= 0:
+            raise AnnotationError(
+                'route loop is not between the two boundaries at a split '
+                'point; redraw it inside the track')
+        mid = (lpt + rpt) / 2.0
+        joints.append({'idx': idx, 'left': lpt, 'right': rpt, 'mid': mid,
+                       'lchain': lchain, 'lj': lj, 'rchain': rchain, 'rj': rj})
+
+    occurrences, transitions = [], []
+    min_spacing_px = max(2.0, 0.05 / track_map.resolution)
+    for k in range(n_occurrences):
+        a, b = joints[k], joints[(k + 1) % n_occurrences]
+        # Seed fragment: from joint a to joint b along travel, with the
+        # endpoints replaced by gate midpoints (exact shared end-caps).
+        idxs, i = [], a['idx']
+        while True:
+            idxs.append(i)
+            if i == b['idx']:
+                break
+            i = (i + 1) % len(seed)
+        frag = [a['mid']] + [seed[i] for i in idxs[1:-1]] + [b['mid']]
+        frag = _simplify(frag, min_spacing_px * track_map.resolution)
+        # Boundary arcs follow the same direction of travel.
+        def arc_pts(chain, j0, j1, ref):
+            fwd = _arc(chain, j0, j1, +1)
+            rev = _arc(chain, j0, j1, -1)
+            # Pick the arc whose midpoint is nearer the seed fragment.
+            midref = ref[len(ref) // 2]
+            pick = fwd if np.linalg.norm(fwd[len(fwd) // 2] - midref) <= \
+                np.linalg.norm(rev[len(rev) // 2] - midref) else rev
+            return _simplify(pick, min_spacing_px * track_map.resolution)
+        left = arc_pts(a['lchain'], a['lj'], b['lj'], frag)
+        right = arc_pts(a['rchain'], a['rj'], b['rj'], frag)
+        # Force exact shared endpoints regardless of arc simplification.
+        left[0], left[-1] = tuple(a['left']), tuple(b['left'])
+        right[0], right[-1] = tuple(a['right']), tuple(b['right'])
+        oid = f'o{k}'
+        occurrences.append({
+            'id': oid, 'surface_id': 'ground',
+            'seed': [[float(x), float(y)] for x, y in frag],
+            'left': [[float(x), float(y)] for x, y in left],
+            'right': [[float(x), float(y)] for x, y in right],
+            'caps': [{'at_m': 0, 'max_speed_mps': float(max_speed_mps)}],
+            'provenance': dict(prov)})
+        # Portal to the next occurrence at joint b.
+        gate = [[float(x), float(y)] for x, y in (b['right'], b['left'])]
+        nxt = seed[(b['idx'] + 1) % len(seed)] - seed[(b['idx'] - 1) % len(seed)]
+        tdir = nxt / np.linalg.norm(nxt)
+        gvec = np.array(b['left']) - np.array(b['right'])
+        gdir = gvec / np.linalg.norm(gvec)
+        # Rectangle expanded around the gate itself, so the gate is
+        # strictly inside its support regardless of gate/seed slant.
+        support = [[float(x), float(y)] for x, y in (
+            np.array(b['right']) - tdir * 0.6 - gdir * 0.3,
+            np.array(b['right']) + tdir * 0.6 - gdir * 0.3,
+            np.array(b['left']) + tdir * 0.6 + gdir * 0.3,
+            np.array(b['left']) - tdir * 0.6 + gdir * 0.3)]
+        transitions.append({
+            'id': f't{k}', 'from': oid, 'to': f'o{(k + 1) % n_occurrences}',
+            'gate': gate, 'support': support,
+            'before_m': 0.5, 'after_m': 0.5, 'continuity': 'shared_endcap',
+            'provenance': dict(prov)})
+    first = occurrences[0]['seed']
+    t0 = np.array(first[1]) - np.array(first[0])
+    heading = math.atan2(t0[1], t0[0])
+    zone_c = np.array(first[0])
+    zd = t0 / np.linalg.norm(t0)
+    zn = np.array([-zd[1], zd[0]])
+    zone = [[float(x), float(y)] for x, y in (
+        zone_c - zn * 0.4, zone_c + zd * 1.0 - zn * 0.4,
+        zone_c + zd * 1.0 + zn * 0.4, zone_c + zn * 0.4)]
+    return {
+        'schema_version': 1, 'course_id': 'annotated-course',
+        'route_id': 'annotated-route-1', 'frame_id': 'map', 'units': 'm',
+        'conventions': 'x-forward_y-left_heading-ccw',
+        'physical_map': {'sha256': track_map.sha256, 'frame_id': 'map',
+                         'registration': [0, 0, 0], 'coverage': 'unknown',
+                         'provenance': dict(prov)},
+        'provenance': dict(prov),
+        'surfaces': [{'id': 'ground', 'kind': 'planar', 'provenance': dict(prov)}],
+        'occurrences': occurrences, 'transitions': transitions,
+        'gate_sequence': [t['id'] for t in transitions],
+        'finish': transitions[-1]['id'],
+        'initialization': {
+            'occurrence_id': 'o0', 'seed_interval_m': [0.1, 0.9],
+            'zone': zone,
+            'heading_interval_rad': [max(-math.pi, heading - 0.3),
+                                     min(math.pi, heading + 0.3)]}}
+
+
+def build_and_validate(track_map, outer_px, inner_px, route_px, **kwargs):
+    """Build with increasing seed smoothing; first fully valid wins.
+
+    Tries smoothing passes (0, 1, 2, 4, 6). If none passes Project A's
+    strict validation and corridor preparation, the last error is
+    raised - the geometry is rejected, never silently repaired beyond
+    smoothing the operator's own seed line.
+    """
+    last = None
+    for passes in (0, 1, 2, 4, 6):
+        try:
+            payload = build_manifest(track_map, outer_px, inner_px,
+                                     route_px, _smoothing_passes=passes,
+                                     **kwargs)
+            route, prepared = validate_manifest(payload)
+            return payload, route, prepared
+        except Exception as exc:  # noqa: BLE001 - re-raised below if all fail
+            last = exc
+    raise AnnotationError(f'route rejected at every smoothing level: {last}')
+
+
+def validate_manifest(payload):
+    """Run Project A's own strict validator + corridor preparation."""
+    from .route_corridor import prepare_route
+    from .route_input import validate_route
+    route = validate_route(payload)
+    prepared = prepare_route(route)
+    return route, prepared

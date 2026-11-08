@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>ForzaETH — Project A Map Annotation (MVP1)</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:12px;background:#111;color:#eee}
+canvas{background:#222;border:1px solid #555;max-width:100%;cursor:crosshair}
+button{margin:2px;padding:6px 10px} .on{background:#2a7;color:#fff}
+#status{white-space:pre-wrap;background:#000;padding:8px;min-height:60px}
+.legend span{margin-right:14px}
+</style></head><body>
+<h3>Project A annotation — two pencils, nothing else</h3>
+<p>
+ <button id="openBtn">Open map session…</button>
+ <input id="mapYaml" size="42" placeholder="server map name e.g. test">
+ <button data-tool="boundary" class="tool">✎ Boundary pencil (close gaps)</button>
+ <button data-tool="route" class="tool">✎ Route pencil (directed lap)</button>
+ <button id="undo">Undo stroke</button>
+ <button id="extract">Run extraction</button>
+ <button id="approve">Approve boundaries + export Project A</button>
+ <button id="save">Save draft</button>
+</p>
+<p class="legend"><span style="color:#f66">■ manual boundary</span>
+<span style="color:#4cf">■ extracted boundaries (candidate)</span>
+<span style="color:#fd4">■ directed route</span>
+<span>Click to add points, double-click to finish a stroke. Route: draw one closed lap in travel direction.</span></p>
+<canvas id="cv" width="900" height="600"></canvas>
+<div id="status">No session. Enter a map name and press “Open map session…”.</div>
+<script>
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d'), st=document.getElementById('status');
+let S=null, tool='boundary', draft=[];
+const say=t=>st.textContent=t;
+async function api(path, body){ const r=await fetch(path,{method:body?'POST':'GET',headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined}); return r.json(); }
+function draw(){
+  ctx.clearRect(0,0,cv.width,cv.height); if(!S) return;
+  const img=new Image(); img.onload=()=>{ ctx.drawImage(img,0,0,cv.width,cv.height); overlay(); }; img.src=S.map_png_data_url;
+}
+function scale(){ return [cv.width/S.image_size[0], cv.height/S.image_size[1]]; }
+function line(pts,color){ if(pts.length<2)return; const [sx,sy]=scale(); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p[0]*sx,p[1]*sy):ctx.moveTo(p[0]*sx,p[1]*sy)); ctx.stroke(); }
+function overlay(){
+  (S.boundary_strokes_px||[]).forEach(p=>line(p,'#f66')); line(draft,'#f66');
+  if(S.extraction){ line(S.extraction.outer_px,'#4cf'); line(S.extraction.inner_px,'#4cf'); }
+  line(S.route_px||[],'#fd4');
+}
+cv.addEventListener('click',e=>{ if(!S)return; const r=cv.getBoundingClientRect();
+  draft.push([(e.clientX-r.left)*S.image_size[0]/r.width, (e.clientY-r.top)*S.image_size[1]/r.height]); draw(); });
+cv.addEventListener('dblclick',async()=>{ if(!S||draft.length<2){draft=[];return;}
+  const field = tool==='boundary' ? 'boundary_strokes_px' : 'route_px';
+  const value = tool==='boundary' ? [...(S.boundary_strokes_px||[]), draft] : draft;
+  const res=await api('/api/session/update',{field, value}); draft=[]; S=res.session||S; say(res.status+': '+(res.message||'')); draw(); });
+document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool; document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',x===b)); say('Tool: '+tool);});
+document.getElementById('openBtn').onclick=async()=>{ const name=document.getElementById('mapYaml').value.trim(); const res=await api('/api/session/open',{map:name}); if(res.session){S=res.session; draw();} say(res.status+': '+(res.message||'')); };
+document.getElementById('extract').onclick=async()=>{ const res=await api('/api/session/extract',{}); if(res.session)S=res.session; say(res.status+': '+(res.message||'')); draw(); };
+document.getElementById('approve').onclick=async()=>{ const res=await api('/api/session/export',{}); if(res.session)S=res.session; say(res.status+': '+(res.message||'')); draw(); };
+document.getElementById('save').onclick=async()=>{ const res=await api('/api/session/save',{}); say(res.status+': '+(res.message||'')); };
+document.getElementById('undo').onclick=async()=>{ const res=await api('/api/session/undo',{}); if(res.session)S=res.session; say(res.status+': '+(res.message||'')); draw(); };
+</script></body></html>
