@@ -93,7 +93,7 @@ def main(argv=None):
                 approval='operator-approved')
             out = Path(args.out)
             out.mkdir(parents=True, exist_ok=True)
-            (out / 'legal_route.json').write_text(
+            (out / f'{track_map.png_path.stem}_legal_route.json').write_text(
                 json.dumps(payload, indent=1), encoding='utf-8')
             result = _validated_receipt(route, prepared, info)
         print(json.dumps(result, sort_keys=True))

@@ -13,6 +13,8 @@ then open http://127.0.0.1:8766/ in a browser.
 import argparse
 import base64
 import json
+import math
+import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
@@ -23,6 +25,14 @@ from .annotation_core import (AnnotationError, TrackMap, build_and_validate,
 
 STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
          'out_dir': None, 'candidate_digest': None}
+
+# Inbound request bounds. A lap seed needs only hundreds of points
+# (0.75 m resampling of a ~164 m lap is ~220 samples); 20k points per
+# field is generous headroom while bounding downstream CPU. The body cap
+# covers several such fields plus JSON overhead.
+MAX_BODY_BYTES = 4 * 1024 * 1024
+MAX_POINTS_PER_FIELD = 20000
+MAX_COORD_ABS = 1e6
 
 
 def configure(maps_dir, out_dir):
@@ -67,6 +77,37 @@ def _reply(handler, payload, code=200):
     handler.wfile.write(body)
 
 
+def _export_name(track_map):
+    """Per-map export filename so maps cannot silently overwrite each other."""
+    return f'{track_map.png_path.stem}_legal_route.json'
+
+
+def _atomic_write_text(path, text):
+    """Write a file atomically: readers never see a partial export."""
+    tmp = Path(str(path) + f'.tmp-{os.getpid()}')
+    tmp.write_text(text, encoding='utf-8')
+    os.replace(tmp, path)
+
+
+def _read_bounded(rfile, length):
+    """Read at most ``MAX_BODY_BYTES + 1`` bytes from the request.
+
+    Returns ``(data, overflow)``. An oversized body is detected from a
+    bounded prefix instead of being loaded fully, so the reply stays
+    predictable without unbounded memory.
+    """
+    if length <= MAX_BODY_BYTES:
+        return (rfile.read(length) if length else b'{}'), False
+    want, chunks = MAX_BODY_BYTES + 1, []
+    while want > 0:
+        chunk = rfile.read(min(65536, want))
+        if not chunk:
+            break
+        chunks.append(chunk)
+        want -= len(chunk)
+    return b''.join(chunks), True
+
+
 def _session_view():
     s = dict(STATE['session'])
     png = Path(STATE['map'].png_path).read_bytes()
@@ -78,15 +119,37 @@ def _session_view():
     return s
 
 
+def _resolve_map_yaml(name):
+    """Resolve a map name to a YAML path confined under the maps dir.
+
+    Nested relative paths (``a/b`` → ``maps/a/b/b.yaml``) keep working;
+    absolute paths, ``..`` escapes, and symlink escapes are refused.
+    """
+    if not isinstance(name, str) or not name:
+        raise AnnotationError('map name must be a nonempty relative path')
+    if name.startswith(('/', '\\')) or any(
+            p in ('..', '.', '') for p in Path(name).parts):
+        raise AnnotationError(f'map name escapes the maps directory: {name!r}')
+    base = Path(STATE['maps_dir']).resolve()
+    leaf = Path(name).name
+    if not leaf.endswith('.yaml'):
+        leaf += '.yaml'
+    candidates = [base / name / leaf, base / f'{name}.yaml']
+    for cand in candidates:
+        try:
+            resolved = cand.resolve()
+        except OSError:
+            continue
+        if resolved != base and base in resolved.parents and resolved.is_file():
+            return resolved
+    raise AnnotationError(f'map not found in maps directory: {name!r}')
+
+
 def op_open(body):
     """Open (or reopen) a session for a map name inside the maps dir."""
     if not STATE.get('maps_dir') or not STATE.get('out_dir'):
         raise AnnotationError('backend not configured (set maps/out dirs first)')
-    name = body.get('map', '')
-    yaml_path = Path(STATE['maps_dir']) / name / f'{name}.yaml'
-    if not yaml_path.exists():
-        yaml_path = Path(STATE['maps_dir']) / f'{name}.yaml'
-    track_map = TrackMap(yaml_path)
+    track_map = TrackMap(_resolve_map_yaml(body.get('map', '')))
     draft = Path(STATE['out_dir']) / f'{track_map.png_path.stem}_annotation.json'
     if draft.exists():
         session = load_session(draft, track_map)
@@ -117,7 +180,23 @@ def op_update(body):
     else:
         if not isinstance(value, list):
             raise AnnotationError(f'{field} must be a list of points')
-        if field == 'route_px' and 0 < len(value) < 3:
+        strokes = [value] if field == 'route_px' else value
+        total = 0
+        for stroke in strokes:
+            if not isinstance(stroke, list):
+                raise AnnotationError(f'{field} must be a list of point lists')
+            for pt in stroke:
+                total += 1
+                if (not isinstance(pt, (list, tuple)) or len(pt) != 2
+                        or any(isinstance(v, bool) or not isinstance(v, (int, float))
+                               or not math.isfinite(v)
+                               or abs(v) > MAX_COORD_ABS for v in pt)):
+                    raise AnnotationError(
+                        f'{field} points must be finite [x, y] pixel pairs')
+        if total > MAX_POINTS_PER_FIELD:
+            raise AnnotationError(
+                f'{field} has {total} points (limit {MAX_POINTS_PER_FIELD})')
+        if field == 'route_px' and 0 < total < 3:
             raise AnnotationError('route needs at least 3 points (or empty to clear)')
     session[field] = value
     _touch(session)  # any edit revokes approval
@@ -252,8 +331,8 @@ def op_export(body):
     payload, route, prepared, info = build_and_validate(
         track_map, outer, inner, session['route_px'],
         author=session.get('author', 'operator'), approval='operator-approved')
-    out = Path(STATE['out_dir']) / 'legal_route.json'
-    out.write_text(json.dumps(payload, indent=1), encoding='utf-8')
+    out = Path(STATE['out_dir']) / _export_name(track_map)
+    _atomic_write_text(out, json.dumps(payload, indent=1))
     receipt = _validated_receipt(payload, route, prepared, info, track_map,
                                  out=out)
     receipt['session'] = _session_view()
@@ -324,12 +403,22 @@ class Handler(BaseHTTPRequestHandler):
         """Dispatch one session operation; errors are explicit replies."""
         try:
             length = int(self.headers.get('Content-Length', 0))
-            body = json.loads(self.rfile.read(length) or b'{}')
+            if length < 0:
+                raise AnnotationError('negative Content-Length')
+            raw, overflow = _read_bounded(self.rfile, length)
+            if overflow:
+                _reply(self, {'status': 'FAIL',
+                              'message': f'request body exceeds '
+                                         f'{MAX_BODY_BYTES} bytes'}, 413)
+                return
+            body = json.loads(raw)
+            if not isinstance(body, dict):
+                raise AnnotationError('request body must be a JSON object')
             op = OPS.get(self.path)
             if op is None:
                 raise AnnotationError(f'unknown operation {self.path}')
             _reply(self, op(body))
-        except (AnnotationError, ValueError, OSError) as exc:
+        except (AnnotationError, ValueError, TypeError, OSError) as exc:
             _reply(self, {'status': 'FAIL', 'message': str(exc)}, 400)
 
 

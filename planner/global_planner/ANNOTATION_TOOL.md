@@ -3,7 +3,8 @@
 Two pencils, no GIS: open a map, close missing legal boundaries with the
 boundary pencil, draw a rough directed lap with the route pencil (or take
 the computed centerline suggestion), preview the candidate, approve exactly
-that candidate, and export a strict Project A `legal_route.json`.
+that candidate, and export a strict Project A `{map}_legal_route.json`
+(one file per map, so maps cannot overwrite each other).
 Preview → approve → export is enforced: the operator always sees the
 transformed geometry (smoothed seed, lateral correction, validated route)
 before approving, and approval binds to the previewed digest. Any edit

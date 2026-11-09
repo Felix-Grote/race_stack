@@ -299,7 +299,8 @@ def test_server_preview_approve_export_cycle(backend):
     assert server.STATE['session']['approval_digest'] is None
     assert server.STATE['session']['revision'] == rev_before_preview
     assert not os.path.exists(
-        os.path.join(server.STATE['out_dir'], 'legal_route.json'))
+        os.path.join(server.STATE['out_dir'],
+        f"{server.STATE['map'].png_path.stem}_legal_route.json"))
     # Export without approval is refused by design.
     with pytest.raises(AnnotationError, match='not .operator-approved'):
         server.op_export({})
@@ -312,7 +313,8 @@ def test_server_preview_approve_export_cycle(backend):
     assert exp['route_digest'] == prev['route_digest']
     assert exp['validated_route_px'] == prev['validated_route_px']
     assert os.path.exists(
-        os.path.join(server.STATE['out_dir'], 'legal_route.json'))
+        os.path.join(server.STATE['out_dir'],
+        f"{server.STATE['map'].png_path.stem}_legal_route.json"))
 
 
 def test_server_approve_rejects_stale_preview(backend):
@@ -410,7 +412,7 @@ def test_cli_export_refuses_stale_approval(tmp_path):
     assert tool.main(['export', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
                       '--out', str(out)]) == 0
-    assert (out / 'legal_route.json').exists()
+    assert (out / 'test_legal_route.json').exists()
     # An edit after approval (saved without re-approval) must be refused.
     stale = load_session(session_path, track_map)
     stale['boundary_strokes_px'] = [[[0, 0], [50, 50]]]
@@ -435,12 +437,12 @@ def test_cli_preview_approve_export_cycle(tmp_path):
     assert tool.main(['export', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
                       '--out', str(out)]) == 1
-    assert not (out / 'legal_route.json').exists()
+    assert not (out / 'test_legal_route.json').exists()
     # Preview is read-only: prints the candidate digest, writes nothing.
     assert tool.main(['preview', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
                       '--out', str(out)]) == 0
-    assert not (out / 'legal_route.json').exists()
+    assert not (out / 'test_legal_route.json').exists()
     candidate = geometry_digest(
         load_session(session_path, track_map), track_map)
     # Approve needs the previewed candidate digest.
@@ -458,8 +460,8 @@ def test_cli_preview_approve_export_cycle(tmp_path):
     assert tool.main(['export', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
                       '--out', str(out)]) == 0
-    assert (out / 'legal_route.json').exists()
-    payload = _json.loads((out / 'legal_route.json').read_text())
+    assert (out / 'test_legal_route.json').exists()
+    payload = _json.loads((out / 'test_legal_route.json').read_text())
     assert payload['provenance']['approval'] == 'operator-approved'
 
 
@@ -776,3 +778,118 @@ def test_node_headless_configuration(tmp_path):
     for i in range(node._SEEN_CAP + 100):
         node._remember(f'id-{i}')
     assert len(node._seen) <= node._SEEN_CAP
+
+
+def test_server_open_confines_map_paths(backend, tmp_path):
+    """Absolute paths, ``..`` escapes and symlink escapes are refused;
+    nested relative map directories keep working."""
+    import shutil
+    server = backend
+    for bad in ('/etc/hostname', '../maps/test', '..', '', 'test/../../x'):
+        with pytest.raises(AnnotationError, match='escapes|nonempty|not found'):
+            server.op_open({'map': bad})
+    # Symlink escape: a maps-dir entry pointing outside must not open.
+    linkdir = tmp_path / 'maps'
+    linkdir.mkdir(parents=True)
+    (linkdir / 'evil').symlink_to('/etc', target_is_directory=True)
+    server.configure(str(linkdir), str(tmp_path / 'out2'))
+    with pytest.raises(AnnotationError, match='escapes|not found'):
+        server.op_open({'map': 'evil/hostname'})
+    # Nested legitimate layout keeps working: nest/sub/sub.yaml.
+    nest = linkdir / 'nest' / 'sub'
+    nest.mkdir(parents=True)
+    shutil.copy(MAPS / 'test' / 'test.png', nest / 'test.png')
+    shutil.copy(MAPS / 'test' / 'test.yaml', nest / 'sub.yaml')
+    res = server.op_open({'map': 'nest/sub'})
+    assert res['status'] == 'PASS'
+    assert server.STATE['map'].png_path.name == 'test.png'
+
+
+def test_server_update_bounds_points(backend):
+    """Oversized, non-finite and malformed point data is rejected early."""
+    server = backend
+    server.op_open({'map': 'test'})
+    with pytest.raises(AnnotationError, match='limit 20000'):
+        server.op_update({'field': 'route_px',
+                          'value': [[0.0, 0.0]] * 20001})
+    with pytest.raises(AnnotationError, match='limit 20000'):
+        server.op_update({'field': 'boundary_strokes_px',
+                          'value': [[[0.0, 0.0]] * 20001]})
+    for bad_pt in ([float('nan'), 0.0], [0.0, float('inf')],
+                   ['x', 0.0], [True, 0.0], [0.0, 0.0, 0.0], 'xy',
+                   [1e7, 0.0]):
+        with pytest.raises(AnnotationError, match='finite'):
+            server.op_update({'field': 'route_px',
+                              'value': [[0.0, 0.0], [1.0, 1.0], bad_pt]})
+    with pytest.raises(AnnotationError, match='point lists'):
+        server.op_update({'field': 'boundary_strokes_px',
+                          'value': ['not-a-stroke']})
+    # Tuples are accepted as pairs; the boundary case stays valid.
+    ok = server.op_update({'field': 'route_px',
+                           'value': [(0.0, 0.0), (1.0, 1.0), (2.0, 0.0)]})
+    assert ok['status'] == 'PASS'
+
+
+def test_http_malformed_and_oversized_bodies(backend):
+    """Malformed JSON, non-object bodies and oversized posts get
+    structured FAIL/413 replies instead of killing the connection."""
+    import http.client
+    import threading
+    from http.server import HTTPServer
+    from global_planner.annotation_server import Handler, MAX_BODY_BYTES
+    server = backend
+    httpd = HTTPServer(('127.0.0.1', 0), Handler)
+    port = httpd.server_address[1]
+    thread = threading.Thread(target=httpd.handle_request)
+    thread.start()
+    try:
+        conn = http.client.HTTPConnection('127.0.0.1', port, timeout=30)
+        conn.request('POST', '/api/session/state', body=b'{not json',
+                     headers={'Content-Type': 'application/json'})
+        resp = conn.getresponse()
+        assert resp.status == 400
+        assert json.loads(resp.read())['status'] == 'FAIL'
+    finally:
+        thread.join(timeout=30)
+
+    def one_post(body, path='/api/session/state'):
+        httpd2_thread = threading.Thread(target=httpd.handle_request)
+        httpd2_thread.start()
+        try:
+            conn = http.client.HTTPConnection('127.0.0.1', port, timeout=30)
+            conn.request('POST', path, body=body,
+                         headers={'Content-Type': 'application/json'})
+            resp = conn.getresponse()
+            return resp.status, resp.read()
+        finally:
+            httpd2_thread.join(timeout=30)
+
+    status, raw = one_post(b'[1, 2, 3]')
+    assert status == 400
+    assert json.loads(raw)['status'] == 'FAIL'
+    status, raw = one_post(b'x' * (MAX_BODY_BYTES + 1))
+    assert status == 413
+    assert json.loads(raw)['status'] == 'FAIL'
+    httpd.server_close()
+
+
+def test_export_names_are_per_map(backend, tmp_path):
+    """Exports carry the map stem; no fixed name can collide across maps."""
+    import shutil
+    from global_planner.annotation_server import _export_name
+    server = backend
+    test_map = type('M', (), {'png_path': MAPS / 'test' / 'test.png'})()
+    assert _export_name(test_map) == 'test_legal_route.json'
+    other_png = tmp_path / 'second.png'
+    shutil.copy(MAPS / 'test' / 'test.png', other_png)
+    other = type('M', (), {'png_path': other_png})()
+    assert _export_name(other) == 'second_legal_route.json'
+    # Full cycle writes the per-map name and no generic fixed name.
+    _draw_test_route(server)
+    prev = server.op_preview({})
+    server.op_approve({'approval_digest': prev['candidate_digest']})
+    server.op_export({})
+    out = server.STATE['out_dir']
+    import os
+    assert os.path.exists(os.path.join(out, 'test_legal_route.json'))
+    assert not os.path.exists(os.path.join(out, 'legal_route.json'))
