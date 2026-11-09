@@ -10,7 +10,8 @@ import argparse
 import json
 from pathlib import Path
 
-from .annotation_core import (AnnotationError, TrackMap, build_and_validate,
+from .annotation_core import (AnnotationError, TrackMap, atomic_write_text,
+                              build_and_validate, export_name,
                               extract_boundaries, geometry_digest,
                               load_session, require_approved, save_session)
 
@@ -93,8 +94,8 @@ def main(argv=None):
                 approval='operator-approved')
             out = Path(args.out)
             out.mkdir(parents=True, exist_ok=True)
-            (out / f'{track_map.png_path.stem}_legal_route.json').write_text(
-                json.dumps(payload, indent=1), encoding='utf-8')
+            atomic_write_text(out / export_name(track_map),
+                              json.dumps(payload, indent=1))
             result = _validated_receipt(route, prepared, info)
         print(json.dumps(result, sort_keys=True))
         return 0

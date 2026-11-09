@@ -14,14 +14,14 @@ import argparse
 import base64
 import json
 import math
-import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
-from .annotation_core import (AnnotationError, TrackMap, build_and_validate,
+from .annotation_core import (AnnotationError, TrackMap, atomic_write_text,
+                              build_and_validate, draft_name, export_name,
                               extract_boundaries, geometry_digest,
                               load_session, new_session, require_approved,
-                              save_session, suggest_route)
+                              resolve_draft, save_session, suggest_route)
 
 STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
          'out_dir': None, 'candidate_digest': None}
@@ -75,18 +75,6 @@ def _reply(handler, payload, code=200):
     handler.send_header('Content-Length', str(len(body)))
     handler.end_headers()
     handler.wfile.write(body)
-
-
-def _export_name(track_map):
-    """Per-map export filename so maps cannot silently overwrite each other."""
-    return f'{track_map.png_path.stem}_legal_route.json'
-
-
-def _atomic_write_text(path, text):
-    """Write a file atomically: readers never see a partial export."""
-    tmp = Path(str(path) + f'.tmp-{os.getpid()}')
-    tmp.write_text(text, encoding='utf-8')
-    os.replace(tmp, path)
 
 
 def _read_bounded(rfile, length):
@@ -150,7 +138,7 @@ def op_open(body):
     if not STATE.get('maps_dir') or not STATE.get('out_dir'):
         raise AnnotationError('backend not configured (set maps/out dirs first)')
     track_map = TrackMap(_resolve_map_yaml(body.get('map', '')))
-    draft = Path(STATE['out_dir']) / f'{track_map.png_path.stem}_annotation.json'
+    draft = resolve_draft(STATE['out_dir'], track_map)
     if draft.exists():
         session = load_session(draft, track_map)
         message = 'reopened saved draft'
@@ -331,8 +319,8 @@ def op_export(body):
     payload, route, prepared, info = build_and_validate(
         track_map, outer, inner, session['route_px'],
         author=session.get('author', 'operator'), approval='operator-approved')
-    out = Path(STATE['out_dir']) / _export_name(track_map)
-    _atomic_write_text(out, json.dumps(payload, indent=1))
+    out = Path(STATE['out_dir']) / export_name(track_map)
+    atomic_write_text(out, json.dumps(payload, indent=1))
     receipt = _validated_receipt(payload, route, prepared, info, track_map,
                                  out=out)
     receipt['session'] = _session_view()
@@ -354,7 +342,7 @@ def op_state(body):
 def op_save(body):
     """Persist the editable draft (never the source map)."""
     session, track_map = require_open()
-    path = Path(STATE['out_dir']) / f"{track_map.png_path.stem}_annotation.json"
+    path = Path(STATE['out_dir']) / draft_name(track_map)
     save_session(session, path)
     return {'status': 'PASS',
             'message': f'draft rev {session.get("revision")} '

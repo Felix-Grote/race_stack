@@ -32,6 +32,7 @@ instead of being silently approximated.
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 
 import numpy as np
@@ -260,6 +261,62 @@ def load_session(path, track_map):
         raise AnnotationError('unsupported session version')
     check_session_map(session, track_map)
     return session
+
+
+def _safe_component(text):
+    """Filesystem-safe readable name fragment (stem/dir names)."""
+    return ''.join(c if c.isalnum() or c in ('-', '_', '.') else '_'
+                   for c in str(text)) or 'map'
+
+
+def map_namespace(track_map):
+    """Filesystem-safe identity prefix distinguishing same-stem maps.
+
+    ``{parentdir}__{stem}__{sha8}``: readable layout location plus the
+    PNG content hash, so two distinct maps sharing one PNG filename can
+    never silently overwrite each other's drafts or exports. Loading a
+    session still binds the FULL identity (sha, size, resolution,
+    origin, negate) via ``check_session_map``; the namespace only
+    selects the file.
+    """
+    png = Path(track_map.png_path)
+    return (f'{_safe_component(png.parent.name)}__'
+            f'{_safe_component(png.stem)}__{track_map.sha256[:8]}')
+
+
+def draft_name(track_map):
+    """Per-map draft filename (replaces the legacy bare-stem name)."""
+    return f'{map_namespace(track_map)}_annotation.json'
+
+
+def export_name(track_map):
+    """Per-map export filename (replaces the legacy bare-stem name)."""
+    return f'{map_namespace(track_map)}_legal_route.json'
+
+
+def resolve_draft(out_dir, track_map):
+    """Draft path for a map, with non-destructive legacy migration.
+
+    Prefers the namespaced name; falls back to the legacy
+    ``{stem}_annotation.json`` when it exists (adopted in place, written
+    forward to the new name on the next save; never deleted here).
+    """
+    out_dir = Path(out_dir)
+    new = out_dir / draft_name(track_map)
+    if new.exists():
+        return new
+    legacy = out_dir / f'{_safe_component(Path(track_map.png_path).stem)}_annotation.json'
+    if legacy.exists() and legacy != new:
+        return legacy
+    return new
+
+
+def atomic_write_text(path, text):
+    """Write a file atomically; readers never see a partial file."""
+    path = Path(path)
+    tmp = path.with_name(path.name + f'.tmp-{os.getpid()}')
+    tmp.write_text(text, encoding='utf-8')
+    os.replace(tmp, path)
 
 
 # --------------------------------------------------------------------------

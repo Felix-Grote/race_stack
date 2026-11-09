@@ -12,8 +12,9 @@ sys.path.insert(0, str(Path(__file__).parents[1]))
 
 from global_planner.annotation_core import (  # noqa: E402
     AnnotationError, MAX_DP_EPS_PER_CELL, TrackMap, build_and_validate,
-    build_manifest, check_session_map, extract_boundaries, geometry_digest,
-    load_session, new_session, patched_free_mask, require_approved,
+    build_manifest, check_session_map, draft_name, export_name,
+    extract_boundaries, geometry_digest, load_session, map_namespace,
+    new_session, patched_free_mask, require_approved, resolve_draft,
     ridge_seed, save_session, suggest_route)
 from global_planner.route_input import RouteError, validate_route  # noqa: E402
 
@@ -300,7 +301,7 @@ def test_server_preview_approve_export_cycle(backend):
     assert server.STATE['session']['revision'] == rev_before_preview
     assert not os.path.exists(
         os.path.join(server.STATE['out_dir'],
-        f"{server.STATE['map'].png_path.stem}_legal_route.json"))
+        export_name(server.STATE['map'])))
     # Export without approval is refused by design.
     with pytest.raises(AnnotationError, match='not .operator-approved'):
         server.op_export({})
@@ -314,7 +315,7 @@ def test_server_preview_approve_export_cycle(backend):
     assert exp['validated_route_px'] == prev['validated_route_px']
     assert os.path.exists(
         os.path.join(server.STATE['out_dir'],
-        f"{server.STATE['map'].png_path.stem}_legal_route.json"))
+        export_name(server.STATE['map'])))
 
 
 def test_server_approve_rejects_stale_preview(backend):
@@ -412,7 +413,7 @@ def test_cli_export_refuses_stale_approval(tmp_path):
     assert tool.main(['export', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
                       '--out', str(out)]) == 0
-    assert (out / 'test_legal_route.json').exists()
+    assert (out / export_name(track_map)).exists()
     # An edit after approval (saved without re-approval) must be refused.
     stale = load_session(session_path, track_map)
     stale['boundary_strokes_px'] = [[[0, 0], [50, 50]]]
@@ -437,12 +438,12 @@ def test_cli_preview_approve_export_cycle(tmp_path):
     assert tool.main(['export', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
                       '--out', str(out)]) == 1
-    assert not (out / 'test_legal_route.json').exists()
+    assert not (out / export_name(track_map)).exists()
     # Preview is read-only: prints the candidate digest, writes nothing.
     assert tool.main(['preview', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
                       '--out', str(out)]) == 0
-    assert not (out / 'test_legal_route.json').exists()
+    assert not (out / export_name(track_map)).exists()
     candidate = geometry_digest(
         load_session(session_path, track_map), track_map)
     # Approve needs the previewed candidate digest.
@@ -460,8 +461,8 @@ def test_cli_preview_approve_export_cycle(tmp_path):
     assert tool.main(['export', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
                       '--out', str(out)]) == 0
-    assert (out / 'test_legal_route.json').exists()
-    payload = _json.loads((out / 'test_legal_route.json').read_text())
+    assert (out / export_name(track_map)).exists()
+    payload = _json.loads((out / export_name(track_map)).read_text())
     assert payload['provenance']['approval'] == 'operator-approved'
 
 
@@ -1009,23 +1010,93 @@ def test_http_malformed_and_oversized_bodies(backend):
     httpd.server_close()
 
 
-def test_export_names_are_per_map(backend, tmp_path):
-    """Exports carry the map stem; no fixed name can collide across maps."""
+def _copy_same_stem_map(tmp_path, dirname, tag):
+    """Copy the test map to <maps>/<dirname>/same/same.{png,yaml}.
+
+    The PNG bytes differ per tag (PIL text chunk; pixels untouched, so
+    extraction/strict behavior is unchanged) while the stem is
+    identical, reproducing the same-stem collision deterministically.
+    """
     import shutil
-    from global_planner.annotation_server import _export_name
-    server = backend
-    test_map = type('M', (), {'png_path': MAPS / 'test' / 'test.png'})()
-    assert _export_name(test_map) == 'test_legal_route.json'
-    other_png = tmp_path / 'second.png'
-    shutil.copy(MAPS / 'test' / 'test.png', other_png)
-    other = type('M', (), {'png_path': other_png})()
-    assert _export_name(other) == 'second_legal_route.json'
-    # Full cycle writes the per-map name and no generic fixed name.
-    _draw_test_route(server)
-    prev = server.op_preview({})
-    server.op_approve({'approval_digest': prev['candidate_digest']})
-    server.op_export({})
-    out = server.STATE['out_dir']
+    from PIL import Image, PngImagePlugin
+    d = tmp_path / 'maps' / dirname / 'same'
+    d.mkdir(parents=True)
+    img = Image.open(MAPS / 'test' / 'test.png')
+    info = PngImagePlugin.PngInfo()
+    info.add_text('same-stem-tag', tag)
+    img.save(d / 'same.png', pnginfo=info)
+    (d / 'same.yaml').write_text(
+        (MAPS / 'test/test.yaml').read_text(encoding='utf-8')
+        .replace('test.png', 'same.png'), encoding='utf-8')
+
+
+def _open_save_cycle(server, name, route):
+    server.op_open({'map': name})
+    server.op_update({'field': 'route_px', 'value': route})
+    return server.op_save({})
+
+
+def test_same_stem_maps_do_not_collide(backend, tmp_path):
+    """Two distinct maps sharing one PNG stem keep independent artifacts."""
     import os
-    assert os.path.exists(os.path.join(out, 'test_legal_route.json'))
-    assert not os.path.exists(os.path.join(out, 'legal_route.json'))
+    server = backend
+    _copy_same_stem_map(tmp_path, 'c1', 'first')
+    _copy_same_stem_map(tmp_path, 'c2', 'second')
+    server.configure(str(tmp_path / 'maps'), str(tmp_path / 'out'))
+    track1 = TrackMap(tmp_path / 'maps/c1/same/same.yaml')
+    track2 = TrackMap(tmp_path / 'maps/c2/same/same.yaml')
+    assert track1.sha256 != track2.sha256
+    assert map_namespace(track1) != map_namespace(track2)
+    route1 = _midline_seed(*extract_boundaries(track1))
+    route2 = _midline_seed(*extract_boundaries(track2))
+    # Independent drafts.
+    _open_save_cycle(server, 'c1/same', route1)
+    _open_save_cycle(server, 'c2/same', route2)
+    drafts = sorted(os.listdir(str(tmp_path / 'out')))
+    assert drafts == sorted([draft_name(track1), draft_name(track2)])
+    assert 'same_annotation.json' not in drafts
+    # Reload retrieves the correct draft for each map.
+    assert server.op_open({'map': 'c1/same'})['message'] == \
+        'reopened saved draft'
+    assert server.STATE['session']['route_px'] == route1
+    assert server.op_open({'map': 'c2/same'})['message'] == \
+        'reopened saved draft'
+    assert server.STATE['session']['route_px'] == route2
+    # Independent exports: both files survive with distinct content.
+    for name in ('c1/same', 'c2/same'):
+        server.op_open({'map': name})
+        prev = server.op_preview({})
+        server.op_approve({'approval_digest': prev['candidate_digest']})
+        server.op_export({})
+    exports = sorted(os.listdir(str(tmp_path / 'out')))
+    assert export_name(track1) in exports
+    assert export_name(track2) in exports
+    assert 'same_legal_route.json' not in exports
+    assert 'legal_route.json' not in exports
+    e1 = (tmp_path / 'out' / export_name(track1)).read_bytes()
+    e2 = (tmp_path / 'out' / export_name(track2)).read_bytes()
+    assert e1 != e2
+
+
+def test_legacy_draft_migrates_without_loss(backend, tmp_path):
+    """A bare-stem draft is adopted in place; saves go to the new name."""
+    server = backend
+    server.op_open({'map': 'test'})
+    track_map = server.STATE['map']
+    legacy = Path(server.STATE['out_dir']) / 'test_annotation.json'
+    save_session(server.STATE['session'], legacy)
+    before = legacy.read_bytes()
+    # Simulate a restart: drop in-memory state, reopen from disk.
+    server.STATE.update(map=None, session=None, extraction=None,
+                        candidate_digest=None)
+    assert server.op_open({'map': 'test'})['message'] == 'reopened saved draft'
+    server.op_save({})
+    assert legacy.read_bytes() == before  # adopted, never destroyed
+    assert (Path(server.STATE['out_dir'])
+            / draft_name(track_map)).exists()
+    # The namespaced draft is preferred on the next open.
+    server.STATE.update(map=None, session=None, extraction=None,
+                        candidate_digest=None)
+    assert server.op_open({'map': 'test'})['message'] == 'reopened saved draft'
+
+
