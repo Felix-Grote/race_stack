@@ -360,6 +360,16 @@ def _simplify(points, min_spacing_px):
     return out
 
 
+#: Maximum RDP epsilon in raster cells for corridor walls. Annexation
+#: gain equals removed-feature height, which RDP bounds by epsilon; the
+#: chord gate additionally rejects crossings of occupied spans >= ~3
+#: cells wide. A 576-run fixture sweep measured worst gain 0.50 cells at
+#: ratio 0.6 (2x margin to the 1-cell bar) and gain_mm <= eps_mm in every
+#: run. build_manifest enforces this; the bare primitive carries no
+#: resolution bound (unit fixtures intentionally exceed it).
+MAX_DP_EPS_PER_CELL = 0.6
+
+
 def _douglas_peucker(points, epsilon, _chord_ok=None):
     """Shape-preserving decimation: keep the fewest points whose polyline
     stays within epsilon of the original (metres).
@@ -379,8 +389,14 @@ def _douglas_peucker(points, epsilon, _chord_ok=None):
     space. When ``_chord_ok(a, b)`` is given, a within-epsilon chord is
     still rejected unless the predicate holds; rejection keeps the
     farthest vertex and recurses exactly like an epsilon violation, so in
-    the limit this falls back to the exact polyline and illegal gain is
-    impossible beyond the predicate's own margin.
+    the limit this falls back to the exact polyline. The gate is
+    raster-grounded, not strictly inward: it rejects chords crossing
+    occupied spans >= ~3 cells wide (axis; ~4 diagonal), while a removed
+    feature narrower than that is annexed up to its own height, which
+    RDP already bounds by epsilon. The honest contract is therefore
+    gain <= epsilon, tightened to sub-cell by the build_manifest
+    envelope (epsilon/resolution <= MAX_DP_EPS_PER_CELL); see
+    ``_chord_stays_free`` for the predicate's resolving power.
     """
     pts = [np.array(p, float) for p in points]
     if len(pts) < 3 or epsilon <= 0:
@@ -423,8 +439,10 @@ def _loop_reference_mask(track_map, outer_px, inner_px):
     annotated free region (map + operator strokes) from them, up to
     contour rasterization (~0.5 px). Chords of simplified walls are
     tested against this mask, so the exported corridor cannot gain space
-    outside the extracted legal region. Frame-touching free space is
-    rejected upstream, so no loop legitimately reaches the image border.
+    across occupied spans the mask resolves (>= ~3 cells wide); narrower
+    sub-epsilon features are bounded by the build_manifest envelope, not
+    by this mask alone. Frame-touching free space is rejected upstream,
+    so no loop legitimately reaches the image border.
     """
     width, height = int(track_map.width), int(track_map.height)
     mask = np.zeros((height, width), np.uint8)
@@ -439,10 +457,17 @@ def _chord_stays_free(a, b, free, to_px_uv, res_m):
     Samples the chord every half pixel; every sample must land on free
     space. The caller passes a free mask dilated by one raster cell, so
     boundary straddle up to one pixel is tolerated while deeper cuts are
-    rejected: a chord through a 15 mm occupied tooth at 2 mm raster fails,
-    a chord hugging the true wall passes. Out-of-bounds samples fail
-    closed. Intrusions below one raster cell are unresolvable by
-    construction (the grid cannot represent them) and documented.
+    rejected. Resolving power, measured: crossings of occupied spans
+    >= 3 cells wide (axis; >= 4 diagonal) are rejected, and a chord
+    hugging the true wall passes. Narrower occupied features are
+    invisible to the one-cell dilation: removing one annexes it up to
+    its own height (RDP already requires height <= epsilon). For
+    example, a 2-cell-wide 8 mm peninsula at 2 mm raster is fully
+    annexed, while a 15 mm tooth 7+ cells wide is kept. Out-of-bounds
+    samples fail closed. Intrusions below one raster cell are
+    unresolvable by construction (the grid cannot represent them) and
+    documented. The sub-cell remainder is bounded by the build_manifest
+    envelope (epsilon/resolution <= MAX_DP_EPS_PER_CELL).
     """
     seg = np.asarray(b, float) - np.asarray(a, float)
     length = float(np.linalg.norm(seg))
@@ -619,9 +644,27 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
     can never masquerade as approved. Returns ``(payload, info)`` with
     seed/correction metrics; the payload itself carries no extra fields
     so Project A's strict schema keeps accepting it verbatim.
+
+    Geometry contract (enforced): wall simplification may annex at most
+    epsilon of occupied space (RDP deviation bound), and only across
+    features narrower than the chord gate resolves (~3 cells). Under the
+    enforced precondition ``chain_dp_epsilon_m / resolution <=
+    MAX_DP_EPS_PER_CELL`` (0.6) the intrusion is additionally bounded to
+    ~0.5 raster cells (measured worst case; diagonal stair-step corners
+    up to ~0.62), i.e. sub-cell in the supported envelope. Configs
+    above the ratio are rejected instead of producing a purportedly
+    valid export. Epsilon 0 disables simplification (exact polyline)
+    and is exempt.
     """
     if approval not in ('operator-approved', 'none'):
         raise AnnotationError("approval must be 'operator-approved' or 'none'")
+    if chain_dp_epsilon_m > 0 and chain_dp_epsilon_m / track_map.resolution > \
+            MAX_DP_EPS_PER_CELL * (1.0 + 1e-9):
+        raise AnnotationError(
+            f'chain simplification epsilon {chain_dp_epsilon_m} m exceeds '
+            f'{MAX_DP_EPS_PER_CELL} raster cells at '
+            f'{track_map.resolution} m/px; reduce chain_dp_epsilon_m '
+            '(supported envelope: epsilon/resolution <= 0.6)')
     prov = {'author': author, 'source': 'annotation-tool',
             'revision': '1', 'approval': approval}
     spacing_px = spacing_m / track_map.resolution

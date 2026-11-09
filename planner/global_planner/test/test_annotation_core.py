@@ -11,10 +11,10 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parents[1]))
 
 from global_planner.annotation_core import (  # noqa: E402
-    AnnotationError, TrackMap, build_and_validate, check_session_map,
-    extract_boundaries, geometry_digest, load_session, new_session,
-    patched_free_mask, require_approved, ridge_seed, save_session,
-    suggest_route)
+    AnnotationError, MAX_DP_EPS_PER_CELL, TrackMap, build_and_validate,
+    build_manifest, check_session_map, extract_boundaries, geometry_digest,
+    load_session, new_session, patched_free_mask, require_approved,
+    ridge_seed, save_session, suggest_route)
 from global_planner.route_input import RouteError, validate_route  # noqa: E402
 
 MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
@@ -746,6 +746,142 @@ def test_rdp_never_expands_corridor():
     assert len(_douglas_peucker(straight, 0.02, _chord_ok=lambda a, b:
                                 _chord_stays_free(a, b, mask, to_px, res))) \
         == 2
+
+
+def _peninsula_fixture(res_m, width_cells, height_m, length_m=0.066):
+    """Straight wall with a rectangular occupied peninsula (analytic truth).
+
+    Returns (wall, free_mask, to_px, tip). NOTE: 2 mm fixtures exceed the
+    build_manifest envelope (eps/res = 10); they pin the bare primitive's
+    eps bound (gain <= eps), not the supported sub-cell contract.
+    """
+    import cv2
+    length_m = max(length_m, 30 * res_m)  # keep ~30 samples at any raster
+    wall, x = [], 0.0
+    while x < length_m:
+        wall.append([x, 0.0])
+        x += res_m
+    hw = width_cells * res_m / 2
+    cx = length_m / 2
+    wall = [p for p in wall if not cx - hw < p[0] < cx + hw]
+    wall += [[cx - hw, height_m], [cx + hw, height_m]]
+    wall = sorted(wall)
+    ncol, nrow = int(length_m / res_m) + 4, 30
+    free = np.zeros((nrow, ncol), np.uint8)
+    for u in range(ncol):
+        for v in range(nrow):
+            wx, wy = u * res_m, (nrow - 1 - v) * res_m
+            occ = (cx - hw <= wx <= cx + hw and wy <= height_m)
+            free[v, u] = 0 if (wy <= 0 or occ) else 255
+    dil = cv2.dilate(free, np.ones((3, 3), np.uint8))
+
+    def to_px(pt):
+        return (pt[0] / res_m, (nrow - 1) - pt[1] / res_m)
+
+    return wall, dil, to_px, [cx, height_m]
+
+
+def _apex_gain_m(tip, simplified):
+    """Distance from the true tip to the simplified polyline (metres)."""
+    tip = np.array(tip, float)
+    best = float('inf')
+    for a, b in zip(simplified[:-1], simplified[1:]):
+        a, b = np.array(a, float), np.array(b, float)
+        seg = b - a
+        t = min(1.0, max(0.0, float(np.dot(tip - a, seg))
+                         / max(1e-18, float(np.dot(seg, seg)))))
+        best = min(best, float(np.linalg.norm(tip - (a + t * seg))))
+    return best
+
+
+def test_rdp_gain_bounded_by_eps():
+    """Annexation gain never exceeds epsilon (576-run sweep property).
+
+    Narrow sub-gate features ARE annexed (2-cell peninsula fully drops),
+    but only up to their own height, which RDP requires to be <= eps.
+    """
+    from global_planner.annotation_core import _chord_stays_free, _douglas_peucker
+    cases = [  # (res_m, width_cells, height_m, eps_m)
+        (0.002, 2, 0.008, 0.02),
+        (0.002, 2, 0.019, 0.02),
+        (0.002, 1, 0.010, 0.02),
+        (0.002, 7, 0.015, 0.02),
+        (0.05, 2, 0.015, 0.02),
+    ]
+    for res_m, width_cells, height_m, eps_m in cases:
+        wall, dil, to_px, tip = _peninsula_fixture(
+            res_m, width_cells, height_m)
+        gated = _douglas_peucker(
+            wall, eps_m, _chord_ok=lambda a, b: _chord_stays_free(
+                a, b, dil, to_px, res_m))
+        assert len(gated) < len(wall)  # still decimates
+        assert _apex_gain_m(tip, gated) <= eps_m * (1.0 + 1e-9)
+
+
+def test_envelope_rejects_coarse_eps(tmp_path):
+    """eps/res above MAX_DP_EPS_PER_CELL fails closed before geometry."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    assert track_map.resolution == pytest.approx(0.05)
+    outer, inner = extract_boundaries(track_map)
+    with pytest.raises(AnnotationError, match='exceeds.*raster cells'):
+        build_manifest(track_map, outer, inner,
+                       _midline_seed(outer, inner),
+                       approval='operator-approved', chain_dp_epsilon_m=0.05)
+
+
+def test_envelope_accepts_boundary(tmp_path):
+    """eps/res == 0.6 (baku's documented ratio) still builds strict PASS."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map)
+    payload, route, prepared, info = build_and_validate(
+        track_map, outer, inner, _midline_seed(outer, inner),
+        approval='operator-approved', chain_dp_epsilon_m=0.03)
+    assert len(prepared.samples) > 100
+    assert len(route.occurrences) == 4
+
+
+def test_exported_walls_within_one_cell():
+    """End-to-end contract on a supported map: no wall gains >= 1 cell.
+
+    Samples every exported occurrence wall densely and measures depth
+    inside occupied space via the distance transform of the UNDILATED
+    reference mask. Single-pixel rounding on diagonal stair-steps reads
+    up to sqrt(2) ~= 1.41 px without any annexation (measured: 2.2% of
+    samples above 1.0 px, none above 1.42 on the test map); anything
+    deeper is a contract violation.
+    """
+    import cv2
+    from global_planner.annotation_core import _loop_reference_mask
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map)
+    payload, route, prepared, info = build_and_validate(
+        track_map, outer, inner, _midline_seed(outer, inner),
+        approval='operator-approved')
+    ref = _loop_reference_mask(track_map, outer, inner)
+    dt_occ = cv2.distanceTransform((ref == 0).astype(np.uint8),
+                                   cv2.DIST_L2, 3)
+    worst = 0.0
+    for occ in payload['occurrences']:
+        for chain in (occ['left'], occ['right']):
+            pts = np.asarray([[track_map.world_to_pixel(p)[0],
+                               track_map.world_to_pixel(p)[1]]
+                              for p in chain], float)
+            segs = np.linalg.norm(np.diff(pts, axis=0), axis=1)
+            total = segs.sum()
+            steps = max(2, int(total / 0.5))
+            frac = np.linspace(0.0, 1.0, steps)
+            cum = np.concatenate([[0.0], np.cumsum(segs)])
+            for f in frac:
+                d = f * total
+                j = min(int(np.searchsorted(cum, d, side='right')) - 1,
+                        len(pts) - 2)
+                t = 0.0 if cum[j + 1] <= cum[j] else (
+                    (d - cum[j]) / (cum[j + 1] - cum[j]))
+                u, v = pts[j] + t * (pts[j + 1] - pts[j])
+                ui, vi = int(round(u)), int(round(v))
+                if 0 <= vi < dt_occ.shape[0] and 0 <= ui < dt_occ.shape[1]:
+                    worst = max(worst, float(dt_occ[vi, ui]))
+    assert worst <= 1.5, f'wall gains {worst:.2f} px of occupied space'
 
 
 def test_endcaps_exact_and_shared():

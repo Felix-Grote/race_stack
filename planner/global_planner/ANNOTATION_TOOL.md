@@ -125,10 +125,20 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
     independent checker's polygon budgets, and 0.035+ fails optimizer
     convergence. NOTE: the previously documented `H=fe61f4f9…` was a
     strict-only result that never completed compilation and is withdrawn.
-    Two fixes were required for full PASS: inward-only RDP (containment
-    gate) and a minimum joint separation (unconstrained straight-snapping
-    piled two joints 5 seed-samples apart, leaving a sliver occurrence
-    whose coincident portals folded optimizer charts at iteration 5).
+    Two fixes were required for full PASS: raster-gated RDP (chord
+    containment gate) and a minimum joint separation (unconstrained
+    straight-snapping piled two joints 5 seed-samples apart, leaving a
+    sliver occurrence whose coincident portals folded optimizer charts
+    at iteration 5). Geometry contract (enforced in code): wall
+    simplification may annex at most epsilon of occupied space, and
+    only across features narrower than the gate resolves (~3 cells);
+    `build_manifest` rejects `chain_dp_epsilon_m / resolution > 0.6`,
+    which bounds intrusion to ~0.5 raster cells in the supported
+    envelope (diagonal stair-step corners up to ~0.62). The method is
+    raster-constrained bounded approximation, not strictly inward: a
+    narrow sub-epsilon feature IS annexed (e.g. a 2-cell-wide 8 mm
+    peninsula at 2 mm raster), which is why the envelope — not the
+    gate alone — carries the guarantee.
     Documented procedure (`/mnt/storage/forza-annot/baku_recipe.py`),
     not a UI option. Generation is recorded on system python3.12
     (opencv 5.0): `ridge_seed` follows cv2 distance-transform numerics,
