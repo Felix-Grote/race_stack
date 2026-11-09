@@ -41,8 +41,11 @@ artifact hash:
   samples → compile PASS `H=e80c49b6…` → geometry PASS →
   dynamics PASS → query PASS.
 - `baku` (ridge seed, `chain_dp_epsilon_m=0.03`): strict PASS, 479
-  prepared samples → compile PASS `H=f96db7b9…` → geometry PASS →
-  dynamics PASS → query PASS.
+  prepared samples → compile PASS `H=82f9b533…` → geometry PASS →
+  dynamics PASS → query PASS. (Previous `H=f96db7b9…` was the
+  ungated-prefilter geometry; the gated prefilter reinstated
+  above-floor wall features, moving the optimum. Test `H=e80c49b6…`
+  is unchanged: no above-floor feature was dropped there.)
 
 Re-running either script must print the same H (determinism); any
 divergence is a release-blocking defect, not a tolerance.
@@ -57,19 +60,25 @@ PYTHONPATH=planner/global_planner python3.12 -m pytest \
   planner/global_planner/test/test_annotation_core.py -q
 ```
 
-49 passed. Covers frame-gap rejection, gated-RDP fixtures and the
+53 passed. Covers frame-gap rejection, gated prefilter/RDP fixtures and the
 end-to-end wall-containment measurement, the eps/res envelope,
 same-stem persistence isolation, HTTP hardening, and the full
 preview→approve→export lifecycle.
 
 ## 4. Geometry contract (enforced in `build_manifest`)
 
-Wall simplification may annex at most epsilon of occupied space, and
-only across features narrower than the chord gate resolves (~3 cells
-wide, ~4 diagonal). `chain_dp_epsilon_m / resolution > 0.6` is
-rejected before any geometry work; inside the envelope intrusion is
-bounded to ~0.5 raster cells (measured worst case; diagonal
-stair-step corners up to ~0.62). This is raster-constrained bounded
+Wall simplification runs two bounded, gate-checked stages. The
+radial pre-filter only removes deviations below the envelope's
+quantization floor (0.6 raster cells: pixel staircase peaks at
+~0.5 px); an eps-bounded prefilter reinstated every quantization jag
+and exploded the checker's polygon budgets, while real features above
+the floor survive (pinned 1x1.2-cell notch fixture: ~0 gain). RDP
+then bounds the remainder within epsilon with raster-gate-checked
+chords. End-to-end gain vs the extracted dense wall is bounded by
+floor + epsilon (<= ~1.2 cells inside the envelope). The gate
+additionally rejects crossings of occupied spans >= ~3 cells wide
+(~4 diagonal). `chain_dp_epsilon_m / resolution > 0.6` is rejected
+before any geometry work. This is raster-constrained bounded
 approximation, not strictly inward simplification.
 
 ## 5. Browser and ROS (operator interfaces)

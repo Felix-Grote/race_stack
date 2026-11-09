@@ -797,10 +797,11 @@ def _apex_gain_m(tip, simplified):
 
 
 def test_rdp_gain_bounded_by_eps():
-    """Annexation gain never exceeds epsilon (576-run sweep property).
+    """RDP-stage annexation gain never exceeds epsilon (sweep property).
 
-    Narrow sub-gate features ARE annexed (2-cell peninsula fully drops),
-    but only up to their own height, which RDP requires to be <= eps.
+    This pins the bare RDP primitive, not the wall chain: narrow
+    sub-gate features ARE annexed (2-cell peninsula fully drops), but
+    only up to their own height, which RDP requires to be <= eps.
     """
     from global_planner.annotation_core import _chord_stays_free, _douglas_peucker
     cases = [  # (res_m, width_cells, height_m, eps_m)
@@ -818,6 +819,61 @@ def test_rdp_gain_bounded_by_eps():
                 a, b, dil, to_px, res_m))
         assert len(gated) < len(wall)  # still decimates
         assert _apex_gain_m(tip, gated) <= eps_m * (1.0 + 1e-9)
+
+
+def test_full_chain_gain_bounded_by_eps():
+    """Wall chain (_simplify + RDP, as build_manifest runs it) gains <= eps.
+
+    Regression for the ungated-prefilter break: _simplify used to drop
+    a 1-cell-wide x 1.2-cell-tall notch (0.0600 m = 3x eps at
+    eps/res = 0.4) before RDP's deviation bound applied, and the
+    annexing chord hit RDP's zero-deviation shortcut past the raster
+    gate. The eps-aware pre-filter must re-instate the tip so the
+    final chain keeps it (gain ~0).
+    """
+    from global_planner.annotation_core import (
+        _chord_stays_free, _douglas_peucker, _simplify)
+    res_m, eps_m = 0.05, 0.02
+    wall, dil, to_px, tip = _peninsula_fixture(res_m, 1, 0.06)
+    gate = lambda a, b: _chord_stays_free(a, b, dil, to_px, res_m)
+    spacing_m = max(2.0, 0.05 / res_m) * res_m
+    pre = _simplify(wall, spacing_m, eps_m, gate)
+    assert any(p[1] > 0.05 for p in pre)  # tip survives the pre-filter
+    out = _douglas_peucker(pre, eps_m, _chord_ok=gate)
+    assert _apex_gain_m(tip, out) <= eps_m * (1.0 + 1e-9)
+    assert len(out) < len(wall)  # straight runs still decimate
+
+
+def test_prefilter_floor_collapses_quantization_zigzag():
+    """The envelope floor (0.6 cells) removes pixel staircase, not signal.
+
+    A half-pixel diagonal zigzag is quantization noise: the floor-bound
+    prefilter must collapse it instead of reinstating every jag (which
+    is what exploded the checker's polygon budgets under an eps-bound
+    prefilter). A 1.2-cell notch under the same bound must survive
+    (pinned by test_full_chain_gain_bounded_by_eps).
+    """
+    from global_planner.annotation_core import _simplify
+    res_m = 0.05
+    floor_m = 0.6 * res_m
+    zig = [[i * res_m, (i % 2) * res_m / 2] for i in range(41)]
+    spacing_m = max(2.0, 0.05 / res_m) * res_m
+    out = _simplify(zig, spacing_m, floor_m, chord_ok=lambda a, b: True)
+    # The staircase is quantization noise: every dropped jag must lie
+    # within the floor of the output polyline (an eps-bound prefilter
+    # reinstated every jag and exploded the checker's polygon budgets).
+    import numpy as np
+    poly = np.asarray(out, float)
+    worst = 0.0
+    for p in np.asarray(zig, float):
+        d = min(float(np.linalg.norm(
+            p - (a + min(1.0, max(0.0, float(np.dot(p - a, b - a))
+                                  / max(1e-18, float(np.dot(b - a, b - a)))))
+                         * (b - a))))
+                for a, b in zip(poly[:-1], poly[1:]))
+        worst = max(worst, d)
+    assert worst <= floor_m * (1.0 + 1e-9)
+    assert len(out) < len(zig)
 
 
 def test_envelope_rejects_coarse_eps(tmp_path):

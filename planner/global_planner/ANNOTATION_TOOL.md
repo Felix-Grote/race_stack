@@ -93,7 +93,7 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
 
 ## Verified (this branch)
 
-- `test_annotation_core.py`: 48 passed — end-to-end strict PASS on the
+- `test_annotation_core.py`: 53 passed — end-to-end strict PASS on the
   real `test` and `baku` maps (crude, ridge and suggested seeds),
   pixel↔world roundtrip, session save/reopen + full map-identity
   rejection, outer-wall bay detour + tangent-stroke repair, isolated-speck
@@ -120,7 +120,7 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
     and is superseded; hashes change when the geometry changes, which is
     expected — provenance, not the prefix, is the identity.
   - **baku map** (ridge seed, walls thinned at 0.03, same zone):
-    strict PASS (479 samples) → compile PASS (`H=f96db7b9…`,
+    strict PASS (479 samples) → compile PASS (`H=82f9b533…`,
     deterministic recompile verified) → independent validate PASS →
     query PASS. Manifest:
     `/mnt/storage/forza-annot/evidence/numerical/manifest_baku_bal003.json`;
@@ -129,20 +129,27 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
     independent checker's polygon budgets, and 0.035+ fails optimizer
     convergence. NOTE: the previously documented `H=fe61f4f9…` was a
     strict-only result that never completed compilation and is withdrawn.
-    Two fixes were required for full PASS: raster-gated RDP (chord
-    containment gate) and a minimum joint separation (unconstrained
+    Three fixes were required for full PASS: raster-gated RDP (chord
+    containment gate), a minimum joint separation (unconstrained
     straight-snapping piled two joints 5 seed-samples apart, leaving a
     sliver occurrence whose coincident portals folded optimizer charts
-    at iteration 5). Geometry contract (enforced in code): wall
-    simplification may annex at most epsilon of occupied space, and
-    only across features narrower than the gate resolves (~3 cells);
-    `build_manifest` rejects `chain_dp_epsilon_m / resolution > 0.6`,
-    which bounds intrusion to ~0.5 raster cells in the supported
-    envelope (diagonal stair-step corners up to ~0.62). The method is
+    at iteration 5), and a gated radial pre-filter (the ungated
+    pre-filter silently dropped sub-spacing notches taller than
+    epsilon before RDP's deviation bound applied; measured 3x-eps gain
+    on a 1-cell-wide x 1.2-cell notch fixture). Geometry contract
+    (enforced in code): the pre-filter only removes deviations below
+    the envelope's quantization floor (0.6 raster cells: pixel
+    staircase peaks at ~0.5 px) with gate-checked chords, then RDP
+    bounds the remainder within epsilon, also gated. End-to-end gain
+    vs the extracted dense wall is bounded by floor + epsilon
+    (<= ~1.2 cells inside the envelope); `build_manifest` rejects
+    `chain_dp_epsilon_m / resolution > 0.6`. The method is
     raster-constrained bounded approximation, not strictly inward: a
     narrow sub-epsilon feature IS annexed (e.g. a 2-cell-wide 8 mm
-    peninsula at 2 mm raster), which is why the envelope — not the
-    gate alone — carries the guarantee.
+    peninsula at 2 mm raster with eps 0.02: above the 1.2 mm floor,
+    so the prefilter reinstates it, then RDP drops it within its
+    epsilon bound), which is why the envelope — not the gate
+    alone — carries the guarantee.
     Documented procedure (`/mnt/storage/forza-annot/baku_recipe.py`),
     not a UI option. Generation is recorded on system python3.12
     (opencv 5.0): `ridge_seed` follows cv2 distance-transform numerics,

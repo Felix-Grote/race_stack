@@ -390,23 +390,10 @@ def patched_free_mask(track_map, boundary_strokes_px, stroke_width_px=5):
     return np.where(patched, 0, 255).astype(np.uint8)
 
 
-def extract_boundaries(track_map, boundary_strokes_px=(), stroke_width_px=5):
-    """Extract (outer, inner) closed loops in file-pixel coordinates.
-
-    The free space must be exactly one connected region with exactly one
-    hole (a planar annulus). Any other topology is rejected - an open
-    gap merges the hole with the outside, a split adds regions - rather
-    than being guessed at.
-    """
-    free = patched_free_mask(track_map, boundary_strokes_px, stroke_width_px)
-    if (bool(free[0, :].any()) or bool(free[-1, :].any())
-            or bool(free[:, 0].any()) or bool(free[:, -1].any())):
-        raise AnnotationError(
-            'extraction failed: free space touches the image frame '
-            '(open outer wall at the map edge; draw a boundary stroke '
-            'to close the gap)')
+def _annulus_loops(mask):
+    """Split a free mask into (outer, inner) closed loops or reject."""
     contours, hierarchy = cv2.findContours(
-        free, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
+        mask, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
     if hierarchy is None or len(contours) == 0:
         raise AnnotationError('extraction failed: no free space found')
     hier = hierarchy[0]
@@ -424,6 +411,28 @@ def extract_boundaries(track_map, boundary_strokes_px=(), stroke_width_px=5):
     outer = contours[outer_idx[0]].reshape(-1, 2).astype(float)
     inner = contours[holes[0]].reshape(-1, 2).astype(float)
     return outer, inner
+
+
+def _touches_frame(mask):
+    return (bool(mask[0, :].any()) or bool(mask[-1, :].any())
+            or bool(mask[:, 0].any()) or bool(mask[:, -1].any()))
+
+
+def extract_boundaries(track_map, boundary_strokes_px=(), stroke_width_px=5):
+    """Extract (outer, inner) closed loops in file-pixel coordinates.
+
+    The free space must be exactly one connected region with exactly one
+    hole (a planar annulus). Any other topology is rejected - an open
+    gap merges the hole with the outside, a split adds regions - rather
+    than being guessed at.
+    """
+    free = patched_free_mask(track_map, boundary_strokes_px, stroke_width_px)
+    if _touches_frame(free):
+        raise AnnotationError(
+            'extraction failed: free space touches the image frame '
+            '(open outer wall at the map edge; draw a boundary stroke '
+            'to close the gap)')
+    return _annulus_loops(free)
 
 
 def _arc(chain_closed, start_idx, end_idx, step_sign):
@@ -445,23 +454,73 @@ def _circular_gap(a, b, n):
     return min((a - b) % n, (b - a) % n)
 
 
-def _simplify(points, min_spacing_px):
-    """Drop consecutive points closer than min_spacing_px (keep last)."""
-    out = [points[0]]
-    for p in points[1:]:
-        if math.hypot(*(np.array(p) - np.array(out[-1]))) >= min_spacing_px:
-            out.append(p)
-    if np.linalg.norm(np.array(points[-1]) - np.array(out[-1])) > 1e-9:
-        out.append(points[-1])
-    return out
+def _simplify(points, min_spacing_px, eps_m=0.0, chord_ok=None):
+    """Drop consecutive points closer than min_spacing_px (keep last).
+
+    The radial pass alone is unbounded: it can silently remove a
+    sub-spacing feature before RDP ever sees it (the annexing chord
+    then hits RDP's zero-deviation shortcut, which skips the raster
+    gate). Callers that simplify legal walls must therefore pass a
+    deviation bound and chord predicate: every shortcut chord over
+    dropped points is then verified (deviation within eps_m, predicate
+    holds), and violations re-instate the farthest dropped vertex
+    RDP-style, so the output stays within eps_m of the input with
+    gate-checked chords. The wall chain passes the envelope's
+    quantization floor (0.6 raster cells: pixel staircase is <= ~0.5
+    px) here and the wall epsilon to RDP below. The seed centerline
+    intentionally uses the legacy unbounded form (it carries no
+    corridor legality; strict validation judges it downstream).
+    """
+    pts = [np.array(p, float) for p in points]
+    n = len(pts)
+    if n < 2:
+        return [tuple(p) for p in pts]
+    keep = [0]
+    for i in range(1, n):
+        if float(np.linalg.norm(pts[i] - pts[keep[-1]])) >= min_spacing_px:
+            keep.append(i)
+    if keep[-1] != n - 1:
+        keep.append(n - 1)
+    if not (eps_m > 0 and chord_ok is not None):
+        return [tuple(pts[i]) for i in keep]
+    kept = [False] * n
+    for i in keep:
+        kept[i] = True
+    stack = [(keep[j], keep[j + 1]) for j in range(len(keep) - 1)]
+    while stack:
+        a, b = stack.pop()
+        if b - a < 2:
+            continue
+        seg = pts[b] - pts[a]
+        denom = float(np.dot(seg, seg))
+        dist, idx = 0.0, -1
+        for i in range(a + 1, b):
+            t = 0.0 if denom < 1e-18 else float(
+                np.dot(pts[i] - pts[a], seg) / denom)
+            proj = pts[a] + min(1.0, max(0.0, t)) * seg
+            d = float(np.linalg.norm(pts[i] - proj))
+            if d > dist:
+                dist, idx = d, i
+        if dist <= 1e-9:
+            continue
+        if dist > eps_m or not chord_ok(pts[a], pts[b]):
+            kept[idx] = True
+            stack.append((a, idx))
+            stack.append((idx, b))
+    return [tuple(pts[i]) for i in range(n) if kept[i]]
 
 
-#: Maximum RDP epsilon in raster cells for corridor walls. Annexation
-#: gain equals removed-feature height, which RDP bounds by epsilon; the
-#: chord gate additionally rejects crossings of occupied spans >= ~3
-#: cells wide. A 576-run fixture sweep measured worst gain 0.50 cells at
-#: ratio 0.6 (2x margin to the 1-cell bar) and gain_mm <= eps_mm in every
-#: run. build_manifest enforces this; the bare primitive carries no
+#: Wall-simplification envelope in raster cells. Walls pass two bounded
+#: stages: a radial pre-filter that only removes deviations below this
+#: quantization floor (pixel staircase peaks at ~0.5 px), then RDP
+#: bounded by the wall epsilon with raster-gate-checked chords. End to
+#: end the gain against the extracted dense wall is bounded by floor +
+#: epsilon (<= 1.2 cells inside the envelope); the chord gate
+#: additionally rejects crossings of occupied spans >= ~3 cells wide.
+#: A 576-run fixture sweep measured worst gain 0.50 cells at ratio 0.6
+#: for the RDP stage, and the full chain keeps the pinned 1x1.2-cell
+#: notch fixture at ~0 gain (above the floor, then kept by RDP).
+#: build_manifest enforces the envelope; the bare primitives carry no
 #: resolution bound (unit fixtures intentionally exceed it).
 MAX_DP_EPS_PER_CELL = 0.6
 
@@ -489,10 +548,15 @@ def _douglas_peucker(points, epsilon, _chord_ok=None):
     raster-grounded, not strictly inward: it rejects chords crossing
     occupied spans >= ~3 cells wide (axis; ~4 diagonal), while a removed
     feature narrower than that is annexed up to its own height, which
-    RDP already bounds by epsilon. The honest contract is therefore
-    gain <= epsilon, tightened to sub-cell by the build_manifest
-    envelope (epsilon/resolution <= MAX_DP_EPS_PER_CELL); see
-    ``_chord_stays_free`` for the predicate's resolving power.
+    this stage bounds by epsilon against its own input. The wall chain
+    pairs this with a floor-bounded ``_simplify`` (deviations below 0.6
+    raster cells are pixel-staircase quantization, verified the same
+    way), so the end-to-end gain against the extracted dense wall is
+    bounded by floor + epsilon; the build_manifest envelope
+    (epsilon/resolution <= MAX_DP_EPS_PER_CELL = 0.6) tightens that to
+    ~1.2 raster cells worst case. RDP alone (the swept primitive) holds
+    gain <= eps; see ``_chord_stays_free`` for the predicate's resolving
+    power.
     """
     pts = [np.array(p, float) for p in points]
     if len(pts) < 3 or epsilon <= 0:
@@ -536,9 +600,10 @@ def _loop_reference_mask(track_map, outer_px, inner_px):
     contour rasterization (~0.5 px). Chords of simplified walls are
     tested against this mask, so the exported corridor cannot gain space
     across occupied spans the mask resolves (>= ~3 cells wide); narrower
-    sub-epsilon features are bounded by the build_manifest envelope, not
-    by this mask alone. Frame-touching free space is rejected upstream,
-    so no loop legitimately reaches the image border.
+    features are bounded by the build_manifest envelope (quantization
+    floor plus epsilon), not by this mask alone. Frame-touching free
+    space is rejected upstream, so no loop legitimately reaches the
+    image border.
     """
     width, height = int(track_map.width), int(track_map.height)
     mask = np.zeros((height, width), np.uint8)
@@ -556,10 +621,12 @@ def _chord_stays_free(a, b, free, to_px_uv, res_m):
     rejected. Resolving power, measured: crossings of occupied spans
     >= 3 cells wide (axis; >= 4 diagonal) are rejected, and a chord
     hugging the true wall passes. Narrower occupied features are
-    invisible to the one-cell dilation: removing one annexes it up to
-    its own height (RDP already requires height <= epsilon). For
-    example, a 2-cell-wide 8 mm peninsula at 2 mm raster is fully
-    annexed, while a 15 mm tooth 7+ cells wide is kept. Out-of-bounds
+    invisible to the one-cell dilation: a chord over one is accepted,
+    and its annexation is bounded by the calling stage's epsilon (each
+    wall stage requires removed-feature height <= epsilon, verified
+    against its own input). For example, a 2-cell-wide 8 mm peninsula
+    at 2 mm raster is annexed only if its height fits the stage bound,
+    while a 15 mm tooth 7+ cells wide is kept. Out-of-bounds
     samples fail closed. Intrusions below one raster cell are
     unresolvable by construction (the grid cannot represent them) and
     documented. The sub-cell remainder is bounded by the build_manifest
@@ -741,16 +808,22 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
     seed/correction metrics; the payload itself carries no extra fields
     so Project A's strict schema keeps accepting it verbatim.
 
-    Geometry contract (enforced): wall simplification may annex at most
-    epsilon of occupied space (RDP deviation bound), and only across
-    features narrower than the chord gate resolves (~3 cells). Under the
-    enforced precondition ``chain_dp_epsilon_m / resolution <=
-    MAX_DP_EPS_PER_CELL`` (0.6) the intrusion is additionally bounded to
-    ~0.5 raster cells (measured worst case; diagonal stair-step corners
-    up to ~0.62), i.e. sub-cell in the supported envelope. Configs
-    above the ratio are rejected instead of producing a purportedly
-    valid export. Epsilon 0 disables simplification (exact polyline)
-    and is exempt.
+    Geometry contract (enforced): wall simplification runs two bounded,
+    gate-checked stages. The radial pre-filter only removes deviations
+    below the envelope's quantization floor (0.6 raster cells: pixel
+    staircase peaks at ~0.5 px), so an eps-bounded prefilter cannot
+    reinstate every quantization jag and explode polygon budgets, while
+    real features above the floor survive. RDP then bounds the
+    remainder within epsilon with raster-gate-checked chords. End to
+    end the gain against the extracted dense wall is bounded by floor
+    + epsilon (<= ~1.2 raster cells inside the envelope), and only
+    across features narrower than the chord gate resolves (~3 cells);
+    the pinned 1x1.2-cell notch fixture measures ~0 gain (above the
+    floor, then kept by RDP). Under the enforced precondition
+    ``chain_dp_epsilon_m / resolution <= MAX_DP_EPS_PER_CELL`` (0.6).
+    Configs above the ratio are rejected instead of producing a
+    purportedly valid export. Epsilon 0 skips RDP (radial decimation
+    still applies) and is exempt.
     """
     if approval not in ('operator-approved', 'none'):
         raise AnnotationError("approval must be 'operator-approved' or 'none'")
@@ -907,7 +980,15 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
             midref = ref[len(ref) // 2]
             pick = fwd if np.linalg.norm(fwd[len(fwd) // 2] - midref) <= \
                 np.linalg.norm(rev[len(rev) // 2] - midref) else rev
-            return _simplify(pick, min_spacing_px * track_map.resolution)
+            # Prefilter bound is the envelope's quantization floor
+            # (0.6 raster cells: pixel staircase is <= ~0.5 px), not eps:
+            # an eps-bounded prefilter reinstates every quantization jag
+            # and explodes the checker's polygon budgets. RDP below still
+            # enforces eps with the raster gate; real features above the
+            # floor survive both stages (pinned by regression test).
+            floor_m = MAX_DP_EPS_PER_CELL * track_map.resolution
+            return _simplify(pick, min_spacing_px * track_map.resolution,
+                             floor_m, wall_chord_ok)
         left = arc_pts(a['lchain'], a['lj'], b['lj'], frag)
         right = arc_pts(a['rchain'], a['rj'], b['rj'], frag)
         if chain_dp_epsilon_m > 0:

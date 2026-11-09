@@ -11,7 +11,7 @@ cd "$REPO"
 SYS="${SYSTEM_PY:-python3.12}"
 PIN="${1:-${PINNED_PY:-$HOME/venvs/forza-pinned/bin/python}}"
 OUT="${REPRO_OUT:-$HERE/out_baku}"
-MAP=baku EXPECTED_H=f96db7b9d36553a4d453089dd5241055925479b30459368c70c4eedb687b3ff2
+MAP=baku EXPECTED_H=82f9b533ce50ad3e7b974187f19e9c40d944ca8b87115d21eb34e5fb41ac03f0
 COMMITTED="$HERE/manifests/manifest_baku_bal003.json"
 REGEN="$OUT/manifest_baku_bal003.json"
 mkdir -p "$OUT"
