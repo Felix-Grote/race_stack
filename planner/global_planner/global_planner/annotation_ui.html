@@ -18,6 +18,7 @@ button{margin:2px;padding:6px 10px} .on{background:#2a7;color:#fff}
  <button id="clearRoute">Clear route</button>
  <label>Stroke width <select id="width"><option>3</option><option selected>5</option><option>9</option><option>13</option></select></label>
  <button id="extract">Run extraction</button>
+ <button id="suggest">Suggest centerline</button>
  <button id="preview">Preview candidate</button>
  <button id="approve">Approve preview</button>
  <button id="export">Export approved</button>
@@ -70,6 +71,10 @@ document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool
 function applied(res){ if(res.session){S=res.session; validated=[];} info(); say(res.status+': '+(res.message||'')); draw(); }
 document.getElementById('openBtn').onclick=async()=>{ const name=document.getElementById('mapYaml').value.trim(); const res=await api('/api/session/open',{map:name}); if(res.session){S=res.session; validated=[]; candidate=null;} info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('extract').onclick=async()=>{ const res=await api('/api/session/extract',{}); if(res.session){S=res.session; validated=[];} info(); say(res.status+': '+(res.message||'')); draw(); };
+document.getElementById('suggest').onclick=async()=>{
+  const res=await api('/api/session/suggest',{});
+  if(res.session){S=res.session; validated=[]; candidate=null;}
+  info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('preview').onclick=async()=>{ const res=await api('/api/session/preview',{}); if(res.session){S=res.session; validated=res.validated_route_px||[]; candidate=res.candidate_digest||null;} info(); say((res.status||'FAIL')+': '+(res.message||res.reason||'')); draw(); };
 document.getElementById('approve').onclick=async()=>{ if(!candidate){say('FAIL: preview a candidate first');return;} const res=await api('/api/session/approve',{approval_digest:candidate}); if(res.session){S=res.session;} info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('export').onclick=async()=>{ const res=await api('/api/session/export',{}); if(res.session){S=res.session;} info(); say(res.status+': '+(res.message||'')); draw(); };

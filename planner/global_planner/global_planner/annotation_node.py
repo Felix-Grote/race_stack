@@ -96,6 +96,7 @@ class AnnotationNode(Node if rclpy else object):
                 op = {'open': server_core.op_open,
                       'update': server_core.op_update,
                       'extract': server_core.op_extract,
+                      'suggest': server_core.op_suggest,
                       'preview': server_core.op_preview,
                       'approve': server_core.op_approve,
                       'export': server_core.op_export,

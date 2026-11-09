@@ -19,7 +19,7 @@ from pathlib import Path
 from .annotation_core import (AnnotationError, TrackMap, build_and_validate,
                               extract_boundaries, geometry_digest,
                               load_session, new_session, require_approved,
-                              save_session)
+                              save_session, suggest_route)
 
 STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
          'out_dir': None, 'candidate_digest': None}
@@ -124,6 +124,27 @@ def op_update(body):
     note = 'cleared' if field == 'route_px' and not value else 'updated'
     return {'status': 'PASS',
             'message': f'{field} {note} (draft rev {session["revision"]}, unapproved)',
+            'session': _session_view()}
+
+
+def op_suggest(body):
+    """Fill the route pencil with a computed centerline suggestion.
+
+    An edit like any other: bumps the revision, revokes approval, clears
+    the candidate. The operator inspects the suggestion in preview, may
+    redraw it, and only an explicit approve authorizes export.
+    """
+    session, track_map = require_open()
+    outer, inner = extract_boundaries(track_map, session['boundary_strokes_px'],
+                                      session.get('stroke_width_px', 5))
+    suggested = suggest_route(outer, inner, session.get('route_px', []))
+    session['route_px'] = suggested + [suggested[0]]  # explicit closure
+    _touch(session)
+    return {'status': 'PASS',
+            'message': f'suggested centerline ({len(session["route_px"])} '
+                       f'points, closed loop, draft rev '
+                       f'{session["revision"]}, unapproved); inspect in '
+                       'preview, redraw if it looks wrong',
             'session': _session_view()}
 
 
@@ -275,10 +296,10 @@ def op_undo(body):
 
 
 OPS = {'/api/session/open': op_open, '/api/session/update': op_update,
-       '/api/session/extract': op_extract, '/api/session/preview': op_preview,
-       '/api/session/approve': op_approve, '/api/session/export': op_export,
-       '/api/session/save': op_save, '/api/session/undo': op_undo,
-       '/api/session/state': op_state}
+       '/api/session/extract': op_extract, '/api/session/suggest': op_suggest,
+       '/api/session/preview': op_preview, '/api/session/approve': op_approve,
+       '/api/session/export': op_export, '/api/session/save': op_save,
+       '/api/session/undo': op_undo, '/api/session/state': op_state}
 
 
 class Handler(BaseHTTPRequestHandler):

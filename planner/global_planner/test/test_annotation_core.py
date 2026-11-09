@@ -13,7 +13,8 @@ sys.path.insert(0, str(Path(__file__).parents[1]))
 from global_planner.annotation_core import (  # noqa: E402
     AnnotationError, TrackMap, build_and_validate, check_session_map,
     extract_boundaries, geometry_digest, load_session, new_session,
-    patched_free_mask, require_approved, ridge_seed, save_session)
+    patched_free_mask, require_approved, ridge_seed, save_session,
+    suggest_route)
 from global_planner.route_input import RouteError, validate_route  # noqa: E402
 
 MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
@@ -564,6 +565,76 @@ def test_hairpin_map_extraction_topology(name):
     track_map = TrackMap(MAPS / f'{name}.yaml')
     outer, inner = extract_boundaries(track_map)
     assert len(outer) > 1000 and len(inner) > 1000
+
+
+def _signed_area(pts):
+    pts = np.asarray(pts, float)
+    return 0.5 * float(np.sum(pts[:, 0] * np.roll(pts[:, 1], -1)
+                               - np.roll(pts[:, 0], -1) * pts[:, 1]))
+
+
+def test_suggest_route_follows_operator_direction():
+    """The suggestion is a smooth centerline in the operator's direction."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map)
+    seed = suggest_route(outer, inner)
+    assert len(seed) == 240
+    op_route = _midline_seed(outer, inner)
+    fwd = suggest_route(outer, inner, op_route)
+    rev = suggest_route(outer, inner, op_route[::-1])
+    assert len(fwd) == len(rev) == 240
+    # The suggestion tracks the operator's loop orientation.
+    assert _signed_area(fwd) * _signed_area(op_route) > 0
+    assert _signed_area(rev) * _signed_area(op_route) < 0
+
+
+def test_server_suggest_then_export_cycle(backend):
+    """Suggest -> preview -> approve -> export is a strict PASS."""
+    server = backend
+    server.op_open({'map': 'test'})
+    res = server.op_suggest({})
+    assert res['status'] == 'PASS'
+    # 240 spline points plus the explicit closing point.
+    assert len(server.STATE['session']['route_px']) == 241
+    assert server.STATE['session']['route_px'][0] == \
+        server.STATE['session']['route_px'][-1]
+    prev = server.op_preview({})
+    assert prev['status'] == 'VALIDATED'
+    assert len(prev['validated_route_px']) == 4
+    server.op_approve({'approval_digest': prev['candidate_digest']})
+    exp = server.op_export({})
+    assert exp['status'] == 'VALIDATED'
+    assert exp['route_digest'] == prev['route_digest']
+
+
+def test_build_defaults_thin_walls_and_big_zone():
+    """Pipeline defaults: RDP-thinned walls fit checker budgets and the
+    init zone is the 2.0 x 1.6 m start box (input convention)."""
+    import math
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map)
+    seed = suggest_route(outer, inner)
+    payload, _, _, _ = build_and_validate(
+        track_map, outer, inner, seed, approval='operator-approved')
+    total = sum(len(o['left']) + len(o['right'])
+                for o in payload['occurrences'])
+    assert total < 1000  # dense extraction is ~1626 vertices
+    zone = payload['initialization']['zone']
+    edges = [math.dist(zone[k], zone[(k + 1) % 4]) for k in range(4)]
+    assert sorted(edges) == pytest.approx([1.6, 1.6, 2.0, 2.0], abs=1e-9)
+
+
+def test_node_suggest_roundtrip(tmp_path):
+    """The ROS adapter exposes the suggest op on the same reply path."""
+    _, send = _headless_node(tmp_path)
+    opened = send('open', request_id='s1', map='test')
+    assert opened['status'] == 'PASS' and opened['revision'] == 1
+    res = send('suggest', request_id='s2')
+    assert res['status'] == 'PASS'
+    assert res['request_id'] == 's2'
+    assert len(res['session']['route_px']) == 241
+    assert res['revision'] == 2
+    assert res['session']['approval'] == 'none'
 
 
 def test_node_headless_configuration(tmp_path):
