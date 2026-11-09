@@ -637,6 +637,134 @@ def test_node_suggest_roundtrip(tmp_path):
     assert res['session']['approval'] == 'none'
 
 
+def _synthetic_map(tmp_path, name, image, resolution=0.05):
+    """Write a PNG+YAML fixture map into tmp_path; return the yaml path."""
+    import cv2 as _cv2
+    png = tmp_path / f'{name}.png'
+    _cv2.imwrite(str(png), image)
+    (tmp_path / f'{name}.yaml').write_text(
+        'image: %s.png\nresolution: %s\norigin: [0.0, 0.0, 0.0]\n'
+        'negate: 0\noccupied_thresh: 0.65\nfree_thresh: 0.196\n'
+        % (name, resolution), encoding='utf-8')
+    return tmp_path / f'{name}.yaml'
+
+
+def test_frame_gap_rejected(tmp_path):
+    """Free space touching the image frame is an open outer wall."""
+    import cv2 as _cv2
+    img = np.zeros((80, 80), np.uint8)
+    _cv2.circle(img, (40, 40), 30, 255, -1)
+    _cv2.circle(img, (40, 40), 15, 0, -1)
+    yaml_path = _synthetic_map(tmp_path, 'ring', img)
+    track_map = TrackMap(yaml_path)
+    outer, inner = extract_boundaries(track_map)
+    assert len(outer) > 50 and len(inner) > 20
+    # One-pixel channel from the track to row 0: the frame becomes the
+    # "outer boundary" and must be rejected, not silently accepted.
+    img[0:12, 40] = 255
+    yaml_path = _synthetic_map(tmp_path, 'ring_gap', img)
+    with pytest.raises(AnnotationError, match='frame'):
+        extract_boundaries(TrackMap(yaml_path))
+
+
+def test_frame_gap_real_map_rejected_and_repaired(tmp_path):
+    """Rows 0:11 whitened on the test map: rejected; repaired: accepted."""
+    import cv2 as _cv2
+    import shutil
+    src = MAPS / 'test/test.png'
+    png = tmp_path / 'gap.png'
+    shutil.copy(src, png)
+    img = _cv2.imread(str(png), _cv2.IMREAD_GRAYSCALE)
+    img[0:11, 219:232] = 255
+    _cv2.imwrite(str(png), img)
+    (tmp_path / 'gap.yaml').write_text(
+        (MAPS / 'test/test.yaml').read_text(
+            encoding='utf-8').replace('test.png', 'gap.png'),
+        encoding='utf-8')
+    track_map = TrackMap(tmp_path / 'gap.yaml')
+    with pytest.raises(AnnotationError, match='frame'):
+        extract_boundaries(track_map)
+    # A stroke closing the gap at the frame restores a valid extraction
+    # and even strict validation.
+    outer, inner = extract_boundaries(
+        track_map, [[[211.0, 5.5], [239.0, 5.5]]], 13)
+    seed = _midline_seed(outer, inner)
+    _, route, prepared, _ = build_and_validate(
+        track_map, outer, inner, seed, approval='operator-approved')
+    assert len(route.occurrences) == 4
+    assert len(prepared.samples) > 100
+
+
+def test_rdp_never_expands_corridor():
+    """A 15 mm occupied tooth must survive simplification (2 mm raster)."""
+    from global_planner.annotation_core import (
+        _chord_stays_free, _douglas_peucker)
+    res = 0.002
+    wall = [[x / 1000.0, 0.0] for x in range(0, 61, 5)]
+    wall.insert(6, [0.030, 0.015])  # apex between (25,0) and (30,0)
+    mask = np.zeros((40, 60), np.uint8)
+    for u in range(60):
+        for v in range(40):
+            x, y = u * res, (39 - v) * res
+            inside = y > 0 and not (
+                0.0 <= x <= 0.060
+                and y <= 0.015 * (1 - abs(x - 0.030) / 0.030))
+            mask[v, u] = 255 if inside else 0
+    # Same construction as build_manifest: one-cell dilation = grid quantum.
+    import cv2
+    mask = cv2.dilate(mask, np.ones((3, 3), np.uint8))
+
+    def to_px(pt):
+        return (pt[0] / res, 39 - pt[1] / res)
+
+    def dist_to_poly(pt, poly):
+        """Distance from a point to a polyline (metres)."""
+        pt = np.array(pt, float)
+        best = float('inf')
+        for a, b in zip(poly[:-1], poly[1:]):
+            a, b = np.array(a, float), np.array(b, float)
+            seg = b - a
+            t = min(1.0, max(0.0, float(np.dot(pt - a, seg))
+                             / max(1e-18, float(np.dot(seg, seg)))))
+            best = min(best, float(np.linalg.norm(pt - (a + t * seg))))
+        return best
+
+    apex = [0.030, 0.015]
+    plain = _douglas_peucker(wall, 0.02)
+    assert len(plain) == 2  # old behavior drops the apex (the bug)
+    # The dropped 15 mm tooth becomes corridor: illegal gain.
+    assert dist_to_poly(apex, plain) >= 0.010
+    fixed = _douglas_peucker(wall, 0.02, _chord_ok=lambda a, b:
+                             _chord_stays_free(a, b, mask, to_px, res))
+    assert any(p[1] > 0.01 for p in fixed)  # apex survives: no gain
+    assert len(fixed) < len(wall)  # straight runs still decimate
+    assert dist_to_poly(apex, fixed) <= 0.001  # tip stays on the wall
+    # Straight runs still collapse: no vertex kept without a reason.
+    straight = [[x / 1000.0, 0.0] for x in range(0, 101, 5)]
+    assert len(_douglas_peucker(straight, 0.02, _chord_ok=lambda a, b:
+                                _chord_stays_free(a, b, mask, to_px, res))) \
+        == 2
+
+
+def test_endcaps_exact_and_shared():
+    """Occurrence portals share exact endpoints (repin is identity)."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map)
+    payload, _, _, _ = build_and_validate(
+        track_map, outer, inner, suggest_route(outer, inner),
+        approval='operator-approved')
+    occurrences = payload['occurrences']
+    assert len(occurrences) == 4
+    assert max(len(o['left']) + len(o['right'])
+               for o in occurrences) < 512
+    for k, occ in enumerate(occurrences):
+        nxt = occurrences[(k + 1) % len(occurrences)]
+        gate = payload['transitions'][k]['gate']
+        assert occ['left'][-1] == nxt['left'][0]
+        assert occ['right'][-1] == nxt['right'][0]
+        assert gate == [occ['right'][-1], occ['left'][-1]]
+
+
 def test_node_headless_configuration(tmp_path):
     """The ROS adapter fails fast without dirs and bounds its seen-set."""
     from global_planner import annotation_node as node_mod

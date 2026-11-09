@@ -303,6 +303,12 @@ def extract_boundaries(track_map, boundary_strokes_px=(), stroke_width_px=5):
     than being guessed at.
     """
     free = patched_free_mask(track_map, boundary_strokes_px, stroke_width_px)
+    if (bool(free[0, :].any()) or bool(free[-1, :].any())
+            or bool(free[:, 0].any()) or bool(free[:, -1].any())):
+        raise AnnotationError(
+            'extraction failed: free space touches the image frame '
+            '(open outer wall at the map edge; draw a boundary stroke '
+            'to close the gap)')
     contours, hierarchy = cv2.findContours(
         free, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
     if hierarchy is None or len(contours) == 0:
@@ -338,6 +344,11 @@ def _arc(chain_closed, start_idx, end_idx, step_sign):
     return out
 
 
+def _circular_gap(a, b, n):
+    """Shortest index distance between two samples of a closed n-loop."""
+    return min((a - b) % n, (b - a) % n)
+
+
 def _simplify(points, min_spacing_px):
     """Drop consecutive points closer than min_spacing_px (keep last)."""
     out = [points[0]]
@@ -349,7 +360,7 @@ def _simplify(points, min_spacing_px):
     return out
 
 
-def _douglas_peucker(points, epsilon):
+def _douglas_peucker(points, epsilon, _chord_ok=None):
     """Shape-preserving decimation: keep the fewest points whose polyline
     stays within epsilon of the original (metres).
 
@@ -360,8 +371,16 @@ def _douglas_peucker(points, epsilon):
     optimizer's charts at bends. RDP keeps bend vertices (charts stay
     unfolded) and drops redundant straight-run points. Endpoints are
     always kept; callers re-pin the exact shared end-caps afterwards.
-    Epsilon 0.02 m is the demonstrated value: full compile + independent
-    geometry/dynamics PASS on the test map; coarser breaks the optimizer.
+    Epsilon 0.02 m is the demonstrated default (full compile +
+    independent geometry/dynamics PASS on the test map); baku passes at
+    0.03 m. Coarser values may break optimizer convergence.
+
+    Plain RDP bounds deviation but not side: a chord may cut occupied
+    space. When ``_chord_ok(a, b)`` is given, a within-epsilon chord is
+    still rejected unless the predicate holds; rejection keeps the
+    farthest vertex and recurses exactly like an epsilon violation, so in
+    the limit this falls back to the exact polyline and illegal gain is
+    impossible beyond the predicate's own margin.
     """
     pts = [np.array(p, float) for p in points]
     if len(pts) < 3 or epsilon <= 0:
@@ -383,11 +402,64 @@ def _douglas_peucker(points, epsilon):
             d = float(np.linalg.norm(pts[i] - proj))
             if d > dist:
                 dist, idx = d, i
-        if dist > epsilon:
+        if dist <= 1e-9:
+            # Chord coincides with the original chain: zero deviation
+            # means zero gain; no raster check needed (and wall-coincident
+            # samples would false-reject). Note idx is -1 here, which must
+            # never reach the split below.
+            continue
+        if dist > epsilon or (_chord_ok is not None
+                              and not _chord_ok(pts[a], pts[b])):
             keep[idx] = True
             stack.append((a, idx))
             stack.append((idx, b))
     return [tuple(pts[i]) for i, k in enumerate(keep) if k]
+
+
+def _loop_reference_mask(track_map, outer_px, inner_px):
+    """Rasterize the extracted loops back to the map pixel grid.
+
+    ``outer_px``/``inner_px`` are file-pixel loops; this reconstructs the
+    annotated free region (map + operator strokes) from them, up to
+    contour rasterization (~0.5 px). Chords of simplified walls are
+    tested against this mask, so the exported corridor cannot gain space
+    outside the extracted legal region. Frame-touching free space is
+    rejected upstream, so no loop legitimately reaches the image border.
+    """
+    width, height = int(track_map.width), int(track_map.height)
+    mask = np.zeros((height, width), np.uint8)
+    cv2.fillPoly(mask, [np.int32(np.round(np.asarray(outer_px, float)))], 1)
+    cv2.fillPoly(mask, [np.int32(np.round(np.asarray(inner_px, float)))], 0)
+    return mask
+
+
+def _chord_stays_free(a, b, free, to_px_uv, res_m):
+    """Check a simplified wall chord against the (dilated) free mask.
+
+    Samples the chord every half pixel; every sample must land on free
+    space. The caller passes a free mask dilated by one raster cell, so
+    boundary straddle up to one pixel is tolerated while deeper cuts are
+    rejected: a chord through a 15 mm occupied tooth at 2 mm raster fails,
+    a chord hugging the true wall passes. Out-of-bounds samples fail
+    closed. Intrusions below one raster cell are unresolvable by
+    construction (the grid cannot represent them) and documented.
+    """
+    seg = np.asarray(b, float) - np.asarray(a, float)
+    length = float(np.linalg.norm(seg))
+    if length < 1e-12:
+        return True
+    step = 0.5 * res_m
+    count = max(2, int(math.ceil(length / step)))
+    frac = np.linspace(0.0, 1.0, count + 1)[1:-1]
+    if len(frac) == 0:
+        return True
+    pts = np.asarray(a, float)[None, :] + frac[:, None] * seg[None, :]
+    uv = np.round(np.array([to_px_uv(p) for p in pts])).astype(int)
+    height, width = free.shape
+    if bool((uv[:, 0] < 0).any()) or bool((uv[:, 0] >= width).any()) or \
+            bool((uv[:, 1] < 0).any()) or bool((uv[:, 1] >= height).any()):
+        return False
+    return bool((free[uv[:, 1], uv[:, 0]] > 0).all())
 
 
 def _resample_closed(points_px, spacing_px):
@@ -607,14 +679,29 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
         b = seed[(i + 1) % len(seed)] - p
         turn.append(abs(math.atan2(a[0] * b[1] - a[1] * b[0],
                                    float(np.dot(a, b)))))
+    # Joints must be well separated around the lap: adjacent windows
+    # overlap, so unconstrained straight-snapping can pile two joints a
+    # few samples apart and leave a degenerate sliver occurrence whose
+    # nearly coincident portals fold the optimizer's local charts.
+    min_sep = max(8, len(seed) // 8)
     joint_at = []
     for k in range(n_occurrences):
         target = int(round(k * len(seed) / n_occurrences))
         window = range(target - len(seed) // 8, target + len(seed) // 8)
-        joint_at.append(min(window, key=lambda j: turn[j % len(seed)]) % len(seed))
-    joint_at = sorted(set(joint_at))
-    if len(joint_at) != n_occurrences:
-        raise AnnotationError('could not place distinct split joints; '
+        cand = [j % len(seed) for j in window]
+        if joint_at:
+            cand = [j for j in cand
+                    if min(_circular_gap(j, c, len(seed)) for c in joint_at)
+                    >= min_sep]
+        if not cand:
+            raise AnnotationError('could not place well-separated split joints; '
+                                  'redraw the route loop more evenly')
+        joint_at.append(min(cand, key=lambda j: turn[j]))
+    joint_at = sorted(joint_at)
+    if len(set(joint_at)) != n_occurrences or \
+            any(_circular_gap(a, b, len(seed)) < min_sep
+                for a, b in zip(joint_at, joint_at[1:] + joint_at[:1])):
+        raise AnnotationError('could not place well-separated split joints; '
                               'redraw the route loop more evenly')
     joints = []  # (seed_idx, left_pt, right_pt, left_chain, left_idx, ...)
     for idx in joint_at:
@@ -649,6 +736,18 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
 
     occurrences, transitions = [], []
     min_spacing_px = max(2.0, 0.05 / track_map.resolution)
+    # Reference free mask for the containment gate: chords of simplified
+    # walls must stay within one raster cell of the extracted legal
+    # region (see helpers). Dilation by exactly one cell is the grid
+    # quantum, not an arbitrary margin: anything smaller is
+    # unrepresentable on this raster.
+    ref_free = cv2.dilate(
+        _loop_reference_mask(track_map, outer_px, inner_px),
+        np.ones((3, 3), np.uint8))
+
+    def wall_chord_ok(a, b):
+        return _chord_stays_free(a, b, ref_free, track_map.world_to_pixel,
+                                track_map.resolution)
     for k in range(n_occurrences):
         a, b = joints[k], joints[(k + 1) % n_occurrences]
         # Seed fragment: from joint a to joint b along travel, with the
@@ -673,8 +772,10 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
         left = arc_pts(a['lchain'], a['lj'], b['lj'], frag)
         right = arc_pts(a['rchain'], a['rj'], b['rj'], frag)
         if chain_dp_epsilon_m > 0:
-            left = _douglas_peucker(left, chain_dp_epsilon_m)
-            right = _douglas_peucker(right, chain_dp_epsilon_m)
+            left = _douglas_peucker(left, chain_dp_epsilon_m,
+                                    _chord_ok=wall_chord_ok)
+            right = _douglas_peucker(right, chain_dp_epsilon_m,
+                                     _chord_ok=wall_chord_ok)
         # Force exact shared endpoints regardless of arc simplification.
         left[0], left[-1] = tuple(a['left']), tuple(b['left'])
         right[0], right[-1] = tuple(a['right']), tuple(b['right'])
