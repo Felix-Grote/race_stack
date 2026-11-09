@@ -18,10 +18,11 @@ from pathlib import Path
 
 from .annotation_core import (AnnotationError, TrackMap, build_and_validate,
                               extract_boundaries, geometry_digest,
-                              load_session, new_session, save_session)
+                              load_session, new_session, require_approved,
+                              save_session)
 
 STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
-         'out_dir': None}
+         'out_dir': None, 'candidate_digest': None}
 
 
 def configure(maps_dir, out_dir):
@@ -54,6 +55,7 @@ def _touch(session):
     session['approval'] = 'none'
     session['approval_digest'] = None
     STATE['extraction'] = None
+    STATE['candidate_digest'] = None
 
 
 def _reply(handler, payload, code=200):
@@ -72,6 +74,7 @@ def _session_view():
     if STATE['extraction']:
         outer, inner = STATE['extraction']
         s['extraction'] = {'outer_px': outer.tolist(), 'inner_px': inner.tolist()}
+    s['candidate_digest'] = STATE.get('candidate_digest')
     return s
 
 
@@ -91,7 +94,8 @@ def op_open(body):
     else:
         session = new_session(track_map)
         message = 'new session'
-    STATE.update(map=track_map, session=session, extraction=None)
+    STATE.update(map=track_map, session=session, extraction=None,
+                 candidate_digest=None)
     return {'status': 'PASS', 'message': message, 'session': _session_view()}
 
 
@@ -135,32 +139,14 @@ def op_extract(body):
             'session': _session_view()}
 
 
-def op_export(body):
-    """Approve, build the Project A manifest, and validate it strictly.
-
-    Approval is bound to the exact exported geometry via a digest: any
-    later edit revokes it, and the headless CLI re-checks the digest
-    before exporting the same session.
-    """
-    session, track_map = require_open()
-    if not session.get('route_px'):
-        raise AnnotationError('draw the directed route loop first')
-    outer, inner = extract_boundaries(track_map, session['boundary_strokes_px'],
-                                      session.get('stroke_width_px', 5))
-    STATE['extraction'] = (outer, inner)
-    payload, route, prepared, info = build_and_validate(
-        track_map, outer, inner, session['route_px'],
-        author=session.get('author', 'operator'), approval='operator-approved')
-    out = Path(STATE['out_dir']) / 'legal_route.json'
-    out.write_text(json.dumps(payload, indent=1), encoding='utf-8')
-    session['approval'] = 'operator-approved'
-    session['approval_digest'] = geometry_digest(session, track_map)
-    session['revision'] = int(session.get('revision', 1)) + 1
+def _validated_receipt(payload, route, prepared, info, track_map, out=None):
+    """Shared VALIDATED receipt body (preview and export show the same)."""
     validated_px = [[list(map(float, track_map.world_to_pixel(pt)))
                      for pt in occ['seed']] for occ in payload['occurrences']]
+    where = f'written to {out}. ' if out is not None else 'not written yet. '
     return {'status': 'VALIDATED',
             'message': f'validate_route + prepare_route PASS; route digest '
-                       f'{route.digest[:16]}… written to {out}. '
+                       f'{route.digest[:16]}… {where}'
                        f'seed correction max {info["max_correction_m"]:.3f} m '
                        f'over {info["seed_samples"]} samples '
                        f'(smoothing {info["smoothing_passes"]}). This is '
@@ -171,7 +157,97 @@ def op_export(body):
             'prepared_samples': len(prepared.samples),
             'max_correction_m': info['max_correction_m'],
             'smoothing_passes': info['smoothing_passes'],
-            'validated_route_px': validated_px,
+            'validated_route_px': validated_px}
+
+
+def op_preview(body):
+    """Build the candidate manifest and show it WITHOUT approving.
+
+    Read-only: writes no file, grants no approval, bumps no revision.
+    The candidate is built with the exact approval provenance the export
+    would write, so the shown route digest and validated geometry are
+    bit-identical to the export output; only the file write and the
+    session approval are withheld until approve/export.
+    """
+    session, track_map = require_open()
+    if not session.get('route_px'):
+        raise AnnotationError('draw the directed route loop first')
+    outer, inner = extract_boundaries(track_map, session['boundary_strokes_px'],
+                                      session.get('stroke_width_px', 5))
+    STATE['extraction'] = (outer, inner)
+    payload, route, prepared, info = build_and_validate(
+        track_map, outer, inner, session['route_px'],
+        author=session.get('author', 'operator'),
+        approval='operator-approved')
+    digest = geometry_digest(session, track_map)
+    STATE['candidate_digest'] = digest
+    receipt = _validated_receipt(payload, route, prepared, info, track_map)
+    receipt['candidate_digest'] = digest
+    receipt['session'] = _session_view()
+    return receipt
+
+
+def op_approve(body):
+    """Approve the exact candidate shown by the last preview.
+
+    Fails closed unless the caller quotes the previewed candidate digest
+    and the geometry is unchanged since that preview. Writes no file.
+    """
+    session, track_map = require_open()
+    quoted = body.get('approval_digest')
+    if not quoted or quoted != STATE.get('candidate_digest'):
+        raise AnnotationError('approve refused: no fresh preview for this '
+                              'geometry (preview the candidate first)')
+    if quoted != geometry_digest(session, track_map):
+        raise AnnotationError('approve refused: geometry changed since '
+                              'preview (preview again)')
+    session['approval'] = 'operator-approved'
+    session['approval_digest'] = quoted
+    session['revision'] = int(session.get('revision', 1)) + 1
+    return {'status': 'PASS',
+            'message': f'candidate {quoted[:16]}… approved '
+                       f'(draft rev {session["revision"]})',
+            'session': _session_view()}
+
+
+def op_export(body):
+    """Export exactly the approved candidate geometry.
+
+    Approval must already be bound to a fresh preview of the current
+    geometry; this op never grants approval itself. Re-runs extraction
+    and validation so the file always matches the current geometry.
+    """
+    session, track_map = require_open()
+    require_approved(session, track_map)
+    if session.get('approval_digest') != STATE.get('candidate_digest'):
+        raise AnnotationError('export refused: no fresh preview for the '
+                              'approved geometry (preview, approve, then '
+                              'export)')
+    if not session.get('route_px'):
+        raise AnnotationError('draw the directed route loop first')
+    outer, inner = extract_boundaries(track_map, session['boundary_strokes_px'],
+                                      session.get('stroke_width_px', 5))
+    STATE['extraction'] = (outer, inner)
+    payload, route, prepared, info = build_and_validate(
+        track_map, outer, inner, session['route_px'],
+        author=session.get('author', 'operator'), approval='operator-approved')
+    out = Path(STATE['out_dir']) / 'legal_route.json'
+    out.write_text(json.dumps(payload, indent=1), encoding='utf-8')
+    receipt = _validated_receipt(payload, route, prepared, info, track_map,
+                                 out=out)
+    receipt['session'] = _session_view()
+    return receipt
+
+
+def op_state(body):
+    """Return the canonical session state without mutating anything.
+
+    Lets a (re)connecting ROS client or UI recover the authoritative
+    revision, approval, and candidate digest after a disconnect.
+    """
+    session, _ = require_open()
+    return {'status': 'PASS', 'message': 'canonical session state',
+            'revision': session.get('revision'),
             'session': _session_view()}
 
 
@@ -199,8 +275,10 @@ def op_undo(body):
 
 
 OPS = {'/api/session/open': op_open, '/api/session/update': op_update,
-       '/api/session/extract': op_extract, '/api/session/export': op_export,
-       '/api/session/save': op_save, '/api/session/undo': op_undo}
+       '/api/session/extract': op_extract, '/api/session/preview': op_preview,
+       '/api/session/approve': op_approve, '/api/session/export': op_export,
+       '/api/session/save': op_save, '/api/session/undo': op_undo,
+       '/api/session/state': op_state}
 
 
 class Handler(BaseHTTPRequestHandler):

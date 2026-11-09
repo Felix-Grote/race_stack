@@ -25,6 +25,12 @@ try:
 except ImportError:  # ROS not installed (e.g. headless dev container)
     rclpy = None
 
+    class String:  # minimal stand-in so command handling stays testable
+        """Headless stand-in for std_msgs/String (test/dev only)."""
+
+        def __init__(self, data=''):
+            self.data = data
+
 from . import annotation_server as server_core
 
 LATCHED = None  # built lazily when rclpy exists
@@ -66,33 +72,52 @@ class AnnotationNode(Node if rclpy else object):
             self._seen.pop(next(iter(self._seen)))
 
     def _on_command(self, msg):
-        """Apply one JSON command once; always reply with full state."""
+        """Apply one JSON command once; always reply with full state.
+
+        A repeated ``request_id`` is acknowledged as DUPLICATE without
+        re-applying. The id is recorded only after the op succeeds, so a
+        failed command stays retryable instead of being masked as a
+        duplicate. Every reply carries the ``request_id`` (when given)
+        and the authoritative session ``revision`` (when a session is
+        open); use the ``state`` op to recover canonical state after a
+        reconnect.
+        """
+        request_id = None
         try:
             body = json.loads(msg.data)
             request_id = body.pop('request_id', None)
             op_name = body.pop('op', '')
             if request_id is not None and request_id in self._seen:
-                result = {'status': 'DUPLICATE', 'message': 'already applied',
+                result = {'status': 'DUPLICATE',
+                          'message': 'already applied; use the state op '
+                                     'to recover canonical state',
                           'request_id': request_id}
             else:
-                if request_id is not None:
-                    self._remember(request_id)
                 op = {'open': server_core.op_open,
                       'update': server_core.op_update,
                       'extract': server_core.op_extract,
+                      'preview': server_core.op_preview,
+                      'approve': server_core.op_approve,
                       'export': server_core.op_export,
                       'save': server_core.op_save,
-                      'undo': server_core.op_undo}.get(op_name)
+                      'undo': server_core.op_undo,
+                      'state': server_core.op_state}.get(op_name)
                 if op is None:
                     raise ValueError(f'unknown op {op_name}')
                 result = op(body)
                 if request_id is not None:
+                    self._remember(request_id)
                     result = dict(result, request_id=request_id)
             session = server_core.STATE.get('session')
             if session is not None:
                 result = dict(result, revision=session.get('revision'))
         except Exception as exc:  # reply, never crash the session node
             result = {'status': 'FAIL', 'message': str(exc)}
+            if request_id is not None:
+                result = dict(result, request_id=request_id)
+            session = server_core.STATE.get('session')
+            if session is not None:
+                result = dict(result, revision=session.get('revision'))
         out = String()
         out.data = json.dumps(result)
         self._pub.publish(out)

@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parents[1]))
 from global_planner.annotation_core import (  # noqa: E402
     AnnotationError, TrackMap, build_and_validate, check_session_map,
     extract_boundaries, geometry_digest, load_session, new_session,
-    patched_free_mask, require_approved, save_session)
+    patched_free_mask, require_approved, ridge_seed, save_session)
 from global_planner.route_input import RouteError, validate_route  # noqa: E402
 
 MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
@@ -181,7 +181,8 @@ def backend(tmp_path):
     from global_planner import annotation_server as server
     saved = dict(server.STATE)
     server.configure(str(MAPS), str(tmp_path / 'out'))
-    server.STATE.update(map=None, session=None, extraction=None)
+    server.STATE.update(map=None, session=None, extraction=None,
+                        candidate_digest=None)
     yield server
     server.STATE.clear()
     server.STATE.update(saved)
@@ -265,9 +266,8 @@ def test_negate_one_inverts_occupancy(tmp_path):
     assert len(route.occurrences) == 4
 
 
-def test_server_undo_revokes_approval(backend):
-    """Undo is an edit: it revokes approval and bumps the revision."""
-    server = backend
+def _draw_test_route(server):
+    """Open the test map and draw a stroke + seed route; return track map."""
     server.op_open({'map': 'test'})
     assert server.STATE['extraction'] is None
     server.op_update({'field': 'boundary_strokes_px',
@@ -277,19 +277,87 @@ def test_server_undo_revokes_approval(backend):
         track_map, server.STATE['session']['boundary_strokes_px'], 5)
     server.op_update({'field': 'route_px',
                       'value': _midline_seed(outer, inner)})
-    rev_before_export = server.STATE['session']['revision']
-    res = server.op_export({})
-    assert res['status'] == 'VALIDATED'
+    return track_map
+
+
+def test_server_preview_approve_export_cycle(backend):
+    """Preview shows the transformed candidate; approve binds it; export
+    writes exactly that candidate. Export without approval is refused."""
+    import os
+    server = backend
+    track_map = _draw_test_route(server)
+    rev_before_preview = server.STATE['session']['revision']
+    prev = server.op_preview({})
+    assert prev['status'] == 'VALIDATED'
+    assert prev['candidate_digest'] == geometry_digest(
+        server.STATE['session'], track_map)
+    assert prev['validated_route_px'] and len(prev['validated_route_px']) == 4
+    assert prev['max_correction_m'] >= 0.0
+    # Preview is read-only: no approval, no revision bump, no file.
+    assert server.STATE['session']['approval'] == 'none'
+    assert server.STATE['session']['approval_digest'] is None
+    assert server.STATE['session']['revision'] == rev_before_preview
+    assert not os.path.exists(
+        os.path.join(server.STATE['out_dir'], 'legal_route.json'))
+    # Export without approval is refused by design.
+    with pytest.raises(AnnotationError, match='not .operator-approved'):
+        server.op_export({})
+    appr = server.op_approve({'approval_digest': prev['candidate_digest']})
+    assert appr['status'] == 'PASS'
     assert server.STATE['session']['approval'] == 'operator-approved'
-    assert server.STATE['session']['approval_digest'] is not None
-    assert res['max_correction_m'] >= 0.0
-    assert res['validated_route_px'] and len(res['validated_route_px']) == 4
+    exp = server.op_export({})
+    assert exp['status'] == 'VALIDATED'
+    # Previewed and exported outputs are demonstrably identical.
+    assert exp['route_digest'] == prev['route_digest']
+    assert exp['validated_route_px'] == prev['validated_route_px']
+    assert os.path.exists(
+        os.path.join(server.STATE['out_dir'], 'legal_route.json'))
+
+
+def test_server_approve_rejects_stale_preview(backend):
+    """Approval binds the previewed digest; edits invalidate it."""
+    server = backend
+    _draw_test_route(server)
+    prev = server.op_preview({})
+    with pytest.raises(AnnotationError, match='preview the candidate first'):
+        server.op_approve({'approval_digest': 'wrong-digest'})
+    with pytest.raises(AnnotationError, match='approve refused'):
+        server.op_approve({})
+    # An edit after preview invalidates the candidate: approve must fail.
+    server.op_update({'field': 'stroke_width_px', 'value': 9})
+    with pytest.raises(AnnotationError, match='no fresh preview'):
+        server.op_approve({'approval_digest': prev['candidate_digest']})
+
+
+def test_server_undo_revokes_approval(backend):
+    """Undo is an edit: it revokes approval and bumps the revision."""
+    server = backend
+    _draw_test_route(server)
+    prev = server.op_preview({})
+    server.op_approve({'approval_digest': prev['candidate_digest']})
+    rev_before_undo = server.STATE['session']['revision']
+    assert server.STATE['session']['approval'] == 'operator-approved'
     undone = server.op_undo({})
     assert undone['status'] == 'PASS'
     assert server.STATE['session']['approval'] == 'none'
     assert server.STATE['session']['approval_digest'] is None
-    assert server.STATE['session']['revision'] > rev_before_export
+    assert server.STATE['session']['revision'] > rev_before_undo
     assert server.STATE['extraction'] is None
+    assert server.STATE['candidate_digest'] is None
+
+
+def test_server_state_op_recovers_canonical_state(backend):
+    """The state op reports canonical state without mutating anything."""
+    server = backend
+    _draw_test_route(server)
+    rev = server.STATE['session']['revision']
+    res = server.op_state({})
+    assert res['status'] == 'PASS'
+    assert res['revision'] == rev
+    assert res['session']['revision'] == rev
+    # Read-only: revision and approval untouched.
+    assert server.STATE['session']['revision'] == rev
+    assert server.STATE['session']['approval'] == 'none'
 
 
 def test_server_update_validation_and_clear(backend):
@@ -349,6 +417,153 @@ def test_cli_export_refuses_stale_approval(tmp_path):
     assert tool.main(['export', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
                       '--out', str(out)]) == 1
+
+
+def test_cli_preview_approve_export_cycle(tmp_path):
+    """Headless preview -> approve -> export writes the previewed digest."""
+    import json as _json
+    from global_planner import annotation_tool as tool
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map, [], 5)
+    session = new_session(track_map)
+    session['route_px'] = _midline_seed(outer, inner)
+    session_path = tmp_path / 'session.json'
+    save_session(session, session_path)
+    out = tmp_path / 'cli_out'
+    # Export before approval is refused.
+    assert tool.main(['export', '--map', str(track_map.yaml_path),
+                      '--session', str(session_path),
+                      '--out', str(out)]) == 1
+    assert not (out / 'legal_route.json').exists()
+    # Preview is read-only: prints the candidate digest, writes nothing.
+    assert tool.main(['preview', '--map', str(track_map.yaml_path),
+                      '--session', str(session_path),
+                      '--out', str(out)]) == 0
+    assert not (out / 'legal_route.json').exists()
+    candidate = geometry_digest(
+        load_session(session_path, track_map), track_map)
+    # Approve needs the previewed candidate digest.
+    assert tool.main(['approve', '--map', str(track_map.yaml_path),
+                      '--session', str(session_path),
+                      '--out', str(out)]) == 1
+    assert tool.main(['approve', '--map', str(track_map.yaml_path),
+                      '--session', str(session_path),
+                      '--out', str(out),
+                      '--candidate', 'wrong-digest']) == 1
+    assert tool.main(['approve', '--map', str(track_map.yaml_path),
+                      '--session', str(session_path),
+                      '--out', str(out),
+                      '--candidate', candidate]) == 0
+    assert tool.main(['export', '--map', str(track_map.yaml_path),
+                      '--session', str(session_path),
+                      '--out', str(out)]) == 0
+    assert (out / 'legal_route.json').exists()
+    payload = _json.loads((out / 'legal_route.json').read_text())
+    assert payload['provenance']['approval'] == 'operator-approved'
+
+
+def _headless_node(tmp_path):
+    """Drive the ROS adapter headlessly with a stub publisher."""
+    from global_planner import annotation_node as node_mod
+
+    class Pub:
+        def __init__(self):
+            self.sent = []
+
+        def publish(self, msg):
+            self.sent.append(json.loads(msg.data))
+
+    node = node_mod.AnnotationNode(maps_dir=str(MAPS),
+                                   out_dir=str(tmp_path / 'node_out'))
+    pub = Pub()
+    node._pub = pub
+
+    def send(op, request_id=None, **fields):
+        body = dict(op=op, **fields)
+        if request_id is not None:
+            body['request_id'] = request_id
+
+        class Msg:
+            data = json.dumps(body)
+
+        node._on_command(Msg())
+        return pub.sent[-1]
+
+    return node, send
+
+
+def test_node_retry_ack_correlation(tmp_path):
+    """Failed commands stay retryable; successes dedup; every reply is
+    correlated with request_id and the authoritative revision."""
+    from global_planner import annotation_node as node_mod
+    assert node_mod.rclpy is None  # headless env: documents the ROS blocker
+    _, send = _headless_node(tmp_path)
+    opened = send('open', request_id='r1', map='test')
+    assert opened['status'] == 'PASS'
+    assert opened['request_id'] == 'r1'
+    rev1 = opened['revision']
+    # Unknown op fails WITH correlation and stays retryable: the same
+    # id with a valid op must execute, not report DUPLICATE.
+    failed = send('nope', request_id='r2')
+    assert failed['status'] == 'FAIL'
+    assert failed['request_id'] == 'r2'
+    assert failed['revision'] == rev1
+    recovered = send('state', request_id='r2')
+    assert recovered['status'] == 'PASS'
+    assert recovered['request_id'] == 'r2'
+    assert recovered['revision'] == rev1
+    # Repeating a successful id is a DUPLICATE with correlation + revision.
+    dup = send('open', request_id='r1', map='test')
+    assert dup['status'] == 'DUPLICATE'
+    assert dup['request_id'] == 'r1'
+    assert dup['revision'] == rev1
+    # A state fetch after (simulated) reconnect recovers canonical state.
+    state = send('state')
+    assert state['status'] == 'PASS'
+    assert state['revision'] == rev1
+    assert 'request_id' not in state
+
+
+@pytest.mark.parametrize('name', ['test/test', 'baku/baku'])
+def test_ridge_seed_validates(name):
+    """DT-ridge seeds validate strictly on supported maps.
+
+    Unlike the crude correspondence midline, the ridge seed is derived
+    from the free-space distance transform, so it stays centered through
+    bends without a nearest-pairing flip.
+    """
+    track_map = TrackMap(MAPS / f'{name}.yaml')
+    outer, inner = extract_boundaries(track_map)
+    seed = ridge_seed(track_map, outer, inner)
+    _, route, prepared, info = build_and_validate(
+        track_map, outer, inner, seed, approval='operator-approved')
+    assert len(route.occurrences) == 4
+    assert len(prepared.samples) > 100
+    assert info['seed_samples'] > 100
+
+
+def test_ridge_seed_confined_and_deterministic():
+    """Ridge seeds never leave free space and are exactly repeatable."""
+    import cv2
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map)
+    first = ridge_seed(track_map, outer, inner)
+    second = ridge_seed(track_map, outer, inner)
+    assert first == second
+    free = patched_free_mask(track_map, [], 5)
+    dist = cv2.distanceTransform(free, cv2.DIST_L2, 3)
+    assert len(first) > 50
+    for p in first:
+        assert dist[int(round(p[1])), int(round(p[0]))] > 0
+
+
+@pytest.mark.parametrize('name', ['spa/spa', 'zuri/zuri'])
+def test_hairpin_map_extraction_topology(name):
+    """Hairpin maps extract a clean annulus; route preparation needs an
+    operator-drawn seed (programmatic seeds are rejected fail-closed)."""
+    track_map = TrackMap(MAPS / f'{name}.yaml')
+    outer, inner = extract_boundaries(track_map)
+    assert len(outer) > 1000 and len(inner) > 1000
 
 
 def test_node_headless_configuration(tmp_path):

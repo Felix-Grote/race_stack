@@ -376,6 +376,72 @@ def _resample_closed(points_px, spacing_px):
 
 
 # --------------------------------------------------------------------------
+# Centerline seed generation (distance-transform ridge)
+# --------------------------------------------------------------------------
+
+def ridge_seed(track_map, outer_px, inner_px, boundary_strokes_px=(),
+               stroke_width_px=5, spacing_m=0.75, count=160, iters=60):
+    """Relax a crude midline seed onto the free-space ridge.
+
+    The correspondence-based midline (each outer point paired with its
+    nearest inner point) kinks at hairpins and S-bends, where nearest
+    matching flips discontinuously. Instead this walks the seed uphill
+    on the distance transform of the free mask - the gradient always
+    points at the local centerline - while a closed-loop Laplacian keeps
+    it smooth. Every step is confined to free space; a point that would
+    leave it keeps its previous position. The result is a deterministic
+    closed seed in file-pixel coordinates following the outer loop's
+    direction; strict ``build_and_validate`` remains the acceptance gate.
+    """
+    free = patched_free_mask(track_map, boundary_strokes_px, stroke_width_px)
+    height, width = free.shape
+    dist = cv2.distanceTransform(free, cv2.DIST_L2, 3)
+    gradu = cv2.Sobel(dist, cv2.CV_64F, 1, 0, ksize=3)
+    gradv = cv2.Sobel(dist, cv2.CV_64F, 0, 1, ksize=3)
+    outer = np.asarray(outer_px, float)
+    inner = np.asarray(inner_px, float)
+    step = max(1, len(outer) // count)
+    crude = []
+    for p in outer[::step]:
+        j = int(np.argmin(np.linalg.norm(inner - p, axis=1)))
+        crude.append((p + inner[j]) / 2.0)
+    pts, _ = _resample_closed([tuple(p) for p in crude],
+                              spacing_m / track_map.resolution)
+    pts = np.array([p for p in pts], float)
+    n = len(pts)
+
+    def sample(p):
+        u = min(width - 1, max(0, int(round(p[0]))))
+        v = min(height - 1, max(0, int(round(p[1]))))
+        return u, v
+
+    for _ in range(iters):
+        # Gentle closed-loop smoothing (kink removal) with most weight
+        # on the current point so the loop cannot collapse off the
+        # track; then snap each point back to its local DT maximum.
+        pts = 0.8 * pts + 0.1 * (np.roll(pts, 1, 0) + np.roll(pts, -1, 0))
+        for i in range(n):
+            p = pts[i].copy()
+            u, v = sample(p)
+            best = float(dist[v, u])
+            for _ in range(40):
+                g = np.array([gradu[v, u], gradv[v, u]])
+                norm = float(np.linalg.norm(g))
+                if norm < 1e-9:
+                    break
+                q = p + 0.5 * g / norm
+                qu, qv = sample(q)
+                if free[qv, qu] == 0:
+                    break
+                val = float(dist[qv, qu])
+                if val < best - 1e-9:
+                    break
+                p, u, v, best = q, qu, qv, val
+            pts[i] = p
+    return [[float(p[0]), float(p[1])] for p in pts]
+
+
+# --------------------------------------------------------------------------
 # Manifest construction
 # --------------------------------------------------------------------------
 
