@@ -104,19 +104,35 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
   numpy 1.26.4 / scipy 1.11.4 / quadprog 0.1.7 / trajectory-planning-helpers
   0.79 — no pin weakened):
   - **test map** (suggested seed via the repo pipeline, default walls and
-    zone): strict PASS (345 samples) → compile PASS (`H=b06017f7…`,
-    deterministic across runs) → independent validate PASS (geometry +
-    dynamics) → query PASS. Receipts in
-    `/mnt/storage/forza-annot/evidence/numerical/`
-    (`manifest_spl6N_ph0_thin_all_02_zone20x16.json`,
-    `verify_pass_report.json`, `verify_validate_report.json`,
-    `verify_query_report.json`).
-  - **baku map** (ridge seed, walls thinned at 0.025, same zone):
-    strict PASS (479 samples) → compile PASS (`H=fe61f4f9…`) →
-    independent validate PASS → query PASS. Baku needs a slightly larger
-    thinning epsilon than the 0.02 default (its track is longer); with the
-    default it reaches optimizer CANDIDATE but exceeds the polygon
-    budgets. Documented procedure, not a UI option.
+    zone): strict PASS (345 samples) → compile PASS (`H=e80c49b6…`,
+    deterministic across runs: identical-provenance recompile is
+    bit-identical, including in a from-scratch rebuilt env) → independent
+    validate PASS (geometry + dynamics) → query PASS. Manifest:
+    `/mnt/storage/forza-annot/evidence/numerical/manifest_test_current.json`;
+    artifact: `test_current_out/<H>/reference.json` (+ validate/query
+    reports beside it). NOTE: the previously documented `H=b06017f7…`
+    came from pre-fix geometry (unconstrained RDP, unseparated joints)
+    and is superseded; hashes change when the geometry changes, which is
+    expected — provenance, not the prefix, is the identity.
+  - **baku map** (ridge seed, walls thinned at 0.03, same zone):
+    strict PASS (479 samples) → compile PASS (`H=f96db7b9…`,
+    deterministic recompile verified) → independent validate PASS →
+    query PASS. Manifest:
+    `/mnt/storage/forza-annot/evidence/numerical/manifest_baku_bal003.json`;
+    artifact: `baku_bal_003_out/<H>/reference.json`. Baku needs 0.03
+    rather than the 0.02 default: its longer track otherwise exceeds the
+    independent checker's polygon budgets, and 0.035+ fails optimizer
+    convergence. NOTE: the previously documented `H=fe61f4f9…` was a
+    strict-only result that never completed compilation and is withdrawn.
+    Two fixes were required for full PASS: inward-only RDP (containment
+    gate) and a minimum joint separation (unconstrained straight-snapping
+    piled two joints 5 seed-samples apart, leaving a sliver occurrence
+    whose coincident portals folded optimizer charts at iteration 5).
+    Documented procedure (`/mnt/storage/forza-annot/baku_recipe.py`),
+    not a UI option. Generation is recorded on system python3.12
+    (opencv 5.0): `ridge_seed` follows cv2 distance-transform numerics,
+    which differ from opencv 4.8.1 by up to ~2.5 m; the manifest digest
+    is the env-independent handoff and compiles bit-identically.
   - The s0 fixture compiles to full PASS plus independent
     geometry/dynamics validation PASS and query PASS in the same env
     (toolchain sanity, unchanged).
@@ -125,7 +141,9 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
   correction shown before approval) → approve → export → save → reload →
   edit revokes approval → export refused stale. 12/12 checks PASS;
   screenshots in `/mnt/storage/forza-annot/evidence/ui/`. The UI-exported
-  manifest compiles to the same PASS (`H=b06017f7…`).
+  manifest previously compiled to the same PASS (old `H=b06017f7…`
+  geometry); re-verification against the fixed geometry is pending
+  (browser re-run scheduled with Commit 3).
 - Live ROS Humble + Foxglove Bridge roundtrip (Docker
   `osrf/ros:humble-desktop`, isolated `ROS_DOMAIN_ID`, repo read-only):
   open (PASS rev 1) → update (PASS rev 2) → duplicate (DUPLICATE,
@@ -137,8 +155,9 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
 ## Map support matrix (fail-closed)
 
 - SUPPORTED, full pipeline to independent validation PASS: `test`
-  (suggested seed, defaults), `baku` (ridge seed, thinning 0.025 via
-  documented procedure; defaults reach strict PASS + optimizer CANDIDATE).
+  (suggested seed, defaults), `baku` (ridge seed, thinning 0.03 via
+  documented procedure; defaults reach strict PASS but exceed polygon
+  budgets, 0.035+ fails convergence).
 - EXTRACTION OK, route needs an operator-drawn seed: `spa`, `zuri` —
   clean annulus extraction, but programmatic seeds are rejected by the
   strict validator (hairpin/S-bend correspondence flips; the chart
@@ -162,7 +181,17 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
   strict-passing (fail-closed at the optimizer, reported, not hidden).
 - The devcontainer installs `quadprog~=0.1.11`, which the pin gate
   rejects; the pin was deliberately not weakened. Canonical numerical
-  environment still needs an owner decision.
+  environment still needs an owner decision. Meanwhile the exact
+  optimizer env is reproducible without touching the devcontainer:
+  `/mnt/storage/forza-annot/pinned_setup.sh` +
+  `pinned_requirements.txt` rebuild it from scratch (verified:
+  from-scratch rebuild compiles the test manifest to a bit-identical
+  artifact). Build subtlety recorded in the script: quadprog 0.1.7's
+  `setup.py` uses unconstrained `setup_requires`, so an isolated build
+  silently cythonizes with Cython 3.x, whose extern-C `qpgen2_`
+  declaration does not link against the C++-mangled `solve.QP.c`
+  definition (undefined symbol at import); the script pre-installs
+  Cython 0.29.37 and builds only quadprog without isolation.
 - Raising the independent checker's polygon budgets or refinement depth,
   or changing the model region count, would be acceptance-contract
   changes: not made. The tool fits the budgets by construction instead.
