@@ -3,8 +3,12 @@
 Two pencils, no GIS: open a map, close missing legal boundaries with the
 boundary pencil, draw a rough directed lap with the route pencil (or take
 the computed centerline suggestion), preview the candidate, approve exactly
-that candidate, and export a strict Project A `{map}_legal_route.json`
-(one file per map, so maps cannot overwrite each other).
+that candidate, and export a strict Project A manifest. Draft and export
+filenames are namespaced per source map —
+`{parentdir}__{stem}__{sha8}_annotation.json` /
+`{parentdir}__{stem}__{sha8}_legal_route.json` — so two maps sharing one
+PNG stem can never silently overwrite each other. A legacy bare-stem
+draft is adopted in place on open and written forward on save.
 Preview → approve → export is enforced: the operator always sees the
 transformed geometry (smoothed seed, lateral correction, validated route)
 before approving, and approval binds to the previewed digest. Any edit
@@ -89,7 +93,7 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
 
 ## Verified (this branch)
 
-- `test_annotation_core.py`: 35 passed — end-to-end strict PASS on the
+- `test_annotation_core.py`: 49 passed — end-to-end strict PASS on the
   real `test` and `baku` maps (crude, ridge and suggested seeds),
   pixel↔world roundtrip, session save/reopen + full map-identity
   rejection, outer-wall bay detour + tangent-stroke repair, isolated-speck
@@ -150,11 +154,10 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
 - Browser flow, headless Chromium, real UI (`ui_flow.py`): open → draw
   boundary stroke → extract → undo → suggest → preview (green candidate +
   correction shown before approval) → approve → export → save → reload →
-  edit revokes approval → export refused stale. 12/12 checks PASS;
+  edit revokes approval → export refused stale. 11/11 checks PASS;
   screenshots in `/mnt/storage/forza-annot/evidence/ui/`. The UI-exported
-  manifest previously compiled to the same PASS (old `H=b06017f7…`
-  geometry); re-verification against the fixed geometry is pending
-  (browser re-run scheduled with Commit 3).
+  manifest compiles to full PASS (`H=6e398bb9…`, geometry + dynamics
+  PASS) under the current geometry.
 - Live ROS Humble + Foxglove Bridge roundtrip (Docker
   `osrf/ros:humble-desktop`, isolated `ROS_DOMAIN_ID`, repo read-only):
   open (PASS rev 1) → update (PASS rev 2) → duplicate (DUPLICATE,

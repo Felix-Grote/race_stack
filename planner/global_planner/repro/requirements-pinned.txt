@@ -1,0 +1,6 @@
+Cython==0.29.37
+numpy==1.26.4
+opencv-python-headless==4.8.1.78
+quadprog==0.1.7
+scipy==1.11.4
+trajectory-planning-helpers==0.79
