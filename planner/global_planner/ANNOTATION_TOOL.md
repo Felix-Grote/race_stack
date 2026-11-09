@@ -93,7 +93,7 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
 
 ## Verified (this branch)
 
-- `test_annotation_core.py`: 49 passed — end-to-end strict PASS on the
+- `test_annotation_core.py`: 48 passed — end-to-end strict PASS on the
   real `test` and `baku` maps (crude, ridge and suggested seeds),
   pixel↔world roundtrip, session save/reopen + full map-identity
   rejection, outer-wall bay detour + tangent-stroke repair, isolated-speck
@@ -154,7 +154,8 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
 - Browser flow, headless Chromium, real UI (`ui_flow.py`): open → draw
   boundary stroke → extract → undo → suggest → preview (green candidate +
   correction shown before approval) → approve → export → save → reload →
-  edit revokes approval → export refused stale. 11/11 checks PASS;
+  edit revokes approval → export refused stale. 12/12 checks PASS
+  (including the namespaced-export assertion);
   screenshots in `/mnt/storage/forza-annot/evidence/ui/`. The UI-exported
   manifest compiles to full PASS (`H=6e398bb9…`, geometry + dynamics
   PASS) under the current geometry.
