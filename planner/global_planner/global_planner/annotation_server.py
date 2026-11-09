@@ -12,6 +12,7 @@ then open http://127.0.0.1:8766/ in a browser.
 """
 import argparse
 import base64
+import os
 import json
 import math
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -138,13 +139,31 @@ def op_open(body):
     if not STATE.get('maps_dir') or not STATE.get('out_dir'):
         raise AnnotationError('backend not configured (set maps/out dirs first)')
     track_map = TrackMap(_resolve_map_yaml(body.get('map', '')))
-    draft = resolve_draft(STATE['out_dir'], track_map)
-    if draft.exists():
-        session = load_session(draft, track_map)
-        message = 'reopened saved draft'
+    draft, legacy = resolve_draft(STATE['out_dir'], track_map)
+    if legacy is None:
+        if draft.exists():
+            # Load validates the full map identity inside; a cross-map
+            # file in this slot fails closed here and is left untouched.
+            session = load_session(draft, track_map)
+            message = 'reopened saved draft'
+        else:
+            session = new_session(track_map)
+            message = 'new session'
     else:
-        session = new_session(track_map)
-        message = 'new session'
+        session = load_session(legacy, track_map)  # validates; raises closed
+        draft.parent.mkdir(parents=True, exist_ok=True)
+        tmp = draft.with_name(draft.name + f'.tmp-{os.getpid()}')
+        try:
+            tmp.write_bytes(legacy.read_bytes())
+            os.replace(tmp, draft)
+        except OSError:
+            try:
+                tmp.unlink()
+            except OSError:
+                pass
+            raise AnnotationError(
+                f'legacy draft could not be adopted: {legacy.name}')
+        message = f'reopened legacy draft (adopted as {draft.name})'
     STATE.update(map=track_map, session=session, extraction=None,
                  candidate_digest=None)
     return {'status': 'PASS', 'message': message, 'session': _session_view()}

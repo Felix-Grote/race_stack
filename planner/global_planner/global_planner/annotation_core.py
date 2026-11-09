@@ -272,16 +272,30 @@ def _safe_component(text):
 def map_namespace(track_map):
     """Filesystem-safe identity prefix distinguishing same-stem maps.
 
-    ``{parentdir}__{stem}__{sha8}``: readable layout location plus the
-    PNG content hash, so two distinct maps sharing one PNG filename can
-    never silently overwrite each other's drafts or exports. Loading a
-    session still binds the FULL identity (sha, size, resolution,
-    origin, negate) via ``check_session_map``; the namespace only
-    selects the file.
+    ``{parentdir}__{stem}__{bytesha8}__{ctxsha8}``: readable layout
+    location plus the PNG content hash plus a context hash binding the
+    full session identity that ``check_session_map`` enforces
+    (resolved parent directory, resolution, origin, negate, image
+    size), so two semantically distinct source-map interpretations can
+    never silently share a draft or export slot — not even same-stem
+    maps in same-named directories, nor identical PNG bytes under
+    different YAML interpretations. Loading a session still binds the
+    FULL identity via ``check_session_map``; the namespace only selects
+    the file, and any residual collision degrades to fail-closed open.
     """
     png = Path(track_map.png_path)
+    try:
+        parent = str(png.resolve().parent)
+    except OSError:
+        parent = str(png.parent)
+    ctx = '|'.join((parent, repr(float(track_map.resolution)),
+                    repr(tuple(float(v) for v in track_map.origin)),
+                    repr(int(track_map.negate)),
+                    repr(int(track_map.width)), repr(int(track_map.height))))
+    ctxsha = hashlib.sha256(ctx.encode('utf-8')).hexdigest()[:8]
     return (f'{_safe_component(png.parent.name)}__'
-            f'{_safe_component(png.stem)}__{track_map.sha256[:8]}')
+            f'{_safe_component(png.stem)}__{track_map.sha256[:8]}'
+            f'__{ctxsha}')
 
 
 def draft_name(track_map):
@@ -294,29 +308,54 @@ def export_name(track_map):
     return f'{map_namespace(track_map)}_legal_route.json'
 
 
+def _legacy_draft_names(track_map):
+    """Older draft filename schemes, newest first (migration chain)."""
+    png = Path(track_map.png_path)
+    stem = _safe_component(png.stem)
+    return [
+        # Commit 9ccf4b2 scheme: parent + stem + PNG hash, no context.
+        f'{_safe_component(png.parent.name)}__{stem}'
+        f'__{track_map.sha256[:8]}_annotation.json',
+        # Original bare-stem scheme.
+        f'{stem}_annotation.json',
+    ]
+
+
 def resolve_draft(out_dir, track_map):
     """Draft path for a map, with non-destructive legacy migration.
 
-    Prefers the namespaced name; falls back to the legacy
-    ``{stem}_annotation.json`` when it exists (adopted in place, written
-    forward to the new name on the next save; never deleted here).
+    Prefers the namespaced name; falls back through older schemes when
+    the namespaced file is absent. A legacy file is adopted only after
+    it loads AND validates against this map, then atomically renamed to
+    the new name so the ambiguous slot cannot trap a later map. Files
+    that fail validation are left untouched and opening fails closed.
+    Returns ``(path, migrate_from)`` with ``migrate_from`` None when no
+    rename is needed.
     """
     out_dir = Path(out_dir)
     new = out_dir / draft_name(track_map)
     if new.exists():
-        return new
-    legacy = out_dir / f'{_safe_component(Path(track_map.png_path).stem)}_annotation.json'
-    if legacy.exists() and legacy != new:
-        return legacy
-    return new
+        return new, None
+    for name in _legacy_draft_names(track_map):
+        cand = out_dir / name
+        if cand != new and cand.exists():
+            return new, cand
+    return new, None
 
 
 def atomic_write_text(path, text):
     """Write a file atomically; readers never see a partial file."""
     path = Path(path)
     tmp = path.with_name(path.name + f'.tmp-{os.getpid()}')
-    tmp.write_text(text, encoding='utf-8')
-    os.replace(tmp, path)
+    try:
+        tmp.write_text(text, encoding='utf-8')
+        os.replace(tmp, path)
+    except OSError:
+        try:
+            tmp.unlink()
+        except OSError:
+            pass
+        raise
 
 
 # --------------------------------------------------------------------------

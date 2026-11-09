@@ -11,7 +11,8 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parents[1]))
 
 from global_planner.annotation_core import (  # noqa: E402
-    AnnotationError, MAX_DP_EPS_PER_CELL, TrackMap, build_and_validate,
+    AnnotationError, MAX_DP_EPS_PER_CELL, TrackMap, atomic_write_text,
+    build_and_validate,
     build_manifest, check_session_map, draft_name, export_name,
     extract_boundaries, geometry_digest, load_session, map_namespace,
     new_session, patched_free_mask, require_approved, resolve_draft,
@@ -1079,7 +1080,7 @@ def test_same_stem_maps_do_not_collide(backend, tmp_path):
 
 
 def test_legacy_draft_migrates_without_loss(backend, tmp_path):
-    """A bare-stem draft is adopted in place; saves go to the new name."""
+    """A bare-stem draft is validated, then adopted under the new name."""
     server = backend
     server.op_open({'map': 'test'})
     track_map = server.STATE['map']
@@ -1089,14 +1090,105 @@ def test_legacy_draft_migrates_without_loss(backend, tmp_path):
     # Simulate a restart: drop in-memory state, reopen from disk.
     server.STATE.update(map=None, session=None, extraction=None,
                         candidate_digest=None)
-    assert server.op_open({'map': 'test'})['message'] == 'reopened saved draft'
-    server.op_save({})
-    assert legacy.read_bytes() == before  # adopted, never destroyed
+    msg = server.op_open({'map': 'test'})['message']
+    assert msg.startswith('reopened legacy draft (adopted as ')
+    # Adoption copies forward; the legacy file is never destroyed here.
+    assert legacy.read_bytes() == before
     assert (Path(server.STATE['out_dir'])
             / draft_name(track_map)).exists()
     # The namespaced draft is preferred on the next open.
     server.STATE.update(map=None, session=None, extraction=None,
                         candidate_digest=None)
     assert server.op_open({'map': 'test'})['message'] == 'reopened saved draft'
+    # Saves go to the new name; the legacy bytes are untouched.
+    server.op_save({})
+    assert legacy.read_bytes() == before
+
+
+def test_legacy_mid_scheme_draft_adopted(backend, tmp_path):
+    """The previous parent__stem__sha8 scheme resolves through the chain."""
+    from global_planner.annotation_core import _legacy_draft_names
+    server = backend
+    server.op_open({'map': 'test'})
+    track_map = server.STATE['map']
+    mid = Path(server.STATE['out_dir']) / _legacy_draft_names(track_map)[0]
+    assert mid.name != draft_name(track_map)
+    save_session(server.STATE['session'], mid)
+    before = mid.read_bytes()
+    server.STATE.update(map=None, session=None, extraction=None,
+                        candidate_digest=None)
+    msg = server.op_open({'map': 'test'})['message']
+    assert msg.startswith('reopened legacy draft (adopted as ')
+    assert mid.read_bytes() == before
+    assert (Path(server.STATE['out_dir'])
+            / draft_name(track_map)).exists()
+
+
+def _copy_twin_map(tmp_path, dirname, resolution):
+    """Copy the test PNG bytes verbatim with a different YAML resolution."""
+    import re
+    import shutil
+    d = tmp_path / 'maps' / dirname / 'twin'
+    d.mkdir(parents=True)
+    shutil.copy(MAPS / 'test/test.png', d / 'twin.png')
+    yaml_text = (MAPS / 'test/test.yaml').read_text(encoding='utf-8')
+    yaml_text = yaml_text.replace('test.png', 'twin.png')
+    yaml_text = re.sub(r'resolution: .*', f'resolution: {resolution}',
+                       yaml_text)
+    (d / 'twin.yaml').write_text(yaml_text, encoding='utf-8')
+
+
+def test_same_png_bytes_different_yaml_no_collision(backend, tmp_path):
+    """Identical PNG bytes under different YAML readings stay independent.
+
+    Same stem, same bytes, same parent name, different resolution: the
+    drafts must not share a slot, and a legacy file written for one
+    reading must fail closed (never rebound) for the other.
+    """
+    import os
+    server = backend
+    _copy_twin_map(tmp_path, 'r1', '0.05')
+    _copy_twin_map(tmp_path, 'r2', '0.06')
+    server.configure(str(tmp_path / 'maps'), str(tmp_path / 'out'))
+    track1 = TrackMap(tmp_path / 'maps/r1/twin/twin.yaml')
+    track2 = TrackMap(tmp_path / 'maps/r2/twin/twin.yaml')
+    assert track1.sha256 == track2.sha256
+    assert map_namespace(track1) != map_namespace(track2)
+    route = [[100, 100], [200, 100], [200, 200]]
+    _open_save_cycle(server, 'r1/twin', route)
+    _open_save_cycle(server, 'r2/twin', [[300, 300], [400, 300], [400, 400]])
+    drafts = sorted(os.listdir(str(tmp_path / 'out')))
+    assert drafts == sorted([draft_name(track1), draft_name(track2)])
+    assert server.op_open({'map': 'r1/twin'})['message'] == \
+        'reopened saved draft'
+    assert server.STATE['session']['route_px'] == route
+    # A bare-stem legacy draft written for reading 1 must fail closed
+    # for reading 2 (resolution differs) and be left untouched.
+    legacy = Path(server.STATE['out_dir']) / 'twin_annotation.json'
+    save_session(server.STATE['session'], legacy)
+    before = legacy.read_bytes()
+    # Drop reading 2's own draft so the legacy fallback is exercised.
+    (Path(server.STATE['out_dir']) / draft_name(track2)).unlink()
+    server.STATE.update(map=None, session=None, extraction=None,
+                        candidate_digest=None)
+    with pytest.raises(AnnotationError, match='resolution differs'):
+        server.op_open({'map': 'r2/twin'})
+    assert legacy.read_bytes() == before
+    assert not (Path(server.STATE['out_dir'])
+                / draft_name(track2)).exists()
+
+
+def test_atomic_write_text_cleans_tmp_on_failure(tmp_path, monkeypatch):
+    """A failed replace never leaves a partial file or a stray tmp file."""
+    import os
+    target = tmp_path / 'out.json'
+    target.write_text('{"v": 1}', encoding='utf-8')
+    def _boom(*args):
+        raise OSError('simulated replace failure')
+    monkeypatch.setattr(os, 'replace', _boom)
+    with pytest.raises(OSError, match='simulated replace failure'):
+        atomic_write_text(target, '{"v": 2}')
+    assert target.read_text(encoding='utf-8') == '{"v": 1}'
+    assert list(tmp_path.glob('out.json.tmp-*')) == []
 
 
