@@ -79,6 +79,23 @@ def _parse_map_yaml(text):
         raise AnnotationError('map YAML missing image/resolution/origin')
     meta['resolution'] = float(meta['resolution'])
     meta['origin'] = origin
+    # Occupancy interpretation: only the Cartographer-style binary convention
+    # (negate 0/1, single thresholds pair) is supported. Anything else risks
+    # reading unknown/gray cells as legal free space, so it is rejected here
+    # instead of being silently approximated downstream.
+    try:
+        meta['negate'] = int(meta.get('negate', '0'))
+    except (TypeError, ValueError) as exc:
+        raise AnnotationError('UNSUPPORTED: map negate must be 0 or 1') from exc
+    if meta['negate'] not in (0, 1):
+        raise AnnotationError('UNSUPPORTED: map negate must be 0 or 1')
+    for thresh_key, default in (('occupied_thresh', 0.65),
+                                ('free_thresh', 0.196)):
+        try:
+            meta[thresh_key] = float(meta.get(thresh_key, default))
+        except (TypeError, ValueError) as exc:
+            raise AnnotationError(
+                f'map {thresh_key} is not a number') from exc
     return meta
 
 
@@ -97,9 +114,20 @@ class TrackMap:
         self.yaml_path, self.png_path = yaml_path, png_path
         self.resolution = float(meta['resolution'])
         self.origin = (float(meta['origin'][0]), float(meta['origin'][1]))
+        self.negate = int(meta['negate'])
+        self.occupied_thresh = float(meta['occupied_thresh'])
+        self.free_thresh = float(meta['free_thresh'])
         self.image = image  # uint8, file order: row 0 = top
         self.height, self.width = image.shape
         self.sha256 = hashlib.sha256(png_path.read_bytes()).hexdigest()
+
+    def map_identity(self):
+        """Full source-map interpretation contract bound by sessions."""
+        return {'map_sha256': self.sha256,
+                'image_size': [int(self.width), int(self.height)],
+                'resolution': float(self.resolution),
+                'origin': [float(self.origin[0]), float(self.origin[1])],
+                'negate': int(self.negate)}
 
     def pixel_to_world(self, uv):
         """Convert file pixel (u, v) to world (x, y) in metres."""
@@ -118,11 +146,11 @@ class TrackMap:
 # Session persistence (annotation_project.json - the editable truth)
 # --------------------------------------------------------------------------
 
-SESSION_VERSION = 1
+SESSION_VERSION = 2
 
 
 def new_session(track_map, author='operator'):
-    """Create an empty session dict bound to one map by hash."""
+    """Create an empty session dict bound to one map by full identity."""
     return {
         'version': SESSION_VERSION,
         'map_yaml': track_map.yaml_path.name,
@@ -131,21 +159,85 @@ def new_session(track_map, author='operator'):
         'image_size': [int(track_map.width), int(track_map.height)],
         'resolution': track_map.resolution,
         'origin': list(track_map.origin),
+        'negate': int(track_map.negate),
         'boundary_strokes_px': [],   # list of polylines [[u, v], ...]
         'route_px': [],              # one directed closed rough loop
         'stroke_width_px': 5,
         'approval': 'none',
+        'approval_digest': None,     # geometry digest the approval was granted for
+        'revision': 1,               # incremented on every session mutation
         'author': author,
     }
 
 
+def _migrate_session(session):
+    """Upgrade a v1 draft to v2; approval never survives migration.
+
+    v1 bound approval to a bare string with no geometry digest and bound the
+    map to hash+size only. Carrying such an approval forward would authorize
+    an unknown geometry under a stronger contract, so it is revoked here.
+    """
+    if session.get('version') == 1:
+        session = dict(session)
+        session['version'] = 2
+        session.setdefault('negate', 0)
+        session['approval'] = 'none'
+        session['approval_digest'] = None
+        session.setdefault('revision', 1)
+        return session
+    return session
+
+
 def check_session_map(session, track_map):
-    """Reject a session reopened against a different map (identity)."""
+    """Reject a session reopened against a differently interpreted map.
+
+    The PNG hash and dimensions alone do not pin the metric registration:
+    the same bytes under another resolution, origin, or negate flag would
+    silently reinterpret every stored stroke and approval. All of them are
+    bound, so such a map is rejected instead of rebound.
+    """
     if session.get('map_sha256') != track_map.sha256:
         raise AnnotationError('map identity mismatch: session was created '
                               'for a different map PNG (sha256 differs)')
     if list(session.get('image_size', [])) != [track_map.width, track_map.height]:
         raise AnnotationError('map identity mismatch: image size differs')
+    if abs(float(session.get('resolution', -1)) - track_map.resolution) > 1e-12:
+        raise AnnotationError('map identity mismatch: resolution differs; '
+                              'strokes cannot be reinterpreted')
+    if [float(v) for v in session.get('origin', [])] != list(track_map.origin):
+        raise AnnotationError('map identity mismatch: origin differs; '
+                              'strokes cannot be reinterpreted')
+    if int(session.get('negate', 0)) != int(track_map.negate):
+        raise AnnotationError('map identity mismatch: negate flag differs; '
+                              'occupied/free would invert')
+
+
+def geometry_digest(session, track_map):
+    """Digest of the exact editable geometry an approval refers to.
+
+    Covers the source-map identity plus every stroke, the route, and the
+    stroke width. Any edit changes this digest, so an approval granted for
+    one geometry can never authorize a different one.
+    """
+    canonical = json.dumps({
+        'map': track_map.map_identity(),
+        'stroke_width_px': session.get('stroke_width_px', 5),
+        'boundary_strokes_px': session.get('boundary_strokes_px', []),
+        'route_px': session.get('route_px', []),
+    }, sort_keys=True, separators=(',', ':'))
+    return hashlib.sha256(canonical.encode('utf-8')).hexdigest()
+
+
+def require_approved(session, track_map):
+    """Refuse export unless approval is bound to the current geometry."""
+    if session.get('approval') != 'operator-approved':
+        raise AnnotationError(
+            'export refused: session approval is not '
+            "'operator-approved' (approve in the UI first)")
+    if session.get('approval_digest') != geometry_digest(session, track_map):
+        raise AnnotationError(
+            'export refused: geometry changed since approval '
+            '(re-extract and approve again)')
 
 
 def save_session(session, path):
@@ -163,6 +255,7 @@ def load_session(path, track_map):
         session = json.loads(Path(path).read_text(encoding='utf-8'))
     except (OSError, json.JSONDecodeError) as exc:
         raise AnnotationError(f'cannot load session: {exc}') from exc
+    session = _migrate_session(session)
     if session.get('version') != SESSION_VERSION:
         raise AnnotationError('unsupported session version')
     check_session_map(session, track_map)
@@ -174,8 +267,21 @@ def load_session(path, track_map):
 # --------------------------------------------------------------------------
 
 def patched_free_mask(track_map, boundary_strokes_px, stroke_width_px=5):
-    """Return uint8 free mask (255=free) of the patched in-memory copy."""
-    occupied = track_map.image < 128
+    """Return uint8 free mask (255=free) of the patched in-memory copy.
+
+    The source image must be strictly binary: any gray/unknown level is
+    rejected instead of being read as legal free space. The YAML negate
+    flag selects which level counts as occupied.
+    """
+    base = (track_map.image if track_map.negate == 0
+            else (255 - track_map.image).astype(track_map.image.dtype))
+    levels = np.unique(base)
+    if any(int(v) not in (0, 255) for v in levels):
+        raise AnnotationError(
+            'UNSUPPORTED: map image is not binary '
+            f'(levels {sorted(int(v) for v in levels)}); unknown cells '
+            'must not be read as legal free space')
+    occupied = base < 128
     patched = occupied.copy()
     for stroke in boundary_strokes_px:
         pts = np.array(stroke, dtype=np.int32).reshape(-1, 1, 2)
@@ -281,7 +387,9 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
 
     ``approval`` must be ``'operator-approved'`` for an export intended
     as legal geometry; anything else is recorded verbatim so a draft
-    can never masquerade as approved.
+    can never masquerade as approved. Returns ``(payload, info)`` with
+    seed/correction metrics; the payload itself carries no extra fields
+    so Project A's strict schema keeps accepting it verbatim.
     """
     if approval not in ('operator-approved', 'none'):
         raise AnnotationError("approval must be 'operator-approved' or 'none'")
@@ -312,6 +420,7 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
         return chain[int(np.argmin(np.linalg.norm(chain - p, axis=1)))]
 
     corrected = []
+    max_correction_m = 0.0
     for i, p in enumerate(seed):
         lo = _nearest(outer_w, p)
         li = _nearest(inner_w, p)
@@ -319,8 +428,12 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
         denom = float(np.dot(half, half))
         alpha = 0.0 if denom < 1e-12 else float(
             np.clip(np.dot(p - mid, half) / denom, -0.5, 0.5))
-        corrected.append(mid + alpha * half)
+        q = mid + alpha * half
+        max_correction_m = max(max_correction_m, float(np.linalg.norm(q - p)))
+        corrected.append(q)
     seed = corrected
+    seed_info = {'seed_samples': len(seed),
+                 'max_correction_m': max_correction_m}
 
     def nearest(chain, p):
         d = np.linalg.norm(chain - np.array(p), axis=1)
@@ -440,7 +553,9 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
     zone = [[float(x), float(y)] for x, y in (
         zone_c - zn * 0.4, zone_c + zd * 1.0 - zn * 0.4,
         zone_c + zd * 1.0 + zn * 0.4, zone_c + zn * 0.4)]
-    return {
+    info = dict(seed_info)
+    info['smoothing_passes'] = _smoothing_passes
+    payload = {
         'schema_version': 1, 'course_id': 'annotated-course',
         'route_id': 'annotated-route-1', 'frame_id': 'map', 'units': 'm',
         'conventions': 'x-forward_y-left_heading-ccw',
@@ -457,6 +572,7 @@ def build_manifest(track_map, outer_px, inner_px, route_px, *,
             'zone': zone,
             'heading_interval_rad': [max(-math.pi, heading - 0.3),
                                      min(math.pi, heading + 0.3)]}}
+    return payload, info
 
 
 def build_and_validate(track_map, outer_px, inner_px, route_px, **kwargs):
@@ -465,16 +581,20 @@ def build_and_validate(track_map, outer_px, inner_px, route_px, **kwargs):
     Tries smoothing passes (0, 1, 2, 4, 6). If none passes Project A's
     strict validation and corridor preparation, the last error is
     raised - the geometry is rejected, never silently repaired beyond
-    smoothing the operator's own seed line.
+    smoothing the operator's own seed line. Returns
+    ``(payload, route, prepared, info)`` where ``info`` reports the
+    winning smoothing level, the seed sample count, and the maximum
+    lateral correction applied to the operator's seed in metres, so the
+    operator (and receipts) can see how far the tool moved their line.
     """
     last = None
     for passes in (0, 1, 2, 4, 6):
         try:
-            payload = build_manifest(track_map, outer_px, inner_px,
-                                     route_px, _smoothing_passes=passes,
-                                     **kwargs)
+            payload, info = build_manifest(track_map, outer_px, inner_px,
+                                           route_px, _smoothing_passes=passes,
+                                           **kwargs)
             route, prepared = validate_manifest(payload)
-            return payload, route, prepared
+            return payload, route, prepared, info
         except Exception as exc:  # noqa: BLE001 - re-raised below if all fail
             last = exc
     raise AnnotationError(f'route rejected at every smoothing level: {last}')

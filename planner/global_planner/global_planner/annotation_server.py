@@ -17,11 +17,43 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
 from .annotation_core import (AnnotationError, TrackMap, build_and_validate,
-                              extract_boundaries, load_session, new_session,
-                              save_session)
+                              extract_boundaries, geometry_digest,
+                              load_session, new_session, save_session)
 
 STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
          'out_dir': None}
+
+
+def configure(maps_dir, out_dir):
+    """Bind the shared backend to directories (HTTP and ROS entry points).
+
+    Both transports reuse these operations, so both must configure them:
+    without this, opening a map fails with an explicit error instead of a
+    late ``TypeError`` on an unconfigured path.
+    """
+    if not maps_dir or not Path(maps_dir).is_dir():
+        raise AnnotationError(f'maps directory not found: {maps_dir}')
+    STATE['maps_dir'], STATE['out_dir'] = str(maps_dir), str(out_dir)
+    Path(out_dir).mkdir(parents=True, exist_ok=True)
+
+
+def require_open():
+    """Fail closed when no session is open yet."""
+    if STATE['session'] is None or STATE['map'] is None:
+        raise AnnotationError('no open session (open a map first)')
+    return STATE['session'], STATE['map']
+
+
+def _touch(session):
+    """Record an edit: bump revision, revoke approval, drop extraction.
+
+    Every geometry mutation funnels through here, so no edit path (update,
+    undo, clear) can retain an approval granted to a previous geometry.
+    """
+    session['revision'] = int(session.get('revision', 1)) + 1
+    session['approval'] = 'none'
+    session['approval_digest'] = None
+    STATE['extraction'] = None
 
 
 def _reply(handler, payload, code=200):
@@ -45,6 +77,8 @@ def _session_view():
 
 def op_open(body):
     """Open (or reopen) a session for a map name inside the maps dir."""
+    if not STATE.get('maps_dir') or not STATE.get('out_dir'):
+        raise AnnotationError('backend not configured (set maps/out dirs first)')
     name = body.get('map', '')
     yaml_path = Path(STATE['maps_dir']) / name / f'{name}.yaml'
     if not yaml_path.exists():
@@ -62,76 +96,105 @@ def op_open(body):
 
 
 def op_update(body):
-    """Accept one completed stroke/route, or reject it with a reason."""
-    if STATE['session'] is None:
-        raise AnnotationError('no open session')
+    """Accept one completed stroke/route/width, or reject it with a reason.
+
+    An empty route clears the draft route (approval revoked either way).
+    The stroke width is operator-visible and deterministic: changing it
+    alters patched geometry, so it revokes approval like any other edit.
+    """
+    session, _ = require_open()
     field, value = body.get('field'), body.get('value')
-    if field not in ('boundary_strokes_px', 'route_px'):
+    if field not in ('boundary_strokes_px', 'route_px', 'stroke_width_px'):
         raise AnnotationError(f'unknown editable field: {field}')
-    if field == 'route_px' and len(value) < 3:
-        raise AnnotationError('route needs at least 3 points')
-    STATE['session'][field] = value
-    STATE['session']['approval'] = 'none'  # any edit revokes approval
-    STATE['extraction'] = None
-    return {'status': 'PASS', 'message': f'{field} updated (draft, unapproved)',
+    if field == 'stroke_width_px':
+        if (isinstance(value, bool) or not isinstance(value, int)
+                or not 1 <= value <= 31):
+            raise AnnotationError('stroke_width_px must be an integer 1..31')
+    else:
+        if not isinstance(value, list):
+            raise AnnotationError(f'{field} must be a list of points')
+        if field == 'route_px' and 0 < len(value) < 3:
+            raise AnnotationError('route needs at least 3 points (or empty to clear)')
+    session[field] = value
+    _touch(session)  # any edit revokes approval
+    note = 'cleared' if field == 'route_px' and not value else 'updated'
+    return {'status': 'PASS',
+            'message': f'{field} {note} (draft rev {session["revision"]}, unapproved)',
             'session': _session_view()}
 
 
 def op_extract(body):
     """Run boundary extraction on the patched raster copy."""
-    if STATE['session'] is None:
-        raise AnnotationError('no open session')
-    s = STATE['session']
-    extraction = extract_boundaries(STATE['map'], s['boundary_strokes_px'],
-                                    s.get('stroke_width_px', 5))
+    session, track_map = require_open()
+    extraction = extract_boundaries(track_map, session['boundary_strokes_px'],
+                                    session.get('stroke_width_px', 5))
     STATE['extraction'] = extraction
     return {'status': 'CANDIDATE',
-            'message': 'extracted boundaries are a CANDIDATE until approved',
+            'message': 'extracted boundaries are a CANDIDATE until approved; '
+                       'inspect the overlay, then approve via export',
             'session': _session_view()}
 
 
 def op_export(body):
-    """Approve, build the Project A manifest, and validate it strictly."""
-    if STATE['session'] is None or STATE['map'] is None:
-        raise AnnotationError('no open session')
-    s = STATE['session']
-    if not s.get('route_px'):
+    """Approve, build the Project A manifest, and validate it strictly.
+
+    Approval is bound to the exact exported geometry via a digest: any
+    later edit revokes it, and the headless CLI re-checks the digest
+    before exporting the same session.
+    """
+    session, track_map = require_open()
+    if not session.get('route_px'):
         raise AnnotationError('draw the directed route loop first')
-    outer, inner = extract_boundaries(STATE['map'], s['boundary_strokes_px'],
-                                      s.get('stroke_width_px', 5))
+    outer, inner = extract_boundaries(track_map, session['boundary_strokes_px'],
+                                      session.get('stroke_width_px', 5))
     STATE['extraction'] = (outer, inner)
-    payload, route, _prepared = build_and_validate(
-        STATE['map'], outer, inner, s['route_px'],
-        author=s.get('author', 'operator'), approval='operator-approved')
+    payload, route, prepared, info = build_and_validate(
+        track_map, outer, inner, session['route_px'],
+        author=session.get('author', 'operator'), approval='operator-approved')
     out = Path(STATE['out_dir']) / 'legal_route.json'
     out.write_text(json.dumps(payload, indent=1), encoding='utf-8')
-    s['approval'] = 'operator-approved'
+    session['approval'] = 'operator-approved'
+    session['approval_digest'] = geometry_digest(session, track_map)
+    session['revision'] = int(session.get('revision', 1)) + 1
+    validated_px = [[list(map(float, track_map.world_to_pixel(pt)))
+                     for pt in occ['seed']] for occ in payload['occurrences']]
     return {'status': 'VALIDATED',
             'message': f'validate_route + prepare_route PASS; route digest '
-                       f'{route.digest[:16]}… written to {out}. This is '
+                       f'{route.digest[:16]}… written to {out}. '
+                       f'seed correction max {info["max_correction_m"]:.3f} m '
+                       f'over {info["seed_samples"]} samples '
+                       f'(smoothing {info["smoothing_passes"]}). This is '
                        'input/topology validation, not optimizer or '
                        'on-car qualification.',
+            'route_digest': route.digest,
+            'occurrences': len(route.occurrences),
+            'prepared_samples': len(prepared.samples),
+            'max_correction_m': info['max_correction_m'],
+            'smoothing_passes': info['smoothing_passes'],
+            'validated_route_px': validated_px,
             'session': _session_view()}
 
 
 def op_save(body):
     """Persist the editable draft (never the source map)."""
-    if STATE['session'] is None:
-        raise AnnotationError('no open session')
-    path = Path(STATE['out_dir']) / f"{STATE['map'].png_path.stem}_annotation.json"
-    save_session(STATE['session'], path)
-    return {'status': 'PASS', 'message': f'draft saved to {path}'}
+    session, track_map = require_open()
+    path = Path(STATE['out_dir']) / f"{track_map.png_path.stem}_annotation.json"
+    save_session(session, path)
+    return {'status': 'PASS',
+            'message': f'draft rev {session.get("revision")} '
+                       f'({session.get("approval")}) saved to {path}'}
 
 
 def op_undo(body):
-    """Drop the last boundary stroke."""
-    if STATE['session'] is None:
-        raise AnnotationError('no open session')
-    strokes = STATE['session'].get('boundary_strokes_px', [])
+    """Drop the last boundary stroke; approval is revoked with the edit."""
+    session, _ = require_open()
+    strokes = session.get('boundary_strokes_px', [])
     if strokes:
         strokes.pop()
-    STATE['extraction'] = None
-    return {'status': 'PASS', 'message': 'last boundary stroke removed',
+    _touch(session)
+    return {'status': 'PASS',
+            'message': 'last boundary stroke removed; approval revoked '
+                       f'(draft rev {session["revision"]}, unapproved)',
             'session': _session_view()}
 
 
@@ -178,8 +241,7 @@ def main(argv=None):
     parser.add_argument('--out', default='/tmp/annotation_out')
     parser.add_argument('--port', type=int, default=8766)
     args = parser.parse_args(argv)
-    STATE['maps_dir'], STATE['out_dir'] = args.maps, args.out
-    Path(args.out).mkdir(parents=True, exist_ok=True)
+    configure(args.maps, args.out)
     server = HTTPServer(('127.0.0.1', args.port), Handler)
     print(f'annotation backend on http://127.0.0.1:{args.port}/ (loopback only)')
     server.serve_forever()

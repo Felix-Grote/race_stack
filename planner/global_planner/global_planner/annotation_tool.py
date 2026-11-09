@@ -11,7 +11,8 @@ import json
 from pathlib import Path
 
 from .annotation_core import (AnnotationError, TrackMap, build_and_validate,
-                              extract_boundaries, load_session)
+                              extract_boundaries, load_session,
+                              require_approved)
 
 
 def main(argv=None):
@@ -32,11 +33,10 @@ def main(argv=None):
         result = {'status': 'CANDIDATE', 'outer_points': len(outer),
                   'inner_points': len(inner)}
         if args.command == 'export':
-            if session.get('approval') != 'operator-approved':
-                raise AnnotationError(
-                    'export refused: session approval is not '
-                    "'operator-approved' (approve in the UI first)")
-            payload, route, prepared = build_and_validate(
+            # Approval must be bound to this exact geometry; a stale
+            # approval from before the last edit is refused, not honored.
+            require_approved(session, track_map)
+            payload, route, prepared, info = build_and_validate(
                 track_map, outer, inner, session['route_px'],
                 author=session.get('author', 'operator'),
                 approval='operator-approved')
@@ -47,6 +47,8 @@ def main(argv=None):
             result = {'status': 'VALIDATED', 'route_digest': route.digest,
                       'occurrences': len(route.occurrences),
                       'prepared_samples': len(prepared.samples),
+                      'max_correction_m': info['max_correction_m'],
+                      'smoothing_passes': info['smoothing_passes'],
                       'meaning': 'strict input + corridor preparation PASS; '
                                  'not optimizer or on-car qualification'}
         print(json.dumps(result, sort_keys=True))
