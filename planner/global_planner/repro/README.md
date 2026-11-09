@@ -60,7 +60,7 @@ PYTHONPATH=planner/global_planner python3.12 -m pytest \
   planner/global_planner/test/test_annotation_core.py -q
 ```
 
-53 passed. Covers frame-gap rejection, gated prefilter/RDP fixtures and the
+54 passed. Covers frame-gap rejection, gated prefilter/RDP fixtures and the
 end-to-end wall-containment measurement, the eps/res envelope,
 same-stem persistence isolation, HTTP hardening, and the full
 preview→approve→export lifecycle.

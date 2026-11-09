@@ -821,15 +821,17 @@ def test_rdp_gain_bounded_by_eps():
         assert _apex_gain_m(tip, gated) <= eps_m * (1.0 + 1e-9)
 
 
-def test_full_chain_gain_bounded_by_eps():
-    """Wall chain (_simplify + RDP, as build_manifest runs it) gains <= eps.
+def test_prefilter_mechanism_reinstates_above_bound_notch():
+    """Gated-prefilter mechanism: above-bound notches survive the pass.
 
-    Regression for the ungated-prefilter break: _simplify used to drop
-    a 1-cell-wide x 1.2-cell-tall notch (0.0600 m = 3x eps at
+    Regression pin for the ungated-prefilter break: _simplify used to
+    drop a 1-cell-wide x 1.2-cell-tall notch (0.0600 m = 3x eps at
     eps/res = 0.4) before RDP's deviation bound applied, and the
     annexing chord hit RDP's zero-deviation shortcut past the raster
-    gate. The eps-aware pre-filter must re-instate the tip so the
-    final chain keeps it (gain ~0).
+    gate. This pins the mechanism (bound + gate), not the production
+    floor value: the tip must survive the pre-filter so the chained
+    RDP keeps it (gain ~0 here; production asserts floor + eps — see
+    test_production_chain_gain_bounded_by_floor_plus_eps).
     """
     from global_planner.annotation_core import (
         _chord_stays_free, _douglas_peucker, _simplify)
@@ -842,6 +844,37 @@ def test_full_chain_gain_bounded_by_eps():
     out = _douglas_peucker(pre, eps_m, _chord_ok=gate)
     assert _apex_gain_m(tip, out) <= eps_m * (1.0 + 1e-9)
     assert len(out) < len(wall)  # straight runs still decimate
+
+
+def test_production_chain_gain_bounded_by_floor_plus_eps():
+    """Production wall chain (floor prefilter + eps RDP) gains <= floor.
+
+    Uses the exact chain build_manifest runs: prefilter bound 0.6
+    cells, RDP bound eps, both gate-checked. A sub-floor spike
+    (1 cell wide x 0.5 cell tall) is annexed up to its own height —
+    that is the documented quantization floor, not a violation — while
+    the above-floor 1.2-cell notch is kept (gain ~0).
+    """
+    from global_planner.annotation_core import (
+        MAX_DP_EPS_PER_CELL, _chord_stays_free, _douglas_peucker,
+        _simplify)
+    res_m, eps_m = 0.05, 0.02
+    floor_m = MAX_DP_EPS_PER_CELL * res_m
+    gate_of = lambda dil, to_px: (
+        lambda a, b: _chord_stays_free(a, b, dil, to_px, res_m))
+    spacing_m = max(2.0, 0.05 / res_m) * res_m
+    # Above-floor notch: kept end to end (gain ~0).
+    wall, dil, to_px, tip = _peninsula_fixture(res_m, 1, 0.06)
+    gate = gate_of(dil, to_px)
+    pre = _simplify(wall, spacing_m, floor_m, gate)
+    out = _douglas_peucker(pre, eps_m, _chord_ok=gate)
+    assert _apex_gain_m(tip, out) <= eps_m * (1.0 + 1e-9)
+    # Sub-floor spike: annexed, but bounded by the floor.
+    wall, dil, to_px, tip = _peninsula_fixture(res_m, 1, 0.025)
+    gate = gate_of(dil, to_px)
+    pre = _simplify(wall, spacing_m, floor_m, gate)
+    out = _douglas_peucker(pre, eps_m, _chord_ok=gate)
+    assert _apex_gain_m(tip, out) <= floor_m * (1.0 + 1e-9)
 
 
 def test_prefilter_floor_collapses_quantization_zigzag():

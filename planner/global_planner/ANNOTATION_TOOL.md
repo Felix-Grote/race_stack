@@ -93,7 +93,7 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
 
 ## Verified (this branch)
 
-- `test_annotation_core.py`: 53 passed — end-to-end strict PASS on the
+- `test_annotation_core.py`: 54 passed — end-to-end strict PASS on the
   real `test` and `baku` maps (crude, ridge and suggested seeds),
   pixel↔world roundtrip, session save/reopen + full map-identity
   rejection, outer-wall bay detour + tangent-stroke repair, isolated-speck

@@ -3,7 +3,7 @@
 #
 # Usage (from the repository root): planner/global_planner/repro/repro_baku.sh [pinned-python]
 # Same env contract as repro_test.sh. Expected: strict PASS (479 samples),
-# compile PASS H=f96db7b9..., independent geometry/dynamics PASS.
+# compile PASS H=82f9b533..., independent geometry/dynamics PASS.
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$HERE/../../.." && pwd)"
