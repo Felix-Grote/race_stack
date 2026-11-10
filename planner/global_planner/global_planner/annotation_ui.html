@@ -91,10 +91,17 @@ function arrows(pts,color){ if(!pts||pts.length<8)return; ctx.fillStyle=color;
     ctx.beginPath(); ctx.moveTo(a[0]+8*Math.cos(ang),a[1]+8*Math.sin(ang));
     ctx.lineTo(a[0]-5*Math.cos(ang-0.4),a[1]-5*Math.sin(ang-0.4));
     ctx.lineTo(a[0]-5*Math.cos(ang+0.4),a[1]-5*Math.sin(ang+0.4)); ctx.closePath(); ctx.fill(); } }
+function hashStr(s){ let h=5381; for(let i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))|0; } return (h>>>0).toString(36); }
+let digestOwner=null, digestText='';
+// Identity is the actual image bytes, not just name+size: same-named
+// maps with different pixels must not reuse the cached <img>. The
+// digest follows the session object, so it is computed once per update,
+// not on every mouse-move redraw.
+function imgDigest(){ if(S!==digestOwner){ digestOwner=S; digestText=hashStr(S?S.map_png_data_url||'':''); } return digestText; }
 function draw(){
   ctx.clearRect(0,0,cv.width,cv.height); ctx.fillStyle='#222'; ctx.fillRect(0,0,cv.width,cv.height);
   if(!S) return;
-  const key=S.map_png+'@'+S.image_size.join('x');
+  const key=S.map_png+'@'+S.image_size.join('x')+'@'+imgDigest();
   if(mapKey!==key){ mapKey=key; mapImg=new Image();
     mapImg.onload=()=>draw(); mapImg.src=S.map_png_data_url; return; }
   if(layers.map&&mapImg&&mapImg.complete&&mapImg.naturalWidth){ const v=view();
@@ -114,10 +121,16 @@ function overlay(){
     (validated.right||[]).forEach(p=>line(p,'#4f4')); }
   if(layers.center){ (validated.route||[]).forEach(p=>line(p,'#4f4')); arrows(validated.route||[],'#4f4'); }
 }
-function nearestStroke(cp){ let best=-1, bd=1e9;
-  (S.boundary_strokes_px||[]).forEach((stroke,i)=>{ stroke.forEach(p=>{ const q=toCanvas(p);
-    const d=Math.hypot(q[0]-cp[0],q[1]-cp[1]); if(d<bd){bd=d;best=i;} }); });
-  return bd<12?best:-1; }
+function segDist(p,a,b){ const vx=b[0]-a[0], vy=b[1]-a[1], L2=vx*vx+vy*vy;
+  let t=L2?((p[0]-a[0])*vx+(p[1]-a[1])*vy)/L2:0; t=Math.max(0,Math.min(1,t));
+  return Math.hypot(p[0]-(a[0]+t*vx),p[1]-(a[1]+t*vy)); }
+// Nearest line segment, not just nearest stored vertex, within 12px.
+function nearestStroke(cp){ let best=-1, bd=12;
+  (S.boundary_strokes_px||[]).forEach((stroke,i)=>{
+    const q=stroke.map(toCanvas);
+    for(let k=0;k<q.length;k++){ const d=segDist(cp,q[Math.max(0,k-1)],q[k]);
+      if(d<bd){ bd=d; best=i; } } });
+  return best; }
 cv.addEventListener('mousemove',e=>{ if(!S){hover=null;return;}
   const cp=evToCanvas(e);
   hover=(draft.length&&!selecting&&toMap(cp[0],cp[1]))?cp:null; draw(); });
@@ -126,13 +139,24 @@ cv.addEventListener('click',e=>{ if(!S)return; const cp=evToCanvas(e);
     say(hit<0?'no stroke near click':'selected stroke '+(hit+1)); return; }
   const mp=toMap(cp[0],cp[1]); if(!mp){ say('click is outside the map (letterbox); nothing added'); return; }
   draft.push(mp); hover=null; draw(); });
-cv.addEventListener('dblclick',async()=>{ draft.splice(-2);
+cv.addEventListener('dblclick',async()=>{
+  // A double-click fires two click events for its endpoint, so the draft
+  // ends with that point twice. Collapse only the double-fired tail:
+  // earlier operator-placed points stay untouched, and a natural stroke
+  // whose endpoint IS the double-click keeps it.
+  while(draft.length>=2){ const a=draft[draft.length-1], b=draft[draft.length-2];
+    if(Math.hypot(a[0]-b[0],a[1]-b[1])>0.5) break; draft.pop(); }
   if(!S||draft.length<2){draft=[]; draw(); return;}
   const field = tool==='boundary' ? 'boundary_strokes_px' : 'route_px';
   const value = tool==='boundary' ? [...(S.boundary_strokes_px||[]), draft] : draft;
   const res=await api('/api/session/update',{field, value}); draft=[]; hover=null; selected=-1;
   if(res.status!=='PASS'){ fail(res); return; }
-  validated={route:[],left:[],right:[]}; candidate=null; S=res.session; info(); say(res.status+': '+(res.message||'')); draw(); });
+  validated={route:[],left:[],right:[]}; candidate=null; S=res.session;
+  // Boundary edits change extraction: refresh it at once so the operator
+  // sees updated legal boundaries without another manual step. A route
+  // commit does not affect extraction, so it skips this roundtrip.
+  if(tool==='boundary'){ await refreshExtraction(); return; }
+  info(); say(res.status+': '+(res.message||'')); draw(); });
 document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool; selecting=false;
   document.getElementById('selectBtn').classList.remove('on');
   document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',x===b)); say('Tool: '+tool);});
@@ -146,7 +170,13 @@ function applied(res){ if(res.status!=='PASS'){ fail(res); return; }
   S=res.session; validated={route:[],left:[],right:[]}; candidate=null; selected=-1;
   info(); say(res.status+': '+(res.message||'')); draw(); }
 document.getElementById('openBtn').onclick=async()=>{ const name=document.getElementById('mapYaml').value.trim(); const res=await api('/api/session/open',{map:name}); if(res.status!=='PASS'){ fail(res); return; } S=res.session; validated={route:[],left:[],right:[]}; candidate=null; selected=-1; draft=[]; hover=null; info(); say(res.status+': '+(res.message||'')); draw(); };
-document.getElementById('extract').onclick=async()=>{ const res=await api('/api/session/extract',{}); if(res.status==='CANDIDATE'){ S=res.session; info(); say(res.status+': '+(res.message||'')); draw(); } else fail(res); };
+async function refreshExtraction(){
+  // New extraction invalidates preview layers and candidacy everywhere.
+  validated={route:[],left:[],right:[]}; candidate=null; selected=-1;
+  const res=await api('/api/session/extract',{});
+  if(res.status!=='CANDIDATE'){ fail(res); return; }
+  S=res.session; info(); say(res.status+': '+(res.message||'')); draw(); }
+document.getElementById('extract').onclick=refreshExtraction;
 document.getElementById('suggest').onclick=async()=>{
   const res=await api('/api/session/suggest',{});
   if(res.status!=='PASS'){ fail(res); return; }
@@ -156,10 +186,15 @@ document.getElementById('preview').onclick=async()=>{ const res=await api('/api/
 document.getElementById('approve').onclick=async()=>{ if(!candidate){say('FAIL: preview a candidate first');return;} const res=await api('/api/session/approve',{approval_digest:candidate}); if(res.status!=='PASS'){ fail(res); return; } if(res.session){S=res.session;} info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('export').onclick=async()=>{ const res=await api('/api/session/export',{}); if(res.status!=='VALIDATED'){ fail(res); return; } if(res.session){S=res.session;} validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[]}; info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('save').onclick=async()=>{ const res=await api('/api/session/save',{}); say(res.status+': '+(res.message||'')); };
-document.getElementById('width').onchange=async(e)=>{ const res=await api('/api/session/update',{field:'stroke_width_px', value:parseInt(e.target.value,10)}); applied(res); };
-document.getElementById('undo').onclick=async()=>{ const res=await api('/api/session/undo',{}); applied(res); };
+async function appliedBoundaryEdit(res){
+  // Boundary-affecting edits (width, undo, stroke removal) change
+  // extraction: apply the edit, then refresh it at once.
+  if(res.status!=='PASS'){ fail(res); return; }
+  S=res.session; await refreshExtraction(); }
+document.getElementById('width').onchange=async(e)=>{ const res=await api('/api/session/update',{field:'stroke_width_px', value:parseInt(e.target.value,10)}); await appliedBoundaryEdit(res); };
+document.getElementById('undo').onclick=async()=>{ const res=await api('/api/session/undo',{}); await appliedBoundaryEdit(res); };
 document.getElementById('removeStroke').onclick=async()=>{ if(!(selected>=0)||!S) return;
   const value=(S.boundary_strokes_px||[]).filter((_,i)=>i!==selected);
-  const res=await api('/api/session/update',{field:'boundary_strokes_px', value}); applied(res); };
+  const res=await api('/api/session/update',{field:'boundary_strokes_px', value}); await appliedBoundaryEdit(res); };
 document.getElementById('clearRoute').onclick=async()=>{ const res=await api('/api/session/update',{field:'route_px', value:[]}); applied(res); };
 </script></body></html>

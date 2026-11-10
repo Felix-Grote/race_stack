@@ -240,6 +240,27 @@ def test_html_layers_toggles_aspect_digest_contract():
     assert html.count('candidate=null') >= 4
 
 
+def test_html_endpoint_and_cache_contract():
+    """Double-click keeps its endpoint (no blind splice of two points);
+    the cached map image is keyed by actual image bytes (digest of the
+    data URL), not just name and dimensions; stroke selection measures
+    point-to-segment distance; boundary edits refresh extraction."""
+    html = UI_HTML.read_text(encoding='utf-8')
+    # A dblclick fires two clicks for its endpoint: collapse only that
+    # double-fired tail instead of dropping two operator points.
+    assert 'splice(-2)' not in html
+    assert 'double-fired' in html
+    # Same name+size with different pixels must not reuse the cached img.
+    assert 'imgDigest' in html
+    assert 'hashStr' in html
+    assert 'map_png_data_url' in html
+    # Nearest segment, not nearest stored vertex.
+    assert 'segDist' in html
+    # Completed boundary edits recompute extraction without manual steps.
+    assert 'refreshExtraction' in html
+    assert "getElementById('extract').onclick=refreshExtraction" in html
+
+
 def test_html_shows_digest_and_approval_state():
     """Session line exposes map/revision/approval/candidate for the
     operator to bind what they approve to what they saw."""
