@@ -6,26 +6,17 @@ gate-checked settings, then select offline through the unchanged pipeline:
 strict validation, corridor preparation, the pinned optimizer and the
 independent checkers.
 
-What this module is and is not:
-
-* Candidates differ only in wall-chain simplification. Seeds carry operator
-  intent and are never modified; the seed digest is pinned across variants.
-* Simplification is bounded: every epsilon must satisfy
-  ``epsilon_m / resolution_m <= 0.6`` (the shared envelope also enforced by
-  the annotation tool's ``build_manifest``), chords are deviation-checked,
-  eps-gated (a chord midpoint further than epsilon from the original ribbon
-  rejects the variant, so occupied space is never gained beyond epsilon)
-  and endcaps stay bit-exact. No random search, no new planner,
-  no replacement optimizer, no per-track tuning: no track names appear here.
-* Status vocabulary is never conflated: ``ENUMERATED`` (strict-valid
-  simplified variant) is not ``PREPARED`` (corridor preparation passed) is
-  not ``OPTIMIZED`` (numerical candidate only) is not ``PASS`` (independent
-  geometry, and dynamics when a model is supplied, accepted). A strict-valid
-  variant is never reported as an optimizer PASS.
-* The offline selection entry point performs no browser drawing, scheduling
-  or persistence beyond the caller-supplied output directory: no scheduler,
-  no database, no browser imports. Identical simplification inputs hit an
-  in-memory cache instead of being recomputed.
+Candidates differ only in wall-chain simplification within the shared
+``epsilon_m / resolution_m <= 0.6`` envelope; chords are deviation-checked
+and eps-gated so occupied space is never gained beyond epsilon, and
+endcaps stay bit-exact. Seeds are never modified; the seed digest is
+pinned across variants. ``ENUMERATED`` (strict-valid variant) is not
+``PREPARED`` (corridor preparation passed); selection receipts carry the
+compile outcome status, ``PASS`` only after independent acceptance, so a
+strict-valid variant is never reported as an optimizer PASS. The offline
+selection entry point performs no browser drawing, scheduling or
+persistence beyond the caller-supplied output directory. Identical
+simplification inputs hit an in-memory cache instead of being recomputed.
 """
 
 from dataclasses import dataclass, field
@@ -449,7 +440,7 @@ def select_candidate(route, *, model, footprint, policies, output_dir,
                 provenance=candidate_provenance)
             receipt = CandidateReceipt(
                 spec.index, spec.epsilon_m, spec.digest,
-                'PASS' if result.status == 'PASS' else 'OPTIMIZED',
+                'PASS' if result.status == 'PASS' else result.status,
                 result.status, result.reason,
                 time.monotonic() - began, _cpu_seconds() - began_cpu,
                 None if result.geometry is None else result.geometry.status,

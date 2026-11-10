@@ -52,8 +52,8 @@ BENIGN_A = [[211.0, 7.5], [239.0, 7.5]]
 BENIGN_B = [[239.0, 7.5], [245.0, 7.5]]
 
 
-def _open_drawn(srv, strokes=(BENIGN_A,), route=True):
-    srv.op_open({'map': 'test'})
+def _open_drawn(srv, strokes=(BENIGN_A,), route=True, map='test'):
+    srv.op_open({'map': map})
     srv.op_update({'field': 'boundary_strokes_px',
                    'value': [list(s) for s in strokes]})
     if route:
@@ -247,6 +247,30 @@ def test_html_shows_digest_and_approval_state():
     assert 'approval ${S.approval}' in html
     assert 'candidate ${(S.candidate_digest' in html
     assert 'rev ${S.revision}' in html
+
+
+def test_suggest_keeps_suggest_seed_on_test(backend):
+    """Ordinary flow unchanged where suggest validates: first method wins,
+    route closed, preview accepts."""
+    srv = backend
+    _open_drawn(srv, route=False)
+    res = srv.op_suggest({})
+    assert res['status'] == 'PASS'
+    assert 'suggest seed' in res['message']
+    route = srv.STATE['session']['route_px']
+    assert route[0] == route[-1]
+    assert srv.op_preview({})['status'] == 'VALIDATED'
+
+
+def test_suggest_falls_back_to_ridge_on_baku(backend):
+    """Same ordinary flow on baku without map-specific settings: suggest
+    fails strict, ridge wins, preview accepts the fallback seed."""
+    srv = backend
+    _open_drawn(srv, strokes=(), route=False, map='baku')
+    res = srv.op_suggest({})
+    assert res['status'] == 'PASS'
+    assert 'ridge seed' in res['message']
+    assert srv.op_preview({})['status'] == 'VALIDATED'
 
 
 def test_source_map_bytes_untouched_by_ui_ops(backend, tmp_path):

@@ -248,6 +248,10 @@ class CandidatePolicyTests(unittest.TestCase):
             self.assertIsNone(result.selected)
             self.assertTrue(all(r.reason for r in result.receipts))
             self.assertTrue(all(r.status != 'PASS' for r in result.receipts))
+        for receipt in result.receipts:
+            self.assertEqual(
+                receipt.stage,
+                'PASS' if receipt.status == 'PASS' else receipt.status)
 
 
 if __name__ == '__main__':

@@ -23,7 +23,8 @@ from .annotation_core import (AnnotationError, TrackMap, atomic_write_text,
                               build_and_validate, draft_name, export_name,
                               extract_boundaries, geometry_digest,
                               load_session, new_session, require_approved,
-                              resolve_draft, save_session, suggest_route)
+                              resolve_draft, ridge_seed, save_session,
+                              suggest_route)
 
 STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
          'out_dir': None, 'candidate_digest': None}
@@ -217,6 +218,10 @@ def op_update(body):
 def op_suggest(body):
     """Fill the route pencil with a computed centerline suggestion.
 
+    Tries the seed methods in a fixed deterministic order (suggest, then
+    ridge) and keeps the first seed the strict validator accepts, so the
+    operator never names a seed algorithm. Each attempt is gated by the
+    same strict build preview enforces; nothing is optimized here.
     An edit like any other: bumps the revision, revokes approval, clears
     the candidate. The operator inspects the suggestion in preview, may
     redraw it, and only an explicit approve authorizes export.
@@ -233,15 +238,39 @@ def op_suggest(body):
         STATE['extraction'] = None
         STATE['candidate_digest'] = None
         raise
-    suggested = suggest_route(outer, inner, session.get('route_px', []))
-    session['route_px'] = suggested + [suggested[0]]  # explicit closure
-    _touch(session)
-    return {'status': 'PASS',
-            'message': f'suggested centerline ({len(session["route_px"])} '
-                       f'points, closed loop, draft rev '
-                       f'{session["revision"]}, unapproved); inspect in '
-                       'preview, redraw if it looks wrong',
-            'session': _session_view()}
+    strokes = session['boundary_strokes_px']
+    width = session.get('stroke_width_px', 5)
+    hint = session.get('route_px', [])
+    methods = (
+        ('suggest',
+         lambda: suggest_route(outer, inner, hint)),
+        ('ridge',
+         lambda: ridge_seed(track_map, outer, inner, strokes, width)),
+    )
+    failures = []
+    for name, make in methods:
+        try:
+            seed = make()
+            if not seed:
+                raise AnnotationError('empty seed')
+            pts = [[float(v) for v in p] for p in seed]
+            closed = pts + [pts[0]] if pts[0] != pts[-1] else pts
+            build_and_validate(track_map, outer, inner, closed,
+                               author=session.get('author', 'operator'),
+                               approval='operator-approved')
+        except Exception as exc:  # noqa: BLE001 - try the next method
+            failures.append('%s: %s' % (name, exc))
+            continue
+        session['route_px'] = closed
+        _touch(session)
+        return {'status': 'PASS',
+                'message': f'suggested centerline ({len(closed)} points, '
+                           f'closed loop, {name} seed, draft rev '
+                           f'{session["revision"]}, unapproved); inspect '
+                           'in preview, redraw if it looks wrong',
+                'session': _session_view()}
+    raise AnnotationError('no seed method produced a strict-valid route '
+                          '(%s)' % '; '.join(failures))
 
 
 def op_extract(body):

@@ -61,12 +61,12 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
   damage is accepted as a visible detour (fail-open is impossible here),
   so the operator must compare the candidate overlay with the map.
 - The route pencil captures the operator's rough directed loop. `suggest`
-  fills it with a computed centerline instead: dense outer→inner pairing
-  + heavy periodic smoothing spline, oriented along the operator's loop
-  when one exists. It is a starting point, not an approval: the operator
-  inspects it in preview, may redraw it, and only an explicit approve
-  authorizes export. The suggestion is the seed family with demonstrated
-  full optimizer + independent-validation PASS (see Verified).
+  fills it with a computed centerline instead, trying the seed methods in
+  a fixed deterministic order (suggest, then ridge) and keeping the first
+  seed the strict validator accepts — the operator never names a seed
+  algorithm. The reply states which method won. It is a starting point,
+  not an approval: the operator inspects it in preview, may redraw it,
+  and only an explicit approve authorizes export.
 - The directed loop is split into 4 occurrences at locally straight
   points; left/right chains are arcs of the extracted loops, so shared
   end-caps are exact by construction. Walls are thinned with a

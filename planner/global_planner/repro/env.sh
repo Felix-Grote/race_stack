@@ -22,7 +22,7 @@ print('generator env: ' +
       ' '.join(f'{k}={have[k]}' for k in ('python', 'cv2', 'numpy')) +
       f' (recorded: {rec["python"]} {rec["cv2"]} {rec["numpy"]})')
 key = lambda v: tuple(v.split('.')[:2])  # noqa: E731
-drift = [k for k in ('python', 'cv2')
+drift = [k for k in ('python', 'cv2', 'numpy')
          if key(have[k]) != key(rec[k])]
 if drift and sys.argv[2] != '1':
     raise SystemExit(
