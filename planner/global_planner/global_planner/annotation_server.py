@@ -2,10 +2,11 @@
 """Local offline backend + web frontend for the annotation tool.
 
 Stdlib-only HTTP transport. The same session operations are exposed by
-``annotation_node`` over ROS (std_msgs/String JSON on
-``/planner_annotation/*``) when rclpy is available; geometry never
-depends on either transport. Binds to loopback only, never touches the
-driving stack, and never writes to the source map files.
+``annotation_node`` over ROS (std_msgs/String JSON on the relative
+topics ``planner_annotation/command`` / ``planner_annotation/state``)
+when rclpy is available; geometry never depends on either transport.
+Binds to loopback only, never touches the driving stack, and never
+writes to the source map files.
 
 Run: ``python3 -m global_planner.annotation_server --maps <dir> --port 8766``
 then open http://127.0.0.1:8766/ in a browser.

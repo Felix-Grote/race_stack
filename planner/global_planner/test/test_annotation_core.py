@@ -22,6 +22,26 @@ from global_planner.route_input import RouteError, validate_route  # noqa: E402
 MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
 
 
+def _has_rclpy():
+    """True when the ROS 2 client library imports (ROS-enabled env)."""
+    try:
+        import rclpy  # noqa: F401
+        return True
+    except ImportError:
+        return False
+
+
+HAS_RCLPY = _has_rclpy()
+# Headless tests drive the adapter through its stdlib stub path and only
+# run where rclpy is absent; ROS tests run a real node and only run
+# where rclpy imports. Both modes collect everywhere; each mode runs
+# its own half, so the suite is green headless and under ROS 2 Humble.
+headless_only = pytest.mark.skipif(
+    HAS_RCLPY, reason='headless adapter path (rclpy present)')
+needs_ros = pytest.mark.skipif(
+    not HAS_RCLPY, reason='requires ROS 2 rclpy')
+
+
 def _midline_seed(outer, inner, count=120):
     step = max(1, len(outer) // count)
     seed = []
@@ -497,11 +517,10 @@ def _headless_node(tmp_path):
     return node, send
 
 
+@headless_only
 def test_node_retry_ack_correlation(tmp_path):
     """Failed commands stay retryable; successes dedup; every reply is
     correlated with request_id and the authoritative revision."""
-    from global_planner import annotation_node as node_mod
-    assert node_mod.rclpy is None  # headless env: documents the ROS blocker
     _, send = _headless_node(tmp_path)
     opened = send('open', request_id='r1', map='test')
     assert opened['status'] == 'PASS'
@@ -628,6 +647,7 @@ def test_build_defaults_thin_walls_and_big_zone():
     assert sorted(edges) == pytest.approx([1.6, 1.6, 2.0, 2.0], abs=1e-9)
 
 
+@headless_only
 def test_node_suggest_roundtrip(tmp_path):
     """The ROS adapter exposes the suggest op on the same reply path."""
     _, send = _headless_node(tmp_path)
@@ -639,6 +659,72 @@ def test_node_suggest_roundtrip(tmp_path):
     assert len(res['session']['route_px']) == 241
     assert res['revision'] == 2
     assert res['session']['approval'] == 'none'
+
+
+def test_node_topics_are_relative():
+    """Adapter topics stay relative so a namespace push isolates them.
+
+    Runs in both modes (no node is constructed): an absolute topic
+    would ignore ``-r __ns:=...`` and silently rejoin the driving
+    graph's topic set.
+    """
+    from global_planner import annotation_node as node_mod
+    assert node_mod.AnnotationNode.COMMAND_TOPIC == \
+        'planner_annotation/command'
+    assert node_mod.AnnotationNode.STATE_TOPIC == 'planner_annotation/state'
+
+
+@needs_ros
+def test_node_ros_namespaced_roundtrip(tmp_path):
+    """With rclpy the adapter runs as a real node on namespaced topics.
+
+    A namespace push moves both relative topics under it (isolation
+    from the driving graph); an ``open`` command round-trips with
+    request_id/revision correlation over real pub/sub.
+    """
+    import time
+    rclpy = pytest.importorskip('rclpy')
+    String = pytest.importorskip('std_msgs.msg').String
+    from global_planner import annotation_node as node_mod
+    assert node_mod.rclpy is not None  # real Node path, not the stub
+    rclpy.init(args=['--ros-args', '-r', '__ns:=/annot'])
+    node = helper = None
+    try:
+        node = node_mod.AnnotationNode(maps_dir=str(MAPS),
+                                       out_dir=str(tmp_path / 'ros_out'))
+        assert node.get_namespace() == '/annot'
+        names = dict(node.get_topic_names_and_types())
+        assert '/annot/planner_annotation/command' in names
+        assert '/annot/planner_annotation/state' in names
+        from rclpy.executors import SingleThreadedExecutor
+        from rclpy.node import Node
+        helper = Node('annot_probe')
+        cmd_pub = helper.create_publisher(
+            String, 'planner_annotation/command', 10)
+        replies = []
+        helper.create_subscription(
+            String, 'planner_annotation/state', replies.append, 10)
+        probe = String()
+        probe.data = json.dumps({'op': 'open', 'map': 'test',
+                                 'request_id': 'ros1'})
+        executor = SingleThreadedExecutor()
+        executor.add_node(node)
+        executor.add_node(helper)
+        cmd_pub.publish(probe)
+        deadline = time.monotonic() + 15.0
+        while not replies and time.monotonic() < deadline:
+            executor.spin_once(timeout_sec=0.2)
+        assert replies, 'no state reply on the namespaced topic'
+        reply = json.loads(replies[-1].data)
+        assert reply['status'] == 'PASS'
+        assert reply['request_id'] == 'ros1'
+        assert reply['revision'] == 1
+    finally:
+        if node is not None:
+            node.destroy_node()
+        if helper is not None:
+            helper.destroy_node()
+        rclpy.shutdown()
 
 
 def _synthetic_map(tmp_path, name, image, resolution=0.05):
@@ -994,10 +1080,10 @@ def test_endcaps_exact_and_shared():
         assert gate == [occ['right'][-1], occ['left'][-1]]
 
 
+@headless_only
 def test_node_headless_configuration(tmp_path):
     """The ROS adapter fails fast without dirs and bounds its seen-set."""
     from global_planner import annotation_node as node_mod
-    assert node_mod.rclpy is None  # headless env: documents the ROS blocker
     with pytest.raises(AnnotationError, match='maps directory not found'):
         node_mod.AnnotationNode(maps_dir='/nonexistent-dir-xyz',
                                 out_dir=str(tmp_path))

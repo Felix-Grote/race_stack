@@ -3,12 +3,13 @@
 #
 # Usage (from the repository root): planner/global_planner/repro/repro_baku.sh [pinned-python]
 # Same env contract as repro_test.sh. Expected: strict PASS (479 samples),
-# compile PASS H=82f9b533..., independent geometry/dynamics PASS.
+# compile PASS H=82f9b533..., independent geometry/dynamics PASS, query PASS.
+# Shared generator gate: repro/env.sh (sets SYS, checks the env).
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$HERE/../../.." && pwd)"
 cd "$REPO"
-SYS="${SYSTEM_PY:-python3.12}"
+source "$HERE/env.sh"
 PIN="${1:-${PINNED_PY:-$HOME/venvs/forza-pinned/bin/python}}"
 OUT="${REPRO_OUT:-$HERE/out_baku}"
 MAP=baku EXPECTED_H=82f9b533ce50ad3e7b974187f19e9c40d944ca8b87115d21eb34e5fb41ac03f0
@@ -34,8 +35,8 @@ print(f'strict PASS prep={len(prepared.samples)} digest={route.digest}')
 EOF
 cmp "$COMMITTED" "$REGEN" && echo "regen byte-identical to committed manifest"
 "$PIN" - "$MAP" "$REGEN" "$OUT" "$EXPECTED_H" <<'EOF'
-import json, sys
-from global_planner.route_artifact import decode_record
+import json, math, sys
+from global_planner.route_artifact import decode_record, load_reference
 from global_planner.route_compile import compile_reference, load_policy
 from global_planner.route_input import validate_route
 from global_planner.route_validate import Footprint
@@ -57,5 +58,13 @@ assert receipt.geometry.status == 'PASS', receipt.geometry.reason
 assert receipt.dynamics.status == 'PASS', receipt.dynamics.reason
 assert receipt.H == expected, (receipt.H, expected)
 print(f'compile PASS H={receipt.H} geom=PASS dyn=PASS (matches {expected})')
+ref = load_reference(receipt.artifact_path, expected_H=expected,
+                     validation_context=context)
+smp = ref.sample(5.0)
+assert smp.H == expected, (smp.H, expected)
+assert smp.s == 5.0 and math.isfinite(smp.curvature)
+assert math.isfinite(smp.speed_mps) and math.isfinite(smp.time_s)
+print(f'query PASS s={smp.s} occ={smp.occurrence_id} '
+      f'v={smp.speed_mps:.3f} k={smp.curvature:.4f}')
 EOF
 echo "baku chain reproduced; outputs in $OUT"

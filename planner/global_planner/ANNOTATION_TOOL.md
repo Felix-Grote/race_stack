@@ -26,13 +26,23 @@ Headless (same core):
 `annotation_tool extract|preview|approve|export --map <yaml> --session <json> --out <dir>`
 (`approve` quotes `--candidate <digest>` from `preview`).
 ROS: `annotation_node` exposes the same operations plus `suggest` and a
-read-only `state` op as std_msgs/String JSON on
-`/planner_annotation/command` → `/planner_annotation/state`, with
-`maps_dir`/`out_dir` ROS params (fail-fast when unset). Every reply carries
-the `request_id` (when given) and the authoritative session `revision`;
-a repeated id is acknowledged `DUPLICATE` without re-applying, while a
-failed command stays retryable under the same id. Run it only
-in an isolated namespace/`ROS_DOMAIN_ID`, never in the driving launch.
+read-only `state` op as std_msgs/String JSON on the relative topics
+`planner_annotation/command` → `planner_annotation/state` (no custom
+messages), with `maps_dir`/`out_dir` ROS params (fail-fast when unset).
+Every reply carries the `request_id` (when given) and the authoritative
+session `revision`; a repeated id is acknowledged `DUPLICATE` without
+re-applying, while a failed command stays retryable under the same id.
+Run it only in an isolated namespace and `ROS_DOMAIN_ID`, never in the
+driving launch. Topics are relative so a namespace push moves them:
+
+```bash
+ROS_DOMAIN_ID=169 ros2 run global_planner annotation_node --ros-args \
+  -r __ns:=/annot -p maps_dir:=stack_master/maps -p out_dir:=/tmp/annotation_out
+# topics: /annot/planner_annotation/command, /annot/planner_annotation/state
+```
+
+With the default namespace the wire names stay
+`/planner_annotation/command` and `/planner_annotation/state`.
 Foxglove Bridge can forward those two topics to Lichtblick/Foxglove; no
 custom WebSocket transport is built or needed. A live ROS Humble +
 Foxglove Bridge roundtrip passed against this code — see Verified.
@@ -93,17 +103,21 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
 
 ## Verified (this branch)
 
-- `test_annotation_core.py`: 54 passed — end-to-end strict PASS on the
-  real `test` and `baku` maps (crude, ridge and suggested seeds),
-  pixel↔world roundtrip, session save/reopen + full map-identity
-  rejection, outer-wall bay detour + tangent-stroke repair, isolated-speck
-  and infield-chord rejection, reversed direction, outside-track
-  rejection, non-binary rejection, negate:1 equivalence, v1 migration,
-  ridge-seed confinement/determinism, spa/zuri annulus topology,
-  suggestion direction/closure, digest-bound preview→approve→export
-  lifecycle, undo/state semantics, CLI preview/approve/export cycle, ROS
-  retry/ack correlation incl. `suggest`, pipeline defaults (thinned walls,
-  2.0×1.6 m zone), headless ROS-adapter configuration.
+- `test_annotation_core.py`: 56 tests, 55 passed + 1 ROS-only skipped
+  headless — end-to-end strict PASS on the real `test` and `baku` maps
+  (crude, ridge and suggested seeds), pixel↔world roundtrip, session
+  save/reopen + full map-identity rejection, outer-wall bay detour +
+  tangent-stroke repair, isolated-speck and infield-chord rejection,
+  reversed direction, outside-track rejection, non-binary rejection,
+  negate:1 equivalence, v1 migration, ridge-seed confinement/determinism,
+  spa/zuri annulus topology, suggestion direction/closure, digest-bound
+  preview→approve→export lifecycle, undo/state semantics, CLI
+  preview/approve/export cycle, ROS retry/ack correlation incl.
+  `suggest`, pipeline defaults (thinned walls, 2.0×1.6 m zone),
+  headless ROS-adapter configuration, relative-topic pin. Under
+  ROS 2 Humble the 3 headless-only adapter tests skip instead and a
+  real namespaced pub/sub roundtrip (`__ns:=/annot`, correlated
+  open) runs.
 - Full trajectory compilation, pinned environment
   (`/mnt/storage/forza-annot/venvs/pinned`, CPython 3.10.12,
   numpy 1.26.4 / scipy 1.11.4 / quadprog 0.1.7 / trajectory-planning-helpers

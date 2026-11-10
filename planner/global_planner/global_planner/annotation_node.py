@@ -1,15 +1,19 @@
 # Copyright 2026 ForzaETH
 """Isolated ROS 2 adapter for the annotation tool (offline only).
 
-Transport is std_msgs/String JSON on ``/planner_annotation/*`` - no
-custom messages, no services on the driving graph. This node must run
-in its own namespace / ROS_DOMAIN_ID, never inside the stack_master
+Transport is std_msgs/String JSON on the relative topics
+``planner_annotation/command`` -> ``planner_annotation/state`` - no
+custom messages, no services on the driving graph. Relative names are
+deliberate: they resolve under the node's namespace, so a namespace
+push (``-r __ns:=/annot``) together with an isolated ROS_DOMAIN_ID
+keeps this traffic off the driving graph. This node must run in its
+own namespace / ROS_DOMAIN_ID, never inside the stack_master
 driving launch. It reuses ``annotation_server`` operations verbatim, so
 the ROS and local HTTP frontends cannot diverge. Commands carry a
 ``request_id``; duplicates within one node lifetime are acknowledged
 without re-applying (bounded, process-local memory - not a persistent
 idempotency log), and every command gets an authoritative-state reply on
-``/planner_annotation/state`` (latched-style, depth 1) carrying the
+``planner_annotation/state`` (latched-style, depth 1) carrying the
 session revision.
 
 Foxglove Bridge / Lichtblick can expose these topics to a panel; the
@@ -39,6 +43,13 @@ LATCHED = None  # built lazily when rclpy exists
 class AnnotationNode(Node if rclpy else object):
     """Single-authority session node; see module docstring for safety."""
 
+    # Relative topics on purpose: they resolve under the node namespace,
+    # so ``-r __ns:=/annot`` isolates this traffic. Never make these
+    # absolute: an absolute name would ignore the namespace push and
+    # silently rejoin the driving graph's topic set.
+    COMMAND_TOPIC = 'planner_annotation/command'
+    STATE_TOPIC = 'planner_annotation/state'
+
     # request_id memory is process-local and bounded: it only suppresses
     # accidental retries within one node lifetime. After a restart the set
     # is empty, so the first command must be ``open``; a resent pre-restart
@@ -61,9 +72,9 @@ class AnnotationNode(Node if rclpy else object):
             qos = QoSProfile(depth=1, reliability=ReliabilityPolicy.RELIABLE,
                              durability=DurabilityPolicy.TRANSIENT_LOCAL)
             self._pub = self.create_publisher(
-                String, '/planner_annotation/state', qos)
+                String, self.STATE_TOPIC, qos)
             self.create_subscription(
-                String, '/planner_annotation/command', self._on_command, 10)
+                String, self.COMMAND_TOPIC, self._on_command, 10)
 
     def _remember(self, request_id):
         """Record a request id, evicting the oldest past the cap."""
@@ -130,6 +141,12 @@ def main(args=None):
     Pass directories as ROS params, e.g.
     ``ros2 run global_planner annotation_node --ros-args
     -p maps_dir:=stack_master/maps -p out_dir:=/tmp/annotation_out``.
+
+    Isolate the node from the driving graph: export a dedicated
+    ``ROS_DOMAIN_ID`` and push a namespace (topics are relative, so
+    they follow it), e.g. ``-r __ns:=/annot``. With the default
+    namespace the wire names stay ``/planner_annotation/command`` and
+    ``/planner_annotation/state``.
     """
     if rclpy is None:
         raise SystemExit('rclpy unavailable: run annotation_server locally, '

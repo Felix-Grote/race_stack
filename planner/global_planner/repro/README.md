@@ -3,11 +3,17 @@
 All commands run from the repository root. Two Python environments are
 used on purpose; the manifest is the env-independent handoff:
 
-- **generation** (system `python3.12` + repo deps, opencv 5.0): map
+- **generation** (system `python3.12` + repo deps, opencv 5.x): map
   extraction, seeds, strict validation. `ridge_seed` follows cv2
   distance-transform numerics, which differ from opencv 4.8.1 by up to
   ~2.5 m — generation is therefore recorded on the system env, and the
-  manifest digest is the reproducible handoff.
+  manifest digest is the reproducible handoff. Both repro scripts source
+  the shared `repro/env.sh`, which resolves `SYSTEM_PY` and fails closed
+  when the generator env drifts from the `generator` record in
+  `receipts.json` (recorded: CPython 3.12.13, opencv 5.0.0, numpy
+  2.5.4). Provision it with:
+  `python3.12 -m pip install --user "opencv-python-headless==5.*"
+  "numpy==2.5.4"` (suite extras: `pillow`, `pytest`).
 - **compilation** (pinned env below): Project A optimization,
   independent validation, query.
 
@@ -34,8 +40,9 @@ planner/global_planner/repro/repro_baku.sh ~/venvs/forza-pinned/bin/python
 ```
 
 Each script regenerates its manifest (asserts byte-identical to the
-committed `manifests/` copy), compiles, and asserts the documented
-artifact hash:
+committed `manifests/` copy), compiles, asserts the documented
+artifact hash, and finishes with a stateless query probe (`s=5.0`)
+against the reloaded artifact:
 
 - `test` (suggested seed, defaults): strict PASS, 345 prepared
   samples → compile PASS `H=e80c49b6…` → geometry PASS →
@@ -60,10 +67,13 @@ PYTHONPATH=planner/global_planner python3.12 -m pytest \
   planner/global_planner/test/test_annotation_core.py -q
 ```
 
-54 passed. Covers frame-gap rejection, gated prefilter/RDP fixtures and the
-end-to-end wall-containment measurement, the eps/res envelope,
-same-stem persistence isolation, HTTP hardening, and the full
-preview→approve→export lifecycle.
+56 tests: 55 passed + 1 ROS-only skipped headless (under ROS 2 Humble
+the 3 headless-only adapter tests skip instead and the namespaced
+pub/sub roundtrip runs). Covers frame-gap rejection, gated
+prefilter/RDP fixtures and the end-to-end wall-containment measurement,
+the eps/res envelope, same-stem persistence isolation, HTTP hardening,
+the full preview→approve→export lifecycle, and relative-topic
+namespace isolation.
 
 ## 4. Geometry contract (enforced in `build_manifest`)
 
@@ -83,7 +93,7 @@ approximation, not strictly inward simplification.
 
 ## 5. Browser and ROS (operator interfaces)
 
-- Browser: `ui_flow.py` harness (headless Chromium) — 11/11 checks.
+- Browser: `ui_flow.py` harness (headless Chromium) — 12/12 checks.
 - ROS 2 Humble + Foxglove Bridge in Docker (`annot:humble-foxglove`
   image, repo mounted read-only): open → edit → duplicate →
   reconnect → failed command → same-ID retry → canonical state →
