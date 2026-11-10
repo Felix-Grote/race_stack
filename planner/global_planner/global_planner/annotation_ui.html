@@ -5,8 +5,12 @@
 body{font-family:system-ui,sans-serif;margin:12px;background:#111;color:#eee}
 canvas{background:#222;border:1px solid #555;max-width:100%;cursor:crosshair}
 button{margin:2px;padding:6px 10px} .on{background:#2a7;color:#fff}
+button:disabled{opacity:.45}
 #status{white-space:pre-wrap;background:#000;padding:8px;min-height:60px}
 .legend span{margin-right:14px}
+#layers label{margin-right:12px}
+#strokeList button{display:block;margin:1px 0}
+.sel{background:#a60;color:#fff}
 </style></head><body>
 <h3>Project A annotation — two pencils, nothing else</h3>
 <p>
@@ -14,7 +18,9 @@ button{margin:2px;padding:6px 10px} .on{background:#2a7;color:#fff}
  <input id="mapYaml" size="42" placeholder="server map name e.g. test">
  <button data-tool="boundary" class="tool">✎ Boundary pencil (close gaps)</button>
  <button data-tool="route" class="tool">✎ Route pencil (directed lap)</button>
+ <button id="selectBtn">⭘ Select stroke (no drawing)</button>
  <button id="undo">Undo stroke</button>
+ <button id="removeStroke" disabled>Remove selected stroke</button>
  <button id="clearRoute">Clear route</button>
  <label>Stroke width <select id="width"><option>3</option><option selected>5</option><option>9</option><option>13</option></select></label>
  <button id="extract">Run extraction</button>
@@ -24,62 +30,136 @@ button{margin:2px;padding:6px 10px} .on{background:#2a7;color:#fff}
  <button id="export">Export approved</button>
  <button id="save">Save draft</button>
 </p>
+<p id="layers">
+ <label><input type="checkbox" id="lay-map" checked> map</label>
+ <label><input type="checkbox" id="lay-strokes" checked> manual strokes</label>
+ <label><input type="checkbox" id="lay-extracted" checked> extracted boundaries</label>
+ <label><input type="checkbox" id="lay-corridor" checked> final corridor (left/right)</label>
+ <label><input type="checkbox" id="lay-center" checked> directed centerline</label>
+</p>
 <p class="legend"><span style="color:#f66">■ manual boundary</span>
 <span style="color:#4cf">■ extracted boundaries (candidate)</span>
 <span style="color:#fd4">■ directed route (your line)</span>
-<span style="color:#4f4">■ validated candidate (preview / export)</span>
-<span>Click to add points, double-click to finish a stroke. Route: draw one closed lap in travel direction (arrows show direction), then double-click. Flow: Preview → inspect green candidate → Approve → Export.</span></p>
+<span style="color:#4f4">■ validated corridor + centerline (preview / export)</span>
+<span>Click to add points, double-click to finish a stroke. Route: draw one closed lap in travel direction (arrows show direction), then double-click. Flow: Preview → inspect green candidate → Approve → Export. Extraction is a button press, never per-mousemove: the hover line is a local preview only. Boundary strokes add occupied cells; there is no free-space brush and maps are never written. Adding any stroke after extraction clears the overlay — re-extract.</span></p>
 <p id="sessinfo"></p>
+<p>Boundary strokes: <span id="strokeList">none</span></p>
+<!-- No frameworks: plain HTML/JS only, minimal viewport. -->
 <canvas id="cv" width="900" height="600"></canvas>
 <div id="status">No session. Enter a map name and press “Open map session…”.</div>
 <script>
 const cv=document.getElementById('cv'), ctx=cv.getContext('2d'), st=document.getElementById('status');
-const si=document.getElementById('sessinfo');
-let S=null, tool='boundary', draft=[], validated=[], candidate=null;
+const si=document.getElementById('sessinfo'), sl=document.getElementById('strokeList');
+let S=null, tool='boundary', selecting=false, draft=[], hover=null, selected=-1;
+let validated={route:[],left:[],right:[]}, candidate=null;
+let mapImg=null, mapKey=null;
+const layers={map:true,strokes:true,extracted:true,corridor:true,center:true};
 const say=t=>st.textContent=t;
+// Aspect-preserving view: fit the map inside the canvas, letterbox the rest.
+function view(){ const iw=S.image_size[0], ih=S.image_size[1];
+  const s=Math.min(cv.width/iw, cv.height/ih);
+  const w=iw*s, h=ih*s; return {s, ox:(cv.width-w)/2, oy:(cv.height-h)/2}; }
+function toCanvas(p){ const v=view(); return [v.ox+p[0]*v.s, v.oy+p[1]*v.s]; }
+function toMap(cx,cy){ const v=view(); const x=(cx-v.ox)/v.s, y=(cy-v.oy)/v.s;
+  if(x<0||y<0||x>S.image_size[0]||y>S.image_size[1]) return null; return [x,y]; }
+function evToCanvas(e){ const r=cv.getBoundingClientRect();
+  return [(e.clientX-r.left)*cv.width/r.width, (e.clientY-r.top)*cv.height/r.height]; }
 function info(){
   if(!S){ si.textContent=''; return; }
   const n=(S.route_px||[]).length; const closed=n>2 && Math.hypot(S.route_px[0][0]-S.route_px[n-1][0],S.route_px[0][1]-S.route_px[n-1][1])<8;
-  si.textContent=`map ${S.map_png} rev ${S.revision} approval ${S.approval} candidate ${(S.candidate_digest||'none').slice(0,12)} strokes ${(S.boundary_strokes_px||[]).length} route ${n?`drawn ${closed?'closed':'OPEN'}`:'empty'} width ${S.stroke_width_px}`;
+  si.textContent=`map ${S.map_png} rev ${S.revision} approval ${S.approval} candidate ${(S.candidate_digest||'none').slice(0,16)} strokes ${(S.boundary_strokes_px||[]).length} route ${n?`drawn ${closed?'closed':'OPEN'}`:'empty'} width ${S.stroke_width_px}`;
   const w=document.getElementById('width'); if(w) w.value=String(S.stroke_width_px);
+  const nb=(S.boundary_strokes_px||[]).length;
+  sl.textContent='';
+  if(!nb){ sl.textContent='none'; }
+  (S.boundary_strokes_px||[]).forEach((p,i)=>{ const b=document.createElement('button');
+    b.textContent=`stroke ${i+1} (${p.length} pts)`; if(i===selected)b.classList.add('sel');
+    b.onclick=()=>{ selected=(selected===i?-1:i); info(); draw(); }; sl.appendChild(b); });
+  document.getElementById('removeStroke').disabled=!(selected>=0&&selected<nb);
 }
 async function api(path, body){ const r=await fetch(path,{method:body?'POST':'GET',headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined}); return r.json(); }
+// Local-only failure path: keep the operator's strokes, drop every overlay
+// derived from geometry that just failed, never show a stale candidate.
+function fail(res){ if(S) S.extraction=null; validated={route:[],left:[],right:[]};
+  candidate=null; selected=-1; info(); say('FAIL: '+(res.message||res.reason||'unknown')); draw(); }
+function line(pts,color,close,width){ if(!pts||pts.length<2)return; ctx.strokeStyle=color; ctx.lineWidth=width||2; ctx.beginPath(); pts.forEach((p,i)=>{const q=toCanvas(p); i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);}); if(close)ctx.closePath(); ctx.stroke(); }
+function arrows(pts,color){ if(!pts||pts.length<8)return; ctx.fillStyle=color;
+  const flat=pts.flatMap(seg=>Array.isArray(seg[0])?seg:[seg]);
+  const n=flat.length, step=Math.max(1,Math.floor(n/12));
+  for(let i=0;i<n;i+=step){ const a=toCanvas(flat[i]), b=toCanvas(flat[(i+1)%n]);
+    const ang=Math.atan2(b[1]-a[1],b[0]-a[0]);
+    ctx.beginPath(); ctx.moveTo(a[0]+8*Math.cos(ang),a[1]+8*Math.sin(ang));
+    ctx.lineTo(a[0]-5*Math.cos(ang-0.4),a[1]-5*Math.sin(ang-0.4));
+    ctx.lineTo(a[0]-5*Math.cos(ang+0.4),a[1]-5*Math.sin(ang+0.4)); ctx.closePath(); ctx.fill(); } }
 function draw(){
-  ctx.clearRect(0,0,cv.width,cv.height); if(!S) return;
-  const img=new Image(); img.onload=()=>{ ctx.drawImage(img,0,0,cv.width,cv.height); overlay(); }; img.src=S.map_png_data_url;
+  ctx.clearRect(0,0,cv.width,cv.height); ctx.fillStyle='#222'; ctx.fillRect(0,0,cv.width,cv.height);
+  if(!S) return;
+  const key=S.map_png+'@'+S.image_size.join('x');
+  if(mapKey!==key){ mapKey=key; mapImg=new Image();
+    mapImg.onload=()=>draw(); mapImg.src=S.map_png_data_url; return; }
+  if(layers.map&&mapImg&&mapImg.complete&&mapImg.naturalWidth){ const v=view();
+    ctx.imageSmoothingEnabled=false;
+    ctx.drawImage(mapImg,v.ox,v.oy,S.image_size[0]*v.s,S.image_size[1]*v.s); }
+  if(!mapImg||!mapImg.complete) return; // overlays need the fitted view only
+  overlay();
 }
-function scale(){ return [cv.width/S.image_size[0], cv.height/S.image_size[1]]; }
-function line(pts,color,close){ if(!pts||pts.length<2)return; const [sx,sy]=scale(); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p[0]*sx,p[1]*sy):ctx.moveTo(p[0]*sx,p[1]*sy)); if(close)ctx.closePath(); ctx.stroke(); }
-function arrows(pts,color){ if(!pts||pts.length<8)return; const [sx,sy]=scale(); ctx.fillStyle=color; const n=pts.length, step=Math.max(1,Math.floor(n/12)); for(let i=0;i<n;i+=step){ const a=pts[i], b=pts[(i+1)%n]; const ang=Math.atan2((b[1]-a[1])*sy,(b[0]-a[0])*sx); const x=a[0]*sx, y=a[1]*sy; ctx.beginPath(); ctx.moveTo(x+8*Math.cos(ang),y+8*Math.sin(ang)); ctx.lineTo(x-5*Math.cos(ang-0.4),y-5*Math.sin(ang-0.4)); ctx.lineTo(x-5*Math.cos(ang+0.4),y-5*Math.sin(ang+0.4)); ctx.closePath(); ctx.fill(); } }
 function overlay(){
-  (S.boundary_strokes_px||[]).forEach(p=>line(p,'#f66')); line(draft,'#f66');
-  if(S.extraction){ line(S.extraction.outer_px,'#4cf'); line(S.extraction.inner_px,'#4cf'); }
-  line(S.route_px||[],'#fd4',true); arrows(S.route_px||[],'#fd4');
-  validated.forEach(p=>{line(p,'#4f4'); arrows(p,'#4f4');});
+  if(layers.strokes){ (S.boundary_strokes_px||[]).forEach((p,i)=>line(p,i===selected?'#fa0':'#f66',false,i===selected?4:2)); line(draft,'#f66');
+    if(hover&&draft.length){ const last=toCanvas(draft[draft.length-1]);
+      ctx.strokeStyle='#f66'; ctx.setLineDash([4,3]); ctx.beginPath();
+      ctx.moveTo(last[0],last[1]); ctx.lineTo(hover[0],hover[1]); ctx.stroke(); ctx.setLineDash([]); } }
+  if(layers.extracted&&S.extraction){ line(S.extraction.outer_px,'#4cf'); line(S.extraction.inner_px,'#4cf'); }
+  if(layers.center){ line(S.route_px||[],'#fd4',true); arrows(S.route_px||[],'#fd4'); }
+  if(layers.corridor){ (validated.left||[]).forEach(p=>line(p,'#4f4'));
+    (validated.right||[]).forEach(p=>line(p,'#4f4')); }
+  if(layers.center){ (validated.route||[]).forEach(p=>line(p,'#4f4')); arrows(validated.route||[],'#4f4'); }
 }
-// Clicks commit immediately (fast clicking keeps every point). A
-// double-click fires after its two click events, so drop those two
-// trailing points before committing the stroke.
-cv.addEventListener('click',e=>{ if(!S)return; const r=cv.getBoundingClientRect();
-  draft.push([(e.clientX-r.left)*S.image_size[0]/r.width, (e.clientY-r.top)*S.image_size[1]/r.height]); draw(); });
+function nearestStroke(cp){ let best=-1, bd=1e9;
+  (S.boundary_strokes_px||[]).forEach((stroke,i)=>{ stroke.forEach(p=>{ const q=toCanvas(p);
+    const d=Math.hypot(q[0]-cp[0],q[1]-cp[1]); if(d<bd){bd=d;best=i;} }); });
+  return bd<12?best:-1; }
+cv.addEventListener('mousemove',e=>{ if(!S){hover=null;return;}
+  const cp=evToCanvas(e);
+  hover=(draft.length&&!selecting&&toMap(cp[0],cp[1]))?cp:null; draw(); });
+cv.addEventListener('click',e=>{ if(!S)return; const cp=evToCanvas(e);
+  if(selecting){ const hit=nearestStroke(cp); selected=hit; info(); draw();
+    say(hit<0?'no stroke near click':'selected stroke '+(hit+1)); return; }
+  const mp=toMap(cp[0],cp[1]); if(!mp){ say('click is outside the map (letterbox); nothing added'); return; }
+  draft.push(mp); hover=null; draw(); });
 cv.addEventListener('dblclick',async()=>{ draft.splice(-2);
   if(!S||draft.length<2){draft=[]; draw(); return;}
   const field = tool==='boundary' ? 'boundary_strokes_px' : 'route_px';
   const value = tool==='boundary' ? [...(S.boundary_strokes_px||[]), draft] : draft;
-  const res=await api('/api/session/update',{field, value}); draft=[]; validated=[]; candidate=null; S=res.session||S; info(); say(res.status+': '+(res.message||'')); draw(); });
-document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool; document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',x===b)); say('Tool: '+tool);});
-function applied(res){ if(res.session){S=res.session; validated=[];} info(); say(res.status+': '+(res.message||'')); draw(); }
-document.getElementById('openBtn').onclick=async()=>{ const name=document.getElementById('mapYaml').value.trim(); const res=await api('/api/session/open',{map:name}); if(res.session){S=res.session; validated=[]; candidate=null;} info(); say(res.status+': '+(res.message||'')); draw(); };
-document.getElementById('extract').onclick=async()=>{ const res=await api('/api/session/extract',{}); if(res.session){S=res.session; validated=[];} info(); say(res.status+': '+(res.message||'')); draw(); };
+  const res=await api('/api/session/update',{field, value}); draft=[]; hover=null; selected=-1;
+  if(res.status!=='PASS'){ fail(res); return; }
+  validated={route:[],left:[],right:[]}; candidate=null; S=res.session; info(); say(res.status+': '+(res.message||'')); draw(); });
+document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool; selecting=false;
+  document.getElementById('selectBtn').classList.remove('on');
+  document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',x===b)); say('Tool: '+tool);});
+document.getElementById('selectBtn').onclick=e=>{ selecting=!selecting;
+  e.target.classList.toggle('on',selecting);
+  document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',false));
+  say(selecting?'Select mode: click a stroke to select it, then Remove selected stroke':'Tool: '+tool); };
+[['lay-map','map'],['lay-strokes','strokes'],['lay-extracted','extracted'],['lay-corridor','corridor'],['lay-center','center']].forEach(([id,k])=>{
+  document.getElementById(id).onchange=e=>{ layers[k]=e.target.checked; draw(); }; });
+function applied(res){ if(res.status!=='PASS'){ fail(res); return; }
+  S=res.session; validated={route:[],left:[],right:[]}; candidate=null; selected=-1;
+  info(); say(res.status+': '+(res.message||'')); draw(); }
+document.getElementById('openBtn').onclick=async()=>{ const name=document.getElementById('mapYaml').value.trim(); const res=await api('/api/session/open',{map:name}); if(res.status!=='PASS'){ fail(res); return; } S=res.session; validated={route:[],left:[],right:[]}; candidate=null; selected=-1; draft=[]; hover=null; info(); say(res.status+': '+(res.message||'')); draw(); };
+document.getElementById('extract').onclick=async()=>{ const res=await api('/api/session/extract',{}); if(res.status==='CANDIDATE'){ S=res.session; info(); say(res.status+': '+(res.message||'')); draw(); } else fail(res); };
 document.getElementById('suggest').onclick=async()=>{
   const res=await api('/api/session/suggest',{});
-  if(res.session){S=res.session; validated=[]; candidate=null;}
+  if(res.status!=='PASS'){ fail(res); return; }
+  S=res.session; validated={route:[],left:[],right:[]}; candidate=null; selected=-1;
   info(); say(res.status+': '+(res.message||'')); draw(); };
-document.getElementById('preview').onclick=async()=>{ const res=await api('/api/session/preview',{}); if(res.session){S=res.session; validated=res.validated_route_px||[]; candidate=res.candidate_digest||null;} info(); say((res.status||'FAIL')+': '+(res.message||res.reason||'')); draw(); };
-document.getElementById('approve').onclick=async()=>{ if(!candidate){say('FAIL: preview a candidate first');return;} const res=await api('/api/session/approve',{approval_digest:candidate}); if(res.session){S=res.session;} info(); say(res.status+': '+(res.message||'')); draw(); };
-document.getElementById('export').onclick=async()=>{ const res=await api('/api/session/export',{}); if(res.session){S=res.session;} info(); say(res.status+': '+(res.message||'')); draw(); };
+document.getElementById('preview').onclick=async()=>{ const res=await api('/api/session/preview',{}); if(res.status!=='VALIDATED'){ fail(res); return; } S=res.session; validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[]}; candidate=res.candidate_digest||null; info(); say((res.status||'FAIL')+': '+(res.message||res.reason||'')); draw(); };
+document.getElementById('approve').onclick=async()=>{ if(!candidate){say('FAIL: preview a candidate first');return;} const res=await api('/api/session/approve',{approval_digest:candidate}); if(res.status!=='PASS'){ fail(res); return; } if(res.session){S=res.session;} info(); say(res.status+': '+(res.message||'')); draw(); };
+document.getElementById('export').onclick=async()=>{ const res=await api('/api/session/export',{}); if(res.status!=='VALIDATED'){ fail(res); return; } if(res.session){S=res.session;} validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[]}; info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('save').onclick=async()=>{ const res=await api('/api/session/save',{}); say(res.status+': '+(res.message||'')); };
 document.getElementById('width').onchange=async(e)=>{ const res=await api('/api/session/update',{field:'stroke_width_px', value:parseInt(e.target.value,10)}); applied(res); };
 document.getElementById('undo').onclick=async()=>{ const res=await api('/api/session/undo',{}); applied(res); };
+document.getElementById('removeStroke').onclick=async()=>{ if(!(selected>=0)||!S) return;
+  const value=(S.boundary_strokes_px||[]).filter((_,i)=>i!==selected);
+  const res=await api('/api/session/update',{field:'boundary_strokes_px', value}); applied(res); };
 document.getElementById('clearRoute').onclick=async()=>{ const res=await api('/api/session/update',{field:'route_px', value:[]}); applied(res); };
 </script></body></html>

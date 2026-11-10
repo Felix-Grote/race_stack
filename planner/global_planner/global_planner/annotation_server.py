@@ -221,8 +221,17 @@ def op_suggest(body):
     redraw it, and only an explicit approve authorizes export.
     """
     session, track_map = require_open()
-    outer, inner = extract_boundaries(track_map, session['boundary_strokes_px'],
-                                      session.get('stroke_width_px', 5))
+    try:
+        outer, inner = extract_boundaries(
+            track_map, session['boundary_strokes_px'],
+            session.get('stroke_width_px', 5))
+    except AnnotationError:
+        # No boundaries, no suggestion: drop any stale overlay so the
+        # display never shows geometry from before the failure. The
+        # operator's strokes are untouched (session not mutated).
+        STATE['extraction'] = None
+        STATE['candidate_digest'] = None
+        raise
     suggested = suggest_route(outer, inner, session.get('route_px', []))
     session['route_px'] = suggested + [suggested[0]]  # explicit closure
     _touch(session)
@@ -235,10 +244,21 @@ def op_suggest(body):
 
 
 def op_extract(body):
-    """Run boundary extraction on the patched raster copy."""
+    """Run boundary extraction on the patched raster copy.
+
+    On failure the previous overlay is dropped (no stale display) while
+    the operator's strokes are retained in the session, and the
+    diagnostic is reported so the stroke can be repaired.
+    """
     session, track_map = require_open()
-    extraction = extract_boundaries(track_map, session['boundary_strokes_px'],
-                                    session.get('stroke_width_px', 5))
+    try:
+        extraction = extract_boundaries(
+            track_map, session['boundary_strokes_px'],
+            session.get('stroke_width_px', 5))
+    except AnnotationError:
+        STATE['extraction'] = None
+        STATE['candidate_digest'] = None
+        raise
     STATE['extraction'] = extraction
     return {'status': 'CANDIDATE',
             'message': 'extracted boundaries are a CANDIDATE until approved; '
@@ -247,9 +267,20 @@ def op_extract(body):
 
 
 def _validated_receipt(payload, route, prepared, info, track_map, out=None):
-    """Shared VALIDATED receipt body (preview and export show the same)."""
-    validated_px = [[list(map(float, track_map.world_to_pixel(pt)))
-                     for pt in occ['seed']] for occ in payload['occurrences']]
+    """Shared VALIDATED receipt body (preview and export show the same).
+
+    The receipt carries the exact final corridor geometry from the
+    export candidate manifest: the per-occurrence left/right wall chains
+    plus the directed seed centerline, all in file-pixel coordinates, so
+    the browser can render the corridor bit-identically to the export
+    without re-deriving anything.
+    """
+    def _px(chain):
+        return [[float(track_map.world_to_pixel(pt)[0]),
+                 float(track_map.world_to_pixel(pt)[1])] for pt in chain]
+    validated_px = [_px(occ['seed']) for occ in payload['occurrences']]
+    validated_left = [_px(occ['left']) for occ in payload['occurrences']]
+    validated_right = [_px(occ['right']) for occ in payload['occurrences']]
     where = f'written to {out}. ' if out is not None else 'not written yet. '
     return {'status': 'VALIDATED',
             'message': f'validate_route + prepare_route PASS; route digest '
@@ -264,7 +295,9 @@ def _validated_receipt(payload, route, prepared, info, track_map, out=None):
             'prepared_samples': len(prepared.samples),
             'max_correction_m': info['max_correction_m'],
             'smoothing_passes': info['smoothing_passes'],
-            'validated_route_px': validated_px}
+            'validated_route_px': validated_px,
+            'validated_left_px': validated_left,
+            'validated_right_px': validated_right}
 
 
 def op_preview(body):
@@ -279,13 +312,28 @@ def op_preview(body):
     session, track_map = require_open()
     if not session.get('route_px'):
         raise AnnotationError('draw the directed route loop first')
-    outer, inner = extract_boundaries(track_map, session['boundary_strokes_px'],
-                                      session.get('stroke_width_px', 5))
+    try:
+        outer, inner = extract_boundaries(
+            track_map, session['boundary_strokes_px'],
+            session.get('stroke_width_px', 5))
+    except AnnotationError:
+        # Boundary failure: nothing valid to show; drop the stale
+        # overlay and candidate, keep the operator's strokes.
+        STATE['extraction'] = None
+        STATE['candidate_digest'] = None
+        raise
     STATE['extraction'] = (outer, inner)
-    payload, route, prepared, info = build_and_validate(
-        track_map, outer, inner, session['route_px'],
-        author=session.get('author', 'operator'),
-        approval='operator-approved')
+    try:
+        payload, route, prepared, info = build_and_validate(
+            track_map, outer, inner, session['route_px'],
+            author=session.get('author', 'operator'),
+            approval='operator-approved')
+    except Exception:  # noqa: BLE001 - any build failure clears candidacy
+        # Route/corridor failure: the extracted boundaries above are
+        # still valid and stay visible, but there is no candidate to
+        # approve until the route is redrawn and previewed again.
+        STATE['candidate_digest'] = None
+        raise
     digest = geometry_digest(session, track_map)
     STATE['candidate_digest'] = digest
     receipt = _validated_receipt(payload, route, prepared, info, track_map)
@@ -332,12 +380,25 @@ def op_export(body):
                               'export)')
     if not session.get('route_px'):
         raise AnnotationError('draw the directed route loop first')
-    outer, inner = extract_boundaries(track_map, session['boundary_strokes_px'],
-                                      session.get('stroke_width_px', 5))
+    try:
+        outer, inner = extract_boundaries(
+            track_map, session['boundary_strokes_px'],
+            session.get('stroke_width_px', 5))
+    except AnnotationError:
+        # Geometry broke after approval (should be unreachable: edits
+        # revoke approval first). Drop the stale overlay either way.
+        STATE['extraction'] = None
+        STATE['candidate_digest'] = None
+        raise
     STATE['extraction'] = (outer, inner)
-    payload, route, prepared, info = build_and_validate(
-        track_map, outer, inner, session['route_px'],
-        author=session.get('author', 'operator'), approval='operator-approved')
+    try:
+        payload, route, prepared, info = build_and_validate(
+            track_map, outer, inner, session['route_px'],
+            author=session.get('author', 'operator'),
+            approval='operator-approved')
+    except Exception:  # noqa: BLE001 - failed build exports nothing
+        STATE['candidate_digest'] = None
+        raise
     out = Path(STATE['out_dir']) / export_name(track_map)
     atomic_write_text(out, json.dumps(payload, indent=1))
     receipt = _validated_receipt(payload, route, prepared, info, track_map,
