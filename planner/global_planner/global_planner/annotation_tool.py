@@ -8,16 +8,13 @@ Examples:
 """
 import argparse
 import json
-import os
-import time
 from pathlib import Path
 
-from .annotation_core import (AnnotationError, TrackMap, VALIDATE_THINNINGS,
-                              atomic_write_text, build_and_validate,
-                              export_name, extract_boundaries,
-                              geometry_digest, load_session,
-                              require_approved, run_pinned_compile,
-                              save_session)
+from .annotation_core import (AnnotationError, TrackMap, atomic_write_text,
+                              build_and_validate, export_name,
+                              extract_boundaries, geometry_digest,
+                              load_session, require_approved, save_session,
+                              select_thinning)
 
 
 def _validated_receipt(route, prepared, info):
@@ -106,53 +103,24 @@ def main(argv=None):
                               json.dumps(payload, indent=1))
             result = _validated_receipt(route, prepared, info)
         elif args.command == 'validate':
-            # Explicit offline step: full optimizer + independent checkers
-            # over bounded thinning settings; the winner is saved into the
-            # session so preview/approve/export all use it afterwards.
-            # Generation runs here; optimization runs pinned, like repro.
+            # Explicit offline validation; the winner is saved into the
+            # session, see op_validate.
             if not session.get('route_px'):
                 raise AnnotationError('draw the directed route loop first')
-            attempts = []
-            tag = (time.strftime('%Y%m%d-%H%M%S') + '-%d'
-                   % (os.getpid() % 10000))
-            work = Path(args.out) / 'validation' / tag
-            for index, eps in enumerate(VALIDATE_THINNINGS):
-                try:
-                    payload, _, _, _ = build_and_validate(
-                        track_map, outer, inner, session['route_px'],
-                        author=session.get('author', 'operator'),
-                        approval='operator-approved',
-                        chain_dp_epsilon_m=eps)
-                    manifest = work / ('candidate-%d.json' % index)
-                    manifest.parent.mkdir(parents=True, exist_ok=True)
-                    atomic_write_text(manifest, json.dumps(payload, indent=1))
-                    receipt = run_pinned_compile(
-                        manifest, work / ('compile-%d' % index),
-                        session.get('map_png', ''), eps)
-                except Exception as exc:  # noqa: BLE001 - try next
-                    attempts.append('eps %.2f: %s' % (eps, exc))
-                    continue
-                if (receipt['status'] == 'PASS'
-                        and receipt.get('geometry_status') == 'PASS'
-                        and receipt.get('dynamics_status') == 'PASS'):
-                    session['chain_dp_epsilon_m'] = eps
-                    session['revision'] = int(session.get('revision', 1)) + 1
-                    session['approval'] = 'none'
-                    session['approval_digest'] = None
-                    save_session(session, args.session)
-                    result = {'status': 'PASS',
-                              'chain_dp_epsilon_m': eps,
-                              'artifact_H': receipt['H'],
-                              'attempts': attempts,
-                              'revision': session['revision']}
-                    break
-                attempts.append('eps %.2f: %s'
-                                % (eps, receipt.get('reason')
-                                   or receipt['status']))
-            else:
-                raise AnnotationError(
-                    'no thinning reached full validation (%s)'
-                    % '; '.join(attempts))
+            eps, artifact_h, attempts = select_thinning(
+                track_map, outer, inner, session['route_px'],
+                session.get('author', 'operator'),
+                session.get('map_png', ''), args.out)
+            session['chain_dp_epsilon_m'] = eps
+            session['revision'] = int(session.get('revision', 1)) + 1
+            session['approval'] = 'none'
+            session['approval_digest'] = None
+            save_session(session, args.session)
+            result = {'status': 'PASS',
+                      'chain_dp_epsilon_m': eps,
+                      'artifact_H': artifact_h,
+                      'attempts': attempts,
+                      'revision': session['revision']}
         print(json.dumps(result, sort_keys=True))
         return 0
     except (AnnotationError, ValueError, OSError) as exc:

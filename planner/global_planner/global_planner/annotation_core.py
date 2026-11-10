@@ -33,6 +33,7 @@ import hashlib
 import json
 import math
 import os
+import time
 from pathlib import Path
 
 import numpy as np
@@ -155,6 +156,7 @@ SESSION_VERSION = 2
 # documented envelope edge (eps/res = 0.6) a dense map needs to fit the
 # independent checker's polygon budgets. No other settings exist.
 VALIDATE_THINNINGS = (0.02, 0.03)
+DEFAULT_CHAIN_DP_EPSILON_M = VALIDATE_THINNINGS[0]
 
 
 def new_session(track_map, author='operator'):
@@ -171,7 +173,7 @@ def new_session(track_map, author='operator'):
         'boundary_strokes_px': [],   # list of polylines [[u, v], ...]
         'route_px': [],              # one directed closed rough loop
         'stroke_width_px': 5,
-        'chain_dp_epsilon_m': 0.02,  # wall simplification; part of identity
+        'chain_dp_epsilon_m': DEFAULT_CHAIN_DP_EPSILON_M,  # part of identity
         'approval': 'none',
         'approval_digest': None,     # geometry digest the approval was granted for
         'revision': 1,               # incremented on every session mutation
@@ -234,7 +236,8 @@ def geometry_digest(session, track_map):
         'stroke_width_px': session.get('stroke_width_px', 5),
         'boundary_strokes_px': session.get('boundary_strokes_px', []),
         'route_px': session.get('route_px', []),
-        'chain_dp_epsilon_m': session.get('chain_dp_epsilon_m', 0.02),
+        'chain_dp_epsilon_m': session.get('chain_dp_epsilon_m',
+                                            DEFAULT_CHAIN_DP_EPSILON_M),
     }, sort_keys=True, separators=(',', ':'))
     return hashlib.sha256(canonical.encode('utf-8')).hexdigest()
 
@@ -279,10 +282,54 @@ def run_pinned_compile(manifest_path, out_dir, map_name, eps,
             % (proc.stderr.strip() or proc.stdout.strip()
                or ('exit %d' % proc.returncode)))
     try:
-        return json.loads(proc.stdout)
-    except (ValueError, AttributeError) as exc:
+        receipt = json.loads(proc.stdout)
+    except (ValueError, TypeError) as exc:
         raise AnnotationError(
             'pinned compile printed no receipt: %s' % exc)
+    if (type(receipt) is not dict
+            or type(receipt.get('status')) is not str
+            or 'reason' not in receipt):
+        raise AnnotationError(
+            'pinned compile printed a malformed receipt')
+    return receipt
+
+
+def select_thinning(track_map, outer, inner, route_px, author, map_name,
+                    out_base_dir):
+    """Try VALIDATE_THINNINGS in order; return (eps, artifact_H, attempts).
+
+    Each attempt rebuilds from the given boundaries and route at that
+    thinning, then runs the full optimizer and the independent checkers
+    in the pinned interpreter. The first full PASS wins. Raises
+    AnnotationError with per-setting reasons when none reaches full PASS.
+    """
+    attempts = []
+    # One directory per invocation: compile targets are immutable, so a
+    # repeated call must not collide with its own previous artifacts.
+    # The path is bookkeeping only; identity travels in content hashes.
+    tag = time.strftime('%Y%m%d-%H%M%S') + '-%d' % (os.getpid() % 10000)
+    work = Path(out_base_dir) / 'validation' / tag
+    for index, eps in enumerate(VALIDATE_THINNINGS):
+        try:
+            payload, _, _, _ = build_and_validate(
+                track_map, outer, inner, route_px, author=author,
+                approval='operator-approved', chain_dp_epsilon_m=eps)
+            manifest = work / ('candidate-%d.json' % index)
+            manifest.parent.mkdir(parents=True, exist_ok=True)
+            atomic_write_text(manifest, json.dumps(payload, indent=1))
+            receipt = run_pinned_compile(
+                manifest, work / ('compile-%d' % index), map_name, eps)
+        except Exception as exc:  # noqa: BLE001 - record and try next
+            attempts.append('eps %.2f: %s' % (eps, exc))
+            continue
+        if (receipt['status'] == 'PASS'
+                and receipt.get('geometry_status') == 'PASS'
+                and receipt.get('dynamics_status') == 'PASS'):
+            return eps, receipt.get('H'), attempts
+        attempts.append('eps %.2f: %s'
+                        % (eps, receipt.get('reason') or receipt['status']))
+    raise AnnotationError('no thinning reached full validation (%s)'
+                          % '; '.join(attempts))
 
 
 def require_approved(session, track_map):

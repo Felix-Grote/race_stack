@@ -16,31 +16,19 @@ import base64
 import os
 import json
 import math
-import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
-from .annotation_core import (AnnotationError, TrackMap, VALIDATE_THINNINGS,
-                              atomic_write_text, build_and_validate,
-                              draft_name, export_name, extract_boundaries,
-                              geometry_digest, load_session, new_session,
-                              require_approved, resolve_draft, ridge_seed,
-                              run_pinned_compile, save_session,
-                              suggest_route)
+from .annotation_core import (AnnotationError, TrackMap,
+                              DEFAULT_CHAIN_DP_EPSILON_M, atomic_write_text,
+                              build_and_validate, draft_name, export_name,
+                              extract_boundaries, geometry_digest,
+                              load_session, new_session, require_approved,
+                              resolve_draft, ridge_seed, save_session,
+                              select_thinning, suggest_route, _signed_area)
 
 STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
          'out_dir': None, 'candidate_digest': None}
-
-def _winding(route_px):
-    """Travel-direction sign of a loop (+1/-1, 0 when degenerate).
-
-    Pure-python shoelace: the server transport stays stdlib-only.
-    """
-    twice = 0.0
-    pts = [(float(p[0]), float(p[1])) for p in route_px]
-    for a, b in zip(pts, pts[1:] + pts[:1]):
-        twice += a[0] * b[1] - b[0] * a[1]
-    return 1 if twice > 0 else (-1 if twice < 0 else 0)
 
 # Inbound request bounds. A lap seed needs only hundreds of points
 # (0.75 m resampling of a ~164 m lap is ~220 samples); 20k points per
@@ -254,8 +242,8 @@ def op_suggest(body):
     strokes = session['boundary_strokes_px']
     width = session.get('stroke_width_px', 5)
     hint = session.get('route_px', [])
-    hint_sign = _winding(hint) if len(hint) >= 3 else 0
-    eps = session.get('chain_dp_epsilon_m', 0.02)
+    hint_sign = _signed_area(hint) if len(hint) >= 3 else 0.0
+    eps = session.get('chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M)
     methods = (
         ('suggest',
          lambda: suggest_route(outer, inner, hint)),
@@ -270,7 +258,7 @@ def op_suggest(body):
                 raise AnnotationError('empty seed')
             pts = [[float(v) for v in p] for p in seed]
             closed = pts + [pts[0]] if pts[0] != pts[-1] else pts
-            if hint_sign and _winding(closed) != hint_sign:
+            if hint_sign and _signed_area(closed) * hint_sign < 0:
                 raise AnnotationError(
                     'seed runs against the drawn travel direction')
             build_and_validate(track_map, outer, inner, closed,
@@ -377,7 +365,8 @@ def op_preview(body):
             track_map, outer, inner, session['route_px'],
             author=session.get('author', 'operator'),
             approval='operator-approved',
-            chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
+            chain_dp_epsilon_m=session.get(
+                'chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M))
     except Exception:  # noqa: BLE001 - any build failure clears candidacy
         # Route/corridor failure: the extracted boundaries above are
         # still valid and stay visible, but there is no candidate to
@@ -446,7 +435,8 @@ def op_export(body):
             track_map, outer, inner, session['route_px'],
             author=session.get('author', 'operator'),
             approval='operator-approved',
-            chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
+            chain_dp_epsilon_m=session.get(
+                'chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M))
     except Exception:  # noqa: BLE001 - failed build exports nothing
         STATE['candidate_digest'] = None
         raise
@@ -483,42 +473,18 @@ def op_validate(body):
         STATE['candidate_digest'] = None
         raise
     STATE['extraction'] = (outer, inner)
-    attempts = []
-    # One directory per invocation: compile targets are immutable, so a
-    # repeated press must not collide with its own previous artifacts.
-    # The path is bookkeeping only; identity travels in content hashes.
-    tag = time.strftime('%Y%m%d-%H%M%S') + '-%d' % (os.getpid() % 10000)
-    work = Path(STATE['out_dir']) / 'validation' / tag
-    for index, eps in enumerate(VALIDATE_THINNINGS):
-        try:
-            payload, _, _, _ = build_and_validate(
-                track_map, outer, inner, session['route_px'],
-                author=session.get('author', 'operator'),
-                approval='operator-approved', chain_dp_epsilon_m=eps)
-            manifest = work / ('candidate-%d.json' % index)
-            manifest.parent.mkdir(parents=True, exist_ok=True)
-            atomic_write_text(manifest, json.dumps(payload, indent=1))
-            receipt = run_pinned_compile(
-                manifest, work / ('compile-%d' % index),
-                session.get('map_png', ''), eps)
-        except Exception as exc:  # noqa: BLE001 - record and try next
-            attempts.append('eps %.2f: %s' % (eps, exc))
-            continue
-        if (receipt['status'] == 'PASS'
-                and receipt.get('geometry_status') == 'PASS'
-                and receipt.get('dynamics_status') == 'PASS'):
-            session['chain_dp_epsilon_m'] = eps
-            _touch(session)
-            return {'status': 'PASS',
-                    'message': f'full validation PASS at thinning {eps} '
-                               f'(H={receipt["H"]}); re-preview, then '
-                               'approve and export',
-                    'chain_dp_epsilon_m': eps, 'artifact_H': receipt['H'],
-                    'attempts': attempts, 'session': _session_view()}
-        attempts.append('eps %.2f: %s'
-                        % (eps, receipt.get('reason') or receipt['status']))
-    raise AnnotationError('no thinning reached full validation (%s)'
-                          % '; '.join(attempts))
+    eps, artifact_h, attempts = select_thinning(
+        track_map, outer, inner, session['route_px'],
+        session.get('author', 'operator'), session.get('map_png', ''),
+        STATE['out_dir'])
+    session['chain_dp_epsilon_m'] = eps
+    _touch(session)
+    return {'status': 'PASS',
+            'message': f'full validation PASS at thinning {eps} '
+                       f'(H={artifact_h}); re-preview, then approve '
+                       'and export',
+            'chain_dp_epsilon_m': eps, 'artifact_H': artifact_h,
+            'attempts': attempts, 'session': _session_view()}
 
 
 def op_state(body):

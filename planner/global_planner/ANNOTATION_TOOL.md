@@ -5,9 +5,12 @@ boundary pencil, draw a rough directed lap with the route pencil (or take
 the computed centerline suggestion), preview the candidate, approve exactly
 that candidate, and export a strict Project A manifest. Draft and export
 filenames are namespaced per source map —
-`{parentdir}__{stem}__{sha8}_annotation.json` /
-`{parentdir}__{stem}__{sha8}_legal_route.json` — so two maps sharing one
-PNG stem can never silently overwrite each other. A legacy bare-stem
+`{parentdir}__{stem}__{bytesha8}__{ctxsha8}_annotation.json` /
+`{parentdir}__{stem}__{bytesha8}__{ctxsha8}_legal_route.json` — PNG
+content hash plus a context hash over the enforced session identity
+(resolved directory, resolution, origin, negate, image size), so two
+maps sharing one PNG stem, and identical pixels under different YAML
+interpretations, can never silently share a slot. A legacy bare-stem
 draft is adopted in place on open and written forward on save.
 Preview → approve → export is enforced: the operator always sees the
 transformed geometry (smoothed seed, lateral correction, validated route)

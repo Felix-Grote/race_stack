@@ -34,7 +34,8 @@ def main(argv):
     receipt = compile_reference(
         route, model, footprint, policies, output_dir=out_dir,
         retime_spacing_m=spacing, validation_context=context,
-        provenance={'map': map_name, 'chain_dp_epsilon_m': eps})
+        provenance={'map': map_name,
+                    'chain_dp_epsilon_m': repr(float(eps))})
     print(json.dumps({
         'status': receipt.status,
         'reason': receipt.reason,
