@@ -97,6 +97,14 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
   with approval revoked. Validation levels are never conflated: CANDIDATE
   (extraction) ≠ VALIDATED (strict input + corridor preparation) ≠
   optimizer PASS ≠ on-car qualification.
+- Explicit offline validation (`Validate`, server op and CLI): tries the
+  bounded thinning settings (0.02, then the 0.03 envelope edge) with the
+  full optimizer and independent checkers, and records the first full
+  PASS as the session's `chain_dp_epsilon_m`. The setting is part of the
+  approval digest, so preview/approve/export all use the winner and any
+  prior approval is revoked. Selection runs the optimizer, so it is an
+  explicit operator action, never part of drawing or preview. Rejected
+  settings report why they failed.
 - `ridge_seed` offers a deterministic distance-transform centerline seed
   (relaxation confined to free space) as an alternative starting point;
   strict `build_and_validate` remains the acceptance gate for any seed.
@@ -127,22 +135,24 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
     deterministic across runs: identical-provenance recompile is
     bit-identical, including in a from-scratch rebuilt env) → independent
     validate PASS (geometry + dynamics) → query PASS. Manifest:
-    `/mnt/storage/forza-annot/evidence/numerical/manifest_test_current.json`;
+    `repro/manifests/manifest_test_current.json`;
     artifact: `test_current_out/<H>/reference.json` (+ validate/query
     reports beside it). NOTE: the previously documented `H=b06017f7…`
     came from pre-fix geometry (unconstrained RDP, unseparated joints)
     and is superseded; hashes change when the geometry changes, which is
     expected — provenance, not the prefix, is the identity.
-  - **baku map** (ridge seed, walls thinned at 0.03, same zone):
+  - **baku map** (ordinary flow: `suggest` falls back to the ridge seed,
+    `Validate` selects 0.03, preview → approve → export; same zone):
     strict PASS (479 samples) → compile PASS (`H=82f9b533…`,
     deterministic recompile verified) → independent validate PASS →
-    query PASS. Manifest:
-    `/mnt/storage/forza-annot/evidence/numerical/manifest_baku_bal003.json`;
+    query PASS. Manifest: `repro/manifests/manifest_baku_bal003.json`;
     artifact: `baku_bal_003_out/<H>/reference.json`. Baku needs 0.03
     rather than the 0.02 default: its longer track otherwise exceeds the
     independent checker's polygon budgets, and 0.035+ fails optimizer
-    convergence. NOTE: the previously documented `H=fe61f4f9…` was a
-    strict-only result that never completed compilation and is withdrawn.
+    convergence. The ordinary export at the locked 0.03 setting is
+    canonically identical to the committed manifest. NOTE: the previously
+    documented `H=fe61f4f9…` was a strict-only result that never completed
+    compilation and is withdrawn.
     Three fixes were required for full PASS: raster-gated RDP (chord
     containment gate), a minimum joint separation (unconstrained
     straight-snapping piled two joints 5 seed-samples apart, leaving a
@@ -164,8 +174,9 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
     so the prefilter reinstates it, then RDP drops it within its
     epsilon bound), which is why the envelope — not the gate
     alone — carries the guarantee.
-    Documented procedure (`/mnt/storage/forza-annot/baku_recipe.py`),
-    not a UI option. Generation is recorded on system python3.12
+    The ordinary operator flow selects it automatically (explicit
+    `Validate`, bounded to 0.02 then 0.03); a headless equivalent lives in
+    the repro scripts. Generation is recorded on system python3.12
     (opencv 5.0): `ridge_seed` follows cv2 distance-transform numerics,
     which differ from opencv 4.8.1 by up to ~2.5 m; the manifest digest
     is the env-independent handoff and compiles bit-identically.
@@ -191,9 +202,10 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
 ## Map support matrix (fail-closed)
 
 - SUPPORTED, full pipeline to independent validation PASS: `test`
-  (suggested seed, defaults), `baku` (ridge seed, thinning 0.03 via
-  documented procedure; defaults reach strict PASS but exceed polygon
-  budgets, 0.035+ fails convergence).
+  (suggested seed, defaults), `baku` (ordinary suggest with automatic
+  ridge fallback, explicit Validate step locks thinning 0.03; defaults
+  reach strict PASS but exceed polygon budgets, 0.035+ fails
+  convergence).
 - EXTRACTION OK, route needs an operator-drawn seed: `spa`, `zuri` —
   clean annulus extraction, but programmatic seeds are rejected by the
   strict validator (hairpin/S-bend correspondence flips; the chart

@@ -110,6 +110,7 @@ class AnnotationNode(Node if rclpy else object):
                       'suggest': server_core.op_suggest,
                       'preview': server_core.op_preview,
                       'approve': server_core.op_approve,
+                      'validate': server_core.op_validate,
                       'export': server_core.op_export,
                       'save': server_core.op_save,
                       'undo': server_core.op_undo,

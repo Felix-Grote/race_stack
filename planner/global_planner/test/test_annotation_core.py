@@ -228,6 +228,20 @@ def test_approval_is_bound_to_geometry_digest():
         require_approved(session, track_map)
 
 
+def test_thinning_is_part_of_approval_identity():
+    """The simplification setting binds approval: same strokes, other
+    thinning -> other digest, so a stale approval is refused."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    session = new_session(track_map)
+    assert session['chain_dp_epsilon_m'] == 0.02
+    session['approval'] = 'operator-approved'
+    session['approval_digest'] = geometry_digest(session, track_map)
+    require_approved(session, track_map)
+    session['chain_dp_epsilon_m'] = 0.03
+    with pytest.raises(AnnotationError, match='changed since approval'):
+        require_approved(session, track_map)
+
+
 def test_session_rejects_reinterpreted_map():
     """Same PNG under another resolution/origin/negate is not rebound."""
     track_map = TrackMap(MAPS / 'test/test.yaml')

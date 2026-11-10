@@ -150,6 +150,13 @@ class TrackMap:
 SESSION_VERSION = 2
 
 
+# Wall-simplification settings the explicit offline validation tries, in
+# order. 0.02 preserves every existing validated reference; 0.03 is the
+# documented envelope edge (eps/res = 0.6) a dense map needs to fit the
+# independent checker's polygon budgets. No other settings exist.
+VALIDATE_THINNINGS = (0.02, 0.03)
+
+
 def new_session(track_map, author='operator'):
     """Create an empty session dict bound to one map by full identity."""
     return {
@@ -164,6 +171,7 @@ def new_session(track_map, author='operator'):
         'boundary_strokes_px': [],   # list of polylines [[u, v], ...]
         'route_px': [],              # one directed closed rough loop
         'stroke_width_px': 5,
+        'chain_dp_epsilon_m': 0.02,  # wall simplification; part of identity
         'approval': 'none',
         'approval_digest': None,     # geometry digest the approval was granted for
         'revision': 1,               # incremented on every session mutation
@@ -216,17 +224,65 @@ def check_session_map(session, track_map):
 def geometry_digest(session, track_map):
     """Digest of the exact editable geometry an approval refers to.
 
-    Covers the source-map identity plus every stroke, the route, and the
-    stroke width. Any edit changes this digest, so an approval granted for
-    one geometry can never authorize a different one.
+    Covers the source-map identity plus every stroke, the route, the
+    stroke width, and the wall-simplification setting. Any edit changes
+    this digest, so an approval granted for one geometry can never
+    authorize a different one.
     """
     canonical = json.dumps({
         'map': track_map.map_identity(),
         'stroke_width_px': session.get('stroke_width_px', 5),
         'boundary_strokes_px': session.get('boundary_strokes_px', []),
         'route_px': session.get('route_px', []),
+        'chain_dp_epsilon_m': session.get('chain_dp_epsilon_m', 0.02),
     }, sort_keys=True, separators=(',', ':'))
     return hashlib.sha256(canonical.encode('utf-8')).hexdigest()
+
+
+# Interpreter used for the optimizer step. The server and CLI run under
+# the system interpreter (exact generator numerics); optimization is
+# only valid under the pinned stack, in a subprocess, exactly like the
+# repro scripts split generation (system) from compilation (pinned).
+PINNED_PY = os.environ.get('PINNED_PY', os.path.expanduser(
+    '~/venvs/forza-pinned/bin/python'))
+
+
+def run_pinned_compile(manifest_path, out_dir, map_name, eps,
+                       timeout_s=900):
+    """Compile a manifest file under the pinned interpreter.
+
+    Runs compile_manifest.py as a subprocess and returns its receipt
+    dict (status/reason/H/geometry_status/dynamics_status). Raises
+    AnnotationError with the attempt reason when compilation cannot run
+    or the subprocess fails, so callers record it and try the next
+    setting instead of crashing.
+    """
+    import subprocess
+    repo = Path(__file__).parents[3]
+    env = dict(os.environ)
+    env['PYTHONPATH'] = (str(repo / 'planner' / 'global_planner')
+                         + os.pathsep + env.get('PYTHONPATH', ''))
+    try:
+        proc = subprocess.run(
+            [PINNED_PY, '-m', 'global_planner.compile_manifest',
+             str(manifest_path), str(out_dir), map_name, repr(eps)],
+            capture_output=True, text=True, timeout=timeout_s, env=env)
+    except OSError as exc:
+        raise AnnotationError(
+            'pinned python unavailable (%s: set PINNED_PY)' % exc)
+    except subprocess.TimeoutExpired:
+        raise AnnotationError(
+            'pinned compile timed out after %ds' % timeout_s)
+    if proc.returncode != 0:
+        raise AnnotationError(
+            'pinned compile failed: %s'
+            % (proc.stderr.strip() or proc.stdout.strip()
+               or ('exit %d' % proc.returncode)))
+    try:
+        return json.loads(proc.stdout)
+    except (ValueError, AttributeError) as exc:
+        raise AnnotationError(
+            'pinned compile printed no receipt: %s' % exc)
 
 
 def require_approved(session, track_map):

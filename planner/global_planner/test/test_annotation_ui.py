@@ -24,6 +24,24 @@ MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
 UI_HTML = Path(__file__).parents[1] / 'global_planner' / 'annotation_ui.html'
 
 
+def _has_pinned_kernel():
+    """True when the exact pinned optimizer stack is importable.
+
+    Mirrors the headless/ROS split: full-validation tests only run where
+    the optimizer kernel exists, and skip by design elsewhere.
+    """
+    try:
+        from global_planner.iqp_route_adapter import _helpers
+        _helpers()
+        return True
+    except Exception:
+        return False
+
+
+needs_pinned = pytest.mark.skipif(
+    not _has_pinned_kernel(), reason='requires pinned optimizer stack')
+
+
 @pytest.fixture
 def backend(tmp_path):
     """Configured shared backend with STATE restored afterwards."""
@@ -292,6 +310,69 @@ def test_suggest_falls_back_to_ridge_on_baku(backend):
     assert res['status'] == 'PASS'
     assert 'ridge seed' in res['message']
     assert srv.op_preview({})['status'] == 'VALIDATED'
+
+
+def test_suggest_rejects_direction_conflict_on_baku(backend):
+    """A ridge fallback that would reverse the drawn travel direction is
+    refused with a reason instead of silently flipping the route."""
+    from global_planner.annotation_core import _signed_area
+    srv = backend
+    _open_drawn(srv, strokes=(), route=False, map='baku')
+    track_map = srv.STATE['map']
+    outer, inner = extract_boundaries(track_map, [], 5)
+    seed = _midline_seed(outer, inner)
+    if _signed_area(seed) < 0:
+        seed = seed[::-1]
+    assert _signed_area(seed) > 0  # CCW hint; baku ridge runs opposite
+    srv.op_update({'field': 'route_px', 'value': seed})
+    with pytest.raises(AnnotationError, match='direction'):
+        srv.op_suggest({})
+
+
+@needs_pinned
+def test_validate_selects_first_full_pass_on_test(backend):
+    """Explicit offline validation on the ordinary flow: test wins at the
+    default thinning, records it in the session identity, and the locked
+    configuration previews, approves and exports."""
+    srv = backend
+    _open_drawn(srv)
+    assert 'suggest seed' in srv.op_suggest({})['message']
+    res = srv.op_validate({})
+    assert res['status'] == 'PASS'
+    assert res['chain_dp_epsilon_m'] == 0.02
+    assert res['artifact_H']
+    assert srv.STATE['session']['chain_dp_epsilon_m'] == 0.02
+    assert srv.STATE['session']['approval'] == 'none'
+    assert srv.STATE['candidate_digest'] is None
+    prev = srv.op_preview({})
+    assert prev['status'] == 'VALIDATED'
+    assert prev['candidate_digest'] == geometry_digest(
+        srv.STATE['session'], srv.STATE['map'])
+    srv.op_approve({'approval_digest': prev['candidate_digest']})
+    exp = srv.op_export({})
+    assert exp['status'] == 'VALIDATED'
+    assert exp['route_digest'] == prev['route_digest']
+
+
+@needs_pinned
+def test_validate_unlocks_baku_full_pass(backend):
+    """Baku ordinary flow needs the envelope-edge thinning: the default
+    fails the full gate, 0.03 passes, and the locked export matches the
+    documented reference hash."""
+    srv = backend
+    _open_drawn(srv, strokes=(), route=False, map='baku')
+    assert 'ridge seed' in srv.op_suggest({})['message']
+    res = srv.op_validate({})
+    assert res['status'] == 'PASS'
+    assert res['chain_dp_epsilon_m'] == 0.03
+    assert [a[:7] for a in res['attempts']] == ['eps 0.0']
+    prev = srv.op_preview({})
+    assert prev['status'] == 'VALIDATED'
+    srv.op_approve({'approval_digest': prev['candidate_digest']})
+    exp = srv.op_export({})
+    assert exp['status'] == 'VALIDATED'
+    assert exp['route_digest'] == (
+        '82f9b533ce50ad3e7b974187f19e9c40d944ca8b87115d21eb34e5fb41ac03f0')
 
 
 def test_source_map_bytes_untouched_by_ui_ops(backend, tmp_path):

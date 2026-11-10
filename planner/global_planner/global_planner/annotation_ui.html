@@ -26,6 +26,7 @@ button:disabled{opacity:.45}
  <button id="extract">Run extraction</button>
  <button id="suggest">Suggest centerline</button>
  <button id="preview">Preview candidate</button>
+ <button id="validate">Validate (offline)</button>
  <button id="approve">Approve preview</button>
  <button id="export">Export approved</button>
  <button id="save">Save draft</button>
@@ -183,6 +184,7 @@ document.getElementById('suggest').onclick=async()=>{
   S=res.session; validated={route:[],left:[],right:[]}; candidate=null; selected=-1;
   info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('preview').onclick=async()=>{ const res=await api('/api/session/preview',{}); if(res.status!=='VALIDATED'){ fail(res); return; } S=res.session; validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[]}; candidate=res.candidate_digest||null; info(); say((res.status||'FAIL')+': '+(res.message||res.reason||'')); draw(); };
+document.getElementById('validate').onclick=async()=>{ const res=await api('/api/session/validate',{}); if(res.status!=='PASS'){ fail(res); return; } S=res.session; info(); const tries=(res.attempts||[]).length?` (tried: ${res.attempts.join('; ')})`:''; say(res.status+': '+(res.message||'')+tries+' — re-preview, then approve and export'); draw(); };
 document.getElementById('approve').onclick=async()=>{ if(!candidate){say('FAIL: preview a candidate first');return;} const res=await api('/api/session/approve',{approval_digest:candidate}); if(res.status!=='PASS'){ fail(res); return; } if(res.session){S=res.session;} info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('export').onclick=async()=>{ const res=await api('/api/session/export',{}); if(res.status!=='VALIDATED'){ fail(res); return; } if(res.session){S=res.session;} validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[]}; info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('save').onclick=async()=>{ const res=await api('/api/session/save',{}); say(res.status+': '+(res.message||'')); };

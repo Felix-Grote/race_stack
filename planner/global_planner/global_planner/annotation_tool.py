@@ -8,12 +8,16 @@ Examples:
 """
 import argparse
 import json
+import os
+import time
 from pathlib import Path
 
-from .annotation_core import (AnnotationError, TrackMap, atomic_write_text,
-                              build_and_validate, export_name,
-                              extract_boundaries, geometry_digest,
-                              load_session, require_approved, save_session)
+from .annotation_core import (AnnotationError, TrackMap, VALIDATE_THINNINGS,
+                              atomic_write_text, build_and_validate,
+                              export_name, extract_boundaries,
+                              geometry_digest, load_session,
+                              require_approved, run_pinned_compile,
+                              save_session)
 
 
 def _validated_receipt(route, prepared, info):
@@ -31,7 +35,8 @@ def main(argv=None):
     """Run one headless annotation operation and print a JSON receipt."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command',
-                        choices=('extract', 'preview', 'approve', 'export'))
+                        choices=('extract', 'preview', 'approve', 'export',
+                                 'validate'))
     parser.add_argument('--map', required=True)
     parser.add_argument('--session', required=True,
                         help='annotation_project.json with strokes + route')
@@ -58,7 +63,8 @@ def main(argv=None):
             _, route, prepared, info = build_and_validate(
                 track_map, outer, inner, session['route_px'],
                 author=session.get('author', 'operator'),
-                approval='operator-approved')
+                approval='operator-approved',
+                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
             result = _validated_receipt(route, prepared, info)
             result['candidate_digest'] = geometry_digest(session, track_map)
         elif args.command == 'approve':
@@ -76,7 +82,8 @@ def main(argv=None):
             # approved; the payload itself is written by export.
             build_and_validate(
                 track_map, outer, inner, session['route_px'],
-                author=session.get('author', 'operator'), approval='none')
+                author=session.get('author', 'operator'), approval='none',
+                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
             session['approval'] = 'operator-approved'
             session['approval_digest'] = args.candidate
             session['revision'] = int(session.get('revision', 1)) + 1
@@ -91,12 +98,61 @@ def main(argv=None):
             payload, route, prepared, info = build_and_validate(
                 track_map, outer, inner, session['route_px'],
                 author=session.get('author', 'operator'),
-                approval='operator-approved')
+                approval='operator-approved',
+                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
             out = Path(args.out)
             out.mkdir(parents=True, exist_ok=True)
             atomic_write_text(out / export_name(track_map),
                               json.dumps(payload, indent=1))
             result = _validated_receipt(route, prepared, info)
+        elif args.command == 'validate':
+            # Explicit offline step: full optimizer + independent checkers
+            # over bounded thinning settings; the winner is saved into the
+            # session so preview/approve/export all use it afterwards.
+            # Generation runs here; optimization runs pinned, like repro.
+            if not session.get('route_px'):
+                raise AnnotationError('draw the directed route loop first')
+            attempts = []
+            tag = (time.strftime('%Y%m%d-%H%M%S') + '-%d'
+                   % (os.getpid() % 10000))
+            work = Path(args.out) / 'validation' / tag
+            for index, eps in enumerate(VALIDATE_THINNINGS):
+                try:
+                    payload, _, _, _ = build_and_validate(
+                        track_map, outer, inner, session['route_px'],
+                        author=session.get('author', 'operator'),
+                        approval='operator-approved',
+                        chain_dp_epsilon_m=eps)
+                    manifest = work / ('candidate-%d.json' % index)
+                    manifest.parent.mkdir(parents=True, exist_ok=True)
+                    atomic_write_text(manifest, json.dumps(payload, indent=1))
+                    receipt = run_pinned_compile(
+                        manifest, work / ('compile-%d' % index),
+                        session.get('map_png', ''), eps)
+                except Exception as exc:  # noqa: BLE001 - try next
+                    attempts.append('eps %.2f: %s' % (eps, exc))
+                    continue
+                if (receipt['status'] == 'PASS'
+                        and receipt.get('geometry_status') == 'PASS'
+                        and receipt.get('dynamics_status') == 'PASS'):
+                    session['chain_dp_epsilon_m'] = eps
+                    session['revision'] = int(session.get('revision', 1)) + 1
+                    session['approval'] = 'none'
+                    session['approval_digest'] = None
+                    save_session(session, args.session)
+                    result = {'status': 'PASS',
+                              'chain_dp_epsilon_m': eps,
+                              'artifact_H': receipt['H'],
+                              'attempts': attempts,
+                              'revision': session['revision']}
+                    break
+                attempts.append('eps %.2f: %s'
+                                % (eps, receipt.get('reason')
+                                   or receipt['status']))
+            else:
+                raise AnnotationError(
+                    'no thinning reached full validation (%s)'
+                    % '; '.join(attempts))
         print(json.dumps(result, sort_keys=True))
         return 0
     except (AnnotationError, ValueError, OSError) as exc:
