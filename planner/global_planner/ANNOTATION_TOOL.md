@@ -114,8 +114,8 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
 
 ## Verified (this branch)
 
-- `test_annotation_core.py`: 56 tests, 55 passed + 1 ROS-only skipped
-  headless — end-to-end strict PASS on the real `test` and `baku` maps
+- `test_annotation_core.py`: 57 tests, 56 passed + 1 ROS-only skipped
+  headless (thinning now binds the approval digest) — end-to-end strict PASS on the real `test` and `baku` maps
   (crude, ridge and suggested seeds), pixel↔world roundtrip, session
   save/reopen + full map-identity rejection, outer-wall bay detour +
   tangent-stroke repair, isolated-speck and infield-chord rejection,
@@ -129,6 +129,12 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
   ROS 2 Humble the 3 headless-only adapter tests skip instead and a
   real namespaced pub/sub roundtrip (`__ns:=/annot`, correlated
   open) runs.
+- `test_annotation_ui.py`: 15 tests, 13 passed + 2 pinned-only skipped
+  headless — exact-corridor receipt, stale-display clearing,
+  remove-selected and rerun-revised flows, aspect-fit cursor mapping,
+  digest-bound approve/export, double-click endpoint preservation,
+  digest-keyed map refresh, suggest seed fallback + direction guard,
+  thinning lock via explicit validation.
 - Full trajectory compilation, pinned environment
   (`/mnt/storage/forza-annot/venvs/pinned`, CPython 3.10.12,
   numpy 1.26.4 / scipy 1.11.4 / quadprog 0.1.7 / trajectory-planning-helpers
@@ -186,21 +192,28 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
   - The s0 fixture compiles to full PASS plus independent
     geometry/dynamics validation PASS and query PASS in the same env
     (toolchain sanity, unchanged).
-- Browser flow, headless Chromium, real UI (`ui_flow.py`): open → draw
-  boundary stroke → extract → undo → suggest → preview (green candidate +
-  correction shown before approval) → approve → export → save → reload →
-  edit revokes approval → export refused stale. 12/12 checks PASS
-  (including the namespaced-export assertion);
-  screenshots in `/mnt/storage/forza-annot/evidence/ui/`. The UI-exported
-  manifest compiles to full PASS (`H=6e398bb9…`, geometry + dynamics
-  PASS) under the current geometry.
+- Browser flow, headless Chromium, real UI: open → draw boundary stroke
+  (double-click endpoint kept) → extraction auto-refreshes → undo /
+  select-remove → suggest (ridge fallback where needed) → preview (exact
+  final corridor + centerline, read-only) → explicit Validate (locks the
+  passing thinning into the session identity) → re-preview → approve →
+  export → save → reload → edit revokes approval → stale export refused.
+  Verified on `test` (suggest wins, 0.02) and `baku` (ridge wins,
+  Validate locks 0.03; export canonically identical to the committed
+  manifest and recompiles to full PASS). Same-name/same-size map
+  replacement refreshes the view (no stale image). UI-exported manifests
+  compile to full PASS (geometry + dynamics PASS).
 - Live ROS Humble + Foxglove Bridge roundtrip (Docker
-  `osrf/ros:humble-desktop`, isolated `ROS_DOMAIN_ID`, repo read-only):
-  open (PASS rev 1) → update (PASS rev 2) → duplicate (DUPLICATE,
-  unchanged) → reconnect + resend (DUPLICATE) → bad op (FAIL correlated)
-  → same-id retry (PASS) → `state` canonical fetch → save. PASS.
-  Transcript and scripts in `/mnt/storage/forza-annot/evidence/ros/`
-  and `/mnt/storage/forza-annot/ros/`.
+  `osrf/ros:humble-desktop`, isolated `ROS_DOMAIN_ID`, repo read-only,
+  re-run against the current HEAD): open (PASS rev 1) → update (PASS
+  rev 2) → duplicate (DUPLICATE, unchanged) → reconnect + resend
+  (DUPLICATE) → bad op (FAIL correlated) → same-id retry (PASS) →
+  `state` canonical fetch → save. PASS. The node runs namespaced
+  (`-r __ns:=/annot`); only `/annot/planner_annotation/command` and
+  `/annot/planner_annotation/state` appear on the wire — no absolute
+  topics, nothing on the driving graph. Transcript and scripts in
+  `/mnt/storage/forza-annot/evidence/ros/` and
+  `/mnt/storage/forza-annot/ros/`.
 
 ## Map support matrix (fail-closed)
 

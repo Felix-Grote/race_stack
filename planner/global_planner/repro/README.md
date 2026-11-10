@@ -64,16 +64,18 @@ artifact H, statuses).
 
 ```bash
 PYTHONPATH=planner/global_planner python3.12 -m pytest \
-  planner/global_planner/test/test_annotation_core.py -q
+  planner/global_planner/test/test_annotation_core.py \
+  planner/global_planner/test/test_annotation_ui.py -q
 ```
 
-56 tests: 55 passed + 1 ROS-only skipped headless (under ROS 2 Humble
-the 3 headless-only adapter tests skip instead and the namespaced
-pub/sub roundtrip runs). Covers frame-gap rejection, gated
-prefilter/RDP fixtures and the end-to-end wall-containment measurement,
-the eps/res envelope, same-stem persistence isolation, HTTP hardening,
-the full preview→approve→export lifecycle, and relative-topic
-namespace isolation.
+69 passed + 3 environment-skipped headless (1 ROS-only; 2 pinned-only
+validation tests, which need the exact optimizer stack). Covers
+frame-gap rejection, gated prefilter/RDP fixtures and the end-to-end
+wall-containment measurement, the eps/res envelope, same-stem
+persistence isolation, HTTP hardening, the full preview→approve→export
+lifecycle, relative-topic namespace isolation, digest-bound thinning,
+suggest fallback + direction guard, and double-click/map-refresh UI
+contracts.
 
 ## 4. Geometry contract (enforced in `build_manifest`)
 
@@ -93,11 +95,17 @@ approximation, not strictly inward simplification.
 
 ## 5. Browser and ROS (operator interfaces)
 
-- Browser: `ui_flow.py` harness (headless Chromium) — 12/12 checks.
+- Browser flows, headless Chromium, real UI: open → draw (double-click
+  endpoint kept) → auto-extract → correct/remove → suggest (ridge
+  fallback) → preview → explicit Validate (locks thinning) → re-preview
+  → approve → export → save/reload → edit revokes → stale refused.
+  Verified on `test` (0.02) and `baku` (0.03; export canonically
+  identical to the committed manifest).
 - ROS 2 Humble + Foxglove Bridge in Docker (`annot:humble-foxglove`
-  image, repo mounted read-only): open → edit → duplicate →
-  reconnect → failed command → same-ID retry → canonical state →
-  persistence — 8/8 checks. See `ANNOTATION_TOOL.md`.
+  image, repo mounted read-only, node namespaced `-r __ns:=/annot`):
+  open → edit → duplicate → reconnect → failed request → same-ID retry
+  → canonical state → persistence — all PASS, relative topics only.
+  See `ANNOTATION_TOOL.md`.
 
 ## 6. Persistence naming
 
