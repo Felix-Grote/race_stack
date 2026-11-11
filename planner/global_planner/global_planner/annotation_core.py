@@ -245,10 +245,16 @@ def _checked_seed(retained_region_px, track_map):
             or any(isinstance(v, bool) for v in seed)):
         raise AnnotationError('retained region must be null or [u, v]')
     try:
-        u, v = int(seed[0]), int(seed[1])
+        f0, f1 = float(seed[0]), float(seed[1])
     except (TypeError, ValueError):
         raise AnnotationError('retained region must be null or [u, v]')
-    if float(seed[0]) != u or float(seed[1]) != v:
+    if not (math.isfinite(f0) and math.isfinite(f1)):
+        raise AnnotationError('retained region must be null or [u, v]')
+    try:
+        u, v = int(f0), int(f1)
+    except OverflowError:
+        raise AnnotationError('retained region must be null or [u, v]')
+    if f0 != u or f1 != v:
         raise AnnotationError('retained region must be integer pixels')
     if not (0 <= u < track_map.width and 0 <= v < track_map.height):
         raise AnnotationError('retained region is outside the map')
@@ -381,9 +387,10 @@ def save_session(session, path):
     """Write a session atomically; validates map-independent shape."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + '.tmp')
-    tmp.write_text(json.dumps(session, indent=1), encoding='utf-8')
-    tmp.replace(path)
+    # Pid-qualified tmp name plus failure cleanup live in one place;
+    # a shared deterministic sibling would let concurrent writers
+    # interleave in one tmp file and publish a corrupt draft.
+    atomic_write_text(path, json.dumps(session, indent=1))
 
 
 def load_session(path, track_map):

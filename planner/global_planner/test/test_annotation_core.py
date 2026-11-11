@@ -1226,6 +1226,47 @@ def test_http_malformed_and_oversized_bodies(backend):
     httpd.server_close()
 
 
+def test_http_explicit_fail_on_corrupt_session_and_nonfinite_seed(backend):
+    """KeyError/non-finite paths return 400 FAIL, never drop the connection."""
+    import http.client
+    import threading
+    from http.server import HTTPServer
+    from global_planner.annotation_server import Handler
+    server = backend
+    server.op_open({'map': 'test'})
+
+    def one_post(body, path):
+        httpd = HTTPServer(('127.0.0.1', 0), Handler)
+        port = httpd.server_address[1]
+        thread = threading.Thread(target=httpd.handle_request)
+        thread.start()
+        try:
+            conn = http.client.HTTPConnection('127.0.0.1', port, timeout=30)
+            conn.request('POST', path, body=body,
+                         headers={'Content-Type': 'application/json'})
+            resp = conn.getresponse()
+            return resp.status, json.loads(resp.read())
+        finally:
+            thread.join(timeout=30)
+            httpd.server_close()
+
+    # A hand-edited draft missing boundary_strokes_px indexes session[...]
+    # and raises KeyError at op level; the transport still replies FAIL.
+    del server.STATE['session']['boundary_strokes_px']
+    status, payload = one_post(b'{}', '/api/session/extract')
+    assert status == 400
+    assert payload['status'] == 'FAIL'
+    # A non-finite seed over the wire (JSON Infinity parses to float inf)
+    # is rejected without overwriting the stored selection.
+    server.op_open({'map': 'test'})
+    status, payload = one_post(
+        b'{"field": "retained_region_px", "value": [Infinity, 0]}',
+        '/api/session/update')
+    assert status == 400
+    assert payload['status'] == 'FAIL'
+    assert server.STATE['session']['retained_region_px'] is None
+
+
 def _copy_same_stem_map(tmp_path, dirname, tag):
     """Copy the test map to <maps>/<dirname>/same/same.{png,yaml}.
 
@@ -1407,6 +1448,22 @@ def test_atomic_write_text_cleans_tmp_on_failure(tmp_path, monkeypatch):
     assert list(tmp_path.glob('out.json.tmp-*')) == []
 
 
+def test_save_session_failure_leaves_no_tmp(tmp_path, monkeypatch):
+    """A failed draft save keeps the old draft and leaves no tmp file."""
+    import os
+    from global_planner.annotation_core import save_session
+    target = tmp_path / 'draft.json'
+    save_session({'a': 1}, target)
+    def _boom(*args):
+        raise OSError('simulated replace failure')
+    monkeypatch.setattr(os, 'replace', _boom)
+    with pytest.raises(OSError, match='simulated replace failure'):
+        save_session({'a': 2}, target)
+    assert json.loads(target.read_text(encoding='utf-8')) == {'a': 1}
+    assert list(tmp_path.glob('draft.json.tmp*')) == []
+    assert not (tmp_path / 'draft.json.tmp').exists()
+
+
 # --------------------------------------------------------------------------
 # Retained-region (Keep Legal Track) selection
 # --------------------------------------------------------------------------
@@ -1497,6 +1554,26 @@ def test_retained_click_rejections(tmp_path):
     for bad in ('x', [1, 2, 3], [True, 0], [[0, 0]]):
         with pytest.raises(AnnotationError, match='null or \\[u, v\\]'):
             extract_boundaries(track_map, [TL_CUT], 5, bad)
+
+
+def test_retained_seed_rejects_nonfinite(tmp_path):
+    """Infinite/NaN seeds fail closed as AnnotationError, never OverflowError."""
+    from global_planner import annotation_tool as tool
+    track_map = _write_annulus_map(tmp_path)
+    for bad in ([float('inf'), 0], [0, float('-inf')], [float('nan'), 0],
+                ['inf', 0], [0, 'nan']):
+        with pytest.raises(AnnotationError, match='null or \\[u, v\\]'):
+            extract_boundaries(track_map, [TL_CUT], 5, bad)
+    # The headless CLI reports FAIL instead of a traceback.
+    session = new_session(track_map)
+    session['boundary_strokes_px'] = [TL_CUT]
+    session_path = tmp_path / 'inf.json'
+    save_session(session, session_path)
+    yaml_path = str(tmp_path / 'annulus.yaml')
+    assert tool.main(['select-region', '--map', yaml_path,
+                      '--session', str(session_path),
+                      '--pixel', 'inf,0']) == 1
+    assert load_session(session_path, track_map)['retained_region_px'] is None
 
 
 def test_effective_mask_is_deterministic(tmp_path):

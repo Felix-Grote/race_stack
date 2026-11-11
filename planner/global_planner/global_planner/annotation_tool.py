@@ -164,7 +164,8 @@ def main(argv=None):
                       'revision': session['revision']}
         print(json.dumps(result, sort_keys=True))
         return 0
-    except (AnnotationError, ValueError, OSError) as exc:
+    except (AnnotationError, ValueError, TypeError, OSError,
+            KeyError, OverflowError) as exc:
         print(json.dumps({'status': 'FAIL', 'reason': str(exc)}, sort_keys=True))
         return 1
 

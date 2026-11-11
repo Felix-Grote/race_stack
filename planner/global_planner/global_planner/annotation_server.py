@@ -648,7 +648,8 @@ class Handler(BaseHTTPRequestHandler):
             if op is None:
                 raise AnnotationError(f'unknown operation {self.path}')
             _reply(self, op(body))
-        except (AnnotationError, ValueError, TypeError, OSError) as exc:
+        except (AnnotationError, ValueError, TypeError, OSError,
+                KeyError, OverflowError) as exc:
             _reply(self, {'status': 'FAIL', 'message': str(exc)}, 400)
 
 
