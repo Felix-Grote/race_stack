@@ -508,6 +508,25 @@ def test_cli_preview_approve_export_cycle(tmp_path):
     assert payload['provenance']['approval'] == 'operator-approved'
 
 
+def test_cli_preview_uses_core_default_epsilon(tmp_path):
+    """CLI preview falls back to the shared core epsilon, not a literal."""
+    from global_planner import annotation_core as core
+    from global_planner import annotation_tool as tool
+    assert (tool.DEFAULT_CHAIN_DP_EPSILON_M
+            == core.DEFAULT_CHAIN_DP_EPSILON_M)
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map, [], 5)
+    session = new_session(track_map)
+    del session['chain_dp_epsilon_m']
+    session['route_px'] = _midline_seed(outer, inner)
+    session_path = tmp_path / 'session.json'
+    save_session(session, session_path)
+    out = tmp_path / 'cli_out'
+    assert tool.main(['preview', '--map', str(track_map.yaml_path),
+                      '--session', str(session_path),
+                      '--out', str(out)]) == 0
+
+
 def test_cli_approve_export_require_persisted_preview(tmp_path):
     """CLI approve/export mirror the server fresh-preview binding.
 
@@ -1316,6 +1335,38 @@ def test_http_explicit_fail_on_corrupt_session_and_nonfinite_seed(backend):
     assert status == 400
     assert payload['status'] == 'FAIL'
     assert server.STATE['session']['retained_region_px'] is None
+
+
+def test_http_unexpected_backend_errors_reply_fail(backend, monkeypatch):
+    """Unexpected geometry errors still reply JSON FAIL, never a bare 500."""
+    import http.client
+    import threading
+    from http.server import HTTPServer
+    from global_planner.annotation_server import Handler
+    from global_planner import annotation_server as server_module
+    server = backend
+    server.op_open({'map': 'test'})
+
+    def boom(body):
+        raise RuntimeError('simulated geometry failure')
+
+    monkeypatch.setitem(server_module.OPS, '/api/session/extract', boom)
+    httpd = HTTPServer(('127.0.0.1', 0), Handler)
+    port = httpd.server_address[1]
+    thread = threading.Thread(target=httpd.handle_request)
+    thread.start()
+    try:
+        conn = http.client.HTTPConnection('127.0.0.1', port, timeout=30)
+        conn.request('POST', '/api/session/extract', body=b'{}',
+                     headers={'Content-Type': 'application/json'})
+        resp = conn.getresponse()
+        assert resp.status == 400
+        payload = json.loads(resp.read())
+        assert payload['status'] == 'FAIL'
+        assert 'simulated geometry failure' in payload['message']
+    finally:
+        thread.join(timeout=30)
+        httpd.server_close()
 
 
 def _copy_same_stem_map(tmp_path, dirname, tag):

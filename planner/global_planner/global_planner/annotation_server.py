@@ -123,6 +123,10 @@ def _region_view():
     try:
         strokes = session.get('boundary_strokes_px', [])
         width = session.get('stroke_width_px', 5)
+        # Any backend failure here (cv2, allocation, encode) must not
+        # propagate: _session_view runs after the session was mutated,
+        # so a raise would turn an applied edit into a FAIL with a
+        # bumped revision. Report it as an error string instead.
         free = patched_free_mask(track_map, strokes, width)
         view['free_regions'] = len(free_components(free))
         seed = session.get('retained_region_px')
@@ -146,6 +150,8 @@ def _region_view():
                     + base64.b64encode(bytes(buf)).decode())
     except AnnotationError as exc:
         view['error'] = str(exc)
+    except Exception as exc:  # noqa: BLE001 - overlay must never break a view
+        view['error'] = 'region overlay unavailable: %s' % exc
     return view
 
 
@@ -654,8 +660,11 @@ class Handler(BaseHTTPRequestHandler):
             if op is None:
                 raise AnnotationError(f'unknown operation {self.path}')
             _reply(self, op(body))
-        except (AnnotationError, ValueError, TypeError, OSError,
-                KeyError, OverflowError) as exc:
+        # The geometry stack can raise beyond the usual suspects
+        # (cv2.error, RuntimeError, ...): every transport failure must
+        # still reach the operator as an explicit JSON FAIL, never as
+        # a bare 500 with no body.
+        except Exception as exc:  # noqa: BLE001 - transport is fail-closed
             _reply(self, {'status': 'FAIL', 'message': str(exc)}, 400)
 
 

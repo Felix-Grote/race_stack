@@ -10,11 +10,13 @@ import argparse
 import json
 from pathlib import Path
 
-from .annotation_core import (AnnotationError, TrackMap, atomic_write_text,
-                              build_and_validate, effective_free_mask,
-                              export_name, extract_boundaries,
-                              geometry_digest, load_session, require_approved,
-                              save_session, select_thinning)
+from .annotation_core import (AnnotationError,
+                              DEFAULT_CHAIN_DP_EPSILON_M, TrackMap,
+                              atomic_write_text, build_and_validate,
+                              effective_free_mask, export_name,
+                              extract_boundaries, geometry_digest,
+                              load_session, require_approved, save_session,
+                              select_thinning)
 
 
 def _validated_receipt(route, prepared, info):
@@ -103,7 +105,7 @@ def main(argv=None):
                 track_map, outer, inner, session['route_px'],
                 author=session.get('author', 'operator'),
                 approval='operator-approved',
-                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
+                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M))
             result = _validated_receipt(route, prepared, info)
             digest = geometry_digest(session, track_map)
             result['candidate_digest'] = digest
@@ -131,7 +133,7 @@ def main(argv=None):
             build_and_validate(
                 track_map, outer, inner, session['route_px'],
                 author=session.get('author', 'operator'), approval='none',
-                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
+                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M))
             session['approval'] = 'operator-approved'
             session['approval_digest'] = args.candidate
             session['revision'] = int(session.get('revision', 1)) + 1
@@ -154,7 +156,7 @@ def main(argv=None):
                 track_map, outer, inner, session['route_px'],
                 author=session.get('author', 'operator'),
                 approval='operator-approved',
-                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
+                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M))
             out = Path(args.out)
             out.mkdir(parents=True, exist_ok=True)
             atomic_write_text(out / export_name(track_map),

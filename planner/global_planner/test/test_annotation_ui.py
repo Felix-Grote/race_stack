@@ -452,6 +452,32 @@ def test_select_region_server_flow(syn_backend):
         srv.op_extract({})
 
 
+def test_region_view_reports_backend_errors_without_raising(syn_backend,
+                                                           monkeypatch):
+    """A backend failure in the overlay path is an error string, not a raise.
+
+    _session_view runs after the session was mutated, so an escaping
+    cv2/alloc/encode error would turn an applied edit into a FAIL with
+    a bumped revision. The view must stay total instead.
+    """
+    srv = syn_backend
+    srv.op_open({'map': 'syn'})
+    srv.op_update({'field': 'boundary_strokes_px', 'value': [SYN_CUT]})
+
+    def boom(*args, **kwargs):
+        raise RuntimeError('simulated cv2 failure')
+
+    monkeypatch.setattr(server, 'patched_free_mask', boom)
+    view = server._region_view()
+    assert view['error'] == 'region overlay unavailable: simulated cv2 failure'
+    assert view['retained_region_px'] is None
+    # The applied edit still reports PASS: the overlay never breaks a view.
+    res = srv.op_update({'field': 'retained_region_px', 'value': None})
+    assert res['status'] == 'PASS'
+    assert res['session']['region']['error'] == (
+        'region overlay unavailable: simulated cv2 failure')
+
+
 def test_select_region_stores_canonical_integer_seed(syn_backend, tmp_path):
     """Float-encoded clicks store canonical ints; digest survives reload.
 
