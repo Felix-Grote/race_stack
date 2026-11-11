@@ -1713,6 +1713,24 @@ def test_parse_map_yaml_origin_and_image(tmp_path):
         TrackMap(tmp_path / 'bad.yaml')
 
 
+def test_parse_map_yaml_rejects_nonfinite_origin(tmp_path):
+    """nan/inf origins fail closed: they would poison identity and drafts."""
+    import shutil
+    shutil.copy(MAPS / 'test/test.png', tmp_path / 'o.png')
+    for bad_origin in ('[nan, -5.35, 0]', '[0, 0, inf]',
+                       '[0, 0, -inf]'):
+        (tmp_path / 'o.yaml').write_text(
+            'image: o.png\nresolution: 0.05\norigin: %s\nnegate: 0\n'
+            'occupied_thresh: 0.65\nfree_thresh: 0.196\n' % bad_origin)
+        with pytest.raises(AnnotationError, match='origin'):
+            TrackMap(tmp_path / 'o.yaml')
+    (tmp_path / 'o.yaml').write_text(
+        'image: o.png\nresolution: 0.05\norigin:\n- -8.4\n- nan\n- 0\n'
+        'negate: 0\noccupied_thresh: 0.65\nfree_thresh: 0.196\n')
+    with pytest.raises(AnnotationError, match='origin'):
+        TrackMap(tmp_path / 'o.yaml')
+
+
 def test_patched_free_mask_rejects_bad_strokes_and_width(tmp_path):
     """Non-numeric strokes and bad widths fail closed, not raw ValueError."""
     track_map = _write_annulus_map(tmp_path)
@@ -1725,8 +1743,14 @@ def test_patched_free_mask_rejects_bad_strokes_and_width(tmp_path):
     for bad_width in (0, 32, '5', 5.0, True, None):
         with pytest.raises(AnnotationError, match='integer 1..31'):
             patched_free_mask(track_map, [TL_CUT], bad_width)
+    # Huge coordinates would wrap in the int32 rasterizer; they fail
+    # closed here instead, while the 2**30 bound itself still passes.
+    with pytest.raises(AnnotationError, match='magnitude'):
+        patched_free_mask(track_map, [[[1e18, 0], [0, 0]]])
     mask = patched_free_mask(track_map, [TL_CUT], 5)
     assert set(np.unique(mask)) <= {0, 255}
+    ok = patched_free_mask(track_map, [[[2 ** 30, 0], [0, 0]]])
+    assert set(np.unique(ok)) <= {0, 255}
 
 
 def test_effective_mask_without_selection_is_byte_identical(tmp_path):

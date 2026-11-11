@@ -87,6 +87,13 @@ def _parse_map_yaml(text):
             meta[key] = rest
     if 'image' not in meta or 'resolution' not in meta or len(origin) != 3:
         raise AnnotationError('map YAML missing image/resolution/origin')
+    if not all(math.isfinite(v) for v in origin):
+        # float() accepts nan/inf, and abs(nan) > 1e-12 is False, so a
+        # non-finite origin would slip past the yaw check below and
+        # poison pixel_to_world, map_identity, and saved drafts (nan
+        # != nan trips the identity check on reopen). Same finite guard
+        # as resolution.
+        raise AnnotationError('map origin must be finite numbers (m)')
     # The image entry is a bare file name: strip a trailing YAML comment
     # and one layer of surrounding quotes. A '#' inside a quoted name is
     # kept; the result must still resolve to a readable file below, so a
@@ -292,6 +299,13 @@ def _checked_seed(retained_region_px, track_map):
     return [u, v]
 
 
+# Raster coordinates are int32: stroke points are bounded well inside
+# it so the float-to-int32 conversion in patched_free_mask can never
+# wrap a huge stored coordinate onto unintended pixels. Far above any
+# real map (the HTTP layer caps tighter via MAX_COORD_ABS).
+_MAX_STROKE_COORD = 2 ** 30
+
+
 def _checked_strokes(boundary_strokes_px):
     """Return strokes as validated point lists, or raise AnnotationError.
 
@@ -321,6 +335,15 @@ def _checked_strokes(boundary_strokes_px):
             if not all(math.isfinite(v) for v in f):
                 raise AnnotationError(
                     'stroke points must be finite pixels')
+            # The rasterizer converts to int32, where out-of-range
+            # float-to-int32 conversion wraps instead of raising: a
+            # huge stored coordinate would land the line on unintended
+            # pixels. Bound the magnitude well inside int32, far above
+            # any real map (HTTP already caps tighter via MAX_COORD_ABS).
+            if any(abs(v) > _MAX_STROKE_COORD for v in f):
+                raise AnnotationError(
+                    'stroke coordinate magnitude exceeds %d px'
+                    % _MAX_STROKE_COORD)
             pts.append(f)
         checked.append(pts)
     return checked
