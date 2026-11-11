@@ -141,12 +141,19 @@ class AnnotationNode(Node if rclpy else object):
 def _isolation_ok(domain_id, namespace):
     """True when the node cannot join the ambient driving graph.
 
-    Isolation holds when the domain is non-default or the namespace is
-    pushed off root: relative topics then resolve away from the driving
-    graph's names on the driving domain. Both default (domain 0 and
-    root namespace) means the wire names sit on the ambient graph.
+    The domain is compared numerically, so equivalent-zero spellings
+    ('0', '00', ' 0 ') all count as the default domain; an
+    unparseable value fails closed to the default. Isolation holds
+    when the domain is non-default or the namespace is pushed off
+    root: relative topics then resolve away from the driving graph's
+    names on the driving domain. Both default means the wire names
+    sit on the ambient graph.
     """
-    return (domain_id or '').strip() not in ('', '0') or namespace != '/'
+    try:
+        domain = int(str(domain_id).strip())
+    except (TypeError, ValueError):
+        domain = 0
+    return domain != 0 or namespace != '/'
 
 
 def main(args=None):
@@ -183,7 +190,9 @@ def main(args=None):
             'annotation_node refused: default ROS_DOMAIN_ID with root '
             'namespace would join the driving graph; export a dedicated '
             'ROS_DOMAIN_ID and push a namespace (e.g. -r __ns:=/annot), '
-            'or pass --allow-ambient-domain to acknowledge the risk')
+            'or pass --allow-ambient-domain to explicitly accept joining '
+            'the ambient driving graph (risk acceptance, never for '
+            'car-adjacent runs)')
     rclpy.spin(node)
     rclpy.shutdown()
 

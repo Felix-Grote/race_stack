@@ -72,7 +72,7 @@ function evToCanvas(e){ const r=cv.getBoundingClientRect();
 function info(){
   if(!S){ si.textContent=''; return; }
   const n=(S.route_px||[]).length; const closed=n>2 && Math.hypot(S.route_px[0][0]-S.route_px[n-1][0],S.route_px[0][1]-S.route_px[n-1][1])<8;
-  si.textContent=`map ${S.map_png} rev ${S.revision} approval ${S.approval} candidate ${(S.candidate_digest||'none').slice(0,16)} strokes ${(S.boundary_strokes_px||[]).length} route ${n?`drawn ${closed?'closed':'OPEN'}`:'empty'} width ${S.stroke_width_px} track ${regionText()}`;
+  si.textContent=`map ${S.map_png} rev ${S.revision} approval ${S.approval} candidate ${(S.candidate_digest||'none').slice(0,16)} strokes ${(S.boundary_strokes_px||[]).length} route ${n?`drawn ${closed?'closed':'OPEN'}`:'empty'} width ${S.stroke_width_px} track ${regionText()} mapview ${S.map_view_error||'ok'}`;
   const w=document.getElementById('width'); if(w) w.value=String(S.stroke_width_px);
   const nb=(S.boundary_strokes_px||[]).length;
   sl.textContent='';

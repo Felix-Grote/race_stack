@@ -478,6 +478,28 @@ def test_region_view_reports_backend_errors_without_raising(syn_backend,
         'region overlay unavailable: simulated cv2 failure')
 
 
+def test_session_view_survives_map_read_failure(backend, monkeypatch):
+    """A transient PNG read failure is a view error, not a failed op.
+
+    _session_view runs after the session was mutated; without the
+    guard, op_undo would report FAIL with a bumped revision, and a
+    client retry would pop a second stroke (op_undo is non-idempotent).
+    """
+    srv = backend
+    _open_drawn(srv)
+    rev = srv.STATE['session']['revision']
+    monkeypatch.setattr(srv.STATE['map'], 'png_path',
+                        Path('/nonexistent/missing.png'))
+    res = srv.op_undo({})
+    assert res['status'] == 'PASS'
+    assert res['session']['revision'] == rev + 1
+    assert res['session']['map_png_data_url'] is None
+    assert 'map image unavailable' in res['session']['map_view_error']
+    # Exactly one stroke was popped: the retry reports PASS, not a
+    # second pop disguised as recovery.
+    assert len(srv.STATE['session']['boundary_strokes_px']) == 0
+
+
 def test_select_region_stores_canonical_integer_seed(syn_backend, tmp_path):
     """Float-encoded clicks store canonical ints; digest survives reload.
 
@@ -549,6 +571,30 @@ def test_selection_approval_cycle_binds_seed(backend):
         srv.op_approve({'approval_digest': prev['candidate_digest']})
     with pytest.raises(AnnotationError, match='not .operator-approved'):
         srv.op_export({})
+
+
+def test_preview_survives_restart_via_persisted_digest(backend):
+    """A saved preview authorizes approve/export after a restart.
+
+    The server restores the persisted preview digest on open when it
+    still matches current geometry, so CLI and HTTP bind the same
+    preview across process restarts. Pinned with a simulated restart.
+    """
+    srv = backend
+    _open_drawn(srv)
+    prev = srv.op_preview({})
+    digest = prev['candidate_digest']
+    assert srv.op_save({})['status'] == 'PASS'
+    # Simulate a process restart: drop all in-memory state, reopen.
+    srv.STATE.update(map=None, session=None, extraction=None,
+                     candidate_digest=None)
+    reopened = srv.op_open({'map': 'test'})
+    assert reopened['status'] == 'PASS'
+    assert reopened['session']['candidate_digest'] == digest
+    assert srv.op_approve({'approval_digest': digest})['status'] == 'PASS'
+    exp = srv.op_export({})
+    assert exp['status'] == 'VALIDATED'
+    assert exp['route_digest'] == prev['route_digest']
 
 
 # Diagonal across the top-left corner pocket of the test map.

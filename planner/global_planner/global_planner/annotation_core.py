@@ -65,21 +65,49 @@ def _parse_map_yaml(text):
         key, _, rest = line.partition(':')
         key, rest = key.strip(), rest.strip()
         if key == 'origin':
-            if rest.startswith('['):
-                origin = [float(x) for x in rest.strip('[]').split(',') if x.strip()]
-            else:  # block sequence "- value" lines
-                for nxt in lines[i + 1:]:
-                    nxt = nxt.strip()
-                    if nxt.startswith('- '):
-                        origin.append(float(nxt[2:]))
-                    else:
-                        break
-        elif key in ('image', 'resolution', 'negate', 'occupied_thresh',
+            try:
+                if rest.startswith('['):
+                    origin = [float(x)
+                              for x in rest.strip('[]').split(',')
+                              if x.strip()]
+                else:  # block sequence "- value" lines
+                    for nxt in lines[i + 1:]:
+                        nxt = nxt.strip()
+                        if nxt.startswith('- '):
+                            origin.append(float(nxt[2:]))
+                        else:
+                            break
+            except (TypeError, ValueError) as exc:
+                raise AnnotationError(
+                    'map origin is not a list of numbers') from exc
+        elif key in ('resolution', 'negate', 'occupied_thresh',
                      'free_thresh'):
+            meta[key] = rest
+        elif key == 'image':
             meta[key] = rest
     if 'image' not in meta or 'resolution' not in meta or len(origin) != 3:
         raise AnnotationError('map YAML missing image/resolution/origin')
-    meta['resolution'] = float(meta['resolution'])
+    # The image entry is a bare file name: strip a trailing YAML comment
+    # and one layer of surrounding quotes. A '#' inside a quoted name is
+    # kept; the result must still resolve to a readable file below, so a
+    # mis-parse fails closed instead of rebinding the map.
+    image = meta['image'].strip()
+    head, hash_, _ = image.partition('#')
+    if hash_ and (not head or head.endswith((' ', '\t'))):
+        image = head.strip()
+    if (len(image) >= 2 and image[0] == image[-1]
+            and image[0] in ('"', "'")):
+        image = image[1:-1].strip()
+    if not image:
+        raise AnnotationError('map YAML has an empty image entry')
+    meta['image'] = image
+    try:
+        meta['resolution'] = float(meta['resolution'])
+    except (TypeError, ValueError) as exc:
+        raise AnnotationError('map resolution is not a number') from exc
+    if not (math.isfinite(meta['resolution']) and meta['resolution'] > 0):
+        raise AnnotationError(
+            'map resolution must be a finite positive number (m/px)')
     meta['origin'] = origin
     # Occupancy interpretation: only the Cartographer-style binary convention
     # (negate 0/1, single thresholds pair) is supported. Anything else risks
@@ -264,6 +292,54 @@ def _checked_seed(retained_region_px, track_map):
     return [u, v]
 
 
+def _checked_strokes(boundary_strokes_px):
+    """Return strokes as validated point lists, or raise AnnotationError.
+
+    Mirrors ``_checked_seed`` for the raster input: every point must be
+    a finite ``[u, v]`` pair (floats allowed, rounded only by the
+    rasterizer). Non-numeric entries raised raw ValueError from the
+    numpy conversion before; they fail closed here instead.
+    """
+    if not isinstance(boundary_strokes_px, (list, tuple)):
+        raise AnnotationError('boundary strokes must be a list of polylines')
+    checked = []
+    for stroke in boundary_strokes_px:
+        if not isinstance(stroke, (list, tuple)):
+            raise AnnotationError(
+                'boundary strokes must be a list of polylines')
+        pts = []
+        for pt in stroke:
+            if (not isinstance(pt, (list, tuple)) or len(pt) != 2
+                    or any(isinstance(v, bool) for v in pt)):
+                raise AnnotationError(
+                    'stroke points must be [u, v] pixel pairs')
+            try:
+                f = [float(pt[0]), float(pt[1])]
+            except (TypeError, ValueError) as exc:
+                raise AnnotationError(
+                    'stroke points must be [u, v] pixel pairs') from exc
+            if not all(math.isfinite(v) for v in f):
+                raise AnnotationError(
+                    'stroke points must be finite pixels')
+            pts.append(f)
+        checked.append(pts)
+    return checked
+
+
+def _checked_width(stroke_width_px):
+    """Return the raster width, or raise AnnotationError.
+
+    The width selects the occupied rasterization, so a non-integer or
+    out-of-range value must fail closed here instead of escaping as a
+    ValueError or cv2.error from the drawing call.
+    """
+    if (isinstance(stroke_width_px, bool)
+            or not isinstance(stroke_width_px, int)
+            or not 1 <= stroke_width_px <= 31):
+        raise AnnotationError('stroke width must be an integer 1..31')
+    return stroke_width_px
+
+
 def geometry_digest(session, track_map):
     """Digest of the exact editable geometry an approval refers to.
 
@@ -402,6 +478,9 @@ def load_session(path, track_map):
         session = json.loads(Path(path).read_text(encoding='utf-8'))
     except (OSError, json.JSONDecodeError) as exc:
         raise AnnotationError(f'cannot load session: {exc}') from exc
+    if not isinstance(session, dict):
+        raise AnnotationError(
+            'cannot load session: top level must be an object')
     session = _migrate_session(session)
     if session.get('version') != SESSION_VERSION:
         raise AnnotationError('unsupported session version')
@@ -525,16 +604,18 @@ def patched_free_mask(track_map, boundary_strokes_px, stroke_width_px=5):
             'UNSUPPORTED: map image is not binary '
             f'(levels {sorted(int(v) for v in levels)}); unknown cells '
             'must not be read as legal free space')
+    boundary_strokes_px = _checked_strokes(boundary_strokes_px)
+    stroke_width_px = _checked_width(stroke_width_px)
     occupied = base < 128
     patched = occupied.copy()
     for stroke in boundary_strokes_px:
         pts = np.array(stroke, dtype=np.int32).reshape(-1, 1, 2)
         if len(pts) >= 2:
             cv2.polylines(patched.view(np.uint8), [pts], False, 1,
-                          thickness=int(stroke_width_px), lineType=cv2.LINE_8)
+                          thickness=stroke_width_px, lineType=cv2.LINE_8)
         elif len(pts) == 1:
-            cv2.circle(patched.view(np.uint8), tuple(pts[0, 0]), 
-                       max(1, int(stroke_width_px) // 2), 1, -1)
+            cv2.circle(patched.view(np.uint8), tuple(pts[0, 0]),
+                       max(1, stroke_width_px // 2), 1, -1)
     return np.where(patched, 0, 255).astype(np.uint8)
 
 

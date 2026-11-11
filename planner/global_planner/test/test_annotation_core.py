@@ -603,6 +603,17 @@ def test_node_isolation_gate():
     assert _isolation_ok('42', '/annot')
 
 
+def test_node_isolation_gate_rejects_zero_spellings():
+    """Equivalent-zero domain spellings count as the default domain."""
+    from global_planner.annotation_node import _isolation_ok
+    assert not _isolation_ok('00', '/')
+    assert not _isolation_ok(' 0 ', '/')
+    assert not _isolation_ok('abc', '/')
+    assert not _isolation_ok(None, '/')
+    assert _isolation_ok('00', '/annot')
+    assert _isolation_ok('48', '/')
+
+
 @headless_only
 def test_node_retry_ack_correlation(tmp_path):
     """Failed commands stay retryable; successes dedup; every reply is
@@ -1337,6 +1348,71 @@ def test_http_explicit_fail_on_corrupt_session_and_nonfinite_seed(backend):
     assert server.STATE['session']['retained_region_px'] is None
 
 
+def test_http_slow_body_times_out(backend, monkeypatch):
+    """A client advertising a body then stalling gets a JSON FAIL, fast."""
+    import http.client
+    import threading
+    from http.server import HTTPServer
+    from global_planner import annotation_server as server_module
+    from global_planner.annotation_server import Handler
+    monkeypatch.setattr(server_module, 'REQUEST_TIMEOUT_S', 1)
+    server = backend
+    server.op_open({'map': 'test'})
+    httpd = HTTPServer(('127.0.0.1', 0), Handler)
+    port = httpd.server_address[1]
+    thread = threading.Thread(target=httpd.handle_request)
+    thread.start()
+    try:
+        conn = http.client.HTTPConnection('127.0.0.1', port, timeout=15)
+        conn.putrequest('POST', '/api/session/state')
+        conn.putheader('Content-Type', 'application/json')
+        conn.putheader('Content-Length', '100')
+        conn.endheaders()
+        conn.send(b'{}')
+        resp = conn.getresponse()
+        assert resp.status == 400
+        assert json.loads(resp.read())['status'] == 'FAIL'
+    finally:
+        thread.join(timeout=30)
+        httpd.server_close()
+
+
+def test_http_oversize_then_server_alive(backend):
+    """An oversized POST gets 413 and the server keeps serving new connections."""
+    import http.client
+    import threading
+    from http.server import HTTPServer
+    from global_planner.annotation_server import Handler, MAX_BODY_BYTES
+    server = backend
+    server.op_open({'map': 'test'})
+    httpd = HTTPServer(('127.0.0.1', 0), Handler)
+    port = httpd.server_address[1]
+
+    def one(body, path='/api/session/state'):
+        thread = threading.Thread(target=httpd.handle_request)
+        thread.start()
+        try:
+            conn = http.client.HTTPConnection('127.0.0.1', port, timeout=30)
+            conn.request('POST', path, body=body,
+                         headers={'Content-Type': 'application/json'})
+            resp = conn.getresponse()
+            return resp.status, json.loads(resp.read())
+        finally:
+            thread.join(timeout=30)
+
+    try:
+        status, payload = one(b'x' * (MAX_BODY_BYTES + 1))
+        assert status == 413
+        assert payload['status'] == 'FAIL'
+        # The unread remainder was not parsed as a pipelined request: a
+        # new connection is served normally.
+        status, payload = one(b'{}')
+        assert status == 200
+        assert payload['status'] == 'PASS'
+    finally:
+        httpd.server_close()
+
+
 def test_http_unexpected_backend_errors_reply_fail(backend, monkeypatch):
     """Unexpected geometry errors still reply JSON FAIL, never a bare 500."""
     import http.client
@@ -1585,6 +1661,72 @@ def _write_annulus_map(tmp_path, name='annulus.png'):
     cv2.rectangle(img, (20, 20), (180, 180), 255, -1)
     cv2.rectangle(img, (70, 70), (130, 130), 0, -1)
     return _write_map_copy(tmp_path, img, name=name)
+
+
+def test_trackmap_rejects_bad_resolution(tmp_path):
+    """Zero/negative/non-finite/non-numeric resolution fails closed."""
+    import shutil
+    shutil.copy(MAPS / 'test/test.png', tmp_path / 'res.png')
+    for bad in ('0', '-0.05', 'nan', 'inf', '-inf', 'abc'):
+        (tmp_path / 'res.yaml').write_text(
+            'image: res.png\nresolution: %s\norigin: [-8.4, -5.35, 0]\n'
+            'negate: 0\noccupied_thresh: 0.65\nfree_thresh: 0.196\n' % bad)
+        with pytest.raises(AnnotationError, match='resolution'):
+            TrackMap(tmp_path / 'res.yaml')
+    (tmp_path / 'res.yaml').write_text(
+        'image: res.png\nresolution: 0.05\norigin: [-8.4, -5.35, 0]\n'
+        'negate: 0\noccupied_thresh: 0.65\nfree_thresh: 0.196\n')
+    assert TrackMap(tmp_path / 'res.yaml').resolution == 0.05
+
+
+def test_load_session_rejects_non_object(tmp_path):
+    """A session file whose top level is not an object fails closed."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    for raw in ('[1, 2]', '"session"', '5', 'null'):
+        path = tmp_path / 'bad.json'
+        path.write_text(raw, encoding='utf-8')
+        with pytest.raises(AnnotationError, match='cannot load session'):
+            load_session(path, track_map)
+
+
+def test_parse_map_yaml_origin_and_image(tmp_path):
+    """Bad origin values fail closed; quoted/commented image names resolve."""
+    import shutil
+    shutil.copy(MAPS / 'test/test.png', tmp_path / 'quoted.png')
+    base = ('resolution: 0.05\norigin: [-8.4, -5.35, 0]\nnegate: 0\n'
+            'occupied_thresh: 0.65\nfree_thresh: 0.196\n')
+    for image_line in ('image: quoted.png',
+                       'image: "quoted.png"',
+                       "image: 'quoted.png'",
+                       'image: quoted.png # Baku map'):
+        (tmp_path / 'q.yaml').write_text(image_line + '\n' + base)
+        assert TrackMap(tmp_path / 'q.yaml').png_path.name == 'quoted.png'
+    (tmp_path / 'bad.yaml').write_text(
+        'image: quoted.png\nresolution: 0.05\norigin: [oops, -5.35, 0]\n'
+        'negate: 0\n')
+    with pytest.raises(AnnotationError, match='origin'):
+        TrackMap(tmp_path / 'bad.yaml')
+    (tmp_path / 'bad.yaml').write_text(
+        'image: quoted.png\nresolution: 0.05\norigin:\n- -8.4\n- oops\n- 0\n'
+        'negate: 0\n')
+    with pytest.raises(AnnotationError, match='origin'):
+        TrackMap(tmp_path / 'bad.yaml')
+
+
+def test_patched_free_mask_rejects_bad_strokes_and_width(tmp_path):
+    """Non-numeric strokes and bad widths fail closed, not raw ValueError."""
+    track_map = _write_annulus_map(tmp_path)
+    with pytest.raises(AnnotationError, match='pixel pairs'):
+        patched_free_mask(track_map, [[['x', 0]]])
+    with pytest.raises(AnnotationError, match='finite'):
+        patched_free_mask(track_map, [[[float('inf'), 0]]])
+    with pytest.raises(AnnotationError, match='list of polylines'):
+        patched_free_mask(track_map, 'nope')
+    for bad_width in (0, 32, '5', 5.0, True, None):
+        with pytest.raises(AnnotationError, match='integer 1..31'):
+            patched_free_mask(track_map, [TL_CUT], bad_width)
+    mask = patched_free_mask(track_map, [TL_CUT], 5)
+    assert set(np.unique(mask)) <= {0, 255}
 
 
 def test_effective_mask_without_selection_is_byte_identical(tmp_path):

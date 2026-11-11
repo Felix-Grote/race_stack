@@ -43,6 +43,10 @@ STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
 MAX_BODY_BYTES = 4 * 1024 * 1024
 MAX_POINTS_PER_FIELD = 20000
 MAX_COORD_ABS = 1e6
+# Per-connection socket timeout (s): the single-threaded server blocks
+# in rfile.read, so a client advertising Content-Length then sending
+# slowly would stall every op without this bound.
+REQUEST_TIMEOUT_S = 30
 
 
 def configure(maps_dir, out_dir):
@@ -157,8 +161,19 @@ def _region_view():
 
 def _session_view():
     s = dict(STATE['session'])
-    png = Path(STATE['map'].png_path).read_bytes()
-    s['map_png_data_url'] = 'data:image/png;base64,' + base64.b64encode(png).decode()
+    # The map read happens after the session was already mutated, so a
+    # transient PNG failure must not turn an applied op into a FAIL
+    # with a bumped revision (op_undo is non-idempotent: a client
+    # retry would pop a second stroke). Report a view error instead,
+    # like _region_view does for the overlay.
+    try:
+        png = Path(STATE['map'].png_path).read_bytes()
+    except Exception as exc:  # noqa: BLE001 - applied ops stay viewable
+        s['map_png_data_url'] = None
+        s['map_view_error'] = 'map image unavailable: %s' % exc
+    else:
+        s['map_png_data_url'] = (
+            'data:image/png;base64,' + base64.b64encode(png).decode())
     if STATE['extraction']:
         outer, inner = STATE['extraction']
         s['extraction'] = {'outer_px': outer.tolist(), 'inner_px': inner.tolist()}
@@ -223,8 +238,17 @@ def op_open(body):
             raise AnnotationError(
                 f'legacy draft could not be adopted: {legacy.name}')
         message = f'reopened legacy draft (adopted as {draft.name})'
+    # Restore the persisted preview when it still matches the current
+    # geometry: the digest binds every editable field, so a preview from
+    # before a restart authorizes exactly the same candidate as a fresh
+    # one. Without this, HTTP would force a re-preview after every
+    # restart while the CLI accepts the persisted digest for the same
+    # draft. Both transports now bind the same persisted preview.
+    candidate = None
+    if session.get('preview_digest') == geometry_digest(session, track_map):
+        candidate = session['preview_digest']
     STATE.update(map=track_map, session=session, extraction=None,
-                 candidate_digest=None)
+                 candidate_digest=candidate)
     return {'status': 'PASS', 'message': message, 'session': _session_view()}
 
 
@@ -626,6 +650,13 @@ OPS = {'/api/session/open': op_open, '/api/session/update': op_update,
 class Handler(BaseHTTPRequestHandler):
     """Loopback-only JSON API plus the single-page frontend."""
 
+    def setup(self):
+        # Bound every phase (header parse + body read): socketserver
+        # only applies self.timeout here, so setting it per connection
+        # is what keeps a slow sender from stalling the server.
+        self.timeout = REQUEST_TIMEOUT_S
+        super().setup()
+
     def log_message(self, *args):
         """Keep the console quiet."""
 
@@ -649,6 +680,9 @@ class Handler(BaseHTTPRequestHandler):
                 raise AnnotationError('negative Content-Length')
             raw, overflow = _read_bounded(self.rfile, length)
             if overflow:
+                # Close the connection: the unread remainder must never
+                # be parsed as a pipelined next request.
+                self.close_connection = True
                 _reply(self, {'status': 'FAIL',
                               'message': f'request body exceeds '
                                          f'{MAX_BODY_BYTES} bytes'}, 413)
