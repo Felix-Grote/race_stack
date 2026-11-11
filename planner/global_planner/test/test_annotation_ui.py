@@ -387,3 +387,156 @@ def test_source_map_bytes_untouched_by_ui_ops(backend, tmp_path):
     srv.op_undo({})
     assert Path(srv.STATE['map'].png_path).read_bytes() == before
     assert json.dumps(srv.STATE['session'])  # session stays JSON-safe
+
+
+SYN_CUT = [[20.0, 60.0], [60.0, 20.0]]  # diagonal across the outer corner
+SYN_RING = [100, 170]  # free pixel on the annulus bottom arm
+
+
+@pytest.fixture
+def syn_backend(tmp_path):
+    """Backend serving a synthetic square annulus for cut tests."""
+    import cv2
+    maps = tmp_path / 'maps'
+    maps.mkdir()
+    img = np.zeros((200, 200), np.uint8)
+    cv2.rectangle(img, (20, 20), (180, 180), 255, -1)
+    cv2.rectangle(img, (70, 70), (130, 130), 0, -1)
+    cv2.imwrite(str(maps / 'syn.png'), img)
+    (maps / 'syn.yaml').write_text(
+        'image: syn.png\nresolution: 0.05\norigin: [0, 0, 0]\nnegate: 0\n'
+        'occupied_thresh: 0.65\nfree_thresh: 0.196\n')
+    saved = dict(server.STATE)
+    server.configure(str(maps), str(tmp_path / 'out'))
+    server.STATE.update(map=None, session=None, extraction=None,
+                        candidate_digest=None)
+    yield server
+    server.STATE.clear()
+    server.STATE.update(saved)
+
+
+def test_select_region_server_flow(syn_backend):
+    """Cut, fragmented report, select, candidate, bad clicks keep state."""
+    srv = syn_backend
+    srv.op_open({'map': 'syn'})
+    upd = srv.op_update({'field': 'boundary_strokes_px', 'value': [SYN_CUT]})
+    assert upd['session']['region']['free_regions'] == 2
+    with pytest.raises(AnnotationError, match='NEEDS_REGION_SELECTION'):
+        srv.op_extract({})
+    rev = srv.STATE['session']['revision']
+    res = srv.op_update({'field': 'retained_region_px', 'value': SYN_RING})
+    assert res['status'] == 'PASS'
+    assert srv.STATE['session']['revision'] == rev + 1
+    assert srv.STATE['session']['approval'] == 'none'
+    region = res['session']['region']
+    assert region['retained_region_px'] == SYN_RING
+    assert len(region['excluded']) == 1
+    assert region['excluded_png_data_url'].startswith('data:image/png;base64,')
+    assert srv.op_extract({})['status'] == 'CANDIDATE'
+    # Occupied, pocket, out-of-bounds and non-integer clicks are
+    # rejected without overwriting the stored selection.
+    for bad in ([100, 100], [30, 30], [-1, 0], [10.5, 3]):
+        with pytest.raises(AnnotationError):
+            srv.op_update({'field': 'retained_region_px', 'value': bad})
+    assert srv.STATE['session']['retained_region_px'] == SYN_RING
+    # Clearing drops the overlay but keeps the strokes.
+    cleared = srv.op_update({'field': 'retained_region_px', 'value': None})
+    assert cleared['session']['region']['excluded'] == []
+    assert srv.STATE['session']['boundary_strokes_px'] == [SYN_CUT]
+    with pytest.raises(AnnotationError, match='NEEDS_REGION_SELECTION'):
+        srv.op_extract({})
+
+
+def test_boundary_edit_clears_selection(syn_backend):
+    """Undo and width changes drop the seed; the mask is recomputed."""
+    srv = syn_backend
+    srv.op_open({'map': 'syn'})
+    srv.op_update({'field': 'boundary_strokes_px', 'value': [SYN_CUT]})
+    srv.op_update({'field': 'retained_region_px', 'value': SYN_RING})
+    srv.op_undo({})
+    assert srv.STATE['session']['retained_region_px'] is None
+    srv.op_update({'field': 'boundary_strokes_px', 'value': [SYN_CUT]})
+    srv.op_update({'field': 'retained_region_px', 'value': SYN_RING})
+    srv.op_update({'field': 'stroke_width_px', 'value': 9})
+    assert srv.STATE['session']['retained_region_px'] is None
+
+
+def test_selection_approval_cycle_binds_seed(backend):
+    """Preview/approve/export run on the retained component, and a
+    selection change revokes the approval bound to the old geometry."""
+    srv = backend
+    _open_drawn(srv)
+    track_map = srv.STATE['map']
+    free = track_map.image > 128
+    ys, xs = np.nonzero(free)
+    pixel = [int(xs[len(xs) // 2]), int(ys[len(ys) // 2])]
+    srv.op_update({'field': 'retained_region_px', 'value': pixel})
+    prev = srv.op_preview({})
+    assert prev['status'] == 'VALIDATED'
+    srv.op_approve({'approval_digest': prev['candidate_digest']})
+    exp = srv.op_export({})
+    assert exp['status'] == 'VALIDATED'
+    assert exp['route_digest'] == prev['route_digest']
+    assert (Path(srv.STATE['out_dir'])
+            / export_name(track_map)).exists()
+    # The retained component is the whole track here, so seeded
+    # extraction matches the unselected baseline exactly (same mask
+    # means same strict walls; the corridor ribbons are inset by
+    # design and must not be compared to the raw boundary here).
+    strokes = srv.STATE['session']['boundary_strokes_px']
+    base_outer, base_inner = extract_boundaries(track_map, strokes, 5)
+    sel_outer, sel_inner = extract_boundaries(track_map, strokes, 5, pixel)
+    assert np.array_equal(sel_outer, base_outer)
+    assert np.array_equal(sel_inner, base_inner)
+    # Clearing the selection revokes the approval bound to it.
+    srv.op_update({'field': 'retained_region_px', 'value': None})
+    with pytest.raises(AnnotationError, match='no fresh preview'):
+        srv.op_approve({'approval_digest': prev['candidate_digest']})
+    with pytest.raises(AnnotationError, match='not .operator-approved'):
+        srv.op_export({})
+
+
+# Diagonal across the top-left corner pocket of the test map.
+TEST_CUT = [[[130.16427660290194, 3.890151624735724],
+             [48.83572339709805, 100.10984837526428]]]
+TEST_CUT_SEED = [125, 230]
+
+
+def test_preview_on_kinked_cut_fails_closed(backend):
+    """A cut whose sharp corner folds the corridor charts grants no
+    candidate: extraction selects the component, preview reports the
+    failure instead of passing silently."""
+    srv = backend
+    srv.op_open({'map': 'test'})
+    srv.op_update({'field': 'boundary_strokes_px', 'value': TEST_CUT})
+    srv.op_update({'field': 'retained_region_px', 'value': TEST_CUT_SEED})
+    assert srv.op_extract({})['status'] == 'CANDIDATE'
+    track_map = srv.STATE['map']
+    outer, inner = extract_boundaries(track_map, TEST_CUT, 5, TEST_CUT_SEED)
+    srv.op_update({'field': 'route_px', 'value': _midline_seed(outer, inner)})
+    with pytest.raises(AnnotationError, match='smoothing level'):
+        srv.op_preview({})
+    assert srv.STATE['candidate_digest'] is None
+    with pytest.raises(AnnotationError, match='no fresh preview'):
+        srv.op_approve({'approval_digest': 'anything'})
+    with pytest.raises(AnnotationError, match='not .operator-approved'):
+        srv.op_export({})
+
+
+def _dev(chain, ref):
+    """Max deviation of a pixel chain from a reference chain (px)."""
+    import numpy as _np
+    chain, ref = _np.asarray(chain, float), _np.asarray(ref, float)
+    return float(_np.linalg.norm(
+        chain[:, None, :] - ref[None, :, :], axis=2).min(axis=1).max())
+
+
+def test_html_bucket_control_contract():
+    """Bucket button, clear control, excluded layer and overlay wiring."""
+    html = UI_HTML.read_text(encoding='utf-8')
+    for element in ('bucketBtn', 'clearRegionBtn', 'lay-excluded'):
+        assert f'id="{element}"' in html, f'missing #{element}'
+    assert 'Keep legal track' in html
+    assert 'retained_region_px' in html
+    assert 'drawImage(exclImg,v.ox' in html
+    assert 'excluded pockets' in html

@@ -11,10 +11,10 @@ import json
 from pathlib import Path
 
 from .annotation_core import (AnnotationError, TrackMap, atomic_write_text,
-                              build_and_validate, export_name,
-                              extract_boundaries, geometry_digest,
-                              load_session, require_approved, save_session,
-                              select_thinning)
+                              build_and_validate, effective_free_mask,
+                              export_name, extract_boundaries,
+                              geometry_digest, load_session, require_approved,
+                              save_session, select_thinning)
 
 
 def _validated_receipt(route, prepared, info):
@@ -33,21 +33,62 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command',
                         choices=('extract', 'preview', 'approve', 'export',
-                                 'validate'))
+                                 'validate', 'select-region'))
     parser.add_argument('--map', required=True)
     parser.add_argument('--session', required=True,
                         help='annotation_project.json with strokes + route')
-    parser.add_argument('--out', required=True)
+    parser.add_argument('--out', required=False, default=None)
     parser.add_argument('--candidate', default=None,
                         help='candidate digest quoted by approve '
                              '(from preview)')
+    parser.add_argument('--pixel', default=None,
+                        help='retained region seed for select-region as u,v '
+                             '(omit with --clear)')
+    parser.add_argument('--clear', action='store_true',
+                        help='clear the retained region (select-region only)')
     args = parser.parse_args(argv)
     try:
         track_map = TrackMap(args.map)
         session = load_session(args.session, track_map)
+        if args.command == 'select-region':
+            if args.clear:
+                session['retained_region_px'] = None
+            elif args.pixel is None:
+                raise AnnotationError(
+                    'select-region needs --pixel u,v or --clear')
+            else:
+                try:
+                    parts = [float(c) for c in args.pixel.split(',')]
+                except ValueError:
+                    raise AnnotationError(
+                        'select-region --pixel must be u,v integers')
+                if (len(parts) != 2
+                        or any(p != int(p) for p in parts)):
+                    raise AnnotationError(
+                        'select-region --pixel must be u,v integers')
+                seed = [int(p) for p in parts]
+                effective_free_mask(
+                    track_map, session.get('boundary_strokes_px', []),
+                    session.get('stroke_width_px', 5), seed)
+                outer, inner = extract_boundaries(
+                    track_map, session.get('boundary_strokes_px', []),
+                    session.get('stroke_width_px', 5), seed)
+                session['retained_region_px'] = seed
+            session['revision'] = int(session.get('revision', 1)) + 1
+            session['approval'] = 'none'
+            session['approval_digest'] = None
+            save_session(session, args.session)
+            print(json.dumps({'status': 'PASS',
+                              'retained_region_px':
+                                  session.get('retained_region_px'),
+                              'revision': session['revision']}, sort_keys=True))
+            return 0
+        if args.command in ('export', 'validate') and not args.out:
+            raise AnnotationError('this command needs --out <dir>')
         outer, inner = extract_boundaries(
             track_map, session['boundary_strokes_px'],
-            session.get('stroke_width_px', 5))
+            session.get('stroke_width_px', 5),
+            session.get('retained_region_px'))
         result = {'status': 'CANDIDATE', 'outer_points': len(outer),
                   'inner_points': len(inner)}
         if args.command == 'preview':

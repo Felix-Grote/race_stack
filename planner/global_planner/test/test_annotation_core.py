@@ -13,10 +13,11 @@ sys.path.insert(0, str(Path(__file__).parents[1]))
 from global_planner.annotation_core import (  # noqa: E402
     AnnotationError, MAX_DP_EPS_PER_CELL, TrackMap, atomic_write_text,
     build_and_validate,
-    build_manifest, check_session_map, draft_name, export_name,
-    extract_boundaries, geometry_digest, load_session, map_namespace,
-    new_session, patched_free_mask, require_approved, resolve_draft,
-    ridge_seed, save_session, suggest_route)
+    build_manifest, check_session_map, draft_name,
+    effective_free_mask, export_name,
+    extract_boundaries, free_components, geometry_digest, load_session,
+    map_namespace, new_session, patched_free_mask, require_approved,
+    resolve_draft, ridge_seed, save_session, suggest_route)
 from global_planner.route_input import RouteError, validate_route  # noqa: E402
 
 MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
@@ -265,7 +266,8 @@ def test_v1_session_migrates_with_approval_revoked(tmp_path):
     path = tmp_path / 'v1.json'
     path.write_text(json.dumps(session), encoding='utf-8')
     loaded = load_session(path, track_map)
-    assert loaded['version'] == 2
+    assert loaded['version'] == 3
+    assert loaded['retained_region_px'] is None
     assert loaded['approval'] == 'none'
     with pytest.raises(AnnotationError, match='not .operator-approved'):
         require_approved(loaded, track_map)
@@ -560,6 +562,30 @@ def test_node_retry_ack_correlation(tmp_path):
     assert state['status'] == 'PASS'
     assert state['revision'] == rev1
     assert 'request_id' not in state
+
+
+@headless_only
+def test_node_select_region_roundtrip(tmp_path):
+    """The ROS adapter carries selection updates on the update op."""
+    from global_planner.annotation_core import TrackMap as _TrackMap
+    from global_planner.annotation_core import patched_free_mask as _mask
+    _, send = _headless_node(tmp_path)
+    assert send('open', request_id='r1', map='test')['status'] == 'PASS'
+    track_map = _TrackMap(MAPS / 'test/test.yaml')
+    ys, xs = np.nonzero(_mask(track_map, []))
+    pixel = [int(xs[len(xs) // 2]), int(ys[len(ys) // 2])]
+    bad = send('update', request_id='r2', field='retained_region_px',
+               value=[-1, 0])
+    assert bad['status'] == 'FAIL'
+    ok = send('update', request_id='r3', field='retained_region_px',
+              value=pixel)
+    assert ok['status'] == 'PASS'
+    assert ok['session']['retained_region_px'] == pixel
+    assert ok['session']['region']['free_regions'] == 1
+    assert send('extract', request_id='r4')['status'] == 'CANDIDATE'
+    dup = send('update', request_id='r3', field='retained_region_px',
+               value=pixel)
+    assert dup['status'] == 'DUPLICATE'
 
 
 @pytest.mark.parametrize('name', ['test/test', 'baku/baku'])
@@ -1379,5 +1405,239 @@ def test_atomic_write_text_cleans_tmp_on_failure(tmp_path, monkeypatch):
         atomic_write_text(target, '{"v": 2}')
     assert target.read_text(encoding='utf-8') == '{"v": 1}'
     assert list(tmp_path.glob('out.json.tmp-*')) == []
+
+
+# --------------------------------------------------------------------------
+# Retained-region (Keep Legal Track) selection
+# --------------------------------------------------------------------------
+
+TL_CUT = [[20.0, 60.0], [60.0, 20.0]]  # diagonal across the outer corner
+FOUR_CUTS = [TL_CUT,
+             [[140.0, 20.0], [180.0, 60.0]],
+             [[180.0, 140.0], [140.0, 180.0]],
+             [[60.0, 180.0], [20.0, 140.0]]]
+RING_PX = [100, 170]  # free pixel on the annulus bottom arm
+
+
+def _write_annulus_map(tmp_path, name='annulus.png'):
+    """Binary square annulus: white ring, black infield and surround."""
+    import cv2
+    img = np.zeros((200, 200), np.uint8)
+    cv2.rectangle(img, (20, 20), (180, 180), 255, -1)
+    cv2.rectangle(img, (70, 70), (130, 130), 0, -1)
+    return _write_map_copy(tmp_path, img, name=name)
+
+
+def test_effective_mask_without_selection_is_byte_identical(tmp_path):
+    """No seed keeps patched semantics: identical bytes and loops."""
+    import hashlib
+    for track_map in (TrackMap(MAPS / 'test/test.yaml'),
+                      _write_annulus_map(tmp_path)):
+        strokes = [[[10.0, 10.0], [30.0, 10.0]]]
+        assert (effective_free_mask(track_map, strokes).tobytes()
+                == patched_free_mask(track_map, strokes).tobytes())
+        assert (hashlib.sha256(
+            effective_free_mask(track_map, []).tobytes()).hexdigest()
+                == hashlib.sha256(
+                    patched_free_mask(track_map, []).tobytes()).hexdigest())
+        base_outer, base_inner = extract_boundaries(track_map)
+        sel_outer, sel_inner = extract_boundaries(track_map, [], 5, None)
+        assert np.array_equal(sel_outer, base_outer)
+        assert np.array_equal(sel_inner, base_inner)
+
+
+def test_diagonal_cut_needs_selection_then_recovers(tmp_path):
+    """One corner cut: 2 regions rejected pre-selection, ring kept after."""
+    track_map = _write_annulus_map(tmp_path)
+    before = Path(track_map.png_path).read_bytes()
+    base_outer, base_inner = extract_boundaries(track_map)
+    regions = free_components(patched_free_mask(track_map, [TL_CUT]))
+    assert len(regions) == 2
+    with pytest.raises(AnnotationError, match='NEEDS_REGION_SELECTION'):
+        extract_boundaries(track_map, [TL_CUT])
+    with pytest.raises(AnnotationError, match='2 separate regions'):
+        extract_boundaries(track_map, [TL_CUT])
+    legal = effective_free_mask(track_map, [TL_CUT], 5, RING_PX)
+    assert set(np.unique(legal)) <= {0, 255}
+    free = patched_free_mask(track_map, [TL_CUT])
+    pocket = int(((free > 0) & (legal == 0)).sum())
+    assert pocket == min(r['area_px'] for r in regions)
+    assert int((legal > 0).sum()) + pocket == int((free > 0).sum())
+    outer, inner = extract_boundaries(track_map, [TL_CUT], 5, RING_PX)
+    assert _maxmin(inner, base_inner) < 1.0  # far boundary untouched
+    assert _maxmin(outer, base_outer) > 2.0  # new diagonal is followed
+    assert Path(track_map.png_path).read_bytes() == before
+
+
+def test_four_cuts_five_regions_then_select(tmp_path):
+    """Four corner cuts: 5 regions rejected pre-selection, ring kept after."""
+    track_map = _write_annulus_map(tmp_path)
+    base_outer, _ = extract_boundaries(track_map)
+    free = patched_free_mask(track_map, FOUR_CUTS)
+    assert len(free_components(free)) == 5
+    with pytest.raises(AnnotationError, match='NEEDS_REGION_SELECTION'):
+        extract_boundaries(track_map, FOUR_CUTS)
+    outer, _ = extract_boundaries(track_map, FOUR_CUTS, 5, RING_PX)
+    assert _maxmin(outer, base_outer) > 2.0
+
+
+def test_retained_click_rejections(tmp_path):
+    """Occupied/pocket/out-of-bounds/malformed seeds fail closed."""
+    track_map = _write_annulus_map(tmp_path)
+    with pytest.raises(AnnotationError, match='occupied'):
+        extract_boundaries(track_map, [TL_CUT], 5, [100, 100])
+    with pytest.raises(AnnotationError, match='inner boundary'):
+        extract_boundaries(track_map, [TL_CUT], 5, [30, 30])
+    with pytest.raises(AnnotationError, match='outside the map'):
+        extract_boundaries(track_map, [TL_CUT], 5, [-1, 0])
+    with pytest.raises(AnnotationError, match='outside the map'):
+        extract_boundaries(track_map, [TL_CUT], 5, [200, 0])
+    with pytest.raises(AnnotationError, match='integer'):
+        extract_boundaries(track_map, [TL_CUT], 5, [10.5, 3])
+    for bad in ('x', [1, 2, 3], [True, 0], [[0, 0]]):
+        with pytest.raises(AnnotationError, match='null or \\[u, v\\]'):
+            extract_boundaries(track_map, [TL_CUT], 5, bad)
+
+
+def test_effective_mask_is_deterministic(tmp_path):
+    """Repeated masks hash identically, with and without a seed."""
+    import hashlib
+    track_map = _write_annulus_map(tmp_path)
+    for seed in (None, RING_PX):
+        first = hashlib.sha256(
+            effective_free_mask(track_map, [TL_CUT], 5, seed)
+            .tobytes()).hexdigest()
+        again = hashlib.sha256(
+            effective_free_mask(track_map, [TL_CUT], 5, seed)
+            .tobytes()).hexdigest()
+        assert first == again
+
+
+def test_severed_track_fails_closed_after_selection():
+    """A cut that opens the ring is not a track, even when selected."""
+    import cv2
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    cut = [[[100.0, 0.0], [100.0, 442.0]]]
+    with pytest.raises(AnnotationError, match='NEEDS_REGION_SELECTION'):
+        extract_boundaries(track_map, cut)
+    free = patched_free_mask(track_map, cut)
+    assert len(free_components(free)) == 3
+    count, labels, stats, _ = cv2.connectedComponentsWithStats(
+        (free > 0).astype(np.uint8), connectivity=8)
+    big = 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))
+    ys, xs = np.nonzero(labels == big)
+    seed = [int(xs[len(xs) // 2]), int(ys[len(ys) // 2])]
+    with pytest.raises(AnnotationError, match='inner boundary'):
+        extract_boundaries(track_map, cut, 5, seed)
+
+
+def test_frame_touch_rejected_with_selection(tmp_path):
+    """A retained component touching the frame is still rejected."""
+    import cv2
+    img = np.zeros((200, 200), np.uint8)
+    cv2.rectangle(img, (0, 20), (199, 180), 255, -1)
+    cv2.rectangle(img, (70, 70), (130, 130), 0, -1)
+    track_map = _write_map_copy(tmp_path, img, name='frame.png')
+    with pytest.raises(AnnotationError, match='frame'):
+        extract_boundaries(track_map, [], 5, RING_PX)
+
+
+def test_retained_seed_in_digest_save_load(tmp_path):
+    """The seed binds approval identity and survives save/reload."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    session = new_session(track_map)
+    assert session['retained_region_px'] is None
+    plain = geometry_digest(session, track_map)
+    session['retained_region_px'] = [100, 100]
+    assert geometry_digest(session, track_map) != plain
+    session['retained_region_px'] = None
+    assert geometry_digest(session, track_map) == plain
+    session['retained_region_px'] = [100, 170]
+    session['approval'] = 'operator-approved'
+    session['approval_digest'] = geometry_digest(session, track_map)
+    require_approved(session, track_map)
+    path = tmp_path / 'sel.json'
+    save_session(session, path)
+    assert load_session(path, track_map)['retained_region_px'] == [100, 170]
+    other = TrackMap(MAPS / 'baku/baku.yaml')
+    with pytest.raises(AnnotationError, match='identity mismatch'):
+        load_session(path, other)
+
+
+def test_v2_session_migrates_to_v3_with_approval_revoked(tmp_path):
+    """A v2 draft reopens, but its approval never carries forward."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    session = new_session(track_map)
+    session['version'] = 2
+    del session['retained_region_px']
+    session['approval'] = 'operator-approved'
+    session['approval_digest'] = geometry_digest(session, track_map)
+    path = tmp_path / 'v2.json'
+    path.write_text(json.dumps(session), encoding='utf-8')
+    loaded = load_session(path, track_map)
+    assert loaded['version'] == 3
+    assert loaded['retained_region_px'] is None
+    assert loaded['approval'] == 'none'
+    with pytest.raises(AnnotationError, match='not .operator-approved'):
+        require_approved(loaded, track_map)
+
+
+def test_malformed_seed_rejected_on_load(tmp_path):
+    """A hand-edited seed that is not an in-bounds pixel fails closed."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    session = new_session(track_map)
+    path = tmp_path / 'bad.json'
+    session['retained_region_px'] = [1, 2, 3]
+    save_session(session, path)
+    with pytest.raises(AnnotationError, match='null or \\[u, v\\]'):
+        load_session(path, track_map)
+    session['retained_region_px'] = [9999, 9999]
+    save_session(session, path)
+    with pytest.raises(AnnotationError, match='outside the map'):
+        load_session(path, track_map)
+
+
+def test_ridge_seed_stays_in_retained_mask(tmp_path):
+    """The ridge seed never enters excluded pockets."""
+    track_map = _write_annulus_map(tmp_path)
+    outer, inner = extract_boundaries(track_map, [TL_CUT], 5, RING_PX)
+    seed = ridge_seed(track_map, outer, inner, [TL_CUT], 5,
+                      retained_region_px=RING_PX)
+    legal = effective_free_mask(track_map, [TL_CUT], 5, RING_PX)
+    assert len(seed) > 10
+    for point in seed:
+        u, v = int(round(point[0])), int(round(point[1]))
+        assert legal[v, u] > 0
+
+
+def test_cli_select_region_extract_cycle(tmp_path):
+    """Headless select-region -> extract -> clear -> extract refusal."""
+    from global_planner import annotation_tool as tool
+    track_map = _write_annulus_map(tmp_path, name='cli.png')
+    session = new_session(track_map)
+    session['boundary_strokes_px'] = [TL_CUT]
+    session_path = tmp_path / 'cli.json'
+    save_session(session, session_path)
+    yaml_path = str(tmp_path / 'cli.yaml')
+    assert tool.main(['select-region', '--map', yaml_path,
+                      '--session', str(session_path)]) == 1
+    assert tool.main(['select-region', '--map', yaml_path,
+                      '--session', str(session_path),
+                      '--pixel', '100,100']) == 1  # occupied infield
+    assert tool.main(['select-region', '--map', yaml_path,
+                      '--session', str(session_path),
+                      '--pixel', '100,170']) == 0
+    assert load_session(
+        session_path, track_map)['retained_region_px'] == [100, 170]
+    assert tool.main(['extract', '--map', yaml_path,
+                      '--session', str(session_path),
+                      '--out', str(tmp_path / 'out')]) == 0
+    assert tool.main(['select-region', '--map', yaml_path,
+                      '--session', str(session_path), '--clear']) == 0
+    assert load_session(
+        session_path, track_map)['retained_region_px'] is None
+    assert tool.main(['extract', '--map', yaml_path,
+                      '--session', str(session_path),
+                      '--out', str(tmp_path / 'out')]) == 1
 
 

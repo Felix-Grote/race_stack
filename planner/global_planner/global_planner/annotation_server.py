@@ -19,11 +19,16 @@ import math
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
+import cv2
+import numpy as np
+
 from .annotation_core import (AnnotationError, TrackMap,
                               DEFAULT_CHAIN_DP_EPSILON_M, atomic_write_text,
-                              build_and_validate, draft_name, export_name,
-                              extract_boundaries, geometry_digest,
-                              load_session, new_session, require_approved,
+                              build_and_validate, draft_name,
+                              effective_free_mask, export_name,
+                              extract_boundaries, free_components,
+                              geometry_digest, load_session, new_session,
+                              patched_free_mask, require_approved,
                               resolve_draft, ridge_seed, save_session,
                               select_thinning, suggest_route, _signed_area)
 
@@ -100,6 +105,46 @@ def _read_bounded(rfile, length):
     return b''.join(chunks), True
 
 
+def _region_view():
+    """Region-selection status for the current strokes.
+
+    Reports the free-component count, the retained seed (if any), and
+    the excluded pockets with a striped overlay image. Never raises:
+    failures are reported as an ``error`` string for the status line.
+    """
+    session, track_map = STATE['session'], STATE['map']
+    view = {'retained_region_px': session.get('retained_region_px'),
+            'free_regions': None, 'excluded': [],
+            'excluded_png_data_url': None}
+    try:
+        strokes = session.get('boundary_strokes_px', [])
+        width = session.get('stroke_width_px', 5)
+        free = patched_free_mask(track_map, strokes, width)
+        view['free_regions'] = len(free_components(free))
+        seed = session.get('retained_region_px')
+        if seed is None:
+            return view
+        legal = effective_free_mask(track_map, strokes, width, seed)
+        view['retained_area_px'] = int((legal > 0).sum())
+        excl = ((free > 0) & (legal == 0)).astype(np.uint8)
+        view['excluded'] = free_components(excl * 255)
+        if view['excluded']:
+            height, width_px = excl.shape
+            uu, vv = np.meshgrid(np.arange(width_px), np.arange(height))
+            stripe = (((uu + vv) & 7) < 4).astype(np.uint8)
+            overlay = np.zeros((height, width_px, 4), np.uint8)
+            overlay[excl > 0] = (255, 128, 0, 200)
+            overlay[(excl > 0) & (stripe == 0)] = (255, 128, 0, 90)
+            ok, buf = cv2.imencode('.png', overlay)
+            if ok:
+                view['excluded_png_data_url'] = (
+                    'data:image/png;base64,'
+                    + base64.b64encode(bytes(buf)).decode())
+    except AnnotationError as exc:
+        view['error'] = str(exc)
+    return view
+
+
 def _session_view():
     s = dict(STATE['session'])
     png = Path(STATE['map'].png_path).read_bytes()
@@ -108,6 +153,7 @@ def _session_view():
         outer, inner = STATE['extraction']
         s['extraction'] = {'outer_px': outer.tolist(), 'inner_px': inner.tolist()}
     s['candidate_digest'] = STATE.get('candidate_digest')
+    s['region'] = _region_view()
     return s
 
 
@@ -179,10 +225,30 @@ def op_update(body):
     The stroke width is operator-visible and deterministic: changing it
     alters patched geometry, so it revokes approval like any other edit.
     """
-    session, _ = require_open()
+    session, track_map = require_open()
     field, value = body.get('field'), body.get('value')
-    if field not in ('boundary_strokes_px', 'route_px', 'stroke_width_px'):
+    if field not in ('boundary_strokes_px', 'route_px', 'stroke_width_px',
+                     'retained_region_px'):
         raise AnnotationError(f'unknown editable field: {field}')
+    if field == 'retained_region_px':
+        # Selection update: validate against the current mask first, so a
+        # bad click never overwrites the stored selection. Setting or
+        # clearing revokes approval like any other edit.
+        if value is not None:
+            strokes = session.get('boundary_strokes_px', [])
+            width = session.get('stroke_width_px', 5)
+            effective_free_mask(track_map, strokes, width, value)
+            # The selected component must itself be a valid track; a
+            # pocket without annular topology is rejected here, before
+            # anything is stored.
+            extract_boundaries(track_map, strokes, width, value)
+        session[field] = value
+        _touch(session)  # selection change revokes approval
+        note = 'cleared' if value is None else f'set to {value}'
+        return {'status': 'PASS',
+                'message': f'retained region {note} '
+                           f'(draft rev {session["revision"]}, unapproved)',
+                'session': _session_view()}
     if field == 'stroke_width_px':
         if (isinstance(value, bool) or not isinstance(value, int)
                 or not 1 <= value <= 31):
@@ -209,6 +275,10 @@ def op_update(body):
         if field == 'route_px' and 0 < total < 3:
             raise AnnotationError('route needs at least 3 points (or empty to clear)')
     session[field] = value
+    if field in ('boundary_strokes_px', 'stroke_width_px'):
+        # Boundary edits change the component layout; the stored seed no
+        # longer refers to a known component.
+        session['retained_region_px'] = None
     _touch(session)  # any edit revokes approval
     note = 'cleared' if field == 'route_px' and not value else 'updated'
     return {'status': 'PASS',
@@ -228,10 +298,11 @@ def op_suggest(body):
     redraw it, and only an explicit approve authorizes export.
     """
     session, track_map = require_open()
+    retained = session.get('retained_region_px')
     try:
         outer, inner = extract_boundaries(
             track_map, session['boundary_strokes_px'],
-            session.get('stroke_width_px', 5))
+            session.get('stroke_width_px', 5), retained)
     except AnnotationError:
         # No boundaries, no suggestion: drop any stale overlay so the
         # display never shows geometry from before the failure. The
@@ -248,7 +319,8 @@ def op_suggest(body):
         ('suggest',
          lambda: suggest_route(outer, inner, hint)),
         ('ridge',
-         lambda: ridge_seed(track_map, outer, inner, strokes, width)),
+         lambda: ridge_seed(track_map, outer, inner, strokes, width,
+                            retained_region_px=retained)),
     )
     failures = []
     for name, make in methods:
@@ -291,7 +363,8 @@ def op_extract(body):
     try:
         extraction = extract_boundaries(
             track_map, session['boundary_strokes_px'],
-            session.get('stroke_width_px', 5))
+            session.get('stroke_width_px', 5),
+            session.get('retained_region_px'))
     except AnnotationError:
         STATE['extraction'] = None
         STATE['candidate_digest'] = None
@@ -352,7 +425,8 @@ def op_preview(body):
     try:
         outer, inner = extract_boundaries(
             track_map, session['boundary_strokes_px'],
-            session.get('stroke_width_px', 5))
+            session.get('stroke_width_px', 5),
+            session.get('retained_region_px'))
     except AnnotationError:
         # Boundary failure: nothing valid to show; drop the stale
         # overlay and candidate, keep the operator's strokes.
@@ -422,7 +496,8 @@ def op_export(body):
     try:
         outer, inner = extract_boundaries(
             track_map, session['boundary_strokes_px'],
-            session.get('stroke_width_px', 5))
+            session.get('stroke_width_px', 5),
+            session.get('retained_region_px'))
     except AnnotationError:
         # Geometry broke after approval (should be unreachable: edits
         # revoke approval first). Drop the stale overlay either way.
@@ -467,7 +542,8 @@ def op_validate(body):
     try:
         outer, inner = extract_boundaries(
             track_map, session['boundary_strokes_px'],
-            session.get('stroke_width_px', 5))
+            session.get('stroke_width_px', 5),
+            session.get('retained_region_px'))
     except AnnotationError:
         STATE['extraction'] = None
         STATE['candidate_digest'] = None
@@ -515,6 +591,7 @@ def op_undo(body):
     strokes = session.get('boundary_strokes_px', [])
     if strokes:
         strokes.pop()
+    session['retained_region_px'] = None
     _touch(session)
     return {'status': 'PASS',
             'message': 'last boundary stroke removed; approval revoked '

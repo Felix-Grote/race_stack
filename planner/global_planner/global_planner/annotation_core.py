@@ -148,7 +148,7 @@ class TrackMap:
 # Session persistence (annotation_project.json - the editable truth)
 # --------------------------------------------------------------------------
 
-SESSION_VERSION = 2
+SESSION_VERSION = 3
 
 
 # Wall-simplification settings the explicit offline validation tries, in
@@ -174,6 +174,7 @@ def new_session(track_map, author='operator'):
         'route_px': [],              # one directed closed rough loop
         'stroke_width_px': 5,
         'chain_dp_epsilon_m': DEFAULT_CHAIN_DP_EPSILON_M,  # part of identity
+        'retained_region_px': None,  # operator-selected legal component seed
         'approval': 'none',
         'approval_digest': None,     # geometry digest the approval was granted for
         'revision': 1,               # incremented on every session mutation
@@ -182,11 +183,13 @@ def new_session(track_map, author='operator'):
 
 
 def _migrate_session(session):
-    """Upgrade a v1 draft to v2; approval never survives migration.
+    """Upgrade old drafts; approval never survives migration.
 
     v1 bound approval to a bare string with no geometry digest and bound the
-    map to hash+size only. Carrying such an approval forward would authorize
-    an unknown geometry under a stronger contract, so it is revoked here.
+    map to hash+size only. v2 lacks the retained-region seed, so an approval
+    granted without it cannot authorize the selected-component geometry.
+    Carrying such an approval forward would authorize an unknown geometry
+    under a stronger contract, so it is revoked here.
     """
     if session.get('version') == 1:
         session = dict(session)
@@ -195,7 +198,13 @@ def _migrate_session(session):
         session['approval'] = 'none'
         session['approval_digest'] = None
         session.setdefault('revision', 1)
-        return session
+    if session.get('version') == 2:
+        session = dict(session)
+        session['version'] = 3
+        session['retained_region_px'] = None
+        session['approval'] = 'none'
+        session['approval_digest'] = None
+        session.setdefault('revision', 1)
     return session
 
 
@@ -223,6 +232,29 @@ def check_session_map(session, track_map):
                               'occupied/free would invert')
 
 
+def _checked_seed(retained_region_px, track_map):
+    """Return the seed as [u, v] ints, or raise for malformed input.
+
+    Shape and bounds are checked here; whether the pixel is free is
+    checked against the patched mask by ``effective_free_mask``.
+    """
+    seed = retained_region_px
+    if seed is None:
+        return None
+    if (not isinstance(seed, (list, tuple)) or len(seed) != 2
+            or any(isinstance(v, bool) for v in seed)):
+        raise AnnotationError('retained region must be null or [u, v]')
+    try:
+        u, v = int(seed[0]), int(seed[1])
+    except (TypeError, ValueError):
+        raise AnnotationError('retained region must be null or [u, v]')
+    if float(seed[0]) != u or float(seed[1]) != v:
+        raise AnnotationError('retained region must be integer pixels')
+    if not (0 <= u < track_map.width and 0 <= v < track_map.height):
+        raise AnnotationError('retained region is outside the map')
+    return [u, v]
+
+
 def geometry_digest(session, track_map):
     """Digest of the exact editable geometry an approval refers to.
 
@@ -235,6 +267,7 @@ def geometry_digest(session, track_map):
         'map': track_map.map_identity(),
         'stroke_width_px': session.get('stroke_width_px', 5),
         'boundary_strokes_px': session.get('boundary_strokes_px', []),
+        'retained_region_px': session.get('retained_region_px'),
         'route_px': session.get('route_px', []),
         'chain_dp_epsilon_m': session.get('chain_dp_epsilon_m',
                                             DEFAULT_CHAIN_DP_EPSILON_M),
@@ -363,6 +396,8 @@ def load_session(path, track_map):
     if session.get('version') != SESSION_VERSION:
         raise AnnotationError('unsupported session version')
     check_session_map(session, track_map)
+    session['retained_region_px'] = _checked_seed(
+        session.get('retained_region_px'), track_map)
     return session
 
 
@@ -493,6 +528,47 @@ def patched_free_mask(track_map, boundary_strokes_px, stroke_width_px=5):
     return np.where(patched, 0, 255).astype(np.uint8)
 
 
+def effective_free_mask(track_map, boundary_strokes_px, stroke_width_px=5,
+                        retained_region_px=None):
+    """Free mask with an optional operator-selected component retained.
+
+    Without a seed this returns ``patched_free_mask()`` unchanged, so
+    unedited maps and references are byte-identical. With a seed pixel
+    ``[u, v]`` in the free space ``F``, it returns the 8-connected
+    component containing that pixel: ``Flegal = C(p)`` with
+    ``Flegal ⊆ F ⊆ F0`` (restriction only; no new free space). Other
+    disconnected pockets become occupied in the returned mask.
+    """
+    free = patched_free_mask(
+        track_map, boundary_strokes_px, stroke_width_px)
+    seed = _checked_seed(retained_region_px, track_map)
+    if seed is None:
+        return free
+    u, v = seed
+    if free[v, u] == 0:
+        raise AnnotationError(
+            'retained pixel is occupied (stroke or wall); '
+            'click free track instead')
+    count, labels, stats, _ = cv2.connectedComponentsWithStats(
+        (free > 0).astype(np.uint8), connectivity=8)
+    label = int(labels[v, u])
+    if label <= 0 or count <= label:
+        raise AnnotationError('retained pixel is not in free space')
+    return np.where(labels == label, 255, 0).astype(np.uint8)
+
+
+def free_components(free_mask):
+    """8-connected free regions, largest first: area + centroid in px."""
+    count, labels, stats, centroids = cv2.connectedComponentsWithStats(
+        (free_mask > 0).astype(np.uint8), connectivity=8)
+    regions = [{'area_px': int(stats[i, cv2.CC_STAT_AREA]),
+                'centroid_px': [float(centroids[i][0]),
+                                float(centroids[i][1])]}
+               for i in range(1, count)]
+    regions.sort(key=lambda r: (-r['area_px'], r['centroid_px']))
+    return regions
+
+
 def _annulus_loops(mask):
     """Split a free mask into (outer, inner) closed loops or reject."""
     contours, hierarchy = cv2.findContours(
@@ -521,21 +597,38 @@ def _touches_frame(mask):
             or bool(mask[:, 0].any()) or bool(mask[:, -1].any()))
 
 
-def extract_boundaries(track_map, boundary_strokes_px=(), stroke_width_px=5):
+def extract_boundaries(track_map, boundary_strokes_px=(), stroke_width_px=5,
+                        retained_region_px=None):
     """Extract (outer, inner) closed loops in file-pixel coordinates.
 
     The free space must be exactly one connected region with exactly one
     hole (a planar annulus). Any other topology is rejected - an open
     gap merges the hole with the outside, a split adds regions - rather
     than being guessed at.
+
+    Strokes that cut off pockets fragment the mask; without a retained
+    seed that raises NEEDS_REGION_SELECTION (select one component, do
+    not approve). With a seed, only its component is checked.
     """
-    free = patched_free_mask(track_map, boundary_strokes_px, stroke_width_px)
+    free = effective_free_mask(track_map, boundary_strokes_px,
+                               stroke_width_px, retained_region_px)
     if _touches_frame(free):
         raise AnnotationError(
             'extraction failed: free space touches the image frame '
             '(open outer wall at the map edge; draw a boundary stroke '
             'to close the gap)')
-    return _annulus_loops(free)
+    try:
+        return _annulus_loops(free)
+    except AnnotationError as exc:
+        if retained_region_px is None and 'separate regions' in str(exc):
+            regions = free_components(free)
+            areas = ', '.join(str(r['area_px']) for r in regions)
+            raise AnnotationError(
+                'NEEDS_REGION_SELECTION: free space has '
+                f'{len(regions)} separate regions '
+                f'(areas px: {areas}); select the legal track component '
+                'before extraction') from exc
+        raise
 
 
 def _arc(chain_closed, start_idx, end_idx, step_sign):
@@ -784,7 +877,8 @@ def _resample_closed(points_px, spacing_px):
 # --------------------------------------------------------------------------
 
 def ridge_seed(track_map, outer_px, inner_px, boundary_strokes_px=(),
-               stroke_width_px=5, spacing_m=0.75, count=160, iters=60):
+               stroke_width_px=5, spacing_m=0.75, count=160, iters=60,
+               retained_region_px=None):
     """Relax a crude midline seed onto the free-space ridge.
 
     The correspondence-based midline (each outer point paired with its
@@ -797,7 +891,8 @@ def ridge_seed(track_map, outer_px, inner_px, boundary_strokes_px=(),
     closed seed in file-pixel coordinates following the outer loop's
     direction; strict ``build_and_validate`` remains the acceptance gate.
     """
-    free = patched_free_mask(track_map, boundary_strokes_px, stroke_width_px)
+    free = effective_free_mask(track_map, boundary_strokes_px,
+                                 stroke_width_px, retained_region_px)
     height, width = free.shape
     dist = cv2.distanceTransform(free, cv2.DIST_L2, 3)
     gradu = cv2.Sobel(dist, cv2.CV_64F, 1, 0, ksize=3)
