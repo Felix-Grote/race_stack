@@ -30,7 +30,8 @@ from .annotation_core import (AnnotationError, TrackMap,
                               geometry_digest, load_session, new_session,
                               patched_free_mask, require_approved,
                               resolve_draft, ridge_seed, save_session,
-                              select_thinning, suggest_route, _signed_area)
+                              select_thinning, suggest_route, _checked_seed,
+                              _signed_area)
 
 STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
          'out_dir': None, 'candidate_digest': None}
@@ -242,7 +243,10 @@ def op_update(body):
             # pocket without annular topology is rejected here, before
             # anything is stored.
             extract_boundaries(track_map, strokes, width, value)
-        session[field] = value
+        # Store the canonical [u, v] ints: an in-memory float seed
+        # (e.g. 100.0 from a Python client) would digest differently
+        # after save/reload normalization and break re-approval.
+        session[field] = _checked_seed(value, track_map)
         _touch(session)  # selection change revokes approval
         note = 'cleared' if value is None else f'set to {value}'
         return {'status': 'PASS',

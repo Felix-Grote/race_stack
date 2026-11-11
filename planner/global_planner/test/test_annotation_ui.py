@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).parents[1]))
 
 from global_planner.annotation_core import (  # noqa: E402
     AnnotationError, TrackMap, build_and_validate, export_name,
-    extract_boundaries, geometry_digest)
+    extract_boundaries, geometry_digest, load_session, save_session)
 from global_planner import annotation_server as server  # noqa: E402
 
 MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
@@ -445,6 +445,30 @@ def test_select_region_server_flow(syn_backend):
     assert srv.STATE['session']['boundary_strokes_px'] == [SYN_CUT]
     with pytest.raises(AnnotationError, match='NEEDS_REGION_SELECTION'):
         srv.op_extract({})
+
+
+def test_select_region_stores_canonical_integer_seed(syn_backend, tmp_path):
+    """Float-encoded clicks store canonical ints; digest survives reload.
+
+    A Python client may send 100.0, which json round-trips as a float;
+    the stored seed must still reload to the identical digest.
+    """
+    srv = syn_backend
+    srv.op_open({'map': 'syn'})
+    srv.op_update({'field': 'boundary_strokes_px', 'value': [SYN_CUT]})
+    srv.op_update({'field': 'retained_region_px',
+                   'value': [float(SYN_RING[0]), float(SYN_RING[1])]})
+    stored = srv.STATE['session']['retained_region_px']
+    assert stored == SYN_RING
+    assert all(type(v) is int for v in stored)
+    assert srv.op_extract({})['status'] == 'CANDIDATE'
+    track_map = srv.STATE['map']
+    before = geometry_digest(srv.STATE['session'], track_map)
+    path = tmp_path / 'float_seed.json'
+    save_session(srv.STATE['session'], path)
+    reloaded = load_session(path, track_map)
+    assert reloaded['retained_region_px'] == SYN_RING
+    assert geometry_digest(reloaded, track_map) == before
 
 
 def test_boundary_edit_clears_selection(syn_backend):
