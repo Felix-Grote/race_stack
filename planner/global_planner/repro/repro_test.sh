@@ -34,31 +34,27 @@ out.write_text(json.dumps(payload))
 print(f'strict PASS prep={len(prepared.samples)} digest={route.digest}')
 EOF
 cmp "$COMMITTED" "$REGEN" && echo "regen byte-identical to committed manifest"
-"$PIN" - "$MAP" "$REGEN" "$OUT" "$EXPECTED_H" <<'EOF'
+# Compile through the shipped entry point (never an inline copy): the
+# single provenance-label rule in compile_manifest.py keeps H identical.
+RECEIPT="$("$PIN" -m global_planner.compile_manifest \
+    "$REGEN" "$OUT/${MAP}_out" "$MAP")"
+echo "$RECEIPT"
+"$SYS" - "$REGEN" "$OUT/${MAP}_out" "$EXPECTED_H" "$RECEIPT" <<'EOF'
 import json, math, sys
-from global_planner.route_artifact import decode_record, load_reference
-from global_planner.route_compile import compile_reference, load_policy
-from global_planner.route_input import validate_route
-from global_planner.route_validate import Footprint
-from global_planner.cyclic_retime import DynamicsModel
 from pathlib import Path
-name, man, out, expected = sys.argv[1:5]
+from global_planner.route_artifact import load_reference
+from global_planner.route_compile import load_policy
+man, out, expected, receipt_s = sys.argv[1:5]
+receipt = json.loads(receipt_s)
+assert receipt['status'] == 'PASS', receipt
+assert receipt['geometry_status'] == 'PASS', receipt
+assert receipt['dynamics_status'] == 'PASS', receipt
+assert receipt['H'] == expected, (receipt['H'], expected)
+print(f'compile PASS H={receipt["H"]} geom=PASS dyn=PASS (matches {expected})')
 cfg = Path('planner/global_planner/config/project_a')
-policies, context, spacing = load_policy(cfg / 'policies/synthetic_policy.json')
-md = json.loads((cfg / 'models/synthetic_model.json').read_text())
-model = decode_record(DynamicsModel, md['model'], 'model')
-footprint = decode_record(Footprint, md['footprint'], 'footprint')
-route = validate_route(json.loads(Path(man).read_text()))
-receipt = compile_reference(
-    route, model, footprint, policies, output_dir=f'{out}/{name}_out',
-    retime_spacing_m=spacing, validation_context=context,
-    provenance={'map': name, 'manifest': Path(man).name})
-assert receipt.status == 'PASS', receipt.reason
-assert receipt.geometry.status == 'PASS', receipt.geometry.reason
-assert receipt.dynamics.status == 'PASS', receipt.dynamics.reason
-assert receipt.H == expected, (receipt.H, expected)
-print(f'compile PASS H={receipt.H} geom=PASS dyn=PASS (matches {expected})')
-ref = load_reference(receipt.artifact_path, expected_H=expected,
+policies, context, spacing = load_policy(
+    str(cfg / 'policies/synthetic_policy.json'))
+ref = load_reference(out, expected_H=expected,
                      validation_context=context)
 smp = ref.sample(5.0)
 assert smp.H == expected, (smp.H, expected)

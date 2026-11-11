@@ -70,10 +70,13 @@ def _touch(session):
 
     Every geometry mutation funnels through here, so no edit path (update,
     undo, clear) can retain an approval granted to a previous geometry.
+    The persisted preview digest is cleared with the in-memory candidate
+    so a saved draft never approves pre-edit geometry.
     """
     session['revision'] = int(session.get('revision', 1)) + 1
     session['approval'] = 'none'
     session['approval_digest'] = None
+    session['preview_digest'] = None
     STATE['extraction'] = None
     STATE['candidate_digest'] = None
 
@@ -453,6 +456,9 @@ def op_preview(body):
         raise
     digest = geometry_digest(session, track_map)
     STATE['candidate_digest'] = digest
+    # Persist the previewed candidate in the session (written forward on
+    # save) so the headless CLI enforces the same fresh-preview binding.
+    session['preview_digest'] = digest
     receipt = _validated_receipt(payload, route, prepared, info, track_map)
     receipt['candidate_digest'] = digest
     receipt['session'] = _session_view()

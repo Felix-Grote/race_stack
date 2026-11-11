@@ -89,9 +89,11 @@ Foxglove Bridge roundtrip passed against this code — see Verified.
   track. Input-convention change, not a checker change: the checker still
   verifies the reference starts inside the box.
 - Approval is explicit, digest-bound and preview-gated: preview builds the
-  exact candidate (bit-identical receipt to export) without writing or
-  approving; approve binds the quoted preview digest to the current
-  geometry; export re-validates and writes only the approved candidate.
+  exact candidate (bit-identical receipt to export) without granting
+  approval (the CLI records the previewed digest in the session so both
+  transports enforce the same fresh-preview binding); approve binds the
+  quoted preview digest to the current geometry; export re-validates and
+  writes only the approved candidate.
   Every edit (strokes, route, suggest, width, undo) bumps the session
   revision, clears the candidate and revokes approval. The headless CLI
   enforces the same digest binding. A stale approval can never authorize

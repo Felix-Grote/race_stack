@@ -444,6 +444,9 @@ def test_cli_export_refuses_stale_approval(tmp_path):
     session['route_px'] = _midline_seed(outer, inner)
     session['approval'] = 'operator-approved'
     session['approval_digest'] = geometry_digest(session, track_map)
+    # A previewed candidate is persisted for the approval to bind to,
+    # exactly as preview + approve would record it.
+    session['preview_digest'] = session['approval_digest']
     session_path = tmp_path / 'session.json'
     save_session(session, session_path)
     out = tmp_path / 'cli_out'
@@ -476,13 +479,15 @@ def test_cli_preview_approve_export_cycle(tmp_path):
                       '--session', str(session_path),
                       '--out', str(out)]) == 1
     assert not (out / export_name(track_map)).exists()
-    # Preview is read-only: prints the candidate digest, writes nothing.
+    # Preview grants no approval and writes no export file, but persists
+    # the previewed candidate digest for approve/export to bind to.
     assert tool.main(['preview', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
                       '--out', str(out)]) == 0
     assert not (out / export_name(track_map)).exists()
     candidate = geometry_digest(
         load_session(session_path, track_map), track_map)
+    assert load_session(session_path, track_map)['preview_digest'] == candidate
     # Approve needs the previewed candidate digest.
     assert tool.main(['approve', '--map', str(track_map.yaml_path),
                       '--session', str(session_path),
@@ -501,6 +506,40 @@ def test_cli_preview_approve_export_cycle(tmp_path):
     assert (out / export_name(track_map)).exists()
     payload = _json.loads((out / export_name(track_map)).read_text())
     assert payload['provenance']['approval'] == 'operator-approved'
+
+
+def test_cli_approve_export_require_persisted_preview(tmp_path):
+    """CLI approve/export mirror the server fresh-preview binding.
+
+    Quoting the current geometry digest is not enough: without a
+    persisted preview the approval is refused, and an approval recorded
+    without one cannot export — the same two checks the server makes
+    against STATE['candidate_digest'].
+    """
+    from global_planner import annotation_tool as tool
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map, [], 5)
+    session = new_session(track_map)
+    session['route_px'] = _midline_seed(outer, inner)
+    session_path = tmp_path / 'session.json'
+    save_session(session, session_path)
+    candidate = geometry_digest(session, track_map)
+    base = ['--map', str(track_map.yaml_path),
+            '--session', str(session_path),
+            '--out', str(tmp_path / 'cli_out')]
+    # No preview persisted yet: the correct digest is still refused.
+    assert tool.main(['approve'] + base + ['--candidate', candidate]) == 1
+    assert load_session(session_path, track_map)['preview_digest'] is None
+    # An approval recorded without a preview cannot export either.
+    approved = load_session(session_path, track_map)
+    approved['approval'] = 'operator-approved'
+    approved['approval_digest'] = candidate
+    save_session(approved, session_path)
+    assert tool.main(['export'] + base) == 1
+    # After a real preview both checks pass on the unchanged geometry.
+    assert tool.main(['preview'] + base) == 0
+    assert tool.main(['approve'] + base + ['--candidate', candidate]) == 0
+    assert tool.main(['export'] + base) == 0
 
 
 def _headless_node(tmp_path):
@@ -531,6 +570,18 @@ def _headless_node(tmp_path):
         return pub.sent[-1]
 
     return node, send
+
+
+@headless_only
+def test_node_isolation_gate():
+    """Ambient domain + root namespace is refused; either isolation or
+    explicit acknowledgement passes the gate."""
+    from global_planner.annotation_node import _isolation_ok
+    assert not _isolation_ok('0', '/')
+    assert not _isolation_ok('', '/')
+    assert _isolation_ok('42', '/')
+    assert _isolation_ok('0', '/annot')
+    assert _isolation_ok('42', '/annot')
 
 
 @headless_only
@@ -1574,6 +1625,18 @@ def test_retained_seed_rejects_nonfinite(tmp_path):
                       '--session', str(session_path),
                       '--pixel', 'inf,0']) == 1
     assert load_session(session_path, track_map)['retained_region_px'] is None
+
+
+def test_compile_manifest_usage_error_and_pinned_gate(monkeypatch, capsys):
+    """Short argv is a usage error, not a traceback; a wrong interpreter
+    fails closed before anything is imported or compiled."""
+    from global_planner import compile_manifest
+    assert compile_manifest.main(['compile_manifest.py']) == 2
+    assert 'usage' in capsys.readouterr().err
+    monkeypatch.setattr(compile_manifest.sys, 'version',
+                        '0.0.0 (fake)', raising=False)
+    gate = compile_manifest._check_pinned_stack()
+    assert gate is not None and 'cpython' in gate
 
 
 def test_effective_mask_is_deterministic(tmp_path):

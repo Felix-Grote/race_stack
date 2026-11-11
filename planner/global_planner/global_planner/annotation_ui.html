@@ -82,7 +82,15 @@ function info(){
     b.onclick=()=>{ selected=(selected===i?-1:i); info(); draw(); }; sl.appendChild(b); });
   document.getElementById('removeStroke').disabled=!(selected>=0&&selected<nb);
 }
-async function api(path, body){ const r=await fetch(path,{method:body?'POST':'GET',headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined}); return r.json(); }
+async function api(path, body){
+  // Transport failures must reach the operator as FAIL, never as an
+  // unhandled rejection: every call site routes non-PASS through fail().
+  try{
+    const r=await fetch(path,{method:body?'POST':'GET',headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+    if(!r.ok) return {status:'FAIL',message:'backend HTTP '+r.status};
+    return await r.json();
+  }catch(e){ return {status:'FAIL',message:'backend unreachable: '+((e&&e.message)||e)}; }
+}
 // Local-only failure path: keep the operator's strokes, drop every overlay
 // derived from geometry that just failed, never show a stale candidate.
 function fail(res){ if(S) S.extraction=null; validated={route:[],left:[],right:[]};

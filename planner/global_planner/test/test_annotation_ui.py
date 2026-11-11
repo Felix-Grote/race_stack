@@ -286,6 +286,11 @@ def test_html_shows_digest_and_approval_state():
     assert 'approval ${S.approval}' in html
     assert 'candidate ${(S.candidate_digest' in html
     assert 'rev ${S.revision}' in html
+    # Transport failures surface as FAIL instead of unhandled rejections:
+    # the api() helper fails closed on non-OK HTTP (!r.ok) and on fetch
+    # exceptions ('backend unreachable').
+    assert '!r.ok' in html
+    assert 'backend unreachable' in html
 
 
 def test_suggest_keeps_suggest_seed_on_test(backend):

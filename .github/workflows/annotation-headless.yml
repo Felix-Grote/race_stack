@@ -15,8 +15,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - run: pip install opencv-python-headless numpy scipy pytest pillow
+          python-version: '3.12.13'
+      # Generator pins follow repro/receipts.json (opencv 5.x numerics define
+      # ridge-seed geometry); the env.sh gate below enforces them.
+      - run: pip install "opencv-python-headless==5.*" "numpy==2.5.4" scipy pytest pillow
+      - run: bash planner/global_planner/repro/env.sh
+        env:
+          SYSTEM_PY: python
       - run: >
           TMPDIR=${{ runner.temp }}
           PYTHONPATH=planner/global_planner

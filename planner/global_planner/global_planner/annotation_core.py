@@ -177,6 +177,9 @@ def new_session(track_map, author='operator'):
         'retained_region_px': None,  # operator-selected legal component seed
         'approval': 'none',
         'approval_digest': None,     # geometry digest the approval was granted for
+        'preview_digest': None,      # candidate digest of the last preview;
+                                     # approve/export bind to it (fresh-preview
+                                     # rule, same as the server candidate)
         'revision': 1,               # incremented on every session mutation
         'author': author,
     }
@@ -289,7 +292,7 @@ PINNED_PY = os.environ.get('PINNED_PY', os.path.expanduser(
     '~/venvs/forza-pinned/bin/python'))
 
 
-def run_pinned_compile(manifest_path, out_dir, map_name, eps,
+def run_pinned_compile(manifest_path, out_dir, map_name,
                        timeout_s=900):
     """Compile a manifest file under the pinned interpreter.
 
@@ -307,7 +310,7 @@ def run_pinned_compile(manifest_path, out_dir, map_name, eps,
     try:
         proc = subprocess.run(
             [PINNED_PY, '-m', 'global_planner.compile_manifest',
-             str(manifest_path), str(out_dir), map_name, repr(eps)],
+             str(manifest_path), str(out_dir), map_name],
             capture_output=True, text=True, timeout=timeout_s, env=env)
     except OSError as exc:
         raise AnnotationError(
@@ -357,7 +360,7 @@ def select_thinning(track_map, outer, inner, route_px, author, map_name,
             manifest.parent.mkdir(parents=True, exist_ok=True)
             atomic_write_text(manifest, json.dumps(payload, indent=1))
             receipt = run_pinned_compile(
-                manifest, work / ('compile-%d' % index), map_name, eps)
+                manifest, work / ('compile-%d' % index), map_name)
         except Exception as exc:  # noqa: BLE001 - record and try next
             attempts.append('eps %.2f: %s' % (eps, exc))
             continue

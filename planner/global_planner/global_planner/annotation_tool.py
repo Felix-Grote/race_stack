@@ -77,6 +77,7 @@ def main(argv=None):
             session['revision'] = int(session.get('revision', 1)) + 1
             session['approval'] = 'none'
             session['approval_digest'] = None
+            session['preview_digest'] = None
             save_session(session, args.session)
             print(json.dumps({'status': 'PASS',
                               'retained_region_px':
@@ -92,10 +93,10 @@ def main(argv=None):
         result = {'status': 'CANDIDATE', 'outer_points': len(outer),
                   'inner_points': len(inner)}
         if args.command == 'preview':
-            # Read-only: show the exact transformed geometry and its
-            # digest without granting approval or writing any file.
-            # Built with the export approval provenance so the receipt
-            # matches what export will write.
+            # Show the exact transformed geometry and its digest without
+            # granting approval or writing any export file. The previewed
+            # candidate digest is persisted in the session so approve and
+            # export enforce the same fresh-preview binding as the server.
             if not session.get('route_px'):
                 raise AnnotationError('draw the directed route loop first')
             _, route, prepared, info = build_and_validate(
@@ -104,13 +105,22 @@ def main(argv=None):
                 approval='operator-approved',
                 chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
             result = _validated_receipt(route, prepared, info)
-            result['candidate_digest'] = geometry_digest(session, track_map)
+            digest = geometry_digest(session, track_map)
+            result['candidate_digest'] = digest
+            session['preview_digest'] = digest
+            session['revision'] = int(session.get('revision', 1)) + 1
+            save_session(session, args.session)
         elif args.command == 'approve':
             # Bind approval to the previewed candidate digest; the
-            # geometry must be unchanged since that preview.
-            if not args.candidate:
-                raise AnnotationError('approve needs --candidate <digest> '
-                                      'from a preview')
+            # geometry must be unchanged since that preview. Both checks
+            # mirror the server (annotation_server.op_approve): the quoted
+            # digest must be the persisted last preview, and it must still
+            # match the current geometry.
+            if (not args.candidate
+                    or args.candidate != session.get('preview_digest')):
+                raise AnnotationError('approve refused: no fresh preview '
+                                      'for this geometry '
+                                      '(preview the candidate first)')
             if args.candidate != geometry_digest(session, track_map):
                 raise AnnotationError('approve refused: geometry changed '
                                       'since preview (preview again)')
@@ -132,7 +142,14 @@ def main(argv=None):
         elif args.command == 'export':
             # Approval must be bound to this exact geometry; a stale
             # approval from before the last edit is refused, not honored.
+            # The second check mirrors the server (op_export): the approval
+            # must target the last previewed candidate.
             require_approved(session, track_map)
+            if (session.get('approval_digest')
+                    != session.get('preview_digest')):
+                raise AnnotationError('export refused: no fresh preview '
+                                      'for the approved geometry (preview, '
+                                      'approve, then export)')
             payload, route, prepared, info = build_and_validate(
                 track_map, outer, inner, session['route_px'],
                 author=session.get('author', 'operator'),
@@ -156,6 +173,7 @@ def main(argv=None):
             session['revision'] = int(session.get('revision', 1)) + 1
             session['approval'] = 'none'
             session['approval_digest'] = None
+            session['preview_digest'] = None
             save_session(session, args.session)
             result = {'status': 'PASS',
                       'chain_dp_epsilon_m': eps,

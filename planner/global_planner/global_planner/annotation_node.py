@@ -20,6 +20,8 @@ Foxglove Bridge / Lichtblick can expose these topics to a panel; the
 geometry core does not depend on that choice.
 """
 import json
+import os
+import sys
 
 try:
     import rclpy
@@ -136,6 +138,17 @@ class AnnotationNode(Node if rclpy else object):
         self._pub.publish(out)
 
 
+def _isolation_ok(domain_id, namespace):
+    """True when the node cannot join the ambient driving graph.
+
+    Isolation holds when the domain is non-default or the namespace is
+    pushed off root: relative topics then resolve away from the driving
+    graph's names on the driving domain. Both default (domain 0 and
+    root namespace) means the wire names sit on the ambient graph.
+    """
+    return (domain_id or '').strip() not in ('', '0') or namespace != '/'
+
+
 def main(args=None):
     """Entry point; refuses to start without ROS (use the HTTP server).
 
@@ -146,14 +159,32 @@ def main(args=None):
     Isolate the node from the driving graph: export a dedicated
     ``ROS_DOMAIN_ID`` and push a namespace (topics are relative, so
     they follow it), e.g. ``-r __ns:=/annot``. With the default
-    namespace the wire names stay ``/planner_annotation/command`` and
-    ``/planner_annotation/state``.
+    namespace on the default domain the wire names stay
+    ``/planner_annotation/command`` and ``/planner_annotation/state``
+    on the ambient graph, so startup refuses unless isolated or
+    explicitly acknowledged with ``--allow-ambient-domain``.
     """
     if rclpy is None:
         raise SystemExit('rclpy unavailable: run annotation_server locally, '
                          'or source ROS 2 Humble for the ROS adapter')
-    rclpy.init(args=args)
-    rclpy.spin(AnnotationNode())
+    remainder = list(args) if args is not None else sys.argv[1:]
+    allow_ambient = False
+    if '--allow-ambient-domain' in remainder:
+        allow_ambient = True
+        remainder = [a for a in remainder if a != '--allow-ambient-domain']
+    rclpy.init(args=remainder)
+    node = AnnotationNode()
+    if (not allow_ambient
+            and not _isolation_ok(os.environ.get('ROS_DOMAIN_ID', '0'),
+                                  node.get_namespace())):
+        node.destroy_node()
+        rclpy.shutdown()
+        raise SystemExit(
+            'annotation_node refused: default ROS_DOMAIN_ID with root '
+            'namespace would join the driving graph; export a dedicated '
+            'ROS_DOMAIN_ID and push a namespace (e.g. -r __ns:=/annot), '
+            'or pass --allow-ambient-domain to acknowledge the risk')
+    rclpy.spin(node)
     rclpy.shutdown()
 
 
