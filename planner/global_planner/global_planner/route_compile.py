@@ -21,6 +21,7 @@ from .iqp_route_adapter import optimize
 from .route_artifact import (CONTRACT_ID, PolicySet, ValidationContext, artifact_identity,
                              build_payload, canonical_bytes, decode_record, load_reference,
                              publish_reference, read_json)
+from .route_corridor import seed_curve
 from .route_input import Route, validate_route
 from .route_validate import Footprint, validate_geometry
 from .route_validate_dynamics import validate_dynamics
@@ -185,7 +186,8 @@ def compile_reference(route, model, footprint, policies, *, output_dir,
 
     try:
         began, began_cpu = time.monotonic(), _cpu()
-        numerical = optimize(approved, policy=policies.solver, numeric_policy=policies.numeric)
+        numerical = optimize(approved, policy=policies.solver, numeric_policy=policies.numeric,
+                             initial=seed_curve(approved, policies.numeric))
         # This must precede retiming, metadata production, serialization, or any
         # other downstream call. A profile/selfhash never supplies approval.
         expected = (curve_digest(numerical.ordered) if numerical.status == 'CANDIDATE' and
