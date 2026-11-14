@@ -53,7 +53,7 @@ flowchart LR
 | `cubic.py` | one cubic piece: evaluation, arc length and its inverse (scipy) |
 | `curve.py` | closed curve of cubic pieces, queried by distance `s` |
 | `geometry.py` · `tolerances.py` · `errors.py` | helpers |
-| `../car.py` | the car: body from the stack's `car_model.yaml`, plus the planner's margin |
+| `../car.py` | the car: body and turning radius from the stack's `car_model.yaml`, plus the planner's margin |
 
 ## The track
 
@@ -138,7 +138,7 @@ for that car.
 | `RouteError` | the manifest is malformed or inconsistent; also when, within a car's reach of a gate, the road is not one piece without holes, or a section is too short for the car |
 | `GeometryError` | a curve is unsupported, numerically uncertain or over budget |
 | `LapError` | a lap curve, sample or gate crossing is invalid or ambiguous |
-| `ValueError` (from `Car`) | a car file lacks a body key, a value is not a finite number or is negative, or the body has no width or no length |
+| `ValueError` (from `Car`) | a car file lacks a body or steering key, a value is not a finite number or is negative, the body has no width or no length, or the steering cannot turn |
 
 ## What is not checked here
 
