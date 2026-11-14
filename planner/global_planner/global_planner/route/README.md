@@ -37,6 +37,7 @@ flowchart LR
     manifest -->|Route| zones
     lap -->|LapCurve| zones
     zones -->|reach_boundaries| sampling
+    zones -->|PortalZone| optimizer
     zones -->|PortalZone| checker([checker])
 ```
 
