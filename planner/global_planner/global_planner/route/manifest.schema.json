@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Route manifest",
+  "description": "Structure only; geometry is checked in manifest.py. Metres, x forward, y left. A definition's message is shown when it fails.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "map", "start", "sections"],
+  "properties": {
+    "name": {"$ref": "#/definitions/text"},
+    "map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frame_id", "sha256"],
+      "properties": {
+        "frame_id": {"$ref": "#/definitions/text"},
+        "sha256": {
+          "type": "string",
+          "message": "must be a string of 64 lowercase hexadecimal digits",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "start": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["heading_range_rad", "zone"],
+      "properties": {
+        "heading_range_rad": {
+          "type": "array",
+          "items": {"type": "number", "minimum": -3.141592653589793, "maximum": 3.141592653589793},
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "zone": {"$ref": "#/definitions/polygon"}
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["uid", "surface", "max_speed_mps", "left", "right"],
+        "properties": {
+          "uid": {"$ref": "#/definitions/text"},
+          "surface": {"$ref": "#/definitions/text"},
+          "max_speed_mps": {"type": "number", "exclusiveMinimum": 0},
+          "left": {"$ref": "#/definitions/chain"},
+          "right": {"$ref": "#/definitions/chain"}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "text": {
+      "type": "string",
+      "message": "must be a string of 1 to 128 characters, with no whitespace at either end and no control characters",
+      "maxLength": 128,
+      "pattern": "^[^\\s\\x00-\\x1f\\x7f-\\x9f]([^\\x00-\\x1f\\x7f-\\x9f]*[^\\s\\x00-\\x1f\\x7f-\\x9f])?(?!\\n)$"
+    },
+    "point": {
+      "type": "array",
+      "items": {"type": "number", "minimum": -100000, "maximum": 100000},
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "chain": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/point"},
+      "minItems": 2
+    },
+    "polygon": {
+      "type": "array",
+      "items": {"$ref": "#/definitions/point"},
+      "minItems": 3
+    }
+  }
+}
