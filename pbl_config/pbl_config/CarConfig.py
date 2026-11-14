@@ -20,6 +20,10 @@ class CarConfig(BaseModel):
     """Wheelbase of the car"""
     width_m: float
     """Width of the car"""
+    body_front_m: float | None = None
+    """Body extent ahead of base_link (rear axle centre); needed by the global planner"""
+    body_rear_m: float | None = None
+    """Body extent behind base_link (rear axle centre); needed by the global planner"""
     h_cg: float
     """Height of the center of gravity"""
     a_max: float
