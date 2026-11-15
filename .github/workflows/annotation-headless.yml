@@ -1,6 +1,7 @@
-# Minimal headless check for the annotation tool: generation, strict
-# validation and corridor preparation run on plain CPython with no ROS.
-# Full optimizer proof stays in repro_test.sh / repro_baku.sh (pinned env).
+# Headless check for the annotation tool: raster extraction, route
+# manifest generation and the global_planner.route checks run on plain
+# CPython with no ROS. There is no optimizer or dynamics stage in the
+# route package; nothing here certifies a trajectory.
 name: annotation-headless
 
 on:
@@ -16,14 +17,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12.13'
-      # Generator pins follow repro/receipts.json (opencv 5.x numerics define
-      # ridge-seed geometry); the env.sh gate below enforces them.
-      - run: pip install "opencv-python-headless==5.*" "numpy==2.5.4" scipy pytest pillow
-      - run: bash planner/global_planner/repro/env.sh
-        env:
-          SYSTEM_PY: python
-      - run: >
+      # Generator pins: opencv 5.x / numpy numerics define the ridge-seed
+      # and golden-digest geometry, so they are pinned like the maps.
+      - run: >-
+          pip install "opencv-python-headless==5.*" "numpy==2.5.4"
+          scipy "shapely~=2.0" "jsonschema~=4.0" pyyaml pytest pillow
+      - run: >-
           TMPDIR=${{ runner.temp }}
           PYTHONPATH=planner/global_planner
           python -m pytest planner/global_planner/test/test_annotation_core.py
-          planner/global_planner/test/test_annotation_ui.py -q
+          planner/global_planner/test/test_annotation_ui.py
+          planner/global_planner/test/test_annotation_route.py -q
