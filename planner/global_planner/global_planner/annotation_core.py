@@ -439,6 +439,34 @@ def geometry_digest(session, track_map):
     return hashlib.sha256(canonical.encode('utf-8')).hexdigest()
 
 
+def check_source_current(track_map):
+    """Refuse when the on-disk source no longer matches this snapshot.
+
+    A ``TrackMap`` is an immutable in-memory snapshot taken at open.
+    A long-lived server keeps that snapshot while the PNG/YAML on disk
+    can change underneath it; every digest computed from the snapshot
+    then still matches itself, so approval alone cannot notice. This
+    reloads the source and compares the full interpreted identity
+    (PNG bytes, size, resolution, origin, negate). Byte-identical
+    restoration passes; interpretation-irrelevant YAML fields (the
+    occupancy thresholds, which the binary interpretation never reads)
+    are not bound. Raises ``AnnotationError`` on drift or read failure.
+    Guarantee: the source matched at this check instant only - a writer
+    racing the check itself is not excluded (see ANNOTATION_TOOL.md).
+    """
+    try:
+        fresh = TrackMap(track_map.yaml_path)
+    except AnnotationError:
+        raise
+    except (OSError, ValueError) as exc:
+        raise AnnotationError(
+            f'source map unreadable since it was opened: {exc}') from exc
+    if fresh.map_identity() != track_map.map_identity():
+        raise AnnotationError(
+            'source map changed on disk since it was opened; reopen the '
+            'map and re-preview (approval does not carry over)')
+
+
 def require_approved(session, track_map):
     """Refuse export unless approval is bound to the current candidate.
 
@@ -447,6 +475,7 @@ def require_approved(session, track_map):
     granted for the last previewed manifest, not an older one).
     Export additionally rebuilds and compares ``Route.digest``.
     """
+    check_source_current(track_map)
     if session.get('approval') != 'operator-approved':
         raise AnnotationError(
             'export refused: session approval is not '
