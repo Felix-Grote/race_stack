@@ -42,6 +42,8 @@ import os
 from pathlib import Path
 
 import numpy as np
+import shapely
+from shapely.geometry import Polygon
 
 try:
     import cv2
@@ -191,7 +193,7 @@ SESSION_VERSION = 4
 # Bump when the emitted geometry for identical session input changes;
 # it is part of the approval digest, so old approvals stop authorizing
 # output of a newer generator.
-GENERATOR_VERSION = 'route-v1'
+GENERATOR_VERSION = 'route-v2'
 
 # Wall-simplification settings the explicit validation tries, in order.
 # 0.02 is the default; 0.03 is the envelope edge (eps/res = 0.6) for
@@ -742,22 +744,115 @@ def _circular_gap(a, b, n):
     return min((a - b) % n, (b - a) % n)
 
 
+# Legal continuous region: the union of the *closed squares* of the
+# selected legal cells (each pixel is a square of side `resolution`
+# centred on its registered world coordinate; that is the standard
+# occupancy-grid meaning and matches TrackMap's transform). Boundary
+# contact has zero area and is not annexation. The tolerance below is
+# numeric zero for exact-predicate area sums, not a policy allowance:
+# genuine annexation fragments are >= ~1e-6 m².
+_AREA_EPS_M2 = 1e-9
+
+
+def _annexation(poly, track_map, occupied):
+    """Exact (area, example point) of ``poly`` over occupied cell squares.
+
+    Only occupied cells in the polygon's bounding box can intersect
+    it; their squares are intersected exactly. Used for the small
+    ear polygons of the generator's chord gate; the final checker
+    differences whole sections against ``_legal_union`` instead.
+    Both measure the identical cell-square geometry.
+    """
+    res = track_map.resolution
+    minx, miny, maxx, maxy = poly.bounds
+    ua, va = track_map.world_to_pixel((minx, maxy))
+    ub, vb = track_map.world_to_pixel((maxx, miny))
+    u0 = max(0, int(math.floor(min(ua, ub))) - 1)
+    u1 = min(track_map.width - 1, int(math.ceil(max(ua, ub))) + 1)
+    v0 = max(0, int(math.floor(min(va, vb))) - 1)
+    v1 = min(track_map.height - 1, int(math.ceil(max(va, vb))) + 1)
+    vs, us = np.nonzero(occupied[v0:v1 + 1, u0:u1 + 1])
+    if len(vs) == 0:
+        return 0.0, None
+    cx = track_map.origin[0] + (us + u0) * res
+    cy = track_map.origin[1] + (track_map.height - 1 - (vs + v0)) * res
+    boxes = shapely.box(cx - res / 2, cy - res / 2,
+                        cx + res / 2, cy + res / 2)
+    pieces = shapely.intersection(boxes, poly)
+    areas = shapely.area(pieces)
+    total = float(areas.sum())
+    if total <= 0.0:
+        return 0.0, None
+    worst = pieces[int(np.argmax(areas))]
+    point = shapely.centroid(worst)
+    return total, (float(point.x), float(point.y))
+
+
+def _legal_union(track_map, legal_mask):
+    """Exact union of the legal cell squares, from row run-lengths.
+
+    One rectangle per maximal free run in each row (hundreds, not one
+    box per cell), unioned once; section polygons are then differenced
+    against this single geometry. Used by the final checker only -
+    the ear gate's local candidate boxes are cheaper per chord.
+    """
+    res = track_map.resolution
+    free = np.asarray(legal_mask) > 0
+    rects = []
+    for v in range(track_map.height):
+        row = free[v]
+        if not row.any():
+            continue
+        edges = np.flatnonzero(np.diff(
+            np.concatenate(([0], row.view(np.int8), [0]))))
+        y_c = track_map.origin[1] + (track_map.height - 1 - v) * res
+        for u0, u1 in zip(edges[0::2], edges[1::2]):
+            rects.append((track_map.origin[0] + (u0 - 0.5) * res,
+                          y_c - res / 2,
+                          track_map.origin[0] + (u1 - 0.5) * res,
+                          y_c + res / 2))
+    rects = np.array(rects, dtype=float)
+    return shapely.union_all(
+        shapely.box(rects[:, 0], rects[:, 1], rects[:, 2], rects[:, 3]))
+
+
+def _ear_annexed_m2(pts, a, b, track_map, occupied):
+    """Area outside the legal squares in the ear chord a-b cuts off.
+
+    The ear is the region enclosed by subchain ``pts[a..b]`` and the
+    straight chord back from b to a: exactly the ground the exported
+    wall gains or surrenders when the chord replaces the subchain.
+    A chord is legal iff this area is zero - the simplified wall then
+    annexes nothing, however far it deviates inside legal space.
+    """
+    ring = [(float(p[0]), float(p[1])) for p in pts[a:b + 1]]
+    if len(ring) < 3:
+        return 0.0
+    # Signed area cancels on self-crossing rings; validate first so
+    # every lobe between chord and subchain is measured.
+    ear = Polygon(ring)
+    if not ear.is_valid:
+        ear = shapely.make_valid(ear)
+    area, _ = _annexation(ear, track_map, occupied)
+    return area
+
+
 def _simplify(points, min_spacing_px, eps_m=0.0, chord_ok=None):
     """Drop consecutive points closer than min_spacing_px (keep last).
 
     The radial pass alone is unbounded: it can silently remove a
-    sub-spacing feature before RDP ever sees it (the annexing chord
-    then hits RDP's zero-deviation shortcut, which skips the raster
-    gate). Callers that simplify legal walls must therefore pass a
-    deviation bound and chord predicate: every shortcut chord over
-    dropped points is then verified (deviation within eps_m, predicate
-    holds), and violations re-instate the farthest dropped vertex
-    RDP-style, so the output stays within eps_m of the input with
-    gate-checked chords. The wall chain passes the envelope's
+    sub-spacing feature before RDP ever sees it. Callers that simplify
+    legal walls must therefore pass a deviation bound and an ear
+    predicate ``chord_ok(pts, a, b)``: every shortcut chord over
+    dropped points is then verified (deviation within eps_m, ear
+    annexes nothing), and violations re-instate the farthest dropped
+    vertex RDP-style. The wall chain passes the envelope's
     quantization floor (0.6 raster cells: pixel staircase is <= ~0.5
-    px) here and the wall epsilon to RDP below. The guide loop
-    intentionally uses the unbounded form (it carries no legality;
-    it only places joints, and the walls are judged downstream).
+    px) here and the wall epsilon to RDP below; the floor bounds
+    shape deviation only - legality comes from the ear predicate,
+    which is exact at any deviation. The guide loop intentionally
+    uses the unbounded form (it carries no legality; it only places
+    joints, and the walls are judged downstream).
     """
     pts = [np.array(p, float) for p in points]
     n = len(pts)
@@ -789,27 +884,26 @@ def _simplify(points, min_spacing_px, eps_m=0.0, chord_ok=None):
             d = float(np.linalg.norm(pts[i] - proj))
             if d > dist:
                 dist, idx = d, i
-        if dist <= 1e-9:
-            continue
-        if dist > eps_m or not chord_ok(pts[a], pts[b]):
+        if dist > eps_m or not chord_ok(pts, a, b):
+            if idx < 0:
+                idx = (a + b) // 2
             kept[idx] = True
             stack.append((a, idx))
             stack.append((idx, b))
     return [tuple(pts[i]) for i in range(n) if kept[i]]
 
 
-#: Wall-simplification envelope in raster cells. Walls pass two bounded
-#: stages: a radial pre-filter that only removes deviations below this
-#: quantization floor (pixel staircase peaks at ~0.5 px), then RDP
-#: bounded by the wall epsilon with raster-gate-checked chords. End to
-#: end the gain against the extracted dense wall is bounded by floor +
-#: epsilon (<= 1.2 cells inside the envelope); the chord gate
-#: additionally rejects crossings of occupied spans >= ~3 cells wide.
-#: A 576-run fixture sweep measured worst gain 0.50 cells at ratio 0.6
-#: for the RDP stage, and the full chain keeps the pinned 1x1.2-cell
-#: notch fixture at ~0 gain (above the floor, then kept by RDP).
-#: build_route enforces the envelope; the bare primitives carry no
-#: resolution bound (unit fixtures intentionally exceed it).
+#: Wall-simplification deviation envelope in raster cells. Walls pass
+#: two deviation-bounded stages (radial pre-filter at this floor, then
+#: RDP at the wall epsilon), so the exported wall stays within
+#: floor + epsilon of the extracted dense wall *in shape*. Shape
+#: deviation is not the legality guarantee: every accepted chord in
+#: both stages must additionally pass the exact ear predicate
+#: (zero annexation against the legal cell squares), at any
+#: deviation. The envelope now guards fidelity and vertex counts,
+#: and keeps ear tests local. build_route enforces it; the bare
+#: primitives carry no resolution bound (unit fixtures intentionally
+#: exceed it).
 MAX_DP_EPS_PER_CELL = 0.6
 
 
@@ -826,22 +920,21 @@ def _douglas_peucker(points, epsilon, _chord_ok=None):
     dense maps use 0.03 m (see VALIDATE_THINNINGS).
 
     Plain RDP bounds deviation but not side: a chord may cut occupied
-    space. When ``_chord_ok(a, b)`` is given, a within-epsilon chord is
-    still rejected unless the predicate holds; rejection keeps the
-    farthest vertex and recurses exactly like an epsilon violation, so in
-    the limit this falls back to the exact polyline. The gate is
-    raster-grounded, not strictly inward: it rejects chords crossing
-    occupied spans >= ~3 cells wide (axis; ~4 diagonal), while a removed
-    feature narrower than that is annexed up to its own height, which
-    this stage bounds by epsilon against its own input. The wall chain
-    pairs this with a floor-bounded ``_simplify`` (deviations below 0.6
-    raster cells are pixel-staircase quantization, verified the same
-    way), so the end-to-end gain against the extracted dense wall is
-    bounded by floor + epsilon; the build_route envelope
-    (epsilon/resolution <= MAX_DP_EPS_PER_CELL = 0.6) tightens that to
-    ~1.2 raster cells worst case. RDP alone (the swept primitive) holds
-    gain <= eps; see ``_chord_stays_free`` for the predicate's resolving
-    power.
+    space. When ``_chord_ok(pts, a, b)`` is given, a within-epsilon
+    chord is still rejected unless the predicate holds; rejection
+    keeps the farthest vertex and recurses exactly like an epsilon
+    violation, so in the limit this falls back to the exact polyline.
+    The wall chain's predicate is the exact ear test
+    (``_ear_annexed_m2`` == 0): a chord may deviate arbitrarily far
+    *inside* legal space, but the ground it gains against the legal
+    cell squares is zero, so no occupied island, excluded pocket or
+    narrow gap inside the ear can be silently annexed at any
+    resolution. The floor-bounded ``_simplify`` pre-filter runs the
+    same predicate against the dense chain, and this stage against
+    the pre-filtered chain; zero-annexation ears compose (each stage's
+    output polygon stays inside the legal squares if its input did),
+    which the final exact checker in ``_vector_legality`` verifies
+    independently rather than trusting this argument.
     """
     pts = [np.array(p, float) for p in points]
     if len(pts) < 3 or epsilon <= 0:
@@ -863,76 +956,14 @@ def _douglas_peucker(points, epsilon, _chord_ok=None):
             d = float(np.linalg.norm(pts[i] - proj))
             if d > dist:
                 dist, idx = d, i
-        if dist <= 1e-9:
-            # Chord coincides with the original chain: zero deviation
-            # means zero gain; no raster check needed (and wall-coincident
-            # samples would false-reject). Note idx is -1 here, which must
-            # never reach the split below.
-            continue
         if dist > epsilon or (_chord_ok is not None
-                              and not _chord_ok(pts[a], pts[b])):
+                              and not _chord_ok(pts, a, b)):
+            if idx < 0:
+                idx = (a + b) // 2
             keep[idx] = True
             stack.append((a, idx))
             stack.append((idx, b))
     return [tuple(pts[i]) for i, k in enumerate(keep) if k]
-
-
-def _loop_reference_mask(track_map, outer_px, inner_px):
-    """Rasterize the extracted loops back to the map pixel grid.
-
-    ``outer_px``/``inner_px`` are file-pixel loops; this reconstructs the
-    annotated free region (map + operator strokes) from them, up to
-    contour rasterization (~0.5 px). Chords of simplified walls are
-    tested against this mask, so the exported corridor cannot gain space
-    across occupied spans the mask resolves (>= ~3 cells wide); narrower
-    features are bounded by the build_route envelope (quantization
-    floor plus epsilon), not by this mask alone. Frame-touching free
-    space is rejected upstream, so no loop legitimately reaches the
-    image border.
-    """
-    width, height = int(track_map.width), int(track_map.height)
-    mask = np.zeros((height, width), np.uint8)
-    cv2.fillPoly(mask, [np.int32(np.round(np.asarray(outer_px, float)))], 1)
-    cv2.fillPoly(mask, [np.int32(np.round(np.asarray(inner_px, float)))], 0)
-    return mask
-
-
-def _chord_stays_free(a, b, free, to_px_uv, res_m):
-    """Check a simplified wall chord against the (dilated) free mask.
-
-    Samples the chord every half pixel; every sample must land on free
-    space. The caller passes a free mask dilated by one raster cell, so
-    boundary straddle up to one pixel is tolerated while deeper cuts are
-    rejected. Resolving power, measured: crossings of occupied spans
-    >= 3 cells wide (axis; >= 4 diagonal) are rejected, and a chord
-    hugging the true wall passes. Narrower occupied features are
-    invisible to the one-cell dilation: a chord over one is accepted,
-    and its annexation is bounded by the calling stage's epsilon (each
-    wall stage requires removed-feature height <= epsilon, verified
-    against its own input). For example, a 2-cell-wide 8 mm peninsula
-    at 2 mm raster is annexed only if its height fits the stage bound,
-    while a 15 mm tooth 7+ cells wide is kept. Out-of-bounds
-    samples fail closed. Intrusions below one raster cell are
-    unresolvable by construction (the grid cannot represent them) and
-    documented. The sub-cell remainder is bounded by the build_route
-    envelope (epsilon/resolution <= MAX_DP_EPS_PER_CELL).
-    """
-    seg = np.asarray(b, float) - np.asarray(a, float)
-    length = float(np.linalg.norm(seg))
-    if length < 1e-12:
-        return True
-    step = 0.5 * res_m
-    count = max(2, int(math.ceil(length / step)))
-    frac = np.linspace(0.0, 1.0, count + 1)[1:-1]
-    if len(frac) == 0:
-        return True
-    pts = np.asarray(a, float)[None, :] + frac[:, None] * seg[None, :]
-    uv = np.round(np.array([to_px_uv(p) for p in pts])).astype(int)
-    height, width = free.shape
-    if bool((uv[:, 0] < 0).any()) or bool((uv[:, 0] >= width).any()) or \
-            bool((uv[:, 1] < 0).any()) or bool((uv[:, 1] >= height).any()):
-        return False
-    return bool((free[uv[:, 1], uv[:, 0]] > 0).all())
 
 
 def _resample_closed(points_px, spacing_px):
@@ -1081,7 +1112,7 @@ def suggest_route(outer_px, inner_px, route_px=(), eval_points=240,
 # --------------------------------------------------------------------------
 
 def build_route(track_map, outer_px, inner_px, route_px, *,
-                name=None, surface=DEFAULT_SURFACE,
+                legal_mask, name=None, surface=DEFAULT_SURFACE,
                 max_speed_mps=DEFAULT_MAX_SPEED_MPS, n_sections=4,
                 spacing_m=0.75, chain_dp_epsilon_m=0.02, _smoothing_passes=4):
     """Build a route manifest payload from extracted loops + guide loop.
@@ -1093,23 +1124,27 @@ def build_route(track_map, outer_px, inner_px, route_px, *,
     not exported - the route package derives each centreline from the
     walls. Returns ``(payload, info)``; validation is ``check_payload``.
 
-    Geometry contract (enforced): wall simplification runs two bounded,
-    gate-checked stages. The radial pre-filter only removes deviations
-    below the envelope's quantization floor (0.6 raster cells: pixel
-    staircase peaks at ~0.5 px), while real features above the floor
-    survive. RDP then bounds the remainder within epsilon with
-    raster-gate-checked chords. End to end the gain against the
-    extracted dense wall is bounded by floor + epsilon (<= ~1.2 raster
-    cells inside the envelope), and only across features narrower than
-    the chord gate resolves (~3 cells); ``check_payload`` re-measures
-    the gain on the final polygons. Under the enforced precondition
-    ``chain_dp_epsilon_m / resolution <= MAX_DP_EPS_PER_CELL`` (0.6).
-    Configs above the ratio are rejected instead of producing a
-    purportedly valid export. Epsilon 0 skips RDP (radial decimation
-    still applies) and is exempt.
+    Legality contract (enforced by construction): the union of the
+    emitted section polygons lies within the closed squares of
+    ``legal_mask``'s free cells - zero annexation, boundary contact
+    allowed. The dense pixel-centre contour already satisfies this;
+    both simplification stages preserve it because every accepted
+    chord cuts off an ear whose exact area over occupied squares is
+    zero (``_ear_annexed_m2``), however far the chord deviates inside
+    legal space. Deviation bounds (quantization floor here, wall
+    epsilon in RDP) additionally keep the exported wall within
+    floor + epsilon of the dense wall in shape. ``check_payload``
+    re-verifies containment on the final polygons independently.
+    Under the enforced precondition
+    ``chain_dp_epsilon_m / resolution <= MAX_DP_EPS_PER_CELL`` (0.6);
+    configs above the ratio are rejected. Epsilon 0 skips RDP (the
+    ear-gated pre-filter still applies).
     """
     if n_sections < 3:
         raise AnnotationError('a route needs at least 3 sections')
+    if np.asarray(legal_mask).shape != (track_map.height, track_map.width):
+        raise AnnotationError('legal mask does not match the map size')
+    occupied = np.asarray(legal_mask) == 0
     if name is None:
         name = Path(track_map.png_path).stem
     name = _checked_text(name, 'route name')
@@ -1239,18 +1274,9 @@ def build_route(track_map, outer_px, inner_px, route_px, *,
 
     sections, seeds = [], []
     min_spacing_px = max(2.0, 0.05 / track_map.resolution)
-    # Reference free mask for the containment gate: chords of simplified
-    # walls must stay within one raster cell of the extracted legal
-    # region (see helpers). Dilation by exactly one cell is the grid
-    # quantum, not an arbitrary margin: anything smaller is
-    # unrepresentable on this raster.
-    ref_free = cv2.dilate(
-        _loop_reference_mask(track_map, outer_px, inner_px),
-        np.ones((3, 3), np.uint8))
 
-    def wall_chord_ok(a, b):
-        return _chord_stays_free(a, b, ref_free, track_map.world_to_pixel,
-                                track_map.resolution)
+    def wall_chord_ok(pts, a, b):
+        return _ear_annexed_m2(pts, a, b, track_map, occupied) <= _AREA_EPS_M2
     for k in range(n_sections):
         a, b = joints[k], joints[(k + 1) % n_sections]
         # Seed fragment: from joint a to joint b along travel, with the
@@ -1274,9 +1300,9 @@ def build_route(track_map, outer_px, inner_px, route_px, *,
             # Prefilter bound is the envelope's quantization floor
             # (0.6 raster cells: pixel staircase is <= ~0.5 px), not eps:
             # an eps-bounded prefilter reinstates every quantization jag
-            # and explodes the wall vertex counts. RDP below still
-            # enforces eps with the raster gate; real features above the
-            # floor survive both stages (pinned by regression test).
+            # and explodes the wall vertex counts. Both stages run the
+            # exact ear gate; real features above the floor survive
+            # both stages (pinned by regression test).
             floor_m = MAX_DP_EPS_PER_CELL * track_map.resolution
             return _simplify(pick, min_spacing_px * track_map.resolution,
                              floor_m, wall_chord_ok)
@@ -1361,39 +1387,42 @@ def _fill_px(track_map, chain_world, scale=1):
 
 
 def _vector_legality(track_map, payload, legal_mask):
-    """Measure final-polygon gain over the selected legal raster.
+    """Certify the emitted polygons against the selected legal raster.
 
-    The chord gate in the simplification stages is a prefilter; this
-    checks the exact emitted polygons (after thinning and cap
-    re-pinning) and the start zone. Policy, stated plainly: every
-    exported pixel centre must lie within one raster cell of legal
-    free space - the same one-cell quantum the chord gate uses - and
-    the gained area over occupied cells is rasterized at 4x and
-    reported (boundary subcells included, so it overstates the true
-    geometric gain). Strict cell-square containment is
-    *not* claimed: a straight chord along a diagonal staircase wall
-    necessarily covers occupied corner subcells, so the measured gain
-    is small but nonzero on real maps. Returns the gain in m².
+    Road sections: exact continuous containment - the area of each
+    section polygon over occupied cell squares (``_annexation``) must
+    be zero. This is checked on the exact emitted coordinates, after
+    thinning and cap re-pinning, independently of the generator's
+    ear gate that should already guarantee it: a failure here means
+    the generator (or a hand-edited payload) annexed occupied or
+    operator-excluded space, however small. Boundary contact has
+    zero area and passes. Returns the total annexed area in m²
+    (0.0 for every accepted candidate).
+
+    The start-zone block below is unchanged pre-existing policy
+    (one-cell raster proximity + centre-in-section); strengthening
+    it to full polygon containment is tracked separately - see
+    LEGALITY.md integration notes. ``_annexation`` is the primitive
+    to reuse there.
     """
+    legal_union = _legal_union(track_map, legal_mask)
+    annexed_total = 0.0
+    for section in payload['sections']:
+        polygon = Polygon(list(section['right'])
+                          + list(reversed(section['left'])))
+        outside = polygon.difference(legal_union)
+        annexed_total += outside.area
+        if outside.area > _AREA_EPS_M2:
+            worst = max(shapely.get_parts(outside),
+                        key=lambda g: g.area)
+            point = shapely.centroid(worst)
+            raise AnnotationError(
+                f'VECTOR_LEGAL: section {section["uid"]} annexes '
+                f'{outside.area:.6f} m² outside the selected legal '
+                f'region, e.g. near ({point.x:.2f}, {point.y:.2f}); '
+                'exported walls must stay within the legal cell squares')
     legal = (legal_mask > 0).astype(np.uint8)
     near = cv2.dilate(legal, np.ones((3, 3), np.uint8))
-    scale = 4
-    legal4 = np.repeat(np.repeat(legal, scale, axis=0), scale, axis=1)
-    gain_cells = 0
-    for section in payload['sections']:
-        polygon = list(section['right']) + list(reversed(section['left']))
-        filled = _fill_px(track_map, polygon)
-        outside = int((filled & (near == 0)).sum())
-        if outside:
-            v, u = (int(x) for x in np.argwhere(filled & (near == 0))[0])
-            x, y = track_map.pixel_to_world((u, v))
-            raise AnnotationError(
-                f'VECTOR_LEGAL: section {section["uid"]} covers '
-                f'{outside} pixel(s) more than one cell outside the '
-                f'selected legal region, e.g. near ({x:.2f}, {y:.2f}); '
-                'the simplified wall annexes excluded or occupied space')
-        filled4 = _fill_px(track_map, polygon, scale)
-        gain_cells += int((filled4 & (legal4 == 0)).sum())
     zone = _fill_px(track_map, payload['start']['zone'])
     if int((zone & (near == 0)).sum()):
         raise AnnotationError(
@@ -1411,7 +1440,7 @@ def _vector_legality(track_map, payload, legal_mask):
         raise AnnotationError(
             'VECTOR_LEGAL: the start zone centre is not inside the '
             'first section')
-    return gain_cells * (track_map.resolution / scale) ** 2
+    return annexed_total
 
 
 def check_payload(payload, track_map, legal_mask, car=None):
@@ -1432,10 +1461,12 @@ def check_payload(payload, track_map, legal_mask, car=None):
     from .route.portals import portal_crossings
     from .route.sampling import sample_lap
 
-    gain = _vector_legality(track_map, payload, legal_mask)
-    stages = {'vector_legal': {'status': 'PASS', 'gain_m2': round(gain, 4),
-                               'policy': 'within one raster cell of the '
-                                         'selected legal region'}}
+    annexed = _vector_legality(track_map, payload, legal_mask)
+    stages = {'vector_legal': {'status': 'PASS',
+                               'annexed_m2': round(annexed, 9),
+                               'policy': 'strict containment in the '
+                                         'selected legal cell squares '
+                                         '(boundary contact allowed)'}}
 
     def run(stage, fn):
         try:
@@ -1491,6 +1522,7 @@ def build_candidate(track_map, session, car=None, chain_dp_epsilon_m=None):
     legal = effective_free_mask(track_map, strokes, width, retained)
     payload, info = build_route(
         track_map, extraction[0], extraction[1], session['route_px'],
+        legal_mask=legal,
         name=session.get('route_name'),
         surface=session.get('surface', DEFAULT_SURFACE),
         max_speed_mps=session.get('max_speed_mps', DEFAULT_MAX_SPEED_MPS),

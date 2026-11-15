@@ -441,7 +441,7 @@ def _candidate_receipt(payload, route, receipt, track_map, out=None):
         return [[float(track_map.world_to_pixel(pt)[0]),
                  float(track_map.world_to_pixel(pt)[1])] for pt in chain]
     where = f'written to {out}. ' if out is not None else 'not written yet. '
-    gain = receipt['stages']['vector_legal']['gain_m2']
+    annexed = receipt['stages']['vector_legal']['annexed_m2']
     car = receipt.get('car')
     car_text = (f'car zones PASS for {car["name"]} (reach '
                 f'{car["reach_m"]:.2f} m). ' if car else
@@ -450,8 +450,8 @@ def _candidate_receipt(payload, route, receipt, track_map, out=None):
             'message': f'route checks PASS (vector legality, manifest, '
                        f'lap, portals, samples); route digest '
                        f'{route.digest[:16]}… {where}'
-                       f'final-polygon raster gain {gain:.3f} m² within '
-                       f'one cell. {car_text}'
+                       f'exported polygons annex {annexed:.6f} m² '
+                       f'outside the selected legal cells. {car_text}'
                        f'guide correction max '
                        f'{receipt["max_correction_m"]:.3f} m over '
                        f'{receipt["seed_samples"]} samples. Not an '
