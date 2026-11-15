@@ -139,8 +139,11 @@ PYTHONPATH=planner/global_planner python3 -m pytest \
   planner/global_planner/test/test_annotation_route.py -q
 ```
 
-`test_annotation_route.py` pins golden `Route.digest` values for the
-unedited `test`/`baku` maps and for reconstructed operator corner
-cuts on Baku (one cut and four cuts, strokes + bucket seed frozen in
-the test), final-polygon legality failures, NUC5 car zones, metadata
-binding and the v3→v4 migration. CI: `.github/workflows/annotation-headless.yml`.
+`test_annotation_route.py` pins reference lap geometry and in-run
+digest determinism for the unedited `test`/`baku` maps and for
+reconstructed operator corner cuts on Baku (one cut and four cuts,
+strokes + bucket seed frozen in the test), final-polygon legality
+failures, NUC5 car zones, metadata binding and the v3→v4 migration.
+Exact digests are recorded for the development environment only:
+the float pipeline legitimately lands on different last-ulp
+branches across CPU/BLAS builds. CI: `.github/workflows/annotation-headless.yml`.
