@@ -5,29 +5,48 @@ Examples:
     python3 -m global_planner.annotation_tool extract \
         --map stack_master/maps/test/test.yaml \
         --session draft.json --out out/
+
+Preview, approve and export enforce the same digest binding as the
+server: approval must quote the last preview's candidate digest, and
+export rebuilds and refuses unless the manifest digest still matches
+the approved preview.
 """
 import argparse
 import json
 from pathlib import Path
 
-from .annotation_core import (AnnotationError,
-                              DEFAULT_CHAIN_DP_EPSILON_M, TrackMap,
-                              atomic_write_text, build_and_validate,
+from .annotation_core import (AnnotationError, TrackMap,
+                              atomic_write_text, build_candidate,
                               effective_free_mask, export_name,
                               extract_boundaries, geometry_digest,
                               load_session, require_approved, save_session,
-                              select_thinning)
+                              try_thinnings)
+from .route.manifest import load_route
 
 
-def _validated_receipt(route, prepared, info):
-    """Shared headless receipt for preview and export."""
-    return {'status': 'VALIDATED', 'route_digest': route.digest,
-            'occurrences': len(route.occurrences),
-            'prepared_samples': len(prepared.samples),
-            'max_correction_m': info['max_correction_m'],
-            'smoothing_passes': info['smoothing_passes'],
-            'meaning': 'strict input + corridor preparation PASS; '
-                       'not optimizer or on-car qualification'}
+def _receipt(checked):
+    """Headless receipt shared by preview and export."""
+    return {'status': 'VALIDATED', 'route_digest': checked['route_digest'],
+            'sections': checked['sections'],
+            'lap_length_m': checked['lap_length_m'],
+            'samples': checked['stages']['samples'],
+            'stages': checked['stages'], 'car': checked['car'],
+            'not_checked': checked['not_checked'],
+            'max_correction_m': checked['max_correction_m'],
+            'smoothing_passes': checked['smoothing_passes'],
+            'meaning': 'vector legality + route manifest/lap/portal/'
+                       'sample checks PASS; not an optimized or '
+                       'dynamics-certified trajectory'}
+
+
+def _revoke(session):
+    """Record a CLI-side edit: bump revision, clear approval/preview."""
+    session['revision'] = int(session.get('revision', 1)) + 1
+    session['approval'] = 'none'
+    session['approval_digest'] = None
+    session['approval_route_digest'] = None
+    session['preview_digest'] = None
+    session['preview_route_digest'] = None
 
 
 def main(argv=None):
@@ -48,10 +67,18 @@ def main(argv=None):
                              '(omit with --clear)')
     parser.add_argument('--clear', action='store_true',
                         help='clear the retained region (select-region only)')
+    parser.add_argument('--car', default=None,
+                        help='car_model.yaml for vehicle portal-zone checks')
+    parser.add_argument('--car-margin', type=float, default=0.05,
+                        help='clearance margin in metres around the car body')
     args = parser.parse_args(argv)
     try:
         track_map = TrackMap(args.map)
         session = load_session(args.session, track_map)
+        car = None
+        if args.car:
+            from .car import Car
+            car = Car.load(args.car, margin_m=args.car_margin)
         if args.command == 'select-region':
             if args.clear:
                 session['retained_region_px'] = None
@@ -72,52 +99,43 @@ def main(argv=None):
                 effective_free_mask(
                     track_map, session.get('boundary_strokes_px', []),
                     session.get('stroke_width_px', 5), seed)
-                outer, inner = extract_boundaries(
+                extract_boundaries(
                     track_map, session.get('boundary_strokes_px', []),
                     session.get('stroke_width_px', 5), seed)
                 session['retained_region_px'] = seed
-            session['revision'] = int(session.get('revision', 1)) + 1
-            session['approval'] = 'none'
-            session['approval_digest'] = None
-            session['preview_digest'] = None
+            _revoke(session)
             save_session(session, args.session)
             print(json.dumps({'status': 'PASS',
                               'retained_region_px':
                                   session.get('retained_region_px'),
                               'revision': session['revision']}, sort_keys=True))
             return 0
-        if args.command in ('export', 'validate') and not args.out:
-            raise AnnotationError('this command needs --out <dir>')
-        outer, inner = extract_boundaries(
-            track_map, session['boundary_strokes_px'],
-            session.get('stroke_width_px', 5),
-            session.get('retained_region_px'))
-        result = {'status': 'CANDIDATE', 'outer_points': len(outer),
-                  'inner_points': len(inner)}
+        if args.command == 'extract':
+            outer, inner = extract_boundaries(
+                track_map, session['boundary_strokes_px'],
+                session.get('stroke_width_px', 5),
+                session.get('retained_region_px'))
+            print(json.dumps({'status': 'CANDIDATE',
+                              'outer_points': len(outer),
+                              'inner_points': len(inner)}, sort_keys=True))
+            return 0
         if args.command == 'preview':
-            # Show the exact transformed geometry and its digest without
-            # granting approval or writing any export file. The previewed
-            # candidate digest is persisted in the session so approve and
-            # export enforce the same fresh-preview binding as the server.
-            if not session.get('route_px'):
-                raise AnnotationError('draw the directed route loop first')
-            _, route, prepared, info = build_and_validate(
-                track_map, outer, inner, session['route_px'],
-                author=session.get('author', 'operator'),
-                approval='operator-approved',
-                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M))
-            result = _validated_receipt(route, prepared, info)
+            # Show the exact candidate and its digests without granting
+            # approval or writing any export file. Both digests persist
+            # in the session so approve/export bind to this preview.
+            _, route, checked, _ = build_candidate(
+                track_map, session, car=car)
+            result = _receipt(checked)
             digest = geometry_digest(session, track_map)
             result['candidate_digest'] = digest
             session['preview_digest'] = digest
+            session['preview_route_digest'] = route.digest
             session['revision'] = int(session.get('revision', 1)) + 1
             save_session(session, args.session)
         elif args.command == 'approve':
-            # Bind approval to the previewed candidate digest; the
-            # geometry must be unchanged since that preview. Both checks
-            # mirror the server (annotation_server.op_approve): the quoted
-            # digest must be the persisted last preview, and it must still
-            # match the current geometry.
+            # Mirror annotation_server.op_approve: the quoted digest must
+            # be the persisted last preview and still match the geometry,
+            # and the candidate must still pass every route check.
             if (not args.candidate
                     or args.candidate != session.get('preview_digest')):
                 raise AnnotationError('approve refused: no fresh preview '
@@ -126,60 +144,57 @@ def main(argv=None):
             if args.candidate != geometry_digest(session, track_map):
                 raise AnnotationError('approve refused: geometry changed '
                                       'since preview (preview again)')
-            if not session.get('route_px'):
-                raise AnnotationError('draw the directed route loop first')
-            # Gate on strict validation so only a valid candidate can be
-            # approved; the payload itself is written by export.
-            build_and_validate(
-                track_map, outer, inner, session['route_px'],
-                author=session.get('author', 'operator'), approval='none',
-                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M))
+            _, route, _, _ = build_candidate(track_map, session, car=car)
+            if route.digest != session.get('preview_route_digest'):
+                raise AnnotationError('approve refused: rebuilt manifest '
+                                      'digest differs from the preview '
+                                      '(preview again)')
             session['approval'] = 'operator-approved'
             session['approval_digest'] = args.candidate
+            session['approval_route_digest'] = route.digest
             session['revision'] = int(session.get('revision', 1)) + 1
             save_session(session, args.session)
             result = {'status': 'PASS',
                       'approval_digest': args.candidate,
+                      'route_digest': route.digest,
                       'revision': session['revision']}
         elif args.command == 'export':
-            # Approval must be bound to this exact geometry; a stale
-            # approval from before the last edit is refused, not honored.
-            # The second check mirrors the server (op_export): the approval
-            # must target the last previewed candidate.
+            if not args.out:
+                raise AnnotationError('this command needs --out <dir>')
             require_approved(session, track_map)
             if (session.get('approval_digest')
                     != session.get('preview_digest')):
                 raise AnnotationError('export refused: no fresh preview '
                                       'for the approved geometry (preview, '
                                       'approve, then export)')
-            payload, route, prepared, info = build_and_validate(
-                track_map, outer, inner, session['route_px'],
-                author=session.get('author', 'operator'),
-                approval='operator-approved',
-                chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M))
+            payload, route, checked, _ = build_candidate(
+                track_map, session, car=car)
+            if route.digest != session.get('approval_route_digest'):
+                raise AnnotationError(
+                    'export refused: rebuilt manifest digest differs '
+                    'from the approved preview')
             out = Path(args.out)
             out.mkdir(parents=True, exist_ok=True)
-            atomic_write_text(out / export_name(track_map),
-                              json.dumps(payload, indent=1))
-            result = _validated_receipt(route, prepared, info)
-        elif args.command == 'validate':
-            # Explicit offline validation; the winner is saved into the
-            # session, see op_validate.
-            if not session.get('route_px'):
-                raise AnnotationError('draw the directed route loop first')
-            eps, artifact_h, attempts = select_thinning(
-                track_map, outer, inner, session['route_px'],
-                session.get('author', 'operator'),
-                session.get('map_png', ''), args.out)
+            path = out / export_name(track_map)
+            atomic_write_text(path, json.dumps(payload, indent=1))
+            if load_route(path).digest != route.digest:
+                raise AnnotationError(
+                    'export readback mismatch: file does not reload to '
+                    'the approved manifest digest')
+            result = _receipt(checked)
+            result['written_to'] = str(path)
+        else:  # validate
+            # Explicit thinning selection; the winner is saved into the
+            # session and approval is revoked (see op_validate).
+            eps, (_, route, checked, _), attempts = try_thinnings(
+                track_map, session, car=car)
             session['chain_dp_epsilon_m'] = eps
-            session['revision'] = int(session.get('revision', 1)) + 1
-            session['approval'] = 'none'
-            session['approval_digest'] = None
-            session['preview_digest'] = None
+            _revoke(session)
             save_session(session, args.session)
             result = {'status': 'PASS',
                       'chain_dp_epsilon_m': eps,
-                      'artifact_H': artifact_h,
+                      'route_digest': route.digest,
+                      'stages': checked['stages'],
                       'attempts': attempts,
                       'revision': session['revision']}
         print(json.dumps(result, sort_keys=True))

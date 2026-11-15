@@ -58,17 +58,26 @@ class AnnotationNode(Node if rclpy else object):
     # id then fails closed on 'no open session' instead of mutating state.
     _SEEN_CAP = 4096
 
-    def __init__(self, maps_dir=None, out_dir=None):
+    def __init__(self, maps_dir=None, out_dir=None, car=None):
         """Subscribe to commands and publish authoritative state."""
         if rclpy:
             super().__init__('planner_annotation')
             self.declare_parameter('maps_dir', maps_dir or '')
             self.declare_parameter('out_dir', out_dir or '/tmp/annotation_out')
+            self.declare_parameter('car_model', '')
+            self.declare_parameter('car_margin_m', 0.05)
             maps_dir = self.get_parameter('maps_dir').value or maps_dir
             out_dir = self.get_parameter('out_dir').value or out_dir
+            car_model = self.get_parameter('car_model').value
+            if car is None and car_model:
+                from .car import Car
+                car = Car.load(
+                    car_model,
+                    margin_m=float(
+                        self.get_parameter('car_margin_m').value))
         # Fail fast here so a misconfigured node never serves its first map
         # from an unconfigured backend (previously a late TypeError).
-        server_core.configure(maps_dir or None, out_dir or None)
+        server_core.configure(maps_dir or None, out_dir or None, car=car)
         self._seen = {}
         if rclpy:
             qos = QoSProfile(depth=1, reliability=ReliabilityPolicy.RELIABLE,

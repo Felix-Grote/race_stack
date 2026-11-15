@@ -23,18 +23,19 @@ import cv2
 import numpy as np
 
 from .annotation_core import (AnnotationError, TrackMap,
-                              DEFAULT_CHAIN_DP_EPSILON_M, atomic_write_text,
-                              build_and_validate, draft_name,
+                              atomic_write_text, build_candidate, draft_name,
                               effective_free_mask, export_name,
                               extract_boundaries, free_components,
                               geometry_digest, load_session, new_session,
                               patched_free_mask, require_approved,
                               resolve_draft, ridge_seed, save_session,
-                              select_thinning, suggest_route, _checked_seed,
+                              suggest_route, try_thinnings, _checked_seed,
+                              _checked_speed, _checked_text, _checked_width,
                               _signed_area)
+from .route.manifest import load_route
 
 STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
-         'out_dir': None, 'candidate_digest': None}
+         'out_dir': None, 'candidate_digest': None, 'car': None}
 
 # Inbound request bounds. A lap seed needs only hundreds of points
 # (0.75 m resampling of a ~164 m lap is ~220 samples); 20k points per
@@ -49,16 +50,20 @@ MAX_COORD_ABS = 1e6
 REQUEST_TIMEOUT_S = 30
 
 
-def configure(maps_dir, out_dir):
+def configure(maps_dir, out_dir, car=None):
     """Bind the shared backend to directories (HTTP and ROS entry points).
 
     Both transports reuse these operations, so both must configure them:
     without this, opening a map fails with an explicit error instead of a
-    late ``TypeError`` on an unconfigured path.
+    late ``TypeError`` on an unconfigured path. ``car`` is an optional
+    ``global_planner.car.Car``; when given, previews also run the
+    vehicle portal-zone stages for that exact car and margin. There is
+    no default car.
     """
     if not maps_dir or not Path(maps_dir).is_dir():
         raise AnnotationError(f'maps directory not found: {maps_dir}')
     STATE['maps_dir'], STATE['out_dir'] = str(maps_dir), str(out_dir)
+    STATE['car'] = car
     Path(out_dir).mkdir(parents=True, exist_ok=True)
 
 
@@ -80,7 +85,9 @@ def _touch(session):
     session['revision'] = int(session.get('revision', 1)) + 1
     session['approval'] = 'none'
     session['approval_digest'] = None
+    session['approval_route_digest'] = None
     session['preview_digest'] = None
+    session['preview_route_digest'] = None
     STATE['extraction'] = None
     STATE['candidate_digest'] = None
 
@@ -245,7 +252,9 @@ def op_open(body):
     # restart while the CLI accepts the persisted digest for the same
     # draft. Both transports now bind the same persisted preview.
     candidate = None
-    if session.get('preview_digest') == geometry_digest(session, track_map):
+    if (session.get('preview_route_digest')
+            and session.get('preview_digest')
+            == geometry_digest(session, track_map)):
         candidate = session['preview_digest']
     STATE.update(map=track_map, session=session, extraction=None,
                  candidate_digest=candidate)
@@ -262,8 +271,19 @@ def op_update(body):
     session, track_map = require_open()
     field, value = body.get('field'), body.get('value')
     if field not in ('boundary_strokes_px', 'route_px', 'stroke_width_px',
-                     'retained_region_px'):
+                     'retained_region_px', 'route_name', 'surface',
+                     'max_speed_mps'):
         raise AnnotationError(f'unknown editable field: {field}')
+    if field in ('route_name', 'surface', 'max_speed_mps'):
+        # Manifest metadata: validated against the same rules the route
+        # schema applies, stored canonically, approval revoked.
+        session[field] = (_checked_speed(value) if field == 'max_speed_mps'
+                          else _checked_text(value, field))
+        _touch(session)
+        return {'status': 'PASS',
+                'message': f'{field} updated (draft rev '
+                           f'{session["revision"]}, unapproved)',
+                'session': _session_view()}
     if field == 'retained_region_px':
         # Selection update: validate against the current mask first, so a
         # bad click never overwrites the stored selection. Setting or
@@ -287,9 +307,7 @@ def op_update(body):
                            f'(draft rev {session["revision"]}, unapproved)',
                 'session': _session_view()}
     if field == 'stroke_width_px':
-        if (isinstance(value, bool) or not isinstance(value, int)
-                or not 1 <= value <= 31):
-            raise AnnotationError('stroke_width_px must be an integer 1..31')
+        _checked_width(value)
     else:
         if not isinstance(value, list):
             raise AnnotationError(f'{field} must be a list of points')
@@ -351,7 +369,6 @@ def op_suggest(body):
     width = session.get('stroke_width_px', 5)
     hint = session.get('route_px', [])
     hint_sign = _signed_area(hint) if len(hint) >= 3 else 0.0
-    eps = session.get('chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M)
     methods = (
         ('suggest',
          lambda: suggest_route(outer, inner, hint)),
@@ -370,17 +387,15 @@ def op_suggest(body):
             if hint_sign and _signed_area(closed) * hint_sign < 0:
                 raise AnnotationError(
                     'seed runs against the drawn travel direction')
-            build_and_validate(track_map, outer, inner, closed,
-                               author=session.get('author', 'operator'),
-                               approval='operator-approved',
-                               chain_dp_epsilon_m=eps)
+            build_candidate(track_map, dict(session, route_px=closed),
+                            car=STATE.get('car'))
         except Exception as exc:  # noqa: BLE001 - try the next method
             failures.append('%s: %s' % (name, exc))
             continue
         session['route_px'] = closed
         _touch(session)
         return {'status': 'PASS',
-                'message': f'suggested centerline ({len(closed)} points, '
+                'message': f'suggested guide loop ({len(closed)} points, '
                            f'closed loop, {name} seed, draft rev '
                            f'{session["revision"]}, unapproved); inspect '
                            'in preview, redraw if it looks wrong',
@@ -413,48 +428,61 @@ def op_extract(body):
             'session': _session_view()}
 
 
-def _validated_receipt(payload, route, prepared, info, track_map, out=None):
+def _candidate_receipt(payload, route, receipt, track_map, out=None):
     """Shared VALIDATED receipt body (preview and export show the same).
 
-    The receipt carries the exact final corridor geometry from the
-    export candidate manifest: the per-occurrence left/right wall chains
-    plus the directed seed centerline, all in file-pixel coordinates, so
-    the browser can render the corridor bit-identically to the export
-    without re-deriving anything.
+    Carries the exact exported geometry in file-pixel coordinates -
+    per-section walls, the wall-derived centrelines, the portal gates
+    and the start zone - so the browser renders bit-identically to the
+    export without re-deriving anything. The stage list states what
+    was checked; ``not_checked`` states what no stage here can prove.
     """
     def _px(chain):
         return [[float(track_map.world_to_pixel(pt)[0]),
                  float(track_map.world_to_pixel(pt)[1])] for pt in chain]
-    validated_px = [_px(occ['seed']) for occ in payload['occurrences']]
-    validated_left = [_px(occ['left']) for occ in payload['occurrences']]
-    validated_right = [_px(occ['right']) for occ in payload['occurrences']]
     where = f'written to {out}. ' if out is not None else 'not written yet. '
+    gain = receipt['stages']['vector_legal']['gain_m2']
+    car = receipt.get('car')
+    car_text = (f'car zones PASS for {car["name"]} (reach '
+                f'{car["reach_m"]:.2f} m). ' if car else
+                'no car supplied: vehicle zones NOT checked. ')
     return {'status': 'VALIDATED',
-            'message': f'validate_route + prepare_route PASS; route digest '
+            'message': f'route checks PASS (vector legality, manifest, '
+                       f'lap, portals, samples); route digest '
                        f'{route.digest[:16]}… {where}'
-                       f'seed correction max {info["max_correction_m"]:.3f} m '
-                       f'over {info["seed_samples"]} samples '
-                       f'(smoothing {info["smoothing_passes"]}). This is '
-                       'input/topology validation, not optimizer or '
-                       'on-car qualification.',
+                       f'final-polygon raster gain {gain:.3f} m² within '
+                       f'one cell. {car_text}'
+                       f'guide correction max '
+                       f'{receipt["max_correction_m"]:.3f} m over '
+                       f'{receipt["seed_samples"]} samples. Not an '
+                       'optimized or dynamics-certified trajectory.',
             'route_digest': route.digest,
-            'occurrences': len(route.occurrences),
-            'prepared_samples': len(prepared.samples),
-            'max_correction_m': info['max_correction_m'],
-            'smoothing_passes': info['smoothing_passes'],
-            'validated_route_px': validated_px,
-            'validated_left_px': validated_left,
-            'validated_right_px': validated_right}
+            'sections': receipt['sections'],
+            'samples': receipt['stages']['samples'],
+            'lap_length_m': receipt['lap_length_m'],
+            'stages': receipt['stages'],
+            'car': car,
+            'not_checked': receipt['not_checked'],
+            'max_correction_m': receipt['max_correction_m'],
+            'smoothing_passes': receipt['smoothing_passes'],
+            'validated_route_px': [_px(s.centreline)
+                                   for s in route.sections],
+            'validated_left_px': [_px(s['left'])
+                                  for s in payload['sections']],
+            'validated_right_px': [_px(s['right'])
+                                   for s in payload['sections']],
+            'gates_px': [_px(p.gate) for p in route.portals],
+            'start_zone_px': _px(payload['start']['zone'])}
 
 
 def op_preview(body):
     """Build the candidate manifest and show it WITHOUT approving.
 
     Read-only: writes no file, grants no approval, bumps no revision.
-    The candidate is built with the exact approval provenance the export
-    would write, so the shown route digest and validated geometry are
-    bit-identical to the export output; only the file write and the
-    session approval are withheld until approve/export.
+    The candidate is built exactly as export builds it, so the shown
+    route digest and geometry are bit-identical to the export output;
+    only the file write and the session approval are withheld until
+    approve/export.
     """
     session, track_map = require_open()
     if not session.get('route_px'):
@@ -472,24 +500,23 @@ def op_preview(body):
         raise
     STATE['extraction'] = (outer, inner)
     try:
-        payload, route, prepared, info = build_and_validate(
-            track_map, outer, inner, session['route_px'],
-            author=session.get('author', 'operator'),
-            approval='operator-approved',
-            chain_dp_epsilon_m=session.get(
-                'chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M))
+        payload, route, checked, _ = build_candidate(
+            track_map, session, car=STATE.get('car'))
     except Exception:  # noqa: BLE001 - any build failure clears candidacy
-        # Route/corridor failure: the extracted boundaries above are
-        # still valid and stay visible, but there is no candidate to
-        # approve until the route is redrawn and previewed again.
+        # Route failure: the extracted boundaries above are still valid
+        # and stay visible, but there is no candidate to approve until
+        # the route is redrawn and previewed again.
         STATE['candidate_digest'] = None
         raise
     digest = geometry_digest(session, track_map)
     STATE['candidate_digest'] = digest
     # Persist the previewed candidate in the session (written forward on
     # save) so the headless CLI enforces the same fresh-preview binding.
+    # Both identities are stored: the editor-input digest and the
+    # manifest digest this preview produced.
     session['preview_digest'] = digest
-    receipt = _validated_receipt(payload, route, prepared, info, track_map)
+    session['preview_route_digest'] = route.digest
+    receipt = _candidate_receipt(payload, route, checked, track_map)
     receipt['candidate_digest'] = digest
     receipt['session'] = _session_view()
     return receipt
@@ -509,8 +536,12 @@ def op_approve(body):
     if quoted != geometry_digest(session, track_map):
         raise AnnotationError('approve refused: geometry changed since '
                               'preview (preview again)')
+    if not session.get('preview_route_digest'):
+        raise AnnotationError('approve refused: preview produced no '
+                              'manifest digest (preview again)')
     session['approval'] = 'operator-approved'
     session['approval_digest'] = quoted
+    session['approval_route_digest'] = session['preview_route_digest']
     session['revision'] = int(session.get('revision', 1)) + 1
     return {'status': 'PASS',
             'message': f'candidate {quoted[:16]}… approved '
@@ -546,35 +577,38 @@ def op_export(body):
         raise
     STATE['extraction'] = (outer, inner)
     try:
-        payload, route, prepared, info = build_and_validate(
-            track_map, outer, inner, session['route_px'],
-            author=session.get('author', 'operator'),
-            approval='operator-approved',
-            chain_dp_epsilon_m=session.get(
-                'chain_dp_epsilon_m', DEFAULT_CHAIN_DP_EPSILON_M))
+        payload, route, checked, _ = build_candidate(
+            track_map, session, car=STATE.get('car'))
     except Exception:  # noqa: BLE001 - failed build exports nothing
         STATE['candidate_digest'] = None
         raise
+    if route.digest != session.get('approval_route_digest'):
+        raise AnnotationError(
+            'export refused: rebuilt manifest digest differs from the '
+            'approved preview (preview and approve again)')
     out = Path(STATE['out_dir']) / export_name(track_map)
     atomic_write_text(out, json.dumps(payload, indent=1))
-    receipt = _validated_receipt(payload, route, prepared, info, track_map,
+    if load_route(out).digest != route.digest:
+        raise AnnotationError(
+            'export readback mismatch: file does not reload to the '
+            'approved manifest digest')
+    receipt = _candidate_receipt(payload, route, checked, track_map,
                                  out=out)
     receipt['session'] = _session_view()
     return receipt
 
 
 def op_validate(body):
-    """Explicit offline validation over bounded thinning settings.
+    """Explicit validation over the bounded thinning settings.
 
-    Tries VALIDATE_THINNINGS in order; each attempt rebuilds from the
-    current boundaries and route, then runs strict validation, corridor
-    preparation, the full optimizer and the independent checkers. The
-    first setting reaching full PASS becomes the session's
+    Tries VALIDATE_THINNINGS in order; each attempt is a full candidate
+    build plus every route check (and the car stages when a car is
+    configured). The first passing setting becomes the session's
     chain_dp_epsilon_m, which is part of the approval digest, so any
-    approval is revoked and preview/approve/export all use it afterwards.
-    Reports why each rejected setting failed. Generation runs here;
-    optimization runs in the pinned interpreter, exactly like the repro
-    scripts split them. Invoke it explicitly, never per mouse movement.
+    approval is revoked and preview/approve/export all use it
+    afterwards. Reports why each rejected setting failed. Invoke it
+    explicitly, never per mouse movement: centreline derivation over
+    dense walls is the expensive part.
     """
     session, track_map = require_open()
     if not session.get('route_px'):
@@ -589,17 +623,16 @@ def op_validate(body):
         STATE['candidate_digest'] = None
         raise
     STATE['extraction'] = (outer, inner)
-    eps, artifact_h, attempts = select_thinning(
-        track_map, outer, inner, session['route_px'],
-        session.get('author', 'operator'), session.get('map_png', ''),
-        STATE['out_dir'])
+    eps, (_, route, checked, _), attempts = try_thinnings(
+        track_map, session, car=STATE.get('car'))
     session['chain_dp_epsilon_m'] = eps
     _touch(session)
     return {'status': 'PASS',
-            'message': f'full validation PASS at thinning {eps} '
-                       f'(H={artifact_h}); re-preview, then approve '
-                       'and export',
-            'chain_dp_epsilon_m': eps, 'artifact_H': artifact_h,
+            'message': f'route checks PASS at thinning {eps} '
+                       f'(digest {route.digest[:16]}…); re-preview, '
+                       'then approve and export',
+            'chain_dp_epsilon_m': eps, 'route_digest': route.digest,
+            'stages': checked['stages'],
             'attempts': attempts, 'session': _session_view()}
 
 
@@ -708,8 +741,19 @@ def main(argv=None):
     parser.add_argument('--maps', required=True, help='directory of map folders')
     parser.add_argument('--out', default='/tmp/annotation_out')
     parser.add_argument('--port', type=int, default=8766)
+    parser.add_argument('--car', default=None,
+                        help='car_model.yaml for vehicle portal-zone checks '
+                             '(omit: car stages are reported NOT checked)')
+    parser.add_argument('--car-margin', type=float, default=0.05,
+                        help='clearance margin in metres around the car body')
     args = parser.parse_args(argv)
-    configure(args.maps, args.out)
+    car = None
+    if args.car:
+        from .car import Car
+        car = Car.load(args.car, margin_m=args.car_margin)
+        print(f'vehicle checks on: {car.name}, reach {car.reach_m:.3f} m '
+              f'(margin {car.margin_m} m)')
+    configure(args.maps, args.out, car=car)
     server = HTTPServer(('127.0.0.1', args.port), Handler)
     print(f'annotation backend on http://127.0.0.1:{args.port}/ (loopback only)')
     server.serve_forever()
