@@ -7,7 +7,8 @@ package_name = 'global_planner'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name],
+    packages=[package_name, package_name + '.route'],
+    package_data={package_name + '.route': ['manifest.schema.json']},
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),

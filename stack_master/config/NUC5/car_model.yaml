@@ -3,6 +3,9 @@ lf: 0.168
 lr: 0.167
 wheelbase: 0.335
 width_m: 0.228
+# body extent ahead of / behind base_link (rear axle): wheelbase + traxxas slash spec overhang, to measure
+body_front_m: 0.457
+body_rear_m: 0.122
 
 Iz: 0.0627
 h_cg: 0.074
