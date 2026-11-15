@@ -148,7 +148,16 @@ class TrackMap:
         if abs(float(meta['origin'][2])) > 1e-12:
             raise AnnotationError('UNSUPPORTED: nonzero map yaw (origin[2])')
         png_path = (yaml_path.parent / meta['image']).resolve()
-        image = cv2.imread(str(png_path), cv2.IMREAD_GRAYSCALE)
+        # Read once: hash and decode the same bytes, so a file replaced
+        # mid-load cannot pair pixels from one version with the SHA of
+        # another.
+        try:
+            png_bytes = png_path.read_bytes()
+        except OSError as exc:
+            raise AnnotationError(
+                f'cannot read map image: {png_path}') from exc
+        image = cv2.imdecode(np.frombuffer(png_bytes, dtype=np.uint8),
+                             cv2.IMREAD_GRAYSCALE)
         if image is None:
             raise AnnotationError(f'cannot read map image: {png_path}')
         self.yaml_path, self.png_path = yaml_path, png_path
@@ -159,7 +168,7 @@ class TrackMap:
         self.free_thresh = float(meta['free_thresh'])
         self.image = image  # uint8, file order: row 0 = top
         self.height, self.width = image.shape
-        self.sha256 = hashlib.sha256(png_path.read_bytes()).hexdigest()
+        self.sha256 = hashlib.sha256(png_bytes).hexdigest()
 
     def map_identity(self):
         """Full source-map interpretation contract bound by sessions."""

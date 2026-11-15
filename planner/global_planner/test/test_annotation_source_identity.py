@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 import cv2
+import numpy as np
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parents[1]))
@@ -140,6 +141,44 @@ def test_cli_export_after_drift_fails_closed(live, tmp_path):
     rc = cli_main(['export', '--map', str(test_dir / 'test.yaml'),
                    '--session', str(draft), '--out', str(tmp_path / 'cli')])
     assert rc == 1
+
+
+def test_load_hashes_and_decodes_the_same_bytes(tmp_path, monkeypatch):
+    """A file replaced mid-load cannot split pixels and SHA across versions."""
+    import hashlib
+    shutil.copytree(MAPS / 'test', tmp_path / 'test')
+    png = tmp_path / 'test' / 'test.png'
+    original_bytes = png.read_bytes()
+    other = cv2.imread(str(png), cv2.IMREAD_GRAYSCALE).copy()
+    other[226, 248] = 0 if other[226, 248] else 255
+
+    real_read_bytes = Path.read_bytes
+
+    def swapping_read_bytes(self):
+        data = real_read_bytes(self)
+        if self == png.resolve():
+            cv2.imwrite(str(png), other)  # writer races the load
+        return data
+
+    monkeypatch.setattr(Path, 'read_bytes', swapping_read_bytes)
+    track_map = TrackMap(tmp_path / 'test' / 'test.yaml')
+    assert png.read_bytes() != original_bytes  # the swap really happened
+    assert track_map.sha256 == hashlib.sha256(original_bytes).hexdigest()
+    expected = cv2.imdecode(
+        np.frombuffer(original_bytes, dtype=np.uint8),
+        cv2.IMREAD_GRAYSCALE)
+    assert (track_map.image == expected).all()
+
+
+def test_unreadable_png_fails_as_before(tmp_path):
+    shutil.copytree(MAPS / 'test', tmp_path / 'test')
+    png = tmp_path / 'test' / 'test.png'
+    png.write_bytes(b'not a png')
+    with pytest.raises(AnnotationError, match='cannot read map image'):
+        TrackMap(tmp_path / 'test' / 'test.yaml')
+    png.unlink()
+    with pytest.raises(AnnotationError, match='cannot read map image'):
+        TrackMap(tmp_path / 'test' / 'test.yaml')
 
 
 def test_check_source_current_unit(tmp_path):
