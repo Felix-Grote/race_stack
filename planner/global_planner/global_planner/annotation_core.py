@@ -1194,7 +1194,12 @@ def build_route(track_map, outer_px, inner_px, route_px, *,
         if not cand:
             raise AnnotationError('could not place well-separated split joints; '
                                   'redraw the route loop more evenly')
-        joint_at.append(min(cand, key=lambda j: turn[j]))
+        # Quantize the turn before comparing: near-straight samples tie
+        # to within float noise, and an unquantized min() picks
+        # different joints on different CPUs/BLAS builds for identical
+        # input. 1e-6 rad is far above that noise and far below any
+        # curvature that matters for cut placement.
+        joint_at.append(min(cand, key=lambda j: round(turn[j], 6)))
     joint_at = sorted(joint_at)
     if len(set(joint_at)) != n_sections or \
             any(_circular_gap(a, b, len(seed)) < min_sep
