@@ -150,7 +150,16 @@ class TrackMap:
         if abs(float(meta['origin'][2])) > 1e-12:
             raise AnnotationError('UNSUPPORTED: nonzero map yaw (origin[2])')
         png_path = (yaml_path.parent / meta['image']).resolve()
-        image = cv2.imread(str(png_path), cv2.IMREAD_GRAYSCALE)
+        # Read once: hash and decode the same bytes, so a file replaced
+        # mid-load cannot pair pixels from one version with the SHA of
+        # another.
+        try:
+            png_bytes = png_path.read_bytes()
+        except OSError as exc:
+            raise AnnotationError(
+                f'cannot read map image: {png_path}') from exc
+        image = cv2.imdecode(np.frombuffer(png_bytes, dtype=np.uint8),
+                             cv2.IMREAD_GRAYSCALE)
         if image is None:
             raise AnnotationError(f'cannot read map image: {png_path}')
         self.yaml_path, self.png_path = yaml_path, png_path
@@ -161,7 +170,7 @@ class TrackMap:
         self.free_thresh = float(meta['free_thresh'])
         self.image = image  # uint8, file order: row 0 = top
         self.height, self.width = image.shape
-        self.sha256 = hashlib.sha256(png_path.read_bytes()).hexdigest()
+        self.sha256 = hashlib.sha256(png_bytes).hexdigest()
 
     def map_identity(self):
         """Full source-map interpretation contract bound by sessions."""
@@ -441,6 +450,34 @@ def geometry_digest(session, track_map):
     return hashlib.sha256(canonical.encode('utf-8')).hexdigest()
 
 
+def check_source_current(track_map):
+    """Refuse when the on-disk source no longer matches this snapshot.
+
+    A ``TrackMap`` is an immutable in-memory snapshot taken at open.
+    A long-lived server keeps that snapshot while the PNG/YAML on disk
+    can change underneath it; every digest computed from the snapshot
+    then still matches itself, so approval alone cannot notice. This
+    reloads the source and compares the full interpreted identity
+    (PNG bytes, size, resolution, origin, negate). Byte-identical
+    restoration passes; interpretation-irrelevant YAML fields (the
+    occupancy thresholds, which the binary interpretation never reads)
+    are not bound. Raises ``AnnotationError`` on drift or read failure.
+    Guarantee: the source matched at this check instant only - a writer
+    racing the check itself is not excluded (see ANNOTATION_TOOL.md).
+    """
+    try:
+        fresh = TrackMap(track_map.yaml_path)
+    except AnnotationError:
+        raise
+    except (OSError, ValueError) as exc:
+        raise AnnotationError(
+            f'source map unreadable since it was opened: {exc}') from exc
+    if fresh.map_identity() != track_map.map_identity():
+        raise AnnotationError(
+            'source map changed on disk since it was opened; reopen the '
+            'map and re-preview (approval does not carry over)')
+
+
 def require_approved(session, track_map):
     """Refuse export unless approval is bound to the current candidate.
 
@@ -449,6 +486,7 @@ def require_approved(session, track_map):
     granted for the last previewed manifest, not an older one).
     Export additionally rebuilds and compares ``Route.digest``.
     """
+    check_source_current(track_map)
     if session.get('approval') != 'operator-approved':
         raise AnnotationError(
             'export refused: session approval is not '

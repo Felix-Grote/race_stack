@@ -23,7 +23,8 @@ import cv2
 import numpy as np
 
 from .annotation_core import (AnnotationError, TrackMap,
-                              atomic_write_text, build_candidate, draft_name,
+                              atomic_write_text, build_candidate,
+                              check_source_current, draft_name,
                               effective_free_mask, export_name,
                               extract_boundaries, free_components,
                               geometry_digest, load_session, new_session,
@@ -485,6 +486,7 @@ def op_preview(body):
     approve/export.
     """
     session, track_map = require_open()
+    check_source_current(track_map)
     if not session.get('route_px'):
         raise AnnotationError('draw the directed route loop first')
     try:
@@ -529,6 +531,7 @@ def op_approve(body):
     and the geometry is unchanged since that preview. Writes no file.
     """
     session, track_map = require_open()
+    check_source_current(track_map)
     quoted = body.get('approval_digest')
     if not quoted or quoted != STATE.get('candidate_digest'):
         raise AnnotationError('approve refused: no fresh preview for this '

@@ -22,6 +22,16 @@ the rebuilt digest equals the approved one, writes atomically, then
 reloads the file and checks the digest again. The manifest itself
 carries no approval state; that lives in the session draft.
 
+Source identity: an approved route represents the interpreted snapshot
+(PNG bytes, size, resolution, origin, negate) the operator previewed.
+Preview, approve and export each re-read the source files and refuse
+on any interpreted change since open (`check_source_current`); reopen
+and re-preview instead. Byte-identical restoration passes, and YAML
+fields the interpretation never reads (occupancy thresholds) are not
+bound. Guarantee is at the check instant only: a writer racing the
+check is not excluded, and the exported manifest always describes the
+in-memory snapshot whose SHA-256 it carries.
+
 ## Run
 
 ```bash
