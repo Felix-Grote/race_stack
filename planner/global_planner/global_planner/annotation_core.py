@@ -1399,18 +1399,9 @@ def _vector_legality(track_map, payload, legal_mask):
         raise AnnotationError(
             'VECTOR_LEGAL: the start zone reaches off the selected '
             'legal road; move the guide loop start or redraw it')
-    first = payload['sections'][0]
-    outline = np.array(
-        [track_map.world_to_pixel(p)
-         for p in list(first['right']) + list(reversed(first['left']))],
-        np.float32)
-    centre = tuple(np.mean(payload['start']['zone'], axis=0))
-    if cv2.pointPolygonTest(
-            outline, tuple(float(v) for v in
-                           track_map.world_to_pixel(centre)), False) < 0:
-        raise AnnotationError(
-            'VECTOR_LEGAL: the start zone centre is not inside the '
-            'first section')
+    # Containment of the zone in the first section is not rechecked here:
+    # validate_route (the MANIFEST_VALID stage, run next in check_payload)
+    # owns that invariant, so hand-edited payloads cannot bypass it.
     return gain_cells * (track_map.resolution / scale) ** 2
 
 

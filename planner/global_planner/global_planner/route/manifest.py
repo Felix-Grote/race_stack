@@ -169,7 +169,7 @@ def _check_section_contacts(sections: list[Section], portals: list[Portal]) -> N
             _check_neighbours(sections[i], sections[j])
 
 
-def _start(value: dict) -> Start:
+def _start(value: dict, first: Section) -> Start:
     """Check the start zone and heading range."""
     heading = value['heading_range_rad']
     require(heading[0] < heading[1], 'start heading range must run from a smaller to a larger '
@@ -178,6 +178,11 @@ def _start(value: dict) -> Start:
     zone = _points(value['zone'], 'start zone')
     require(simple_polygon(zone), 'start zone must be a polygon with an area that does not '
             'cross itself')
+    # The whole zone, edges included, must lie in the first section; boundary
+    # contact counts as inside, as in geometry.covers (EPS slack for float noise).
+    require(Polygon(first.polygon).buffer(EPS).covers(Polygon(zone)),
+            'start zone is not contained in the first section; move the zone '
+            'wholly inside section ' + first.uid)
 
     return Start(zone, tuple(heading))
 
@@ -217,7 +222,7 @@ def validate_route(payload: object) -> Route:
 
     _check_section_contacts(sections, portals)
 
-    start = _start(payload['start'])
+    start = _start(payload['start'], sections[0])
 
     return Route(tuple(sections), tuple(portals), start, digest)
 
