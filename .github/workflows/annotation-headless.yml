@@ -1,0 +1,29 @@
+# Minimal headless check for the annotation tool: generation, strict
+# validation and corridor preparation run on plain CPython with no ROS.
+# Full optimizer proof stays in repro_test.sh / repro_baku.sh (pinned env).
+name: annotation-headless
+
+on:
+  pull_request:
+  push:
+    branches: [ros2-humble]
+
+jobs:
+  headless:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.13'
+      # Generator pins follow repro/receipts.json (opencv 5.x numerics define
+      # ridge-seed geometry); the env.sh gate below enforces them.
+      - run: pip install "opencv-python-headless==5.*" "numpy==2.5.4" scipy pytest pillow
+      - run: bash planner/global_planner/repro/env.sh
+        env:
+          SYSTEM_PY: python
+      - run: >
+          TMPDIR=${{ runner.temp }}
+          PYTHONPATH=planner/global_planner
+          python -m pytest planner/global_planner/test/test_annotation_core.py
+          planner/global_planner/test/test_annotation_ui.py -q
