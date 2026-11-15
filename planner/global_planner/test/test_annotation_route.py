@@ -196,20 +196,23 @@ def _synthetic_payload(zone, heading=(-0.3, 0.3), notch=False):
     [[2, 0.5], [4, 0.5], [4, 1.5], [2, 1.5]],   # fully inside s0
     [[2, 0], [5, 0], [5, 1], [2, 1]],           # shares s0's wall: contact is inside
     [[2, -1e-12], [5, -1e-12], [5, 1], [2, 1]],  # float noise beyond the wall (EPS)
+    [[7.5, 0.5], [9.5, 0.5], [9.5, 2.5], [7.5, 2.5]],  # straddles the s0/s1 gate
+    [[8, 4], [9, 4], [9, 6], [8, 6]],           # wholly in s1, not in s0 at all
 ])
-def test_start_zone_inside_first_section_passes(zone):
-    """Containment is whole-polygon; boundary contact is allowed."""
+def test_start_zone_inside_route_union_passes(zone):
+    """Containment is whole-polygon against the union of all sections;
+    boundary contact is allowed and no section is privileged."""
     validate_route(_synthetic_payload(zone))
 
 
 @pytest.mark.parametrize('zone,notch', [
-    ([[7.5, 0.5], [9.5, 0.5], [9.5, 2.5], [7.5, 2.5]], False),  # 50% past the s0 gate
-    ([[8, 4], [9, 4], [9, 6], [8, 6]], False),                  # on the road, in s1
+    ([[4, 4], [6, 4], [6, 6], [4, 6]], False),        # in the infield hole
+    ([[-1, 4], [1, 4], [1, 6], [-1, 6]], False),      # beyond the outer wall
     ([[4, 0.5], [6, 0.5], [6, 2], [4, 2]], True),  # vertices in, edge cuts the notch
-    ([[2, -0.001], [5, -0.001], [5, 1], [2, 1]], False),        # 1 mm beyond the wall
+    ([[2, -0.001], [5, -0.001], [5, 1], [2, 1]], False),  # 1 mm beyond the wall
 ])
-def test_start_zone_not_wholly_in_first_section_rejected(zone, notch):
-    """A representative point inside s0 does not rescue a zone that leaves it."""
+def test_start_zone_outside_route_union_rejected(zone, notch):
+    """A representative point on the road does not rescue a zone that leaves it."""
     with pytest.raises(RouteError, match='start zone is not contained'):
         validate_route(_synthetic_payload(zone, notch=notch))
 
