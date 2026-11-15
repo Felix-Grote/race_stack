@@ -1416,16 +1416,6 @@ NOT_CHECKED = (
 )
 
 
-def _fill_px(track_map, chain_world, scale=1):
-    """Rasterize one world polygon: filled mask at ``scale`` x resolution."""
-    mask = np.zeros((track_map.height * scale, track_map.width * scale),
-                    np.uint8)
-    pts = np.array([track_map.world_to_pixel(p) for p in chain_world],
-                   float) * scale
-    cv2.fillPoly(mask, [np.round(pts).astype(np.int32)], 1)
-    return mask
-
-
 def _vector_legality(track_map, payload, legal_mask):
     """Certify the emitted polygons against the selected legal raster.
 
@@ -1439,11 +1429,9 @@ def _vector_legality(track_map, payload, legal_mask):
     zero area and passes. Returns the total annexed area in m²
     (0.0 for every accepted candidate).
 
-    The start-zone block below is unchanged pre-existing policy
-    (one-cell raster proximity + centre-in-section); strengthening
-    it to full polygon containment is tracked separately - see
-    LEGALITY.md integration notes. ``_annexation`` is the primitive
-    to reuse there.
+    Start-zone containment is canonical: ``validate_route`` requires
+    the whole zone within the union of the section polygons, so it
+    is deliberately not duplicated here.
     """
     legal_union = _legal_union(track_map, legal_mask)
     annexed_total = 0.0
@@ -1466,25 +1454,12 @@ def _vector_legality(track_map, payload, legal_mask):
                 f'{outside.area:.6f} m² outside the selected legal '
                 f'region, e.g. near ({point.x:.2f}, {point.y:.2f}); '
                 'exported walls must stay within the legal cell squares')
-    legal = (legal_mask > 0).astype(np.uint8)
-    near = cv2.dilate(legal, np.ones((3, 3), np.uint8))
-    zone = _fill_px(track_map, payload['start']['zone'])
-    if int((zone & (near == 0)).sum()):
-        raise AnnotationError(
-            'VECTOR_LEGAL: the start zone reaches off the selected '
-            'legal road; move the guide loop start or redraw it')
-    first = payload['sections'][0]
-    outline = np.array(
-        [track_map.world_to_pixel(p)
-         for p in list(first['right']) + list(reversed(first['left']))],
-        np.float32)
-    centre = tuple(np.mean(payload['start']['zone'], axis=0))
-    if cv2.pointPolygonTest(
-            outline, tuple(float(v) for v in
-                           track_map.world_to_pixel(centre)), False) < 0:
-        raise AnnotationError(
-            'VECTOR_LEGAL: the start zone centre is not inside the '
-            'first section')
+    # Start-zone containment is not rechecked here: validate_route
+    # (the MANIFEST_VALID stage, run next in check_payload) requires
+    # the whole zone within the union of the section polygons, which
+    # chained with the containment above puts it inside the legal
+    # squares too. Keeping a second, weaker raster check here would
+    # only duplicate that invariant with a different tolerance.
     return annexed_total
 
 
