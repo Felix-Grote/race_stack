@@ -16,7 +16,6 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-import shapely
 from shapely.geometry import Polygon, box
 from shapely.ops import unary_union
 
@@ -267,7 +266,6 @@ def test_other_resolutions_exact(tmp_path, resolution):
     assert illegal <= 1e-9  # exact zero, up to GEOS overlay residue
 
 
-
 def _shift_outward(section, wall, mid, dist_m, half=2):
     """Move wall points around index mid away from the section centroid."""
     poly = Polygon(list(section['right']) + list(reversed(section['left'])))
@@ -278,6 +276,7 @@ def _shift_outward(section, wall, mid, dist_m, half=2):
         n = float(np.linalg.norm(d))
         if n > 0:
             wall[i] = (p + d / n * dist_m).tolist()
+
 
 # ----------------------------------------------------------------------
 # Checker false-acceptance regressions (hand-mutated payloads)

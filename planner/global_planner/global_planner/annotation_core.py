@@ -811,6 +811,8 @@ def _legal_union(track_map, legal_mask):
                           y_c - res / 2,
                           track_map.origin[0] + (u1 - 0.5) * res,
                           y_c + res / 2))
+    if not rects:
+        return Polygon()
     rects = np.array(rects, dtype=float)
     return shapely.union_all(
         shapely.box(rects[:, 0], rects[:, 1], rects[:, 2], rects[:, 3]))
@@ -1410,7 +1412,12 @@ def _vector_legality(track_map, payload, legal_mask):
     for section in payload['sections']:
         polygon = Polygon(list(section['right'])
                           + list(reversed(section['left'])))
-        outside = polygon.difference(legal_union)
+        try:
+            outside = polygon.difference(legal_union)
+        except (shapely.errors.GEOSException, ValueError) as exc:
+            raise AnnotationError(
+                f'VECTOR_LEGAL: section {section["uid"]} walls do not '
+                f'form a usable polygon ({exc})') from exc
         annexed_total += outside.area
         if outside.area > _AREA_EPS_M2:
             worst = max(shapely.get_parts(outside),

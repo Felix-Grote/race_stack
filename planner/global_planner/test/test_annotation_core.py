@@ -994,6 +994,7 @@ def test_exported_walls_exactly_contained():
         assert annexed == 0.0
     assert receipt['stages']['vector_legal']['annexed_m2'] == 0.0
 
+
 def test_endcaps_exact_and_shared():
     """Section portals share exact endpoints (repin is identity)."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
@@ -1798,5 +1799,3 @@ def test_cli_select_region_extract_cycle(tmp_path):
     assert tool.main(['extract', '--map', yaml_path,
                       '--session', str(session_path),
                       '--out', str(tmp_path / 'out')]) == 1
-
-
