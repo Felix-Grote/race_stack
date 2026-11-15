@@ -142,7 +142,7 @@ def test_baku_corner_cuts_shorten_lap_and_validate(cuts, key):
         REFERENCE_LAP_M[key], abs=0.1)
     assert receipt['lap_length_m'] < 122.77  # unedited lap
     assert receipt['stages']['vector_legal']['status'] == 'PASS'
-    assert receipt['stages']['vector_legal']['gain_m2'] < 1.0
+    assert receipt['stages']['vector_legal']['annexed_m2'] == 0.0
     assert receipt['stages']['car_zones'] == 'PASS'
     assert validate_route(payload).digest == route.digest
 
@@ -165,9 +165,10 @@ def test_vector_legality_rejects_offroad_start_zone():
     must fail here, not in a later planner stage."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
     session = _session(track_map)
-    payload, _ = build_route(
-        track_map, *extract_boundaries(track_map), session['route_px'])
     legal = effective_free_mask(track_map, [], 5)
+    payload, _ = build_route(
+        track_map, *extract_boundaries(track_map), session['route_px'],
+        legal_mask=legal)
     payload['start']['zone'] = [[-8.0, -5.0], [-6.0, -5.0],
                                 [-6.0, -3.0], [-8.0, -3.0]]
     with pytest.raises(AnnotationError, match='VECTOR_LEGAL'):
@@ -179,9 +180,10 @@ def test_vector_legality_rejects_annexed_wall():
     though the payload is otherwise the valid golden route."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
     session = _session(track_map)
-    payload, _ = build_route(
-        track_map, *extract_boundaries(track_map), session['route_px'])
     legal = effective_free_mask(track_map, [], 5)
+    payload, _ = build_route(
+        track_map, *extract_boundaries(track_map), session['route_px'],
+        legal_mask=legal)
     wall = payload['sections'][1]['left']
     mid = len(wall) // 2
     for i in range(mid - 3, mid + 4):
