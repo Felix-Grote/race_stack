@@ -12,13 +12,23 @@ sys.path.insert(0, str(Path(__file__).parents[1]))
 
 from global_planner.annotation_core import (  # noqa: E402
     AnnotationError, MAX_DP_EPS_PER_CELL, TrackMap, atomic_write_text,
-    build_and_validate,
-    build_manifest, check_session_map, draft_name,
+    build_route, check_payload, check_session_map, draft_name,
     effective_free_mask, export_name,
     extract_boundaries, free_components, geometry_digest, load_session,
     map_namespace, new_session, patched_free_mask, require_approved,
     resolve_draft, ridge_seed, save_session, suggest_route)
-from global_planner.route_input import RouteError, validate_route  # noqa: E402
+from global_planner.route.errors import RouteError  # noqa: E402
+from global_planner.route.manifest import validate_route  # noqa: E402
+
+
+def _build(track_map, outer, inner, route_px, strokes=(), width=5,
+           seed=None, **kwargs):
+    """build_route + check_payload: (payload, route, receipt, info)."""
+    payload, info = build_route(track_map, outer, inner, route_px, **kwargs)
+    legal = effective_free_mask(track_map, strokes, width, seed)
+    route, receipt = check_payload(payload, track_map, legal)
+    return payload, route, receipt, info
+
 
 MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
 
@@ -54,15 +64,14 @@ def _midline_seed(outer, inner, count=120):
 
 @pytest.mark.parametrize('name', ['test/test', 'baku/baku'])
 def test_real_map_end_to_end_validates(name):
-    """Extracted loops + directed seed -> strict PASS + prepared corridor."""
+    """Extracted loops + directed guide -> route checks PASS."""
     track_map = TrackMap(MAPS / f'{name}.yaml')
     outer, inner = extract_boundaries(track_map)
-    payload, route, prepared, info = build_and_validate(
-        track_map, outer, inner, _midline_seed(outer, inner),
-        approval='operator-approved')
-    assert len(route.occurrences) == 4
-    assert len(prepared.samples) > 100
-    assert payload['physical_map']['sha256'] == track_map.sha256
+    payload, route, receipt, info = _build(
+        track_map, outer, inner, _midline_seed(outer, inner))
+    assert len(route.sections) == 4
+    assert receipt['stages']['samples'] > 100
+    assert payload['map']['sha256'] == track_map.sha256
     assert info['seed_samples'] > 100
     assert info['max_correction_m'] >= 0.0
 
@@ -160,10 +169,8 @@ def test_reversed_direction_also_valid_but_distinct():
     track_map = TrackMap(MAPS / 'test/test.yaml')
     outer, inner = extract_boundaries(track_map)
     seed = _midline_seed(outer, inner)
-    fwd, _, _, _ = build_and_validate(track_map, outer, inner, seed,
-                                      approval='operator-approved')
-    rev, _, _, _ = build_and_validate(track_map, outer, inner, seed[::-1],
-                                      approval='operator-approved')
+    fwd, _, _, _ = _build(track_map, outer, inner, seed)
+    rev, _, _, _ = _build(track_map, outer, inner, seed[::-1])
     assert fwd != rev
 
 
@@ -174,19 +181,20 @@ def test_route_outside_track_rejected():
     bogus = [[10 + 20 * math.cos(a), 10 + 20 * math.sin(a)]
              for a in np.linspace(0, 2 * math.pi, 24)]
     with pytest.raises((AnnotationError, RouteError, ValueError)):
-        build_and_validate(track_map, outer, inner, bogus,
-                           approval='operator-approved')
+        _build(track_map, outer, inner, bogus)
 
 
-def test_unapproved_export_payload_is_marked():
-    """Draft approval state is recorded verbatim in provenance."""
+def test_payload_carries_no_approval_state():
+    """The manifest is exactly the route schema; approval is session-only,
+    so a draft file can never masquerade as approved geometry."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
     outer, inner = extract_boundaries(track_map)
-    payload, _, _, _ = build_and_validate(
-        track_map, outer, inner, _midline_seed(outer, inner),
-        approval='none')
-    assert payload['provenance']['approval'] == 'none'
-    validate_route(payload)  # syntax still strict; approval is separate
+    payload, _, _, _ = _build(
+        track_map, outer, inner, _midline_seed(outer, inner))
+    assert set(payload) == {'name', 'map', 'start', 'sections'}
+    validate_route(payload)  # strict; approval is enforced separately
+    with pytest.raises(AnnotationError, match='not .operator-approved'):
+        require_approved(new_session(track_map), track_map)
 
 
 def test_source_map_never_modified(tmp_path):
@@ -223,6 +231,8 @@ def test_approval_is_bound_to_geometry_digest():
     with pytest.raises(AnnotationError, match='changed since approval'):
         require_approved(session, track_map)
     session['approval_digest'] = geometry_digest(session, track_map)
+    session['preview_route_digest'] = 'a' * 64
+    session['approval_route_digest'] = 'a' * 64
     require_approved(session, track_map)  # exact geometry: allowed
     session['boundary_strokes_px'] = [[[0, 0], [10, 10]]]
     with pytest.raises(AnnotationError, match='changed since approval'):
@@ -237,6 +247,8 @@ def test_thinning_is_part_of_approval_identity():
     assert session['chain_dp_epsilon_m'] == 0.02
     session['approval'] = 'operator-approved'
     session['approval_digest'] = geometry_digest(session, track_map)
+    session['preview_route_digest'] = 'a' * 64
+    session['approval_route_digest'] = 'a' * 64
     require_approved(session, track_map)
     session['chain_dp_epsilon_m'] = 0.03
     with pytest.raises(AnnotationError, match='changed since approval'):
@@ -266,7 +278,7 @@ def test_v1_session_migrates_with_approval_revoked(tmp_path):
     path = tmp_path / 'v1.json'
     path.write_text(json.dumps(session), encoding='utf-8')
     loaded = load_session(path, track_map)
-    assert loaded['version'] == 3
+    assert loaded['version'] == 4
     assert loaded['retained_region_px'] is None
     assert loaded['approval'] == 'none'
     with pytest.raises(AnnotationError, match='not .operator-approved'):
@@ -299,10 +311,9 @@ def test_negate_one_inverts_occupancy(tmp_path):
     outer, inner = extract_boundaries(src, [])
     outer_n, inner_n = extract_boundaries(inv_map, [])
     assert len(outer) == len(outer_n) and len(inner) == len(inner_n)
-    _, route, _, _ = build_and_validate(
-        inv_map, outer_n, inner_n, _midline_seed(outer_n, inner_n),
-        approval='operator-approved')
-    assert len(route.occurrences) == 4
+    _, route, _, _ = _build(
+        inv_map, outer_n, inner_n, _midline_seed(outer_n, inner_n))
+    assert len(route.sections) == 4
 
 
 def _draw_test_route(server):
@@ -409,7 +420,7 @@ def test_server_update_validation_and_clear(backend):
         server.op_update({'field': 'nope', 'value': []})
     with pytest.raises(AnnotationError, match='at least 3 points'):
         server.op_update({'field': 'route_px', 'value': [[0, 0]]})
-    with pytest.raises(AnnotationError, match='stroke_width_px'):
+    with pytest.raises(AnnotationError, match='stroke width'):
         server.op_update({'field': 'stroke_width_px', 'value': 99})
     rev = server.STATE['session']['revision']
     cleared = server.op_update({'field': 'route_px', 'value': []})
@@ -442,17 +453,16 @@ def test_cli_export_refuses_stale_approval(tmp_path):
     outer, inner = extract_boundaries(track_map, [], 5)
     session = new_session(track_map)
     session['route_px'] = _midline_seed(outer, inner)
-    session['approval'] = 'operator-approved'
-    session['approval_digest'] = geometry_digest(session, track_map)
-    # A previewed candidate is persisted for the approval to bind to,
-    # exactly as preview + approve would record it.
-    session['preview_digest'] = session['approval_digest']
     session_path = tmp_path / 'session.json'
     save_session(session, session_path)
     out = tmp_path / 'cli_out'
-    assert tool.main(['export', '--map', str(track_map.yaml_path),
-                      '--session', str(session_path),
-                      '--out', str(out)]) == 0
+    base = ['--map', str(track_map.yaml_path),
+            '--session', str(session_path), '--out', str(out)]
+    # Real preview + approve, so the approval binds both digests.
+    assert tool.main(['preview'] + base) == 0
+    candidate = load_session(session_path, track_map)['preview_digest']
+    assert tool.main(['approve'] + base + ['--candidate', candidate]) == 0
+    assert tool.main(['export'] + base) == 0
     assert (out / export_name(track_map)).exists()
     # An edit after approval (saved without re-approval) must be refused.
     stale = load_session(session_path, track_map)
@@ -505,15 +515,18 @@ def test_cli_preview_approve_export_cycle(tmp_path):
                       '--out', str(out)]) == 0
     assert (out / export_name(track_map)).exists()
     payload = _json.loads((out / export_name(track_map)).read_text())
-    assert payload['provenance']['approval'] == 'operator-approved'
+    # The manifest carries no approval state (route schema); approval
+    # lives in the session, and the file reloads to the preview digest.
+    assert set(payload) == {'name', 'map', 'start', 'sections'}
+    assert load_session(session_path, track_map)['approval'] == (
+        'operator-approved')
 
 
 def test_cli_preview_uses_core_default_epsilon(tmp_path):
     """CLI preview falls back to the shared core epsilon, not a literal."""
     from global_planner import annotation_core as core
     from global_planner import annotation_tool as tool
-    assert (tool.DEFAULT_CHAIN_DP_EPSILON_M
-            == core.DEFAULT_CHAIN_DP_EPSILON_M)
+    assert core.DEFAULT_CHAIN_DP_EPSILON_M == core.VALIDATE_THINNINGS[0]
     track_map = TrackMap(MAPS / 'test/test.yaml')
     outer, inner = extract_boundaries(track_map, [], 5)
     session = new_session(track_map)
@@ -680,10 +693,9 @@ def test_ridge_seed_validates(name):
     track_map = TrackMap(MAPS / f'{name}.yaml')
     outer, inner = extract_boundaries(track_map)
     seed = ridge_seed(track_map, outer, inner)
-    _, route, prepared, info = build_and_validate(
-        track_map, outer, inner, seed, approval='operator-approved')
-    assert len(route.occurrences) == 4
-    assert len(prepared.samples) > 100
+    _, route, receipt, info = _build(track_map, outer, inner, seed)
+    assert len(route.sections) == 4
+    assert receipt['stages']['samples'] > 100
     assert info['seed_samples'] > 100
 
 
@@ -752,20 +764,21 @@ def test_server_suggest_then_export_cycle(backend):
 
 
 def test_build_defaults_thin_walls_and_big_zone():
-    """Pipeline defaults: RDP-thinned walls fit checker budgets and the
-    init zone is the 2.0 x 1.6 m start box (input convention)."""
-    import math
+    """Pipeline defaults: walls are RDP-thinned and the start zone is
+    the middle half of the road over the first section's first 1.2 m,
+    following the walls (its centre lies inside section s0)."""
+    from shapely.geometry import Point, Polygon
     track_map = TrackMap(MAPS / 'test/test.yaml')
     outer, inner = extract_boundaries(track_map)
     seed = suggest_route(outer, inner)
-    payload, _, _, _ = build_and_validate(
-        track_map, outer, inner, seed, approval='operator-approved')
+    payload, route, _, _ = _build(track_map, outer, inner, seed)
     total = sum(len(o['left']) + len(o['right'])
-                for o in payload['occurrences'])
+                for o in payload['sections'])
     assert total < 1000  # dense extraction is ~1626 vertices
-    zone = payload['initialization']['zone']
-    edges = [math.dist(zone[k], zone[(k + 1) % 4]) for k in range(4)]
-    assert sorted(edges) == pytest.approx([1.6, 1.6, 2.0, 2.0], abs=1e-9)
+    zone = Polygon(payload['start']['zone'])
+    assert 0.5 < zone.area < 4.0
+    assert Polygon(route.sections[0].polygon).covers(
+        Point(zone.centroid.x, zone.centroid.y))
 
 
 @headless_only
@@ -900,10 +913,11 @@ def test_frame_gap_real_map_rejected_and_repaired(tmp_path):
     outer, inner = extract_boundaries(
         track_map, [[[211.0, 5.5], [239.0, 5.5]]], 13)
     seed = _midline_seed(outer, inner)
-    _, route, prepared, _ = build_and_validate(
-        track_map, outer, inner, seed, approval='operator-approved')
-    assert len(route.occurrences) == 4
-    assert len(prepared.samples) > 100
+    _, route, receipt, _ = _build(
+        track_map, outer, inner, seed,
+        strokes=[[[211.0, 5.5], [239.0, 5.5]]], width=13)
+    assert len(route.sections) == 4
+    assert receipt['stages']['samples'] > 100
 
 
 def test_rdp_never_expands_corridor():
@@ -921,7 +935,7 @@ def test_rdp_never_expands_corridor():
                 0.0 <= x <= 0.060
                 and y <= 0.015 * (1 - abs(x - 0.030) / 0.030))
             mask[v, u] = 255 if inside else 0
-    # Same construction as build_manifest: one-cell dilation = grid quantum.
+    # Same construction as build_route: one-cell dilation = grid quantum.
     import cv2
     mask = cv2.dilate(mask, np.ones((3, 3), np.uint8))
 
@@ -961,7 +975,7 @@ def _peninsula_fixture(res_m, width_cells, height_m, length_m=0.066):
     """Straight wall with a rectangular occupied peninsula (analytic truth).
 
     Returns (wall, free_mask, to_px, tip). NOTE: 2 mm fixtures exceed the
-    build_manifest envelope (eps/res = 10); they pin the bare primitive's
+    build_route envelope (eps/res = 10); they pin the bare primitive's
     eps bound (gain <= eps), not the supported sub-cell contract.
     """
     import cv2
@@ -1056,7 +1070,7 @@ def test_prefilter_mechanism_reinstates_above_bound_notch():
 def test_production_chain_gain_bounded_by_floor_plus_eps():
     """Production wall chain (floor prefilter + eps RDP) gains <= floor.
 
-    Uses the exact chain build_manifest runs: prefilter bound 0.6
+    Uses the exact chain build_route runs: prefilter bound 0.6
     cells, RDP bound eps, both gate-checked. A sub-floor spike
     (1 cell wide x 0.5 cell tall) is annexed up to its own height —
     that is the documented quantization floor, not a violation — while
@@ -1122,20 +1136,19 @@ def test_envelope_rejects_coarse_eps(tmp_path):
     assert track_map.resolution == pytest.approx(0.05)
     outer, inner = extract_boundaries(track_map)
     with pytest.raises(AnnotationError, match='exceeds.*raster cells'):
-        build_manifest(track_map, outer, inner,
-                       _midline_seed(outer, inner),
-                       approval='operator-approved', chain_dp_epsilon_m=0.05)
+        build_route(track_map, outer, inner,
+                    _midline_seed(outer, inner), chain_dp_epsilon_m=0.05)
 
 
 def test_envelope_accepts_boundary(tmp_path):
     """eps/res == 0.6 (baku's documented ratio) still builds strict PASS."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
     outer, inner = extract_boundaries(track_map)
-    payload, route, prepared, info = build_and_validate(
+    payload, route, receipt, info = _build(
         track_map, outer, inner, _midline_seed(outer, inner),
-        approval='operator-approved', chain_dp_epsilon_m=0.03)
-    assert len(prepared.samples) > 100
-    assert len(route.occurrences) == 4
+        chain_dp_epsilon_m=0.03)
+    assert receipt['stages']['samples'] > 100
+    assert len(route.sections) == 4
 
 
 def test_exported_walls_within_one_cell():
@@ -1152,14 +1165,13 @@ def test_exported_walls_within_one_cell():
     from global_planner.annotation_core import _loop_reference_mask
     track_map = TrackMap(MAPS / 'test/test.yaml')
     outer, inner = extract_boundaries(track_map)
-    payload, route, prepared, info = build_and_validate(
-        track_map, outer, inner, _midline_seed(outer, inner),
-        approval='operator-approved')
+    payload, route, receipt, info = _build(
+        track_map, outer, inner, _midline_seed(outer, inner))
     ref = _loop_reference_mask(track_map, outer, inner)
     dt_occ = cv2.distanceTransform((ref == 0).astype(np.uint8),
                                    cv2.DIST_L2, 3)
     worst = 0.0
-    for occ in payload['occurrences']:
+    for occ in payload['sections']:
         for chain in (occ['left'], occ['right']):
             pts = np.asarray([[track_map.world_to_pixel(p)[0],
                                track_map.world_to_pixel(p)[1]]
@@ -1183,22 +1195,22 @@ def test_exported_walls_within_one_cell():
 
 
 def test_endcaps_exact_and_shared():
-    """Occurrence portals share exact endpoints (repin is identity)."""
+    """Section portals share exact endpoints (repin is identity)."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
     outer, inner = extract_boundaries(track_map)
-    payload, _, _, _ = build_and_validate(
-        track_map, outer, inner, suggest_route(outer, inner),
-        approval='operator-approved')
-    occurrences = payload['occurrences']
-    assert len(occurrences) == 4
+    payload, route, _, _ = _build(
+        track_map, outer, inner, suggest_route(outer, inner))
+    sections = payload['sections']
+    assert len(sections) == 4
     assert max(len(o['left']) + len(o['right'])
-               for o in occurrences) < 512
-    for k, occ in enumerate(occurrences):
-        nxt = occurrences[(k + 1) % len(occurrences)]
-        gate = payload['transitions'][k]['gate']
+               for o in sections) < 512
+    for k, occ in enumerate(sections):
+        nxt = sections[(k + 1) % len(sections)]
         assert occ['left'][-1] == nxt['left'][0]
         assert occ['right'][-1] == nxt['right'][0]
-        assert gate == [occ['right'][-1], occ['left'][-1]]
+        gate = route.portals[k].gate
+        assert [list(gate[0]), list(gate[1])] == [occ['right'][-1],
+                                                  occ['left'][-1]]
 
 
 @headless_only
@@ -1844,18 +1856,6 @@ def test_retained_seed_rejects_nonfinite(tmp_path):
     assert load_session(session_path, track_map)['retained_region_px'] is None
 
 
-def test_compile_manifest_usage_error_and_pinned_gate(monkeypatch, capsys):
-    """Short argv is a usage error, not a traceback; a wrong interpreter
-    fails closed before anything is imported or compiled."""
-    from global_planner import compile_manifest
-    assert compile_manifest.main(['compile_manifest.py']) == 2
-    assert 'usage' in capsys.readouterr().err
-    monkeypatch.setattr(compile_manifest.sys, 'version',
-                        '0.0.0 (fake)', raising=False)
-    gate = compile_manifest._check_pinned_stack()
-    assert gate is not None and 'cpython' in gate
-
-
 def test_effective_mask_is_deterministic(tmp_path):
     """Repeated masks hash identically, with and without a seed."""
     import hashlib
@@ -1912,6 +1912,8 @@ def test_retained_seed_in_digest_save_load(tmp_path):
     session['retained_region_px'] = [100, 170]
     session['approval'] = 'operator-approved'
     session['approval_digest'] = geometry_digest(session, track_map)
+    session['preview_route_digest'] = 'a' * 64
+    session['approval_route_digest'] = 'a' * 64
     require_approved(session, track_map)
     path = tmp_path / 'sel.json'
     save_session(session, path)
@@ -1921,7 +1923,7 @@ def test_retained_seed_in_digest_save_load(tmp_path):
         load_session(path, other)
 
 
-def test_v2_session_migrates_to_v3_with_approval_revoked(tmp_path):
+def test_v2_session_migrates_to_current_with_approval_revoked(tmp_path):
     """A v2 draft reopens, but its approval never carries forward."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
     session = new_session(track_map)
@@ -1932,7 +1934,7 @@ def test_v2_session_migrates_to_v3_with_approval_revoked(tmp_path):
     path = tmp_path / 'v2.json'
     path.write_text(json.dumps(session), encoding='utf-8')
     loaded = load_session(path, track_map)
-    assert loaded['version'] == 3
+    assert loaded['version'] == 4
     assert loaded['retained_region_px'] is None
     assert loaded['approval'] == 'none'
     with pytest.raises(AnnotationError, match='not .operator-approved'):

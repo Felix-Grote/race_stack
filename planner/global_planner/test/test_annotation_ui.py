@@ -16,30 +16,13 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parents[1]))
 
 from global_planner.annotation_core import (  # noqa: E402
-    AnnotationError, TrackMap, build_and_validate, export_name,
+    AnnotationError, TrackMap, build_route, export_name,
     extract_boundaries, geometry_digest, load_session, save_session)
+from global_planner.route.manifest import validate_route  # noqa: E402
 from global_planner import annotation_server as server  # noqa: E402
 
 MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
 UI_HTML = Path(__file__).parents[1] / 'global_planner' / 'annotation_ui.html'
-
-
-def _has_pinned_kernel():
-    """True when the exact pinned optimizer stack is importable.
-
-    Mirrors the headless/ROS split: full-validation tests only run where
-    the optimizer kernel exists, and skip by design elsewhere.
-    """
-    try:
-        from global_planner.iqp_route_adapter import _helpers
-        _helpers()
-        return True
-    except Exception:
-        return False
-
-
-needs_pinned = pytest.mark.skipif(
-    not _has_pinned_kernel(), reason='requires pinned optimizer stack')
 
 
 @pytest.fixture
@@ -139,8 +122,9 @@ def test_suggest_failure_clears_stale_overlay(backend):
 
 
 def test_receipt_carries_exact_final_corridor_layers(backend):
-    """Preview exposes the manifest's own left/right walls + directed
-    seeds per occurrence; export shows bit-identical layers."""
+    """Preview exposes the manifest's own left/right walls, the
+    wall-derived centrelines, gates and start zone; export shows
+    bit-identical layers."""
     srv = backend
     track_map = _open_drawn(srv)
     prev = srv.op_preview({})
@@ -151,18 +135,23 @@ def test_receipt_carries_exact_final_corridor_layers(backend):
     # Layers match the manifest payload exactly (pixel roundtrip).
     outer, inner = extract_boundaries(
         track_map, srv.STATE['session']['boundary_strokes_px'], 5)
-    payload, _, _, _ = build_and_validate(
-        track_map, outer, inner, srv.STATE['session']['route_px'],
-        approval='operator-approved')
-    for k, occ in enumerate(payload['occurrences']):
-        for key in ('validated_route_px', 'validated_left_px',
-                    'validated_right_px'):
-            chain = {'validated_route_px': 'seed',
-                     'validated_left_px': 'left',
-                     'validated_right_px': 'right'}[key]
+    session = srv.STATE['session']
+    payload, _ = build_route(
+        track_map, outer, inner, session['route_px'],
+        name=session.get('route_name'),
+        chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
+    route = validate_route(payload)
+    assert prev['route_digest'] == route.digest
+    for k, occ in enumerate(payload['sections']):
+        for key, chain in (('validated_left_px', occ['left']),
+                           ('validated_right_px', occ['right']),
+                           ('validated_route_px',
+                            route.sections[k].centreline)):
             want = [[float(v) for v in track_map.world_to_pixel(pt)]
-                    for pt in occ[chain]]
+                    for pt in chain]
             assert np.allclose(prev[key][k], want, atol=1e-9)
+    assert len(prev['gates_px']) == 4
+    assert len(prev['start_zone_px']) == 4
     # Left/right are real walls, not copies of the seed.
     for k in range(4):
         left = np.asarray(prev['validated_left_px'][k])
@@ -287,9 +276,9 @@ def test_html_shows_digest_and_approval_state():
     assert 'candidate ${(S.candidate_digest' in html
     assert 'rev ${S.revision}' in html
     # Transport failures surface as FAIL instead of unhandled rejections:
-    # the api() helper fails closed on non-OK HTTP (!r.ok) and on fetch
-    # exceptions ('backend unreachable').
-    assert '!r.ok' in html
+    # api() reads the backend's JSON error body (HTTP 400 carries the
+    # operator-facing reason) and fails closed on fetch exceptions.
+    assert 'r.json().catch' in html
     assert 'backend unreachable' in html
 
 
@@ -306,20 +295,20 @@ def test_suggest_keeps_suggest_seed_on_test(backend):
     assert srv.op_preview({})['status'] == 'VALIDATED'
 
 
-def test_suggest_falls_back_to_ridge_on_baku(backend):
-    """Same ordinary flow on baku without map-specific settings: suggest
-    fails strict, ridge wins, preview accepts the fallback seed."""
+def test_suggest_on_baku_passes_route_checks(backend):
+    """Baku's suggested guide loop passes the route checks directly."""
     srv = backend
     _open_drawn(srv, strokes=(), route=False, map='baku')
     res = srv.op_suggest({})
     assert res['status'] == 'PASS'
-    assert 'ridge seed' in res['message']
+    assert 'suggest seed' in res['message']
     assert srv.op_preview({})['status'] == 'VALIDATED'
 
 
-def test_suggest_rejects_direction_conflict_on_baku(backend):
-    """A ridge fallback that would reverse the drawn travel direction is
-    refused with a reason instead of silently flipping the route."""
+def test_suggest_follows_drawn_direction_on_baku(backend):
+    """The suggestion follows the operator's drawn direction: a hint
+    running opposite to the extracted loop order yields a seed in the
+    hint's direction, never a silently flipped route."""
     from global_planner.annotation_core import _signed_area
     srv = backend
     _open_drawn(srv, strokes=(), route=False, map='baku')
@@ -328,15 +317,15 @@ def test_suggest_rejects_direction_conflict_on_baku(backend):
     seed = _midline_seed(outer, inner)
     if _signed_area(seed) < 0:
         seed = seed[::-1]
-    assert _signed_area(seed) > 0  # CCW hint; baku ridge runs opposite
+    assert _signed_area(seed) > 0  # CCW hint; baku loops run opposite
     srv.op_update({'field': 'route_px', 'value': seed})
-    with pytest.raises(AnnotationError, match='direction'):
-        srv.op_suggest({})
+    res = srv.op_suggest({})
+    assert res['status'] == 'PASS'
+    assert _signed_area(srv.STATE['session']['route_px']) > 0
 
 
-@needs_pinned
 def test_validate_selects_first_full_pass_on_test(backend):
-    """Explicit offline validation on the ordinary flow: test wins at the
+    """Explicit validation on the ordinary flow: test wins at the
     default thinning, records it in the session identity, and the locked
     configuration previews, approves and exports."""
     srv = backend
@@ -345,7 +334,7 @@ def test_validate_selects_first_full_pass_on_test(backend):
     res = srv.op_validate({})
     assert res['status'] == 'PASS'
     assert res['chain_dp_epsilon_m'] == 0.02
-    assert res['artifact_H']
+    assert res['route_digest']
     assert srv.STATE['session']['chain_dp_epsilon_m'] == 0.02
     assert srv.STATE['session']['approval'] == 'none'
     assert srv.STATE['candidate_digest'] is None
@@ -359,25 +348,24 @@ def test_validate_selects_first_full_pass_on_test(backend):
     assert exp['route_digest'] == prev['route_digest']
 
 
-@needs_pinned
-def test_validate_unlocks_baku_full_pass(backend):
-    """Baku ordinary flow needs the envelope-edge thinning: the default
-    fails the full gate, 0.03 passes, and the locked export matches the
-    documented reference hash."""
+def test_validate_baku_passes_and_locks_thinning(backend):
+    """Baku ordinary flow passes the route checks at the default
+    thinning; the winner is locked into the session and the locked
+    configuration previews, approves and exports one digest."""
     srv = backend
     _open_drawn(srv, strokes=(), route=False, map='baku')
-    assert 'ridge seed' in srv.op_suggest({})['message']
+    assert 'suggest seed' in srv.op_suggest({})['message']
     res = srv.op_validate({})
     assert res['status'] == 'PASS'
-    assert res['chain_dp_epsilon_m'] == 0.03
-    assert [a[:7] for a in res['attempts']] == ['eps 0.0']
+    assert res['chain_dp_epsilon_m'] == 0.02
+    assert res['attempts'] == []
     prev = srv.op_preview({})
     assert prev['status'] == 'VALIDATED'
     srv.op_approve({'approval_digest': prev['candidate_digest']})
     exp = srv.op_export({})
     assert exp['status'] == 'VALIDATED'
-    assert exp['route_digest'] == (
-        '82f9b533ce50ad3e7b974187f19e9c40d944ca8b87115d21eb34e5fb41ac03f0')
+    assert exp['route_digest'] == prev['route_digest']
+    assert exp['route_digest'] == res['route_digest']
 
 
 def test_source_map_bytes_untouched_by_ui_ops(backend, tmp_path):
@@ -597,25 +585,24 @@ def test_preview_survives_restart_via_persisted_digest(backend):
     assert exp['route_digest'] == prev['route_digest']
 
 
-# Diagonal across the top-left corner pocket of the test map.
-TEST_CUT = [[[130.16427660290194, 3.890151624735724],
-             [48.83572339709805, 100.10984837526428]]]
-TEST_CUT_SEED = [125, 230]
+def test_preview_on_pinched_road_fails_closed(backend):
+    """A stroke pinching the road to a slit grants no candidate:
+    extraction still succeeds, preview fails at the manifest stage
+    (derived centreline touches a wall) instead of passing silently.
 
-
-def test_preview_on_kinked_cut_fails_closed(backend):
-    """A cut whose sharp corner folds the corridor charts grants no
-    candidate: extraction selects the component, preview reports the
-    failure instead of passing silently."""
+    (The old kinked corner cut no longer fails anything under the
+    wall-derived centreline; test_annotation_route pins that.)
+    """
     srv = backend
     srv.op_open({'map': 'test'})
-    srv.op_update({'field': 'boundary_strokes_px', 'value': TEST_CUT})
-    srv.op_update({'field': 'retained_region_px', 'value': TEST_CUT_SEED})
+    srv.op_update({'field': 'stroke_width_px', 'value': 3})
+    pinch = [[[109.0, 74.0], [73.12, 32.6]]]
+    srv.op_update({'field': 'boundary_strokes_px', 'value': pinch})
     assert srv.op_extract({})['status'] == 'CANDIDATE'
     track_map = srv.STATE['map']
-    outer, inner = extract_boundaries(track_map, TEST_CUT, 5, TEST_CUT_SEED)
+    outer, inner = extract_boundaries(track_map, pinch, 3)
     srv.op_update({'field': 'route_px', 'value': _midline_seed(outer, inner)})
-    with pytest.raises(AnnotationError, match='smoothing level'):
+    with pytest.raises(AnnotationError, match='zero width'):
         srv.op_preview({})
     assert srv.STATE['candidate_digest'] is None
     with pytest.raises(AnnotationError, match='no fresh preview'):
