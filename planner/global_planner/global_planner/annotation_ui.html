@@ -32,6 +32,7 @@ button:disabled{opacity:.45}
  <button id="approve">Approve preview</button>
  <button id="export">Export approved</button>
  <button id="save">Save draft</button>
+ <button id="fitBtn" title="Reset zoom/pan to the full map">Fit map</button>
 </p>
 <p><label>Route name <input id="meta-name" size="14"></label>
  <label>Surface <input id="meta-surface" size="10"></label>
@@ -52,7 +53,7 @@ button:disabled{opacity:.45}
 <span style="color:#fd4">■ guide loop (direction + cuts only, not exported)</span>
 <span style="color:#4f4">■ exported walls + derived centreline (from walls)</span>
 <span style="color:#f4f">■ section gates</span> <span style="color:#fff">■ start zone</span>
-<span>Click to add points, double-click to finish a stroke. Guide: draw one closed lap in travel direction (arrows show direction), then double-click. The guide only sets direction and where sections are cut; the green centreline is derived from the exported walls by the route package. Flow: Preview → inspect green candidate → Approve → Export. Extraction is a button press, never per-mousemove: the hover line is a local preview only. Boundary strokes add occupied cells; there is no free-space brush and maps are never written. Adding any stroke after extraction clears the overlay — re-extract.</span></p>
+<span>Click to add points, double-click to finish a stroke. Mouse wheel zooms at the cursor; Space+drag or middle-drag pans; Fit map restores the full view (view only, never edits the draft). Guide: draw one closed lap in travel direction (arrows show direction), then double-click. The guide only sets direction and where sections are cut; the green centreline is derived from the exported walls by the route package. Flow: Preview → inspect green candidate → Approve → Export. Extraction is a button press, never per-mousemove: the hover line is a local preview only. Boundary strokes add occupied cells; there is no free-space brush and maps are never written. Adding any stroke after extraction clears the overlay — re-extract.</span></p>
 <p id="sessinfo"></p>
 <p>Boundary strokes: <span id="strokeList">none</span></p>
 <!-- No frameworks: plain HTML/JS only, minimal viewport. -->
@@ -66,15 +67,30 @@ let validated={route:[],left:[],right:[],gates:[],start:[]}, candidate=null;
 let mapImg=null, mapKey=null, exclImg=null, exclKey=null, bucket=false;
 const layers={map:true,excluded:true,strokes:true,extracted:true,corridor:true,center:true};
 const say=t=>st.textContent=t;
-// Aspect-preserving view: fit the map inside the canvas, letterbox the rest.
-function view(){ const iw=S.image_size[0], ih=S.image_size[1];
-  const s=Math.min(cv.width/iw, cv.height/ih);
-  const w=iw*s, h=ih*s; return {s, ox:(cv.width-w)/2, oy:(cv.height-h)/2}; }
+// One affine viewport for every layer and for input:
+// canvas = scale * map + translation. Presentation only: zoom/pan
+// never touch the session, its revision, digests or geometry.
+let vp=null;
+function fitScale(){ return Math.min(cv.width/S.image_size[0], cv.height/S.image_size[1]); }
+function fitView(){ if(!S){ vp=null; return; }
+  const s=fitScale(), iw=S.image_size[0], ih=S.image_size[1];
+  vp={s, ox:(cv.width-iw*s)/2, oy:(cv.height-ih*s)/2}; }
+function view(){ if(!vp) fitView(); return vp||{s:1,ox:0,oy:0}; }
+function clampView(){ if(!S||!vp) return;
+  const w=S.image_size[0]*vp.s, h=S.image_size[1]*vp.s;
+  vp.ox=Math.min(cv.width-40, Math.max(40-w, vp.ox));
+  vp.oy=Math.min(cv.height-40, Math.max(40-h, vp.oy)); }
 function toCanvas(p){ const v=view(); return [v.ox+p[0]*v.s, v.oy+p[1]*v.s]; }
-function toMap(cx,cy){ const v=view(); const x=(cx-v.ox)/v.s, y=(cy-v.oy)/v.s;
-  if(x<0||y<0||x>S.image_size[0]||y>S.image_size[1]) return null; return [x,y]; }
+function toMapRaw(cx,cy){ const v=view(); return [(cx-v.ox)/v.s, (cy-v.oy)/v.s]; }
+function toMap(cx,cy){ const p=toMapRaw(cx,cy);
+  if(p[0]<0||p[1]<0||p[0]>S.image_size[0]||p[1]>S.image_size[1]) return null; return p; }
+// Mouse -> canvas backing store through the CSS content box:
+// getBoundingClientRect() includes the border, so offset by the
+// border widths (clientLeft/clientTop) and scale by the content
+// size (clientWidth/clientHeight), not the border box.
 function evToCanvas(e){ const r=cv.getBoundingClientRect();
-  return [(e.clientX-r.left)*cv.width/r.width, (e.clientY-r.top)*cv.height/r.height]; }
+  return [(e.clientX-r.left-cv.clientLeft)*cv.width/cv.clientWidth,
+          (e.clientY-r.top-cv.clientTop)*cv.height/cv.clientHeight]; }
 function info(){
   if(!S){ si.textContent=''; return; }
   const n=(S.route_px||[]).length; const closed=n>2 && Math.hypot(S.route_px[0][0]-S.route_px[n-1][0],S.route_px[0][1]-S.route_px[n-1][1])<8;
@@ -103,10 +119,15 @@ async function api(path, body){
     return {status:'FAIL',message:'backend HTTP '+r.status};
   }catch(e){ return {status:'FAIL',message:'backend unreachable: '+((e&&e.message)||e)}; }
 }
+// One place that drops stale candidate identity and validated overlays
+// whenever a candidate-defining input changed (edit, selection change,
+// validate, metadata). Editable strokes, the guide loop and still-valid
+// extracted boundaries stay visible; approval stays the backend's call.
+function invalidateCandidate(){ validated={route:[],left:[],right:[],gates:[],start:[]}; candidate=null; }
 // Local-only failure path: keep the operator's strokes, drop every overlay
 // derived from geometry that just failed, never show a stale candidate.
-function fail(res){ if(S) S.extraction=null; validated={route:[],left:[],right:[],gates:[],start:[]};
-  candidate=null; selected=-1; info(); say('FAIL: '+(res.message||res.reason||'unknown')); draw(); }
+function fail(res){ if(S) S.extraction=null; invalidateCandidate();
+  selected=-1; info(); say('FAIL: '+(res.message||res.reason||'unknown')); draw(); }
 function line(pts,color,close,width){ if(!pts||pts.length<2)return; ctx.strokeStyle=color; ctx.lineWidth=width||2; ctx.beginPath(); pts.forEach((p,i)=>{const q=toCanvas(p); i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);}); if(close)ctx.closePath(); ctx.stroke(); }
 function arrows(pts,color){ if(!pts||pts.length<8)return; ctx.fillStyle=color;
   const flat=pts.flatMap(seg=>Array.isArray(seg[0])?seg:[seg]);
@@ -170,16 +191,46 @@ function nearestStroke(cp){ let best=-1, bd=12;
     for(let k=0;k<q.length;k++){ const d=segDist(cp,q[Math.max(0,k-1)],q[k]);
       if(d<bd){ bd=d; best=i; } } });
   return best; }
-cv.addEventListener('mousemove',e=>{ if(!S){hover=null;return;}
+// Zoom (wheel, cursor-centred, 1x-12x of fit) and pan (Space+drag or
+// middle-drag). Both only move vp: no session state, revision, digest
+// or geometry can change, and a pan never adds or finishes a stroke.
+let pan=null, spaceDown=false, suppressClick=false;
+cv.addEventListener('wheel',e=>{ if(!S) return; e.preventDefault();
+  const cp=evToCanvas(e), mp=toMapRaw(cp[0],cp[1]), v=view(), fit=fitScale();
+  const ns=Math.min(12*fit, Math.max(fit, v.s*(e.deltaY<0?1.15:1/1.15)));
+  vp={s:ns, ox:cp[0]-mp[0]*ns, oy:cp[1]-mp[1]*ns}; clampView(); draw();
+},{passive:false});
+cv.addEventListener('mousedown',e=>{ if(!S) return;
+  if(e.button===1||(e.button===0&&spaceDown)){
+    pan={x:e.clientX, y:e.clientY, ox:view().ox, oy:view().oy, moved:false};
+    e.preventDefault(); } });
+window.addEventListener('mousemove',e=>{ if(!pan) return;
+  const dx=(e.clientX-pan.x)*cv.width/cv.clientWidth,
+        dy=(e.clientY-pan.y)*cv.height/cv.clientHeight;
+  if(Math.abs(dx)+Math.abs(dy)>3) pan.moved=true;
+  vp.ox=pan.ox+dx; vp.oy=pan.oy+dy; clampView(); hover=null; draw(); });
+let panEnd=0;
+window.addEventListener('mouseup',()=>{ if(pan&&pan.moved){ suppressClick=true; panEnd=Date.now(); } pan=null; });
+// Space is the pan modifier everywhere except text entry (focus is
+// usually on the last-clicked button, so body/canvas-only would miss
+// it); suppressing keyup also stops Space re-triggering that button.
+window.addEventListener('keydown',e=>{ if(e.code==='Space'&&
+  !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)){ spaceDown=true; e.preventDefault(); } });
+window.addEventListener('keyup',e=>{ if(e.code==='Space'){
+  if(spaceDown) e.preventDefault(); spaceDown=false; } });
+cv.addEventListener('mousemove',e=>{ if(!S){hover=null;return;} if(pan) return;
   const cp=evToCanvas(e);
   hover=(draft.length&&!selecting&&toMap(cp[0],cp[1]))?cp:null; draw(); });
-cv.addEventListener('click',async e=>{ if(!S)return; const cp=evToCanvas(e);
+cv.addEventListener('click',async e=>{ if(!S)return;
+  if(suppressClick){ suppressClick=false; return; }
+  if(e.button===1) return;
+  const cp=evToCanvas(e);
   if(bucket){ const mp=toMap(cp[0],cp[1]);
     if(!mp){ say('click is outside the map; nothing set'); return; }
     const pixel=[Math.round(mp[0]),Math.round(mp[1])];
     const res=await api('/api/session/update',{field:'retained_region_px', value:pixel});
     if(res.status!=='PASS'){ fail(res); return; }
-    S=res.session; bucket=false;
+    invalidateCandidate(); S=res.session; bucket=false;
     document.getElementById('bucketBtn').classList.remove('on');
     info(); say(res.status+': '+(res.message||'')); draw(); return; }
   if(selecting){ const hit=nearestStroke(cp); selected=hit; info(); draw();
@@ -187,6 +238,7 @@ cv.addEventListener('click',async e=>{ if(!S)return; const cp=evToCanvas(e);
   const mp=toMap(cp[0],cp[1]); if(!mp){ say('click is outside the map (letterbox); nothing added'); return; }
   draft.push(mp); hover=null; draw(); });
 cv.addEventListener('dblclick',async()=>{
+  if(Date.now()-panEnd<600) return; // tail of a pan drag, not a finish
   // A double-click fires two click events for its endpoint, so the draft
   // ends with that point twice. Collapse only the double-fired tail:
   // earlier operator-placed points stay untouched, and a natural stroke
@@ -198,7 +250,7 @@ cv.addEventListener('dblclick',async()=>{
   const value = tool==='boundary' ? [...(S.boundary_strokes_px||[]), draft] : draft;
   const res=await api('/api/session/update',{field, value}); draft=[]; hover=null; selected=-1;
   if(res.status!=='PASS'){ fail(res); return; }
-  validated={route:[],left:[],right:[],gates:[],start:[]}; candidate=null; S=res.session;
+  invalidateCandidate(); S=res.session;
   // Boundary edits change extraction: refresh it at once so the operator
   // sees updated legal boundaries without another manual step. A route
   // commit does not affect extraction, so it skips this roundtrip.
@@ -222,16 +274,16 @@ document.getElementById('clearRegionBtn').onclick=async()=>{
   if(!S)return;
   const res=await api('/api/session/update',{field:'retained_region_px', value:null});
   if(res.status!=='PASS'){ fail(res); return; }
-  S=res.session; info(); say(res.status+': '+(res.message||'')); draw(); };
+  invalidateCandidate(); S=res.session; info(); say(res.status+': '+(res.message||'')); draw(); };
 [['lay-map','map'],['lay-excluded','excluded'],['lay-strokes','strokes'],['lay-extracted','extracted'],['lay-corridor','corridor'],['lay-center','center']].forEach(([id,k])=>{
   document.getElementById(id).onchange=e=>{ layers[k]=e.target.checked; draw(); }; });
 function applied(res){ if(res.status!=='PASS'){ fail(res); return; }
-  S=res.session; validated={route:[],left:[],right:[],gates:[],start:[]}; candidate=null; selected=-1;
+  S=res.session; invalidateCandidate(); selected=-1;
   info(); say(res.status+': '+(res.message||'')); draw(); }
-document.getElementById('openBtn').onclick=async()=>{ const name=document.getElementById('mapYaml').value.trim(); const res=await api('/api/session/open',{map:name}); if(res.status!=='PASS'){ fail(res); return; } S=res.session; validated={route:[],left:[],right:[],gates:[],start:[]}; candidate=null; selected=-1; draft=[]; hover=null; bucket=false; document.getElementById('bucketBtn').classList.remove('on'); info(); say(res.status+': '+(res.message||'')); draw(); };
+document.getElementById('openBtn').onclick=async()=>{ const name=document.getElementById('mapYaml').value.trim(); const res=await api('/api/session/open',{map:name}); if(res.status!=='PASS'){ fail(res); return; } S=res.session; invalidateCandidate(); fitView(); selected=-1; draft=[]; hover=null; bucket=false; document.getElementById('bucketBtn').classList.remove('on'); info(); say(res.status+': '+(res.message||'')); draw(); };
 async function refreshExtraction(){
   // New extraction invalidates preview layers and candidacy everywhere.
-  validated={route:[],left:[],right:[],gates:[],start:[]}; candidate=null; selected=-1;
+  invalidateCandidate(); selected=-1;
   const res=await api('/api/session/extract',{});
   if(res.status!=='CANDIDATE'){ fail(res); return; }
   S=res.session; info(); say(res.status+': '+(res.message||'')); draw(); }
@@ -239,20 +291,21 @@ document.getElementById('extract').onclick=refreshExtraction;
 document.getElementById('suggest').onclick=async()=>{
   const res=await api('/api/session/suggest',{});
   if(res.status!=='PASS'){ fail(res); return; }
-  S=res.session; validated={route:[],left:[],right:[],gates:[],start:[]}; candidate=null; selected=-1;
+  S=res.session; invalidateCandidate(); selected=-1;
   info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('preview').onclick=async()=>{ const res=await api('/api/session/preview',{}); if(res.status!=='VALIDATED'){ fail(res); return; } S=res.session; validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[],gates:res.gates_px||[],start:res.start_zone_px||[]}; candidate=res.candidate_digest||null; info(); say((res.status||'FAIL')+': '+(res.message||res.reason||'')); draw(); };
-document.getElementById('validate').onclick=async()=>{ const res=await api('/api/session/validate',{}); if(res.status!=='PASS'){ fail(res); return; } S=res.session; info(); const tries=(res.attempts||[]).length?` (tried: ${res.attempts.join('; ')})`:''; say(res.status+': '+(res.message||'')+tries+' — re-preview, then approve and export'); draw(); };
+document.getElementById('validate').onclick=async()=>{ const res=await api('/api/session/validate',{}); if(res.status!=='PASS'){ fail(res); return; } S=res.session; invalidateCandidate(); info(); const tries=(res.attempts||[]).length?` (tried: ${res.attempts.join('; ')})`:''; say(res.status+': '+(res.message||'')+tries+' — re-preview, then approve and export'); draw(); };
 document.getElementById('approve').onclick=async()=>{ if(!candidate){say('FAIL: preview a candidate first');return;} const res=await api('/api/session/approve',{approval_digest:candidate}); if(res.status!=='PASS'){ fail(res); return; } if(res.session){S=res.session;} info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('export').onclick=async()=>{ const res=await api('/api/session/export',{}); if(res.status!=='VALIDATED'){ fail(res); return; } if(res.session){S=res.session;} validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[],gates:res.gates_px||[],start:res.start_zone_px||[]}; info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('save').onclick=async()=>{ const res=await api('/api/session/save',{}); say(res.status+': '+(res.message||'')); };
+document.getElementById('fitBtn').onclick=()=>{ fitView(); draw(); };
 document.getElementById('metaApply').onclick=async()=>{ if(!S)return;
   const fields=[['route_name',document.getElementById('meta-name').value],
                 ['surface',document.getElementById('meta-surface').value],
                 ['max_speed_mps',parseFloat(document.getElementById('meta-speed').value)]];
   for(const [field,value] of fields){ const res=await api('/api/session/update',{field, value});
     if(res.status!=='PASS'){ fail(res); return; } S=res.session; }
-  validated={route:[],left:[],right:[],gates:[],start:[]}; candidate=null;
+  invalidateCandidate();
   info(); say('PASS: metadata updated (unapproved)'); draw(); };
 async function appliedBoundaryEdit(res){
   // Boundary-affecting edits (width, undo, stroke removal) change

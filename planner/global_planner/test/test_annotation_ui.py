@@ -289,4 +289,15 @@ def test_html_contract():
     assert 'splice(-2)' not in html  # dblclick keeps its endpoint
     assert 'approval ${S.approval}' in html
     assert 'backend unreachable' in html
-    assert html.count('candidate=null') >= 4  # edits clear the candidate
+    # Candidate invalidation is centralized: one helper clears the
+    # candidate token and validated overlays, used by every edit path.
+    assert 'function invalidateCandidate()' in html
+    assert html.count('invalidateCandidate()') >= 8
+    assert html.count('candidate=null') == 2  # declaration + the helper
+    # Viewport: content-box mouse math (no border bias), one affine
+    # view, cursor zoom, space/middle pan, fit reset.
+    assert 'cv.clientLeft' in html and 'cv.clientWidth' in html
+    assert "addEventListener('wheel'" in html
+    assert 'fitScale()' in html and 'fitView()' in html
+    assert "getElementById('fitBtn')" in html
+    assert 'suppressClick' in html  # a pan never adds/finishes points
