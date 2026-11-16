@@ -354,6 +354,7 @@ def op_suggest(body):
     redraw it, and only an explicit approve authorizes export.
     """
     session, track_map = require_open()
+    check_source_current(track_map)
     retained = session.get('retained_region_px')
     try:
         outer, inner = extract_boundaries(
@@ -614,6 +615,7 @@ def op_validate(body):
     dense walls is the expensive part.
     """
     session, track_map = require_open()
+    check_source_current(track_map)
     if not session.get('route_px'):
         raise AnnotationError('draw the directed route loop first')
     try:

@@ -1380,17 +1380,54 @@ def build_route(track_map, outer_px, inner_px, route_px, *,
             left_m -= d
         return pts[-1]
 
-    # Start zone: the middle half of the road over the first 1.2 m of
-    # the first section, following its actual walls so the box stays
-    # on the road around a bend (a fixed rectangle does not). It is a
-    # starting suggestion, not a surveyed grid slot; check_payload
-    # still verifies it against the legal raster.
+    # Start zone: the middle of the road over the first 1.2 m of the
+    # first section. validate_route requires the whole zone inside
+    # the section union, so generation verifies containment in that
+    # union and falls back through simpler shapes until one fits:
+    # first a ribbon of cross-sections every 0.3 m along the actual
+    # walls (follows bends), then shrinking quads. It stays a
+    # starting suggestion, not a surveyed grid slot.
     s0 = sections[0]
-    r0, l0 = np.array(s0['right'][0]), np.array(s0['left'][0])
-    r1, l1 = _at(s0['right'], 1.2), _at(s0['left'], 1.2)
-    zone = [[float(x), float(y)] for x, y in (
-        r0 + 0.25 * (l0 - r0), r1 + 0.25 * (l1 - r1),
-        r1 + 0.75 * (l1 - r1), r0 + 0.75 * (l0 - r0))]
+    road = shapely.union_all(
+        [Polygon(list(s['right']) + list(reversed(s['left'])))
+         for s in sections])
+
+    def _cross(dist_m, frac):
+        r_d = _at(s0['right'], dist_m)
+        return r_d + frac * (_at(s0['left'], dist_m) - r_d)
+
+    stations = (0.0, 0.3, 0.6, 0.9, 1.2)
+    candidates = [
+        [_cross(d, 0.25) for d in stations]
+        + [_cross(d, 0.75) for d in reversed(stations)]]
+    for length_m, frac in ((1.2, 0.25), (0.8, 0.30), (0.5, 0.35),
+                           (0.3, 0.40)):
+        candidates.append([_cross(0.0, frac), _cross(length_m, frac),
+                           _cross(length_m, 1 - frac),
+                           _cross(0.0, 1 - frac)])
+    zone = None
+    for cand_pts in candidates:
+        cand = []
+        for p in cand_pts:
+            point = [float(p[0]), float(p[1])]
+            if not cand or math.dist(point, cand[-1]) > 1e-9:
+                cand.append(point)
+        if len(cand) > 1 and math.dist(cand[0], cand[-1]) <= 1e-9:
+            cand.pop()
+        if len(cand) < 3:
+            continue
+        try:
+            poly = Polygon(cand)
+            if poly.is_valid and road.covers(poly):
+                zone = cand
+                break
+        except (shapely.errors.GEOSException, ValueError):
+            continue
+    if zone is None:
+        raise AnnotationError(
+            'no start zone fits inside the first section near its '
+            'start cap; move the guide loop start to a straighter '
+            'part of the track')
     payload = {
         'name': name,
         'map': {'frame_id': 'map', 'sha256': track_map.sha256},
