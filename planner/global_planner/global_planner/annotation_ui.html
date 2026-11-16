@@ -87,7 +87,7 @@ details{margin-top:6px}
 <span style="color:#fd4">■ guide (direction + section cuts only, not exported) →</span>
 <span style="color:#4f4">■ exported walls + derived centreline →</span>
 <span style="color:#f4f">■ section gates</span> <span style="color:#fff">■ start zone</span>
-<span>○ S = start point (direction of travel follows the arrows)</span></p>
+<span>S = generated route start (authoritative; start zone follows it) · ○ = guide start (direction reference only)</span></p>
 <p id="sessinfo"></p>
 <!-- No frameworks: plain HTML/JS only, minimal viewport. -->
 <canvas id="cv" width="900" height="600"></canvas>
@@ -95,7 +95,7 @@ details{margin-top:6px}
 <script>
 const cv=document.getElementById('cv'), ctx=cv.getContext('2d'), st=document.getElementById('status');
 const si=document.getElementById('sessinfo'), sl=document.getElementById('strokeList');
-let S=null, tool='boundary', draft=[], hover=null, selected=-1;
+let S=null, tool=null, draft=[], hover=null, selected=-1;
 let validated={route:[],left:[],right:[],gates:[],start:[]}, candidate=null;
 let exported=false;
 let mapImg=null, mapKey=null, exclImg=null, exclKey=null, bucket=false;
@@ -198,15 +198,20 @@ function arrows(pts,color){ const flat=flatLine(pts); if(flat.length<2) return;
       ctx.closePath(); ctx.fill(); ctx.stroke();
       nextAt+=80; }
     dist+=seg; } }
-// Start point marker: white S disc at the first stored point; the
-// first arrow shows the initial heading. A suggestion of where the
-// route starts, not a surveyed starting grid.
-function startMarker(pts,color){ const flat=flatLine(pts); if(flat.length<2) return;
+// Start markers. The generated route's start is authoritative (the
+// exported start zone follows section 0): filled white S disc. The
+// guide's start is only a direction/phase reference (gate placement
+// may shift the generated start away from it): hollow circle, no
+// letter, so the two can never be confused.
+function startMarker(pts,color,label){ const flat=flatLine(pts); if(flat.length<2) return;
   const a=toCanvas(flat[0]);
-  ctx.fillStyle='#fff'; ctx.strokeStyle=color; ctx.lineWidth=2;
-  ctx.beginPath(); ctx.arc(a[0],a[1],7,0,7); ctx.fill(); ctx.stroke();
-  ctx.fillStyle='#111'; ctx.font='bold 9px system-ui';
-  ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('S',a[0],a[1]); }
+  ctx.strokeStyle=color; ctx.lineWidth=2;
+  if(label){ ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.arc(a[0],a[1],7,0,7); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#111'; ctx.font='bold 9px system-ui';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(label,a[0],a[1]); }
+  else { ctx.beginPath(); ctx.arc(a[0],a[1],5,0,7); ctx.stroke(); } }
 function regionText(){ const rg=(S&&S.region)||{};
   if(rg.error) return 'error';
   const ret=rg.retained_region_px?`[${rg.retained_region_px}]`:'none';
@@ -244,22 +249,29 @@ function overlay(){
       ctx.strokeStyle='#f66'; ctx.setLineDash([4,3]); ctx.beginPath();
       ctx.moveTo(last[0],last[1]); ctx.lineTo(hover[0],hover[1]); ctx.stroke(); ctx.setLineDash([]); } }
   if(layers.extracted&&S.extraction){ line(S.extraction.outer_px,'#4cf'); line(S.extraction.inner_px,'#4cf'); }
-  if(layers.center){ line(S.route_px||[],'#fd4',true); arrows(S.route_px||[],'#fd4'); startMarker(S.route_px||[],'#fd4'); }
+  if(layers.center){ line(S.route_px||[],'#fd4',true); arrows(S.route_px||[],'#fd4'); startMarker(S.route_px||[],'#fd4',''); }
   if(layers.corridor){ (validated.left||[]).forEach(p=>line(p,'#4f4'));
     (validated.right||[]).forEach(p=>line(p,'#4f4'));
     (validated.gates||[]).forEach(p=>line(p,'#f4f',false,3));
     line(validated.start||[],'#fff',true,2); }
-  if(layers.center){ (validated.route||[]).forEach(p=>line(p,'#4f4')); arrows(validated.route||[],'#4f4'); startMarker(validated.route||[],'#4f4'); }
+  if(layers.center){ (validated.route||[]).forEach(p=>line(p,'#4f4')); arrows(validated.route||[],'#4f4'); startMarker(validated.route||[],'#4f4','S'); }
 }
-// Reverse a stored closed guide in place-value: keep the starting
-// point and loop closure, reverse traversal order. An involution up
-// to closure normalization (an open tail point pair becomes one
-// explicit closing point, which route generation already assumed).
+// Reverse a stored guide: keep the starting point, reverse traversal
+// order, and preserve the input's closure representation (exactly
+// closed stays closed; near-closed/open stays open - route generation
+// wraps the tail either way). A true involution: reversing twice
+// restores the original point list exactly, for manual and suggested
+// guides alike.
 function reversedGuide(route){ const pts=(route||[]).slice();
-  if(pts.length>1){ const a=pts[0], b=pts[pts.length-1];
-    if(Math.hypot(a[0]-b[0],a[1]-b[1])<1e-9) pts.pop(); }
   if(pts.length<3) return null;
-  const rev=[pts[0], ...pts.slice(1).reverse()]; rev.push(pts[0]); return rev; }
+  const closed=pts.length>1 &&
+    Math.hypot(pts[0][0]-pts[pts.length-1][0],
+               pts[0][1]-pts[pts.length-1][1])<1e-9;
+  const body=closed ? pts.slice(0,-1) : pts;
+  if(body.length<3) return null;
+  const rev=[body[0], ...body.slice(1).reverse()];
+  if(closed) rev.push(body[0]);
+  return rev; }
 // Zoom (wheel, cursor-centred, 1x-12x of fit) and pan (Space+drag or
 // middle-drag). Both only move vp: no session state, revision, digest
 // or geometry can change, and a pan never adds or finishes a stroke.
@@ -304,6 +316,7 @@ cv.addEventListener('click',async e=>{ if(!S)return;
     invalidateCandidate(); S=res.session; bucket=false;
     document.getElementById('bucketBtn').classList.remove('on');
     info(); say(res.status+': '+(res.message||'')); draw(); return; }
+  if(!tool){ say('Inspect: clicks do not draw; choose Boundary Pencil or Route Pencil to annotate'); return; }
   const mp=toMap(cp[0],cp[1]); if(!mp){ say('click is outside the map (letterbox); nothing added'); return; }
   draft.push(mp); hover=null; draw(); });
 cv.addEventListener('dblclick',async()=>{
@@ -314,7 +327,7 @@ cv.addEventListener('dblclick',async()=>{
   // whose endpoint IS the double-click keeps it.
   while(draft.length>=2){ const a=draft[draft.length-1], b=draft[draft.length-2];
     if(Math.hypot(a[0]-b[0],a[1]-b[1])>0.5) break; draft.pop(); }
-  if(!S||draft.length<2){draft=[]; draw(); return;}
+  if(!S||!tool||draft.length<2){draft=[]; draw(); return;}
   const field = tool==='boundary' ? 'boundary_strokes_px' : 'route_px';
   const value = tool==='boundary' ? [...(S.boundary_strokes_px||[]), draft] : draft;
   const res=await api('/api/session/update',{field, value}); draft=[]; hover=null; selected=-1;
@@ -325,14 +338,21 @@ cv.addEventListener('dblclick',async()=>{
   // commit does not affect extraction, so it skips this roundtrip.
   if(tool==='boundary'){ await refreshExtraction(); return; }
   info(); say(res.status+': '+(res.message||'')); draw(); });
-document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool; bucket=false;
+// Pencils toggle: clicking the active pencil returns to Inspect
+// (tool=null), where canvas clicks never draw. The highlighted
+// button always matches click behavior; Inspect is the default.
+document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{
+  tool=(tool===b.dataset.tool ? null : b.dataset.tool); bucket=false;
   document.getElementById('bucketBtn').classList.remove('on');
-  document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',x===b));
-  say('Tool: '+(tool==='boundary'?'Boundary Pencil':'Route Pencil'));});
+  document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',x.dataset.tool===tool));
+  say(tool ? 'Tool: '+(tool==='boundary'?'Boundary Pencil':'Route Pencil')
+           : 'Inspect: clicks do not draw; choose a pencil to annotate');});
 document.getElementById('bucketBtn').onclick=e=>{ bucket=!bucket;
   document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',false));
   e.target.classList.toggle('on',bucket);
-  say(bucket?'Select Drivable Region: click a free pixel inside the road':'Tool: '+(tool==='boundary'?'Boundary Pencil':'Route Pencil')); };
+  say(bucket?'Select Drivable Region: click a free pixel inside the road'
+           : tool ? 'Tool: '+(tool==='boundary'?'Boundary Pencil':'Route Pencil')
+                  : 'Inspect: clicks do not draw; choose a pencil to annotate'); };
 document.getElementById('clearRegionBtn').onclick=async()=>{
   if(!S)return;
   const res=await api('/api/session/update',{field:'retained_region_px', value:null});

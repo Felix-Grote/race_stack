@@ -268,11 +268,35 @@ def test_browser_shows_loaded_snapshot_not_reread_file(syn_backend):
 
 
 def _reversed_guide(route):
-    """Mirror of the UI's reversedGuide(): keep start, reverse order."""
+    """Mirror of the UI's reversedGuide(): keep start, reverse order,
+    preserve the input's closure representation (a true involution)."""
     pts = [list(p) for p in route]
-    if len(pts) > 1 and pts[0] == pts[-1]:
-        pts.pop()
-    return [pts[0]] + pts[1:][::-1] + [pts[0]]
+    if len(pts) < 3:
+        return None
+    closed = len(pts) > 1 and pts[0] == pts[-1]
+    body = pts[:-1] if closed else pts
+    if len(body) < 3:
+        return None
+    rev = [body[0]] + body[1:][::-1]
+    if closed:
+        rev.append(body[0])
+    return rev
+
+
+def test_reversed_guide_closure_classes():
+    """Exact, near-closed and open guides: double reversal is the
+    identity on the stored representation in every class."""
+    exact = [[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]
+    near = [[0, 0], [10, 0], [10, 10], [2, 2]]  # tail 2.8px from start
+    open_ = [[0, 0], [10, 0], [10, 10], [0, 10]]
+    for route in (exact, near, open_):
+        rev = _reversed_guide(route)
+        assert rev[0] == route[0]  # start preserved
+        assert rev != route
+        assert _reversed_guide(rev) == route
+    assert _reversed_guide(exact)[-1] == exact[0]  # stays closed
+    assert _reversed_guide(near)[-1] != near[0]  # stays open-class
+    assert _reversed_guide([[0, 0], [1, 1]]) is None
 
 
 def test_reverse_direction_flow(backend):
@@ -304,6 +328,18 @@ def test_reverse_direction_flow(backend):
     srv.op_update({'field': 'route_px',
                    'value': _reversed_guide(rev)})
     assert srv.STATE['session']['route_px'] == original
+    # Near-closed manual guide (tail within the UI's 8px closure
+    # tolerance, no exact closing point): reversal validates, and
+    # double reversal restores the stored list byte-for-byte.
+    manual = original[:-1] + [[original[0][0] + 2.0, original[0][1] + 2.0]]
+    srv.op_update({'field': 'route_px', 'value': manual})
+    rev_manual = _reversed_guide(manual)
+    assert rev_manual[-1] != manual[0]  # open class preserved
+    srv.op_update({'field': 'route_px', 'value': rev_manual})
+    assert srv.op_preview({})['status'] == 'VALIDATED'
+    srv.op_update({'field': 'route_px',
+                   'value': _reversed_guide(rev_manual)})
+    assert srv.STATE['session']['route_px'] == manual
 
 
 def test_html_contract():
@@ -348,11 +384,20 @@ def test_html_contract():
     # test, place arrows by arc length, mark the start (UI-04).
     assert 'function flatLine(pts)' in html
     assert 'nextAt+=80' in html  # arc-length spacing, not point index
-    assert 'function startMarker(pts,color)' in html
+    assert 'function startMarker(pts,color,label)' in html
     # Reverse Direction reverses the stored guide via the update path.
     assert 'function reversedGuide(route)' in html
     assert "getElementById('reverseBtn').disabled=!closed" in html
     assert "e.code==='Escape'" in html  # cancel unfinished stroke
+    # Inspect is the default, pencils toggle, clicks agree with the
+    # highlighted tool (no hidden drawing mode).
+    assert 'S=null, tool=null' in html
+    assert 'Inspect: clicks do not draw' in html
+    # Start markers: generated start is the lettered authority, the
+    # guide start a hollow reference only.
+    assert "startMarker(validated.route||[],'#4f4','S')" in html
+    assert "startMarker(S.route_px||[],'#fd4','')" in html
+    assert 'generated route start (authoritative' in html
     # Viewport: content-box mouse math (no border bias), one affine
     # view, cursor zoom, space/middle pan, fit reset.
     assert 'cv.clientLeft' in html and 'cv.clientWidth' in html
