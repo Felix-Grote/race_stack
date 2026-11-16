@@ -342,6 +342,22 @@ def test_reverse_direction_flow(backend):
     assert srv.STATE['session']['route_px'] == manual
 
 
+def test_tool_state_synchronization():
+    """Visible active tool == click behavior: bucket mode must not
+    strip the pencil highlight (it is a one-click gesture over the
+    still-active pencil), and any tool transition cancels the
+    unfinished draft so it can never commit under the wrong tool."""
+    html = UI_HTML.read_text(encoding='utf-8')
+    tool_block = html.split("querySelectorAll('.tool')")[1] \
+        .split("bucketBtn').onclick")[0]
+    assert 'draft=[]' in tool_block  # switch/deselect cancels draft
+    bucket_block = html.split("getElementById('bucketBtn').onclick")[1] \
+        .split('clearRegionBtn')[0]
+    assert 'draft=[]' in bucket_block  # entering bucket cancels draft
+    assert "'.tool'" not in bucket_block  # pencil highlight untouched
+    assert "classList.toggle('on',x.dataset.tool===tool)" in html
+
+
 def test_html_contract():
     """Static frontend contract (Doc 23 UI-01..UI-07): grouped layout,
     preferred labels, help panel, direction arrows, Reverse Direction,

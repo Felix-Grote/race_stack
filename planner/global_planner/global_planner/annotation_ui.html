@@ -343,12 +343,15 @@ cv.addEventListener('dblclick',async()=>{
 // button always matches click behavior; Inspect is the default.
 document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{
   tool=(tool===b.dataset.tool ? null : b.dataset.tool); bucket=false;
+  draft=[]; hover=null; // switching tools cancels an unfinished stroke
   document.getElementById('bucketBtn').classList.remove('on');
   document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',x.dataset.tool===tool));
   say(tool ? 'Tool: '+(tool==='boundary'?'Boundary Pencil':'Route Pencil')
            : 'Inspect: clicks do not draw; choose a pencil to annotate');});
 document.getElementById('bucketBtn').onclick=e=>{ bucket=!bucket;
-  document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',false));
+  draft=[]; hover=null; // entering/leaving bucket mode cancels a draft;
+  // the pencil stays highlighted: it is still the active tool under
+  // the one-click bucket gesture, so highlight == click behavior.
   e.target.classList.toggle('on',bucket);
   say(bucket?'Select Drivable Region: click a free pixel inside the road'
            : tool ? 'Tool: '+(tool==='boundary'?'Boundary Pencil':'Route Pencil')
