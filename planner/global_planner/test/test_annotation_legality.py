@@ -227,6 +227,28 @@ def test_checker_rejects_annexed_payloads(tmp_path):
         check_payload(payload, baku, cut_legal)
 
 
+def test_self_crossing_ear_measured_by_lobes(tmp_path):
+    """A bowtie ear's signed area cancels; its lobes must not.
+
+    Regression: measuring the ear as one signed polygon would report
+    zero annexation for a self-crossing chord whose two lobes cover
+    occupied cells. ``_ear_annexed_m2`` must measure both lobes.
+    """
+    from global_planner.annotation_core import _ear_annexed_m2, \
+        _signed_area
+    track_map = _annulus(tmp_path, size=200, name='ear.png')
+    occupied = effective_free_mask(track_map, []) == 0
+    # Bowtie over the occupied infield (world m, 200px * 0.05, origin 0):
+    # lobes are the two triangles meeting at the centre.
+    pts = [(3.0, 3.0), (7.0, 7.0), (7.0, 3.0), (3.0, 7.0)]
+    assert _signed_area(pts + [pts[0]]) == pytest.approx(0.0, abs=1e-12)
+    assert _ear_annexed_m2(pts, 0, 3, track_map, occupied) > 0.1
+    # Same bowtie entirely inside free ring arm annexes nothing.
+    free_pts = [(1.5, 7.5), (3.5, 8.5), (3.5, 7.5), (1.5, 8.5)]
+    assert _ear_annexed_m2(free_pts, 0, 3, track_map, occupied) \
+        == pytest.approx(0.0, abs=1e-9)
+
+
 def test_generated_zone_contained_at_rotated_starts():
     """The generated start zone stays inside the section union wherever
     around the lap the guide starts."""

@@ -198,8 +198,10 @@ fail-closed with a route-package message; operator redraws the
 guide); (2) start zone may sit anywhere in the union with unchecked
 heading coherence, and the 2D union can splice across surfaces in
 hand-edited multi-surface manifests — future multi-surface work,
-editor emits one surface; (3) source-drift guarantee is
-check-instant only (documented in ANNOTATION_TOOL.md).
+editor emits one surface; (3) there is no source-drift check after
+open: the editor (browser display included) works on the snapshot
+taken at open, so a file changed on disk is only seen on reopen,
+when draft reopening rebinds the full identity.
 
 ## Recommendation
 

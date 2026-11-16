@@ -107,12 +107,20 @@ def test_map_yaml_validation(tmp_path):
             ('image: m.png\nresolution: 0.05\norigin: [0, 0, 0]\n'
              'negate: 2\n', 'negate'),
             ('image: m.png\nresolution: 0.05\norigin: [0, 0, 0]\n'
+             'mode: raw\n', 'mode.*trinary'),
+            ('image: m.png\nresolution: 0.05\norigin: [0, 0, 0]\n'
+             'mode: scale\n', 'mode.*trinary'),
+            ('image: m.png\nresolution: 0.05\norigin: [0, 0, 0]\n'
              'free_thresh: 0.9\noccupied_thresh: 0.65\n', 'thresholds'),
             ('resolution: 0.05\norigin: [0, 0, 0]\n', 'image'),
             ('image: [unclosed\n', 'not valid YAML')):
         (tmp_path / 'm.yaml').write_text(bad, encoding='utf-8')
         with pytest.raises(AnnotationError, match=match):
             TrackMap(tmp_path / 'm.yaml')
+    # Explicit trinary is accepted, like no mode at all (good case above).
+    (tmp_path / 'm.yaml').write_text(
+        good + 'mode: trinary\n', encoding='utf-8')
+    assert TrackMap(tmp_path / 'm.yaml').png_path.name == 'm.png'
     # Nonzero yaw is unsupported, never approximated.
     (tmp_path / 'm.yaml').write_text(
         'image: m.png\nresolution: 0.05\norigin: [0, 0, 0.5]\n',
@@ -153,6 +161,24 @@ def test_session_roundtrip_and_map_identity(tmp_path):
     path.write_text('[1, 2]', encoding='utf-8')
     with pytest.raises(AnnotationError, match='cannot load session'):
         load_session(path, track_map)
+
+
+def test_free_thresh_changes_map_namespace(tmp_path):
+    """Same PNG under different free_thresh gets distinct file slots."""
+    import cv2
+    from global_planner.annotation_core import draft_name, export_name, \
+        map_namespace
+    cv2.imwrite(str(tmp_path / 'm.png'), annulus_image())
+    base = ('image: m.png\nresolution: 0.05\norigin: [0, 0, 0]\n'
+            'negate: 0\noccupied_thresh: 0.65\nfree_thresh: %s\n')
+    (tmp_path / 'a.yaml').write_text(base % 0.196, encoding='utf-8')
+    (tmp_path / 'b.yaml').write_text(base % 0.5, encoding='utf-8')
+    low = TrackMap(tmp_path / 'a.yaml')
+    high = TrackMap(tmp_path / 'b.yaml')
+    assert low.sha256 == high.sha256 and low.png_path == high.png_path
+    assert map_namespace(low) != map_namespace(high)
+    assert draft_name(low) != draft_name(high)
+    assert export_name(low) != export_name(high)
 
 
 def test_source_map_never_modified():

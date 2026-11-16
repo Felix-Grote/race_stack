@@ -66,8 +66,8 @@ def _parse_map_yaml(text):
 
     Extra keys (e.g. the ``ot_interpolator`` blocks in ForzaETH map
     YAMLs) are ignored. Only the Cartographer/ROS occupancy convention
-    is supported: ``negate`` 0/1 and a thresholds pair with
-    ``0 < free_thresh <= occupied_thresh <= 1``.
+    is supported: ``negate`` 0/1, ``mode`` absent or ``trinary``, and a
+    thresholds pair with ``0 < free_thresh <= occupied_thresh <= 1``.
     """
     try:
         data = yaml.safe_load(text)
@@ -97,6 +97,12 @@ def _parse_map_yaml(text):
     negate = data.get('negate', 0)
     if isinstance(negate, bool) or negate not in (0, 1):
         raise AnnotationError('UNSUPPORTED: map negate must be 0 or 1')
+    mode = data.get('mode', 'trinary')
+    if mode != 'trinary':
+        raise AnnotationError(
+            f"UNSUPPORTED: map mode {mode!r} is not supported (only "
+            "'trinary', or no mode, uses the occupancy thresholds this "
+            'tool reads; convert the map to trinary or remove the mode)')
     meta = {'image': image.strip(), 'resolution': resolution,
             'origin': origin, 'negate': int(negate)}
     for key, default in (('occupied_thresh', 0.65), ('free_thresh', 0.196)):
@@ -140,6 +146,7 @@ class TrackMap:
         self.free_thresh = float(meta['free_thresh'])
         self.image = image  # uint8, file order: row 0 = top
         self.height, self.width = image.shape
+        self.png_bytes = png_bytes  # exact snapshot the geometry uses
         self.sha256 = hashlib.sha256(png_bytes).hexdigest()
 
     def map_identity(self):
@@ -474,8 +481,8 @@ def map_namespace(track_map):
     location plus the PNG content hash plus a context hash binding the
     full session identity that ``check_session_map`` enforces
     (resolved parent directory, resolution, origin, negate, image
-    size), so two semantically distinct source-map interpretations can
-    never silently share a draft or export slot — not even same-stem
+    size, free_thresh), so two semantically distinct source-map
+    interpretations can never silently share a draft or export slot — not even same-stem
     maps in same-named directories, nor identical PNG bytes under
     different YAML interpretations. Loading a session still binds the
     FULL identity via ``check_session_map``; the namespace only selects
@@ -489,7 +496,8 @@ def map_namespace(track_map):
     ctx = '|'.join((parent, repr(float(track_map.resolution)),
                     repr(tuple(float(v) for v in track_map.origin)),
                     repr(int(track_map.negate)),
-                    repr(int(track_map.width)), repr(int(track_map.height))))
+                    repr(int(track_map.width)), repr(int(track_map.height)),
+                    repr(float(track_map.free_thresh))))
     ctxsha = hashlib.sha256(ctx.encode('utf-8')).hexdigest()[:8]
     return (f'{_safe_component(png.parent.name)}__'
             f'{_safe_component(png.stem)}__{track_map.sha256[:8]}'

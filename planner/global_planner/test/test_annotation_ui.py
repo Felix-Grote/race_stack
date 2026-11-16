@@ -252,6 +252,21 @@ def test_preview_on_pinched_road_fails_closed(backend):
         srv.op_export({})
 
 
+def test_browser_shows_loaded_snapshot_not_reread_file(syn_backend):
+    """Replacing the PNG on disk after open does not change the view."""
+    import base64
+    srv = syn_backend
+    srv.op_open({'map': 'syn'})
+    track_map = srv.STATE['map']
+    assert track_map.png_bytes == Path(track_map.png_path).read_bytes()
+    Path(track_map.png_path).write_bytes(b'not the loaded png')
+    view = srv.op_state({})['session']
+    shown = base64.b64decode(view['map_png_data_url'].split(',', 1)[1])
+    assert shown == track_map.png_bytes
+    assert shown != b'not the loaded png'
+    assert 'map_view_error' not in view
+
+
 def test_html_contract():
     """Static frontend contract: layers, bucket, digest-guarded approve."""
     html = UI_HTML.read_text(encoding='utf-8')

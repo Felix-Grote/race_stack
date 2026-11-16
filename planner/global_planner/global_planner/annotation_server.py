@@ -156,13 +156,10 @@ def _region_view():
 
 def _session_view():
     s = dict(STATE['session'])
-    # The map read happens after the session was already mutated, so a
-    # transient PNG failure must not turn an applied op into a FAIL
-    # with a bumped revision (op_undo is non-idempotent: a client
-    # retry would pop a second stroke). Report a view error instead,
-    # like _region_view does for the overlay.
+    # Display the exact PNG snapshot TrackMap loaded (never re-read the
+    # file): the browser must show the same bytes the geometry uses.
     try:
-        png = Path(STATE['map'].png_path).read_bytes()
+        png = STATE['map'].png_bytes
     except Exception as exc:  # noqa: BLE001 - applied ops stay viewable
         s['map_png_data_url'] = None
         s['map_view_error'] = 'map image unavailable: %s' % exc

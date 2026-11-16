@@ -9,9 +9,9 @@ written. Draft and export filenames are namespaced per source map —
 `{parentdir}__{stem}__{bytesha8}__{ctxsha8}_annotation.json` /
 `..._legal_route.json` — PNG content hash plus a context hash over the
 enforced session identity (resolved directory, resolution, origin,
-negate, image size), so two maps sharing one PNG stem, and identical
-pixels under different YAML interpretations, can never silently share
-a slot.
+negate, image size, `free_thresh`), so two maps sharing one PNG stem,
+and identical pixels under different YAML interpretations (including
+different `free_thresh` values), can never silently share a slot.
 
 Preview → approve → export is enforced on every transport. Approval
 binds two digests: the editor-input digest (map identity, strokes,
@@ -27,7 +27,9 @@ Source identity: an approved route represents the interpreted snapshot
 operator previewed; that identity is bound into every approval digest
 and checked when a draft is reopened, so a draft can never be rebound
 to a differently interpreted map. The editor works on the snapshot
-taken at open and never writes the source files.
+taken at open — the browser displays those exact retained PNG bytes —
+and never writes the source files. There are no repeated source-drift
+re-reads: a file changed on disk after open is only picked up on reopen.
 
 ## Run
 
@@ -73,8 +75,9 @@ ROS_DOMAIN_ID=169 ros2 run global_planner annotation_node --ros-args \
   uncertain (gray) cells alike stay occupied and never become road.
   Binary maps reduce to exactly the strict binary reading. Map YAML
   is parsed with PyYAML (`yaml.safe_load`); only image, resolution,
-  origin, negate and the thresholds pair are read, extra keys are
-  ignored.
+  origin, negate, mode and the thresholds pair are read, extra keys are
+  ignored. `mode` must be absent or `trinary`; `raw`/`scale` are
+  rejected with a conversion hint.
 - Corner cutting: a stroke across a corner splits free space; the
   bucket click selects the one 8-connected component that stays legal
   and the excluded pocket is shaded. Legal free space only ever
@@ -143,8 +146,9 @@ migrated, so an approval can never silently carry across formats.
 ## Map support (fail-closed)
 
 One planar ring in a zero-yaw occupancy map (binary or grayscale;
-grayscale is read conservatively as above). Bridges/split courses,
-multiple holes and nonzero yaw are rejected with a reason. The
+grayscale is read conservatively as above; YAML `mode` absent or
+`trinary` only). Bridges/split courses, multiple holes and nonzero yaw
+are rejected with a reason. The
 manifest's `surface` string does not make this a 3D or multi-layer
 editor.
 
