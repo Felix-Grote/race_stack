@@ -24,8 +24,9 @@ from global_planner.route.manifest import validate_route  # noqa: E402
 def _build(track_map, outer, inner, route_px, strokes=(), width=5,
            seed=None, **kwargs):
     """build_route + check_payload: (payload, route, receipt, info)."""
-    payload, info = build_route(track_map, outer, inner, route_px, **kwargs)
     legal = effective_free_mask(track_map, strokes, width, seed)
+    payload, info = build_route(track_map, outer, inner, route_px,
+                                legal_mask=legal, **kwargs)
     route, receipt = check_payload(payload, track_map, legal)
     return payload, route, receipt, info
 
@@ -920,184 +921,6 @@ def test_frame_gap_real_map_rejected_and_repaired(tmp_path):
     assert receipt['stages']['samples'] > 100
 
 
-def test_rdp_never_expands_corridor():
-    """A 15 mm occupied tooth must survive simplification (2 mm raster)."""
-    from global_planner.annotation_core import (
-        _chord_stays_free, _douglas_peucker)
-    res = 0.002
-    wall = [[x / 1000.0, 0.0] for x in range(0, 61, 5)]
-    wall.insert(6, [0.030, 0.015])  # apex between (25,0) and (30,0)
-    mask = np.zeros((40, 60), np.uint8)
-    for u in range(60):
-        for v in range(40):
-            x, y = u * res, (39 - v) * res
-            inside = y > 0 and not (
-                0.0 <= x <= 0.060
-                and y <= 0.015 * (1 - abs(x - 0.030) / 0.030))
-            mask[v, u] = 255 if inside else 0
-    # Same construction as build_route: one-cell dilation = grid quantum.
-    import cv2
-    mask = cv2.dilate(mask, np.ones((3, 3), np.uint8))
-
-    def to_px(pt):
-        return (pt[0] / res, 39 - pt[1] / res)
-
-    def dist_to_poly(pt, poly):
-        """Distance from a point to a polyline (metres)."""
-        pt = np.array(pt, float)
-        best = float('inf')
-        for a, b in zip(poly[:-1], poly[1:]):
-            a, b = np.array(a, float), np.array(b, float)
-            seg = b - a
-            t = min(1.0, max(0.0, float(np.dot(pt - a, seg))
-                             / max(1e-18, float(np.dot(seg, seg)))))
-            best = min(best, float(np.linalg.norm(pt - (a + t * seg))))
-        return best
-
-    apex = [0.030, 0.015]
-    plain = _douglas_peucker(wall, 0.02)
-    assert len(plain) == 2  # old behavior drops the apex (the bug)
-    # The dropped 15 mm tooth becomes corridor: illegal gain.
-    assert dist_to_poly(apex, plain) >= 0.010
-    fixed = _douglas_peucker(wall, 0.02, _chord_ok=lambda a, b:
-                             _chord_stays_free(a, b, mask, to_px, res))
-    assert any(p[1] > 0.01 for p in fixed)  # apex survives: no gain
-    assert len(fixed) < len(wall)  # straight runs still decimate
-    assert dist_to_poly(apex, fixed) <= 0.001  # tip stays on the wall
-    # Straight runs still collapse: no vertex kept without a reason.
-    straight = [[x / 1000.0, 0.0] for x in range(0, 101, 5)]
-    assert len(_douglas_peucker(straight, 0.02, _chord_ok=lambda a, b:
-                                _chord_stays_free(a, b, mask, to_px, res))) \
-        == 2
-
-
-def _peninsula_fixture(res_m, width_cells, height_m, length_m=0.066):
-    """Straight wall with a rectangular occupied peninsula (analytic truth).
-
-    Returns (wall, free_mask, to_px, tip). NOTE: 2 mm fixtures exceed the
-    build_route envelope (eps/res = 10); they pin the bare primitive's
-    eps bound (gain <= eps), not the supported sub-cell contract.
-    """
-    import cv2
-    length_m = max(length_m, 30 * res_m)  # keep ~30 samples at any raster
-    wall, x = [], 0.0
-    while x < length_m:
-        wall.append([x, 0.0])
-        x += res_m
-    hw = width_cells * res_m / 2
-    cx = length_m / 2
-    wall = [p for p in wall if not cx - hw < p[0] < cx + hw]
-    wall += [[cx - hw, height_m], [cx + hw, height_m]]
-    wall = sorted(wall)
-    ncol, nrow = int(length_m / res_m) + 4, 30
-    free = np.zeros((nrow, ncol), np.uint8)
-    for u in range(ncol):
-        for v in range(nrow):
-            wx, wy = u * res_m, (nrow - 1 - v) * res_m
-            occ = (cx - hw <= wx <= cx + hw and wy <= height_m)
-            free[v, u] = 0 if (wy <= 0 or occ) else 255
-    dil = cv2.dilate(free, np.ones((3, 3), np.uint8))
-
-    def to_px(pt):
-        return (pt[0] / res_m, (nrow - 1) - pt[1] / res_m)
-
-    return wall, dil, to_px, [cx, height_m]
-
-
-def _apex_gain_m(tip, simplified):
-    """Distance from the true tip to the simplified polyline (metres)."""
-    tip = np.array(tip, float)
-    best = float('inf')
-    for a, b in zip(simplified[:-1], simplified[1:]):
-        a, b = np.array(a, float), np.array(b, float)
-        seg = b - a
-        t = min(1.0, max(0.0, float(np.dot(tip - a, seg))
-                         / max(1e-18, float(np.dot(seg, seg)))))
-        best = min(best, float(np.linalg.norm(tip - (a + t * seg))))
-    return best
-
-
-def test_rdp_gain_bounded_by_eps():
-    """RDP-stage annexation gain never exceeds epsilon (sweep property).
-
-    This pins the bare RDP primitive, not the wall chain: narrow
-    sub-gate features ARE annexed (2-cell peninsula fully drops), but
-    only up to their own height, which RDP requires to be <= eps.
-    """
-    from global_planner.annotation_core import _chord_stays_free, _douglas_peucker
-    cases = [  # (res_m, width_cells, height_m, eps_m)
-        (0.002, 2, 0.008, 0.02),
-        (0.002, 2, 0.019, 0.02),
-        (0.002, 1, 0.010, 0.02),
-        (0.002, 7, 0.015, 0.02),
-        (0.05, 2, 0.015, 0.02),
-    ]
-    for res_m, width_cells, height_m, eps_m in cases:
-        wall, dil, to_px, tip = _peninsula_fixture(
-            res_m, width_cells, height_m)
-        gated = _douglas_peucker(
-            wall, eps_m, _chord_ok=lambda a, b: _chord_stays_free(
-                a, b, dil, to_px, res_m))
-        assert len(gated) < len(wall)  # still decimates
-        assert _apex_gain_m(tip, gated) <= eps_m * (1.0 + 1e-9)
-
-
-def test_prefilter_mechanism_reinstates_above_bound_notch():
-    """Gated-prefilter mechanism: above-bound notches survive the pass.
-
-    Regression pin for the ungated-prefilter break: _simplify used to
-    drop a 1-cell-wide x 1.2-cell-tall notch (0.0600 m = 3x eps at
-    eps/res = 0.4) before RDP's deviation bound applied, and the
-    annexing chord hit RDP's zero-deviation shortcut past the raster
-    gate. This pins the mechanism (bound + gate), not the production
-    floor value: the tip must survive the pre-filter so the chained
-    RDP keeps it (gain ~0 here; production asserts floor + eps — see
-    test_production_chain_gain_bounded_by_floor_plus_eps).
-    """
-    from global_planner.annotation_core import (
-        _chord_stays_free, _douglas_peucker, _simplify)
-    res_m, eps_m = 0.05, 0.02
-    wall, dil, to_px, tip = _peninsula_fixture(res_m, 1, 0.06)
-    gate = lambda a, b: _chord_stays_free(a, b, dil, to_px, res_m)
-    spacing_m = max(2.0, 0.05 / res_m) * res_m
-    pre = _simplify(wall, spacing_m, eps_m, gate)
-    assert any(p[1] > 0.05 for p in pre)  # tip survives the pre-filter
-    out = _douglas_peucker(pre, eps_m, _chord_ok=gate)
-    assert _apex_gain_m(tip, out) <= eps_m * (1.0 + 1e-9)
-    assert len(out) < len(wall)  # straight runs still decimate
-
-
-def test_production_chain_gain_bounded_by_floor_plus_eps():
-    """Production wall chain (floor prefilter + eps RDP) gains <= floor.
-
-    Uses the exact chain build_route runs: prefilter bound 0.6
-    cells, RDP bound eps, both gate-checked. A sub-floor spike
-    (1 cell wide x 0.5 cell tall) is annexed up to its own height —
-    that is the documented quantization floor, not a violation — while
-    the above-floor 1.2-cell notch is kept (gain ~0).
-    """
-    from global_planner.annotation_core import (
-        MAX_DP_EPS_PER_CELL, _chord_stays_free, _douglas_peucker,
-        _simplify)
-    res_m, eps_m = 0.05, 0.02
-    floor_m = MAX_DP_EPS_PER_CELL * res_m
-    gate_of = lambda dil, to_px: (
-        lambda a, b: _chord_stays_free(a, b, dil, to_px, res_m))
-    spacing_m = max(2.0, 0.05 / res_m) * res_m
-    # Above-floor notch: kept end to end (gain ~0).
-    wall, dil, to_px, tip = _peninsula_fixture(res_m, 1, 0.06)
-    gate = gate_of(dil, to_px)
-    pre = _simplify(wall, spacing_m, floor_m, gate)
-    out = _douglas_peucker(pre, eps_m, _chord_ok=gate)
-    assert _apex_gain_m(tip, out) <= eps_m * (1.0 + 1e-9)
-    # Sub-floor spike: annexed, but bounded by the floor.
-    wall, dil, to_px, tip = _peninsula_fixture(res_m, 1, 0.025)
-    gate = gate_of(dil, to_px)
-    pre = _simplify(wall, spacing_m, floor_m, gate)
-    out = _douglas_peucker(pre, eps_m, _chord_ok=gate)
-    assert _apex_gain_m(tip, out) <= floor_m * (1.0 + 1e-9)
-
-
 def test_prefilter_floor_collapses_quantization_zigzag():
     """The envelope floor (0.6 cells) removes pixel staircase, not signal.
 
@@ -1112,7 +935,7 @@ def test_prefilter_floor_collapses_quantization_zigzag():
     floor_m = 0.6 * res_m
     zig = [[i * res_m, (i % 2) * res_m / 2] for i in range(41)]
     spacing_m = max(2.0, 0.05 / res_m) * res_m
-    out = _simplify(zig, spacing_m, floor_m, chord_ok=lambda a, b: True)
+    out = _simplify(zig, spacing_m, floor_m, chord_ok=lambda pts, a, b: True)
     # The staircase is quantization noise: every dropped jag must lie
     # within the floor of the output polyline (an eps-bound prefilter
     # reinstated every jag and exploded the checker's polygon budgets).
@@ -1137,7 +960,9 @@ def test_envelope_rejects_coarse_eps(tmp_path):
     outer, inner = extract_boundaries(track_map)
     with pytest.raises(AnnotationError, match='exceeds.*raster cells'):
         build_route(track_map, outer, inner,
-                    _midline_seed(outer, inner), chain_dp_epsilon_m=0.05)
+                    _midline_seed(outer, inner),
+                    legal_mask=effective_free_mask(track_map, [], 5),
+                    chain_dp_epsilon_m=0.05)
 
 
 def test_envelope_accepts_boundary(tmp_path):
@@ -1151,47 +976,23 @@ def test_envelope_accepts_boundary(tmp_path):
     assert len(route.sections) == 4
 
 
-def test_exported_walls_within_one_cell():
-    """End-to-end contract on a supported map: no wall gains >= 1 cell.
-
-    Samples every exported occurrence wall densely and measures depth
-    inside occupied space via the distance transform of the UNDILATED
-    reference mask. Single-pixel rounding on diagonal stair-steps reads
-    up to sqrt(2) ~= 1.41 px without any annexation (measured: 2.2% of
-    samples above 1.0 px, none above 1.42 on the test map); anything
-    deeper is a contract violation.
-    """
-    import cv2
-    from global_planner.annotation_core import _loop_reference_mask
+def test_exported_walls_exactly_contained():
+    """End-to-end contract: exported section polygons annex exactly
+    zero area over occupied cell squares (exact shapely measurement
+    against the undilated legal mask, not the production checker)."""
+    from shapely.geometry import Polygon
+    from global_planner.annotation_core import _annexation
     track_map = TrackMap(MAPS / 'test/test.yaml')
     outer, inner = extract_boundaries(track_map)
     payload, route, receipt, info = _build(
         track_map, outer, inner, _midline_seed(outer, inner))
-    ref = _loop_reference_mask(track_map, outer, inner)
-    dt_occ = cv2.distanceTransform((ref == 0).astype(np.uint8),
-                                   cv2.DIST_L2, 3)
-    worst = 0.0
-    for occ in payload['sections']:
-        for chain in (occ['left'], occ['right']):
-            pts = np.asarray([[track_map.world_to_pixel(p)[0],
-                               track_map.world_to_pixel(p)[1]]
-                              for p in chain], float)
-            segs = np.linalg.norm(np.diff(pts, axis=0), axis=1)
-            total = segs.sum()
-            steps = max(2, int(total / 0.5))
-            frac = np.linspace(0.0, 1.0, steps)
-            cum = np.concatenate([[0.0], np.cumsum(segs)])
-            for f in frac:
-                d = f * total
-                j = min(int(np.searchsorted(cum, d, side='right')) - 1,
-                        len(pts) - 2)
-                t = 0.0 if cum[j + 1] <= cum[j] else (
-                    (d - cum[j]) / (cum[j + 1] - cum[j]))
-                u, v = pts[j] + t * (pts[j + 1] - pts[j])
-                ui, vi = int(round(u)), int(round(v))
-                if 0 <= vi < dt_occ.shape[0] and 0 <= ui < dt_occ.shape[1]:
-                    worst = max(worst, float(dt_occ[vi, ui]))
-    assert worst <= 1.5, f'wall gains {worst:.2f} px of occupied space'
+    occupied = effective_free_mask(track_map, [], 5) == 0
+    for section in payload['sections']:
+        poly = Polygon(list(section['right'])
+                       + list(reversed(section['left'])))
+        annexed, _ = _annexation(poly, track_map, occupied)
+        assert annexed == 0.0
+    assert receipt['stages']['vector_legal']['annexed_m2'] == 0.0
 
 
 def test_endcaps_exact_and_shared():
@@ -1998,5 +1799,3 @@ def test_cli_select_region_extract_cycle(tmp_path):
     assert tool.main(['extract', '--map', yaml_path,
                       '--session', str(session_path),
                       '--out', str(tmp_path / 'out')]) == 1
-
-

@@ -16,8 +16,9 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parents[1]))
 
 from global_planner.annotation_core import (  # noqa: E402
-    AnnotationError, TrackMap, build_route, export_name,
-    extract_boundaries, geometry_digest, load_session, save_session)
+    AnnotationError, TrackMap, build_route, effective_free_mask,
+    export_name, extract_boundaries, geometry_digest, load_session,
+    save_session)
 from global_planner.route.manifest import validate_route  # noqa: E402
 from global_planner import annotation_server as server  # noqa: E402
 
@@ -138,6 +139,10 @@ def test_receipt_carries_exact_final_corridor_layers(backend):
     session = srv.STATE['session']
     payload, _ = build_route(
         track_map, outer, inner, session['route_px'],
+        legal_mask=effective_free_mask(
+            track_map, session['boundary_strokes_px'],
+            session.get('stroke_width_px', 5),
+            session.get('retained_region_px')),
         name=session.get('route_name'),
         chain_dp_epsilon_m=session.get('chain_dp_epsilon_m', 0.02))
     route = validate_route(payload)
@@ -151,7 +156,7 @@ def test_receipt_carries_exact_final_corridor_layers(backend):
                     for pt in chain]
             assert np.allclose(prev[key][k], want, atol=1e-9)
     assert len(prev['gates_px']) == 4
-    assert len(prev['start_zone_px']) == 4
+    assert len(prev['start_zone_px']) == len(payload['start']['zone'])
     # Left/right are real walls, not copies of the seed.
     for k in range(4):
         left = np.asarray(prev['validated_left_px'][k])

@@ -22,6 +22,16 @@ the rebuilt digest equals the approved one, writes atomically, then
 reloads the file and checks the digest again. The manifest itself
 carries no approval state; that lives in the session draft.
 
+Source identity: an approved route represents the interpreted snapshot
+(PNG bytes, size, resolution, origin, negate) the operator previewed.
+Preview, approve and export each re-read the source files and refuse
+on any interpreted change since open (`check_source_current`); reopen
+and re-preview instead. Byte-identical restoration passes, and YAML
+fields the interpretation never reads (occupancy thresholds) are not
+bound. Guarantee is at the check instant only: a writer racing the
+check is not excluded, and the exported manifest always describes the
+in-memory snapshot whose SHA-256 it carries.
+
 ## Run
 
 ```bash
@@ -74,8 +84,10 @@ ROS_DOMAIN_ID=169 ros2 run global_planner annotation_node --ros-args \
 - The guide pencil is a direction & section-cut hint, not an exported
   centreline: joints are placed at locally straight guide points
   (4 sections), left/right walls are arcs of the extracted loops with
-  exact shared end-caps, thinned by bounded chord-checked
-  simplification (gain vs the dense wall ≤ ~1.2 raster cells). The
+  exact shared end-caps, thinned by deviation-bounded simplification
+  whose every chord is exact-ear-checked to annex zero area against
+  the legal cell squares (shape deviation vs the dense wall stays
+  ≤ ~1.2 raster cells). The
   route package derives each section's centreline from the walls;
   preview draws that derived centreline, the gates and the start zone.
   `Suggest guide loop` fills the pencil (dense-pairing spline, then
@@ -92,18 +104,20 @@ ROS_DOMAIN_ID=169 ros2 run global_planner annotation_node --ros-args \
 Preview/validate/export run, in order, failing closed at the first
 bad stage:
 
-1. `vector_legal` — the exact exported section polygons (after
-   thinning and cap re-pinning) and the start zone against the
-   selected legal raster. Policy: every exported pixel centre lies
-   within one raster cell of legal free space; the gained area over
-   occupied cells is measured (4× supersampled) and reported.
-   Strict cell-square containment is *not* claimed: a straight chord
-   along a diagonal staircase wall covers occupied corner subcells,
-   so the measured gain on real maps is small (≈0.3–0.5 m² over a
-   full lap) but nonzero.
+1. `vector_legal` — exact continuous containment: the emitted
+   section polygons (after thinning and cap re-pinning) must annex
+   zero area over the occupied cell squares of the selected legal
+   raster (boundary contact allowed; see LEGALITY.md for the full
+   contract, evidence and the one policy decision it rests on).
+   The generator guarantees this by construction — every
+   simplification chord cuts off an ear whose exact occupied area
+   is zero — and this stage re-verifies it independently on the
+   final coordinates.
 2. `manifest` — route `validate_route`: schema, simple CCW ribbons,
    shared caps, forward portals, contact rules, wall-derived
-   centrelines inside their sections.
+   centrelines inside their sections, and the whole start zone
+   within the union of the section polygons (hence, chained with
+   stage 1, within the legal cell squares).
 3. `lap` / `portals` / `samples` — `centre_curve`,
    `portal_crossings` (exactly one forward crossing per gate),
    `sample_lap` at 0.25 m.

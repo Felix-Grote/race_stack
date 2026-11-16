@@ -23,7 +23,8 @@ import cv2
 import numpy as np
 
 from .annotation_core import (AnnotationError, TrackMap,
-                              atomic_write_text, build_candidate, draft_name,
+                              atomic_write_text, build_candidate,
+                              check_source_current, draft_name,
                               effective_free_mask, export_name,
                               extract_boundaries, free_components,
                               geometry_digest, load_session, new_session,
@@ -353,6 +354,7 @@ def op_suggest(body):
     redraw it, and only an explicit approve authorizes export.
     """
     session, track_map = require_open()
+    check_source_current(track_map)
     retained = session.get('retained_region_px')
     try:
         outer, inner = extract_boundaries(
@@ -441,7 +443,7 @@ def _candidate_receipt(payload, route, receipt, track_map, out=None):
         return [[float(track_map.world_to_pixel(pt)[0]),
                  float(track_map.world_to_pixel(pt)[1])] for pt in chain]
     where = f'written to {out}. ' if out is not None else 'not written yet. '
-    gain = receipt['stages']['vector_legal']['gain_m2']
+    annexed = receipt['stages']['vector_legal']['annexed_m2']
     car = receipt.get('car')
     car_text = (f'car zones PASS for {car["name"]} (reach '
                 f'{car["reach_m"]:.2f} m). ' if car else
@@ -450,8 +452,8 @@ def _candidate_receipt(payload, route, receipt, track_map, out=None):
             'message': f'route checks PASS (vector legality, manifest, '
                        f'lap, portals, samples); route digest '
                        f'{route.digest[:16]}… {where}'
-                       f'final-polygon raster gain {gain:.3f} m² within '
-                       f'one cell. {car_text}'
+                       f'exported polygons annex {annexed:.6f} m² '
+                       f'outside the selected legal cells. {car_text}'
                        f'guide correction max '
                        f'{receipt["max_correction_m"]:.3f} m over '
                        f'{receipt["seed_samples"]} samples. Not an '
@@ -485,6 +487,7 @@ def op_preview(body):
     approve/export.
     """
     session, track_map = require_open()
+    check_source_current(track_map)
     if not session.get('route_px'):
         raise AnnotationError('draw the directed route loop first')
     try:
@@ -529,6 +532,7 @@ def op_approve(body):
     and the geometry is unchanged since that preview. Writes no file.
     """
     session, track_map = require_open()
+    check_source_current(track_map)
     quoted = body.get('approval_digest')
     if not quoted or quoted != STATE.get('candidate_digest'):
         raise AnnotationError('approve refused: no fresh preview for this '
@@ -611,6 +615,7 @@ def op_validate(body):
     dense walls is the expensive part.
     """
     session, track_map = require_open()
+    check_source_current(track_map)
     if not session.get('route_px'):
         raise AnnotationError('draw the directed route loop first')
     try:

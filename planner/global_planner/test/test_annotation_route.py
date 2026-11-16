@@ -30,6 +30,7 @@ from global_planner.annotation_core import (  # noqa: E402
     free_components, geometry_digest, load_session, new_session,
     patched_free_mask, save_session)
 from global_planner.car import Car  # noqa: E402
+from global_planner.route.errors import RouteError  # noqa: E402
 from global_planner.route.manifest import load_route, validate_route  # noqa: E402
 
 REPO = Path(__file__).parents[3]
@@ -58,10 +59,10 @@ TEST_CUT_SEED = [125, 230]
 REFERENCE_LAP_M = {'test': 85.868, 'baku': 122.77,
                    'baku_1cut': 121.844, 'baku_4cut': 120.071}
 REFERENCE_DIGEST = {
-    'test': '7d420739fb56aa573ae9fbaada3d9df59e27c4a982a74e3adb15cf09bee7005b',
-    'baku': 'a9f848f60dc23c2b5830214145702ebbee05b3657622b67ff140cbbfef825adc',
-    'baku_1cut': '508c12e0af53a8e4df677af625fca1c9b19b3aa949be0fb46d683b39cdff921b',
-    'baku_4cut': '1cea27a03d4f05890d1be8ef87a3e8ff60335b991bf02e9070f98b3d04b0b111',
+    'test': 'cf9c981785b1754ab7b3842b2c15a9992aeb7b0188118c98938584a6c4d2dd00',
+    'baku': '96a9c0b2181e41ba62cda80899a2da5e6ed8e497575a9e49df0bcf9023ebfd27',
+    'baku_1cut': '0b539362a21cc8ec69e18850fc09d5330ee84ac131a40351e6438c6ac810bd7a',
+    'baku_4cut': 'bcb07fc509b94540dddc1cb23dd068b45b8e830ebaf0c43198e91c576cc7ff2b',
 }
 
 
@@ -142,7 +143,7 @@ def test_baku_corner_cuts_shorten_lap_and_validate(cuts, key):
         REFERENCE_LAP_M[key], abs=0.1)
     assert receipt['lap_length_m'] < 122.77  # unedited lap
     assert receipt['stages']['vector_legal']['status'] == 'PASS'
-    assert receipt['stages']['vector_legal']['gain_m2'] < 1.0
+    assert receipt['stages']['vector_legal']['annexed_m2'] == 0.0
     assert receipt['stages']['car_zones'] == 'PASS'
     assert validate_route(payload).digest == route.digest
 
@@ -160,17 +161,109 @@ def test_test_map_kinked_cut_now_passes():
     assert route.digest != REFERENCE_DIGEST['test']
 
 
-def test_vector_legality_rejects_offroad_start_zone():
-    """The route schema cannot see the raster; an off-road start zone
-    must fail here, not in a later planner stage."""
+def test_offroad_start_zone_rejected_at_manifest_stage():
+    """Canonical containment: an off-road start zone fails in
+    validate_route (zone outside the union of sections), reported
+    through check_payload as the MANIFEST_VALID stage."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
     session = _session(track_map)
-    payload, _ = build_route(
-        track_map, *extract_boundaries(track_map), session['route_px'])
     legal = effective_free_mask(track_map, [], 5)
+    payload, _ = build_route(
+        track_map, *extract_boundaries(track_map), session['route_px'],
+        legal_mask=legal)
     payload['start']['zone'] = [[-8.0, -5.0], [-6.0, -5.0],
                                 [-6.0, -3.0], [-8.0, -3.0]]
-    with pytest.raises(AnnotationError, match='VECTOR_LEGAL'):
+    with pytest.raises(AnnotationError, match='MANIFEST_VALID'):
+        check_payload(payload, track_map, legal)
+
+
+def _synthetic_payload(zone, heading=(-0.3, 0.3), notch=False):
+    """Four trapezoid sections forming a ring; s0 is the bottom strip."""
+    left0 = [[3, 3], [5, 1.5], [7, 3]] if notch else [[3, 3], [7, 3]]
+    sections = [
+        {'uid': 's0', 'surface': 'ground', 'max_speed_mps': 2.5,
+         'right': [[0, 0], [10, 0]], 'left': left0},
+        {'uid': 's1', 'surface': 'ground', 'max_speed_mps': 2.5,
+         'right': [[10, 0], [10, 10]], 'left': [[7, 3], [7, 7]]},
+        {'uid': 's2', 'surface': 'ground', 'max_speed_mps': 2.5,
+         'right': [[10, 10], [0, 10]], 'left': [[7, 7], [3, 7]]},
+        {'uid': 's3', 'surface': 'ground', 'max_speed_mps': 2.5,
+         'right': [[0, 10], [0, 0]], 'left': [[3, 7], [3, 3]]}]
+    return {'name': 'synth', 'map': {'frame_id': 'map', 'sha256': '0' * 64},
+            'start': {'heading_range_rad': list(heading), 'zone': zone},
+            'sections': sections}
+
+
+@pytest.mark.parametrize('zone', [
+    [[2, 0.5], [4, 0.5], [4, 1.5], [2, 1.5]],   # fully inside s0
+    [[2, 0], [5, 0], [5, 1], [2, 1]],           # shares s0's wall: contact is inside
+    [[2, -1e-12], [5, -1e-12], [5, 1], [2, 1]],  # float noise beyond the wall (EPS)
+    [[7.5, 0.5], [9.5, 0.5], [9.5, 2.5], [7.5, 2.5]],  # straddles the s0/s1 gate
+    [[8, 4], [9, 4], [9, 6], [8, 6]],           # wholly in s1, not in s0 at all
+])
+def test_start_zone_inside_route_union_passes(zone):
+    """Containment is whole-polygon against the union of all sections;
+    boundary contact is allowed and no section is privileged."""
+    validate_route(_synthetic_payload(zone))
+
+
+@pytest.mark.parametrize('zone,notch', [
+    ([[4, 4], [6, 4], [6, 6], [4, 6]], False),        # in the infield hole
+    ([[-1, 4], [1, 4], [1, 6], [-1, 6]], False),      # beyond the outer wall
+    ([[4, 0.5], [6, 0.5], [6, 2], [4, 2]], True),  # vertices in, edge cuts the notch
+    ([[2, -0.001], [5, -0.001], [5, 1], [2, 1]], False),  # 1 mm beyond the wall
+])
+def test_start_zone_outside_route_union_rejected(zone, notch):
+    """A representative point on the road does not rescue a zone that leaves it."""
+    with pytest.raises(RouteError, match='start zone is not contained'):
+        validate_route(_synthetic_payload(zone, notch=notch))
+
+
+def test_start_zone_invalid_metadata_rejected():
+    """Self-crossing zones and empty/reversed heading ranges stay rejected."""
+    with pytest.raises(RouteError, match='start zone'):
+        validate_route(_synthetic_payload([[2, 0.5], [4, 1.5], [4, 0.5], [2, 1.5]]))
+    for heading in [(0.3, -0.3), (0.0, 0.0)]:
+        with pytest.raises(RouteError, match='heading'):
+            validate_route(_synthetic_payload(
+                [[2, 0.5], [4, 0.5], [4, 1.5], [2, 1.5]], heading=heading))
+
+
+def test_generated_start_zones_contained_on_real_maps():
+    """Auto-generated zones (tight bends included) satisfy containment."""
+    from shapely.geometry import Polygon
+    for name in ('test/test', 'baku/baku', 'spa/spa', 'zuri/zuri'):
+        track_map = TrackMap(MAPS / f'{name}.yaml')
+        outer, inner = extract_boundaries(track_map)
+        session = _session(track_map)
+        payload, _ = build_route(
+            track_map, outer, inner, session['route_px'],
+            legal_mask=effective_free_mask(track_map, [], 5))
+        first = payload['sections'][0]
+        section0 = Polygon(list(first['right']) + list(reversed(first['left'])))
+        assert section0.covers(Polygon(payload['start']['zone'])), name
+        validate_route(payload)
+
+
+def test_editor_rejects_zone_partly_outside_first_section():
+    """Regression: a zone scaled x2 about its centre is ~25% outside s0
+    yet passed check_payload when only the vertex mean was tested."""
+    from shapely.geometry import Polygon
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    session = _session(track_map)
+    legal = effective_free_mask(track_map, [], 5)
+    payload, _ = build_route(
+        track_map, *extract_boundaries(track_map), session['route_px'],
+        legal_mask=legal)
+    zone = np.array(payload['start']['zone'], float)
+    payload['start']['zone'] = (2 * zone - zone.mean(axis=0)).tolist()
+    first = payload['sections'][0]
+    section0 = Polygon(list(first['right']) + list(reversed(first['left'])))
+    outside = Polygon(payload['start']['zone']).difference(section0).area
+    assert outside > 0.2 * Polygon(payload['start']['zone']).area
+    with pytest.raises(RouteError, match='start zone is not contained'):
+        validate_route(payload)
+    with pytest.raises(AnnotationError, match='MANIFEST_VALID'):
         check_payload(payload, track_map, legal)
 
 
@@ -179,9 +272,10 @@ def test_vector_legality_rejects_annexed_wall():
     though the payload is otherwise the valid golden route."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
     session = _session(track_map)
-    payload, _ = build_route(
-        track_map, *extract_boundaries(track_map), session['route_px'])
     legal = effective_free_mask(track_map, [], 5)
+    payload, _ = build_route(
+        track_map, *extract_boundaries(track_map), session['route_px'],
+        legal_mask=legal)
     wall = payload['sections'][1]['left']
     mid = len(wall) // 2
     for i in range(mid - 3, mid + 4):
