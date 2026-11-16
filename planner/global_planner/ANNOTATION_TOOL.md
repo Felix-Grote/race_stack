@@ -112,11 +112,12 @@ bad stage:
    The generator guarantees this by construction — every
    simplification chord cuts off an ear whose exact occupied area
    is zero — and this stage re-verifies it independently on the
-   final coordinates. The start zone keeps its previous raster
-   proximity check for now (tracked separately in LEGALITY.md).
+   final coordinates.
 2. `manifest` — route `validate_route`: schema, simple CCW ribbons,
    shared caps, forward portals, contact rules, wall-derived
-   centrelines inside their sections.
+   centrelines inside their sections, and the whole start zone
+   within the union of the section polygons (hence, chained with
+   stage 1, within the legal cell squares).
 3. `lap` / `portals` / `samples` — `centre_curve`,
    `portal_crossings` (exactly one forward crossing per gate),
    `sample_lap` at 0.25 m.

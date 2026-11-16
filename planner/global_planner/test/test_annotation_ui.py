@@ -156,7 +156,7 @@ def test_receipt_carries_exact_final_corridor_layers(backend):
                     for pt in chain]
             assert np.allclose(prev[key][k], want, atol=1e-9)
     assert len(prev['gates_px']) == 4
-    assert len(prev['start_zone_px']) == 4
+    assert len(prev['start_zone_px']) == len(payload['start']['zone'])
     # Left/right are real walls, not copies of the seed.
     for k in range(4):
         left = np.asarray(prev['validated_left_px'][k])

@@ -25,6 +25,7 @@ from global_planner.annotation_core import (  # noqa: E402
     AnnotationError, TrackMap, _annexation, _ear_annexed_m2,
     build_candidate, build_route, check_payload, effective_free_mask,
     extract_boundaries, new_session, patched_free_mask)
+from global_planner.route.manifest import validate_route  # noqa: E402
 
 MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
 BAKU_CUTS = [[[316.0, 584.0], [284.0, 482.0]],
@@ -390,3 +391,47 @@ def test_baku_build_stays_fast_enough_for_preview():
     start = time.time()
     _candidate(track_map)
     assert time.time() - start < 6.0
+
+
+def test_generated_zone_contained_at_rotated_starts():
+    """The auto-generated start zone stays inside the section union
+    wherever around the lap the guide starts (canonical manifest
+    containment must never make a generated route unexportable on
+    realistic tracks)."""
+    track_map = TrackMap(MAPS / 'baku/baku.yaml')
+    legal = effective_free_mask(track_map, [], 5)
+    outer, inner = extract_boundaries(track_map)
+    seed = _midline(outer, inner)
+    closed = seed + [seed[0]]
+    for k in range(8):
+        shift = (len(closed) - 1) * k // 8
+        rot = closed[shift:-1] + closed[:shift] + [closed[shift]]
+        payload, _ = build_route(track_map, outer, inner, rot,
+                                 legal_mask=legal)
+        validate_route(payload)  # raises if the zone escapes
+
+
+def test_extreme_hairpin_zone_fails_closed_actionably(tmp_path):
+    """Pathological geometry (0.15 m inner radius, 1 m road) may
+    legitimately refuse - but at generation, with an actionable
+    message, never as a silent or cryptic downstream failure, and
+    never by emitting an escaping zone."""
+    import cv2
+    img = np.zeros((120, 120), np.uint8)
+    cv2.circle(img, (60, 60), 23, 255, 20)
+    track_map = _write_map(tmp_path, img, name='hairpin.png')
+    legal = effective_free_mask(track_map, [], 5)
+    outer, inner = extract_boundaries(track_map)
+    from global_planner.annotation_core import suggest_route
+    seed = suggest_route(outer, inner)
+    closed = seed + [seed[0]]
+    for k in range(8):
+        shift = (len(closed) - 1) * k // 8
+        rot = closed[shift:-1] + closed[:shift] + [closed[shift]]
+        try:
+            payload, _ = build_route(track_map, outer, inner, rot,
+                                     legal_mask=legal, spacing_m=0.15)
+        except AnnotationError as exc:
+            assert 'start zone' in str(exc) or 'split joints' in str(exc)
+            continue
+        validate_route(payload)

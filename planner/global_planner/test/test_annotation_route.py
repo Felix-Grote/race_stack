@@ -59,10 +59,10 @@ TEST_CUT_SEED = [125, 230]
 REFERENCE_LAP_M = {'test': 85.868, 'baku': 122.77,
                    'baku_1cut': 121.844, 'baku_4cut': 120.071}
 REFERENCE_DIGEST = {
-    'test': '4c1479c7727cf046b94dd338c79f22fcda16d539865806c60d01e401d34374fa',
-    'baku': 'da2e66db8f665732b84f534626f3d6740f242d5426fe17ee48de5dfde33f4da4',
-    'baku_1cut': '26d213d97dbde6f1d4e3f08f382df7f5b78a6b128417dde2d636927a75b2cdcc',
-    'baku_4cut': 'eb8489afea332a5794d175bd50820b081e6a2466d3687b0915f373284991c863',
+    'test': 'cf9c981785b1754ab7b3842b2c15a9992aeb7b0188118c98938584a6c4d2dd00',
+    'baku': '96a9c0b2181e41ba62cda80899a2da5e6ed8e497575a9e49df0bcf9023ebfd27',
+    'baku_1cut': '0b539362a21cc8ec69e18850fc09d5330ee84ac131a40351e6438c6ac810bd7a',
+    'baku_4cut': 'bcb07fc509b94540dddc1cb23dd068b45b8e830ebaf0c43198e91c576cc7ff2b',
 }
 
 

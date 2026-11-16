@@ -164,28 +164,42 @@ branch demonstrates ordinary tracks remain practical under it.
 It is implemented here as a candidate, **not** as owner approval:
 Document 22's gate G1 still wants explicit sign-off.
 
-## Integration notes (other workstreams)
+## Integration (done: start-zone + source-identity branches merged)
 
-- **Start zone**: `_vector_legality` still contains the previous
-  start-zone block verbatim (proximity + centre-in-section) below
-  the exact section loop. The start-zone agent can replace it with
-  `_legal_union`/`_annexation` (exact primitives, same file)
-  without touching the section contract; receipt key
-  `stages.vector_legal.annexed_m2` covers sections only today.
-- **Source-map identity / approval**: no interface change, except
-  `GENERATOR_VERSION` bumped to `route-v2` (geometry changed for
-  identical input; old approvals correctly stop authorizing).
+- **Start zone** (`felix/start-zone-containment`): containment is
+  canonical — `validate_route` requires the whole zone within the
+  union of the section polygons, which chained with the exact
+  section containment above puts it inside the legal squares too.
+  The editor's former centre test and weaker raster-proximity check
+  were deleted as duplicates. Zone *generation* verifies
+  containment in that union and falls back ribbon → shrinking
+  quads → actionable refusal, after rotation sweeps showed a
+  single quad escapes on tight bends (worst outside area is now
+  0.0 across 24 rotations × 4 real maps, sharp diamond corners,
+  and hairpins down to 0.15 m inner radius; beyond that it fails
+  closed at generation with a move-the-start message).
+- **Source identity** (`fix/source-identity-approval`): adopted
+  as-is, plus the same `check_source_current` guard on
+  `op_validate`/`op_suggest` so no candidate-building server op
+  mints a PASS against a stale snapshot.
+- `GENERATOR_VERSION` is `route-v2` (geometry changed for identical
+  input; old approvals correctly stop authorizing).
   `build_route` gained a required `legal_mask` keyword;
   `build_candidate` signature is unchanged.
-- Merge order is free: this branch touches
-  `annotation_core.py` (simplification + legality sections),
-  `annotation_server.py` (receipt wording only), tests, docs, CI.
-  Expect textual conflicts only where the start-zone agent edits
-  `_vector_legality`'s tail or `build_route`'s zone block.
+
+Known residuals, ranked: (1) zuri joint placement can still choose
+cuts whose sections share wall along a narrow isthmus (pre-existing,
+fail-closed with a route-package message; operator redraws the
+guide); (2) start zone may sit anywhere in the union with unchecked
+heading coherence, and the 2D union can splice across surfaces in
+hand-edited multi-surface manifests — future multi-surface work,
+editor emits one surface; (3) source-drift guarantee is
+check-instant only (documented in ANNOTATION_TOOL.md).
 
 ## Recommendation
 
-Ready for PR #11 merge qualification on the legality axis once the
-owner ratifies the cell-square/zero-expansion policy above.
-Remaining blockers are the other agents' gates (start-zone
-containment, source drift) per Document 22 — not this branch.
+Ready for PR #11 merge qualification once the owner ratifies the
+cell-square/zero-expansion policy above. The Document 22 gates
+G1–G3 are implemented and tested on this stack; G4–G6 are
+qualification activities (browser campaign breadth, ROS Humble
+roundtrip) rather than code changes.

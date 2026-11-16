@@ -188,3 +188,29 @@ def test_check_source_current_unit(tmp_path):
     _drift_png(tmp_path / 'test')
     with pytest.raises(AnnotationError, match='changed on disk'):
         check_source_current(track_map)
+
+
+def test_png_drift_blocks_validate_and_suggest(live):
+    """Candidate-building ops beyond preview also refuse stale sources,
+    so no PASS receipt is ever minted against a changed map."""
+    server, test_dir = live
+    server.op_open({'map': 'test/test'})
+    server.op_suggest({})
+    _drift_png(test_dir)
+    with pytest.raises(AnnotationError, match='changed on disk'):
+        server.op_validate({})
+    with pytest.raises(AnnotationError, match='changed on disk'):
+        server.op_suggest({})
+
+
+def test_negate_drift_blocks_export(live):
+    """Negate is part of the interpreted identity (it inverts the
+    whole occupancy reading), unlike the unread thresholds."""
+    server, test_dir = live
+    _approved(server)
+    yaml = test_dir / 'test.yaml'
+    text = yaml.read_text()
+    assert 'negate: 0' in text
+    yaml.write_text(text.replace('negate: 0', 'negate: 1'))
+    with pytest.raises(AnnotationError, match='changed on disk'):
+        server.op_export({})

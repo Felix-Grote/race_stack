@@ -28,4 +28,5 @@ jobs:
           python -m pytest planner/global_planner/test/test_annotation_core.py
           planner/global_planner/test/test_annotation_ui.py
           planner/global_planner/test/test_annotation_route.py
-          planner/global_planner/test/test_annotation_legality.py -q
+          planner/global_planner/test/test_annotation_legality.py
+          planner/global_planner/test/test_annotation_source_identity.py -q
