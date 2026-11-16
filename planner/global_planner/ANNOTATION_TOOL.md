@@ -12,6 +12,16 @@ enforced session identity (resolved directory, resolution, origin,
 negate, image size, `free_thresh`), so two maps sharing one PNG stem,
 and identical pixels under different YAML interpretations (including
 different `free_thresh` values), can never silently share a slot.
+`free_thresh` joined the namespace after the scheme was introduced, so
+a draft saved by an earlier revision of this unmerged branch keeps the
+old filename and is not auto-discovered — the server opens a new
+session and leaves the old file untouched. To recover it, rename the
+old file to the current draft name (`python3 -c "from
+global_planner.annotation_core import TrackMap, draft_name;
+print(draft_name(TrackMap('<map>.yaml')))"` with
+`PYTHONPATH=planner/global_planner`) and reopen; loading still
+validates the full stored identity and fails closed on mismatch.
+`--session` CLI users are unaffected (explicit path, no discovery).
 
 Preview → approve → export is enforced on every transport. Approval
 binds two digests: the editor-input digest (map identity, strokes,

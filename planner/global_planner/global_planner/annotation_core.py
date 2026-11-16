@@ -100,9 +100,8 @@ def _parse_map_yaml(text):
     mode = data.get('mode', 'trinary')
     if mode != 'trinary':
         raise AnnotationError(
-            f"UNSUPPORTED: map mode {mode!r} is not supported (only "
-            "'trinary', or no mode, uses the occupancy thresholds this "
-            'tool reads; convert the map to trinary or remove the mode)')
+            f'UNSUPPORTED: map mode {mode!r} is not supported (convert '
+            'the PNG and YAML together to trinary occupancy semantics)')
     meta = {'image': image.strip(), 'resolution': resolution,
             'origin': origin, 'negate': int(negate)}
     for key, default in (('occupied_thresh', 0.65), ('free_thresh', 0.196)):
