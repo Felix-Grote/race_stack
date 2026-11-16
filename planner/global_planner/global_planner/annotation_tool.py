@@ -19,8 +19,8 @@ from .annotation_core import (AnnotationError, TrackMap,
                               atomic_write_text, build_candidate,
                               effective_free_mask, export_name,
                               extract_boundaries, geometry_digest,
-                              load_session, require_approved, save_session,
-                              try_thinnings)
+                              load_session, require_approved, revoke_approval,
+                              save_session, try_thinnings)
 from .route.manifest import load_route
 
 
@@ -37,16 +37,6 @@ def _receipt(checked):
             'meaning': 'vector legality + route manifest/lap/portal/'
                        'sample checks PASS; not an optimized or '
                        'dynamics-certified trajectory'}
-
-
-def _revoke(session):
-    """Record a CLI-side edit: bump revision, clear approval/preview."""
-    session['revision'] = int(session.get('revision', 1)) + 1
-    session['approval'] = 'none'
-    session['approval_digest'] = None
-    session['approval_route_digest'] = None
-    session['preview_digest'] = None
-    session['preview_route_digest'] = None
 
 
 def main(argv=None):
@@ -103,7 +93,7 @@ def main(argv=None):
                     track_map, session.get('boundary_strokes_px', []),
                     session.get('stroke_width_px', 5), seed)
                 session['retained_region_px'] = seed
-            _revoke(session)
+            revoke_approval(session)
             save_session(session, args.session)
             print(json.dumps({'status': 'PASS',
                               'retained_region_px':
@@ -189,7 +179,7 @@ def main(argv=None):
             eps, (_, route, checked, _), attempts = try_thinnings(
                 track_map, session, car=car)
             session['chain_dp_epsilon_m'] = eps
-            _revoke(session)
+            revoke_approval(session)
             save_session(session, args.session)
             result = {'status': 'PASS',
                       'chain_dp_epsilon_m': eps,

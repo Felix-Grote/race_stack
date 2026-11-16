@@ -11,7 +11,7 @@ written. Draft and export filenames are namespaced per source map —
 enforced session identity (resolved directory, resolution, origin,
 negate, image size), so two maps sharing one PNG stem, and identical
 pixels under different YAML interpretations, can never silently share
-a slot. A legacy bare-stem draft is adopted in place on open.
+a slot.
 
 Preview → approve → export is enforced on every transport. Approval
 binds two digests: the editor-input digest (map identity, strokes,
@@ -23,14 +23,11 @@ reloads the file and checks the digest again. The manifest itself
 carries no approval state; that lives in the session draft.
 
 Source identity: an approved route represents the interpreted snapshot
-(PNG bytes, size, resolution, origin, negate) the operator previewed.
-Preview, approve and export each re-read the source files and refuse
-on any interpreted change since open (`check_source_current`); reopen
-and re-preview instead. Byte-identical restoration passes, and YAML
-fields the interpretation never reads (occupancy thresholds) are not
-bound. Guarantee is at the check instant only: a writer racing the
-check is not excluded, and the exported manifest always describes the
-in-memory snapshot whose SHA-256 it carries.
+(PNG bytes, size, resolution, origin, negate, `free_thresh`) the
+operator previewed; that identity is bound into every approval digest
+and checked when a draft is reopened, so a draft can never be rebound
+to a differently interpreted map. The editor works on the snapshot
+taken at open and never writes the source files.
 
 ## Run
 
@@ -69,9 +66,15 @@ ROS_DOMAIN_ID=169 ros2 run global_planner annotation_node --ros-args \
 
 - Source PNG/YAML are read-only. Boundary strokes patch an in-memory
   copy by adding occupied cells only (`negate: 1` supported by
-  inversion; `y = origin_y + (H-1-v)·res`, zero-yaw only). Non-binary
-  images (gray/unknown levels) are rejected instead of being read as
-  free space.
+  inversion; `y = origin_y + (H-1-v)·res`, zero-yaw only). Grayscale
+  images are binarized at ingestion with ROS occupancy semantics
+  (`p = (255 - v) / 255`, inverted for `negate: 1`): a cell counts as
+  free only when `p < free_thresh` proves it, so occupied and
+  uncertain (gray) cells alike stay occupied and never become road.
+  Binary maps reduce to exactly the strict binary reading. Map YAML
+  is parsed with PyYAML (`yaml.safe_load`); only image, resolution,
+  origin, negate and the thresholds pair are read, extra keys are
+  ignored.
 - Corner cutting: a stroke across a corner splits free space; the
   bucket click selects the one 8-connected component that stays legal
   and the excluded pocket is shaded. Legal free space only ever
@@ -133,16 +136,17 @@ certified racing trajectory.
 0.03 m envelope edge) through the same checks and locks the first
 passing setting into the session.
 
-Sessions are versioned (current: 4). Older drafts reopen with
-approvals and preview bindings revoked — a v3 approval authorized a
-retired manifest format and never carries forward.
+Sessions are versioned (current: 4). Only current-version drafts
+reopen; older drafts are rejected with a clear error rather than
+migrated, so an approval can never silently carry across formats.
 
 ## Map support (fail-closed)
 
-One planar ring in a binary, zero-yaw occupancy map. Bridges/split
-courses, multiple holes, gray/unknown rasters and nonzero yaw are
-rejected with a reason. The manifest's `surface` string does not make
-this a 3D or multi-layer editor.
+One planar ring in a zero-yaw occupancy map (binary or grayscale;
+grayscale is read conservatively as above). Bridges/split courses,
+multiple holes and nonzero yaw are rejected with a reason. The
+manifest's `surface` string does not make this a 3D or multi-layer
+editor.
 
 ## Tests
 
@@ -150,14 +154,17 @@ this a 3D or multi-layer editor.
 PYTHONPATH=planner/global_planner python3 -m pytest \
   planner/global_planner/test/test_annotation_core.py \
   planner/global_planner/test/test_annotation_ui.py \
-  planner/global_planner/test/test_annotation_route.py -q
+  planner/global_planner/test/test_annotation_route.py \
+  planner/global_planner/test/test_annotation_legality.py -q
 ```
 
-`test_annotation_route.py` pins reference lap geometry and in-run
-digest determinism for the unedited `test`/`baku` maps and for
-reconstructed operator corner cuts on Baku (one cut and four cuts,
-strokes + bucket seed frozen in the test), final-polygon legality
-failures, NUC5 car zones, metadata binding and the v3→v4 migration.
-Exact digests are recorded for the development environment only:
-the float pipeline legitimately lands on different last-ulp
-branches across CPU/BLAS builds. CI: `.github/workflows/annotation-headless.yml`.
+The deployment suite is deliberately compact: real binary and
+grayscale ForzaETH maps loading and validating end to end, exact
+zero-annexation legality against an independent oracle (including
+Baku corner cuts with bucket selection), canonical start-zone and
+manifest contracts, NUC5 car zones, preview -> approval -> export
+integrity on the server, CLI and ROS transports, and fail-closed
+topology. Exact cross-machine digests are not asserted: the float
+pipeline legitimately lands on different last-ulp branches across
+CPU/BLAS builds; within one environment it is deterministic, which
+is what approval binds. CI: `.github/workflows/annotation-headless.yml`.

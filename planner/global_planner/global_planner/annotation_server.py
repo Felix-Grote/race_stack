@@ -13,7 +13,6 @@ then open http://127.0.0.1:8766/ in a browser.
 """
 import argparse
 import base64
-import os
 import json
 import math
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -23,13 +22,12 @@ import cv2
 import numpy as np
 
 from .annotation_core import (AnnotationError, TrackMap,
-                              atomic_write_text, build_candidate,
-                              check_source_current, draft_name,
+                              atomic_write_text, build_candidate, draft_name,
                               effective_free_mask, export_name,
                               extract_boundaries, free_components,
                               geometry_digest, load_session, new_session,
                               patched_free_mask, require_approved,
-                              resolve_draft, ridge_seed, save_session,
+                              revoke_approval, ridge_seed, save_session,
                               suggest_route, try_thinnings, _checked_seed,
                               _checked_speed, _checked_text, _checked_width,
                               _signed_area)
@@ -76,19 +74,8 @@ def require_open():
 
 
 def _touch(session):
-    """Record an edit: bump revision, revoke approval, drop extraction.
-
-    Every geometry mutation funnels through here, so no edit path (update,
-    undo, clear) can retain an approval granted to a previous geometry.
-    The persisted preview digest is cleared with the in-memory candidate
-    so a saved draft never approves pre-edit geometry.
-    """
-    session['revision'] = int(session.get('revision', 1)) + 1
-    session['approval'] = 'none'
-    session['approval_digest'] = None
-    session['approval_route_digest'] = None
-    session['preview_digest'] = None
-    session['preview_route_digest'] = None
+    """Record an edit: revoke approval (core), drop server-side display."""
+    revoke_approval(session)
     STATE['extraction'] = None
     STATE['candidate_digest'] = None
 
@@ -221,31 +208,15 @@ def op_open(body):
     if not STATE.get('maps_dir') or not STATE.get('out_dir'):
         raise AnnotationError('backend not configured (set maps/out dirs first)')
     track_map = TrackMap(_resolve_map_yaml(body.get('map', '')))
-    draft, legacy = resolve_draft(STATE['out_dir'], track_map)
-    if legacy is None:
-        if draft.exists():
-            # Load validates the full map identity inside; a cross-map
-            # file in this slot fails closed here and is left untouched.
-            session = load_session(draft, track_map)
-            message = 'reopened saved draft'
-        else:
-            session = new_session(track_map)
-            message = 'new session'
+    draft = Path(STATE['out_dir']) / draft_name(track_map)
+    if draft.exists():
+        # Load validates the full map identity inside; a cross-map
+        # file in this slot fails closed here and is left untouched.
+        session = load_session(draft, track_map)
+        message = 'reopened saved draft'
     else:
-        session = load_session(legacy, track_map)  # validates; raises closed
-        draft.parent.mkdir(parents=True, exist_ok=True)
-        tmp = draft.with_name(draft.name + f'.tmp-{os.getpid()}')
-        try:
-            tmp.write_bytes(legacy.read_bytes())
-            os.replace(tmp, draft)
-        except OSError:
-            try:
-                tmp.unlink()
-            except OSError:
-                pass
-            raise AnnotationError(
-                f'legacy draft could not be adopted: {legacy.name}')
-        message = f'reopened legacy draft (adopted as {draft.name})'
+        session = new_session(track_map)
+        message = 'new session'
     # Restore the persisted preview when it still matches the current
     # geometry: the digest binds every editable field, so a preview from
     # before a restart authorizes exactly the same candidate as a fresh
@@ -354,7 +325,6 @@ def op_suggest(body):
     redraw it, and only an explicit approve authorizes export.
     """
     session, track_map = require_open()
-    check_source_current(track_map)
     retained = session.get('retained_region_px')
     try:
         outer, inner = extract_boundaries(
@@ -487,7 +457,6 @@ def op_preview(body):
     approve/export.
     """
     session, track_map = require_open()
-    check_source_current(track_map)
     if not session.get('route_px'):
         raise AnnotationError('draw the directed route loop first')
     try:
@@ -532,7 +501,6 @@ def op_approve(body):
     and the geometry is unchanged since that preview. Writes no file.
     """
     session, track_map = require_open()
-    check_source_current(track_map)
     quoted = body.get('approval_digest')
     if not quoted or quoted != STATE.get('candidate_digest'):
         raise AnnotationError('approve refused: no fresh preview for this '
@@ -615,7 +583,6 @@ def op_validate(body):
     dense walls is the expensive part.
     """
     session, track_map = require_open()
-    check_source_current(track_map)
     if not session.get('route_px'):
         raise AnnotationError('draw the directed route loop first')
     try:

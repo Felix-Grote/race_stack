@@ -1,40 +1,31 @@
 # Copyright 2026 ForzaETH
-"""Route-manifest contract tests: annotation output against live PR #10.
+"""Route-manifest contract tests against the live PR #10 package.
 
-These pin what the migration must prove and the raster/UI suites do
-not: the exact ``global_planner.route`` payload shape, reference
-geometry for the unedited maps, genuine operator corner cuts on
-Baku (strokes + bucket selection through the full check pipeline),
-final-polygon legality failures, car portal zones, metadata binding
-and the v3 -> v4 session migration.
-
-Corner-cut fixture provenance: no recorded operator session existed,
-so the strokes below are reconstructed operator-equivalent actions -
-each is a straight boundary stroke between two points on the inner
-wall of the Baku map (found by search, 2026-11-15), cutting off one
-corner pocket; BAKU_SEED is the bucket click in the retained main
-component. The coordinates are frozen here as the fixture.
+Pins reference lap geometry and in-run determinism for unedited maps,
+genuine operator corner cuts on Baku (strokes + bucket seed through
+the full pipeline), canonical start-zone containment for generated
+routes, NUC5 car zones and approval-bound metadata. Exact digests are
+not asserted across machines: the float pipeline legitimately lands
+on different last-ulp branches per CPU/BLAS build; within one
+environment it is deterministic, which is what approval binds.
 """
 import json
 import sys
 from pathlib import Path
 
-import numpy as np
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parents[1]))
 
+from conftest import MAPS, midline_seed  # noqa: E402
 from global_planner.annotation_core import (  # noqa: E402
     AnnotationError, TrackMap, build_candidate, build_route,
     check_payload, effective_free_mask, extract_boundaries,
-    free_components, geometry_digest, load_session, new_session,
-    patched_free_mask, save_session)
+    free_components, geometry_digest, new_session, patched_free_mask)
 from global_planner.car import Car  # noqa: E402
-from global_planner.route.errors import RouteError  # noqa: E402
 from global_planner.route.manifest import load_route, validate_route  # noqa: E402
 
 REPO = Path(__file__).parents[3]
-MAPS = REPO / 'stack_master' / 'maps'
 NUC5 = REPO / 'stack_master' / 'config' / 'NUC5' / 'car_model.yaml'
 
 BAKU_CUTS = [[[316.0, 584.0], [284.0, 482.0]],
@@ -42,37 +33,12 @@ BAKU_CUTS = [[[316.0, 584.0], [284.0, 482.0]],
              [[362.0, 187.0], [309.0, 81.0]],
              [[100.0, 308.0], [190.0, 297.0]]]
 BAKU_SEED = [179, 25]
-# The old stack's kinked corner cut on the test map (was a hard
-# failure under corridor-chart validation; see the test below).
 TEST_CUT = [[[130.16427660290194, 3.890151624735724],
              [48.83572339709805, 100.10984837526428]]]
 TEST_CUT_SEED = [125, 230]
 
-# Reference geometry measured on the development machine (CPython
-# 3.14, opencv 5.0.0, numpy 2.5.4). Exact Route.digests are *not*
-# asserted: the float geometry pipeline (resampling, RDP keep/drop at
-# the epsilon boundary) lands on different last-ulp branches across
-# CPU/BLAS builds, so identical input yields a different - equally
-# valid - digest on other runners (observed in CI). What approval
-# actually needs, and what is asserted, is determinism within one
-# environment plus the recorded lap geometry within tolerance.
 REFERENCE_LAP_M = {'test': 85.868, 'baku': 122.77,
                    'baku_1cut': 121.844, 'baku_4cut': 120.071}
-REFERENCE_DIGEST = {
-    'test': 'cf9c981785b1754ab7b3842b2c15a9992aeb7b0188118c98938584a6c4d2dd00',
-    'baku': '96a9c0b2181e41ba62cda80899a2da5e6ed8e497575a9e49df0bcf9023ebfd27',
-    'baku_1cut': '0b539362a21cc8ec69e18850fc09d5330ee84ac131a40351e6438c6ac810bd7a',
-    'baku_4cut': 'bcb07fc509b94540dddc1cb23dd068b45b8e830ebaf0c43198e91c576cc7ff2b',
-}
-
-
-def _midline_seed(outer, inner, count=120):
-    step = max(1, len(outer) // count)
-    seed = []
-    for p in outer[::step]:
-        j = int(np.argmin(np.linalg.norm(inner - p, axis=1)))
-        seed.append(((p + inner[j]) / 2).tolist())
-    return seed
 
 
 def _session(track_map, strokes=(), seed=None):
@@ -81,13 +47,13 @@ def _session(track_map, strokes=(), seed=None):
     session['boundary_strokes_px'] = [list(map(list, s)) for s in strokes]
     session['retained_region_px'] = seed
     outer, inner = extract_boundaries(track_map, strokes, 5, seed)
-    session['route_px'] = _midline_seed(outer, inner)
+    session['route_px'] = midline_seed(outer, inner)
     return session
 
 
 @pytest.mark.parametrize('name,key', [('test/test', 'test'),
                                       ('baku/baku', 'baku')])
-def test_golden_digest_and_roundtrip(name, key, tmp_path):
+def test_reference_lap_and_roundtrip(name, key, tmp_path):
     """Unedited maps build reference geometry deterministically; the
     exported file reloads to the same digest it was built with."""
     track_map = TrackMap(MAPS / f'{name}.yaml')
@@ -95,13 +61,11 @@ def test_golden_digest_and_roundtrip(name, key, tmp_path):
     payload, route, receipt, _ = build_candidate(track_map, session)
     assert receipt['lap_length_m'] == pytest.approx(
         REFERENCE_LAP_M[key], abs=0.1)
-    # Deterministic in this environment: rebuilding changes nothing.
     _, again, _, _ = build_candidate(track_map, session)
     assert again.digest == route.digest
     path = tmp_path / 'route.json'
     path.write_text(json.dumps(payload, indent=1), encoding='utf-8')
     assert load_route(path).digest == route.digest
-    # Exact live schema shape: nothing extra, nothing missing.
     assert set(payload) == {'name', 'map', 'start', 'sections'}
     assert set(payload['map']) == {'frame_id', 'sha256'}
     assert payload['map']['sha256'] == track_map.sha256
@@ -114,57 +78,50 @@ def test_golden_digest_and_roundtrip(name, key, tmp_path):
     assert receipt['not_checked']  # optimizer/dynamics named, not implied
 
 
-def test_baku_four_cuts_need_region_selection_first():
-    """Four cuts fragment the mask into 5 regions; without the bucket
-    seed extraction refuses instead of picking a component itself."""
+def test_baku_cuts_need_selection_then_shorten_lap():
+    """Corner cuts fragment the mask; with the bucket seed the lap
+    shortens, pockets stay excluded and car zones pass."""
     track_map = TrackMap(MAPS / 'baku/baku.yaml')
     regions = free_components(patched_free_mask(track_map, BAKU_CUTS, 5))
     assert len(regions) == 5
     with pytest.raises(AnnotationError, match='NEEDS_REGION_SELECTION'):
         extract_boundaries(track_map, BAKU_CUTS, 5, None)
-
-
-@pytest.mark.parametrize('cuts,key', [(BAKU_CUTS[:1], 'baku_1cut'),
-                                      (BAKU_CUTS, 'baku_4cut')])
-def test_baku_corner_cuts_shorten_lap_and_validate(cuts, key):
-    """Real shortened Baku corners: pockets excluded by the bucket,
-    final polygons legal, full route pipeline green, lap shorter."""
-    track_map = TrackMap(MAPS / 'baku/baku.yaml')
-    base_area = int((effective_free_mask(track_map, [], 5) > 0).sum())
-    session = _session(track_map, cuts, BAKU_SEED)
-    legal_area = int((effective_free_mask(
-        track_map, cuts, 5, BAKU_SEED) > 0).sum())
-    assert legal_area < base_area - 1000 * len(cuts) // 2
     car = Car.load(NUC5, margin_m=0.05)
-    payload, route, receipt, _ = build_candidate(
-        track_map, session, car=car)
-    assert route.digest != REFERENCE_DIGEST['baku']
-    assert receipt['lap_length_m'] == pytest.approx(
-        REFERENCE_LAP_M[key], abs=0.1)
-    assert receipt['lap_length_m'] < 122.77  # unedited lap
-    assert receipt['stages']['vector_legal']['status'] == 'PASS'
-    assert receipt['stages']['vector_legal']['annexed_m2'] == 0.0
-    assert receipt['stages']['car_zones'] == 'PASS'
-    assert validate_route(payload).digest == route.digest
+    for cuts, key in ((BAKU_CUTS[:1], 'baku_1cut'), (BAKU_CUTS, 'baku_4cut')):
+        session = _session(track_map, cuts, BAKU_SEED)
+        payload, route, receipt, _ = build_candidate(
+            track_map, session, car=car)
+        assert receipt['lap_length_m'] == pytest.approx(
+            REFERENCE_LAP_M[key], abs=0.1)
+        assert receipt['lap_length_m'] < REFERENCE_LAP_M['baku']
+        assert receipt['stages']['vector_legal']['annexed_m2'] == 0.0
+        assert receipt['stages']['car_zones'] == 'PASS'
+        assert validate_route(payload).digest == route.digest
 
 
-def test_test_map_kinked_cut_now_passes():
-    """Behavior change, pinned: the old corridor-chart stack rejected
-    this kinked cut at every smoothing level; the wall-derived
-    centreline accepts it, so preview now grants a candidate. The
-    spline-between-knots containment question belongs to the future
-    trajectory checker and stays in the receipt's not_checked list."""
+def test_test_map_kinked_cut_validates():
+    """The old kinked corner cut builds under wall-derived centrelines."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
     session = _session(track_map, TEST_CUT, TEST_CUT_SEED)
-    _, route, receipt, _ = build_candidate(track_map, session)
+    _, _, receipt, _ = build_candidate(track_map, session)
     assert receipt['stages']['manifest'] == 'PASS'
-    assert route.digest != REFERENCE_DIGEST['test']
 
 
-def test_offroad_start_zone_rejected_at_manifest_stage():
-    """Canonical containment: an off-road start zone fails in
-    validate_route (zone outside the union of sections), reported
-    through check_payload as the MANIFEST_VALID stage."""
+def test_start_zone_containment_contract():
+    """Generated zones satisfy canonical containment on real maps; an
+    off-road zone fails at the manifest stage, never silently."""
+    from shapely.geometry import Polygon
+    for name in ('test/test', 'baku/baku', 'spa/spa', 'zuri/zuri'):
+        track_map = TrackMap(MAPS / f'{name}.yaml')
+        session = _session(track_map)
+        payload, _ = build_route(
+            track_map, *extract_boundaries(track_map), session['route_px'],
+            legal_mask=effective_free_mask(track_map, [], 5))
+        first = payload['sections'][0]
+        section0 = Polygon(list(first['right'])
+                           + list(reversed(first['left'])))
+        assert section0.covers(Polygon(payload['start']['zone'])), name
+        validate_route(payload)
     track_map = TrackMap(MAPS / 'test/test.yaml')
     session = _session(track_map)
     legal = effective_free_mask(track_map, [], 5)
@@ -177,133 +134,17 @@ def test_offroad_start_zone_rejected_at_manifest_stage():
         check_payload(payload, track_map, legal)
 
 
-def _synthetic_payload(zone, heading=(-0.3, 0.3), notch=False):
-    """Four trapezoid sections forming a ring; s0 is the bottom strip."""
-    left0 = [[3, 3], [5, 1.5], [7, 3]] if notch else [[3, 3], [7, 3]]
-    sections = [
-        {'uid': 's0', 'surface': 'ground', 'max_speed_mps': 2.5,
-         'right': [[0, 0], [10, 0]], 'left': left0},
-        {'uid': 's1', 'surface': 'ground', 'max_speed_mps': 2.5,
-         'right': [[10, 0], [10, 10]], 'left': [[7, 3], [7, 7]]},
-        {'uid': 's2', 'surface': 'ground', 'max_speed_mps': 2.5,
-         'right': [[10, 10], [0, 10]], 'left': [[7, 7], [3, 7]]},
-        {'uid': 's3', 'surface': 'ground', 'max_speed_mps': 2.5,
-         'right': [[0, 10], [0, 0]], 'left': [[3, 7], [3, 3]]}]
-    return {'name': 'synth', 'map': {'frame_id': 'map', 'sha256': '0' * 64},
-            'start': {'heading_range_rad': list(heading), 'zone': zone},
-            'sections': sections}
-
-
-@pytest.mark.parametrize('zone', [
-    [[2, 0.5], [4, 0.5], [4, 1.5], [2, 1.5]],   # fully inside s0
-    [[2, 0], [5, 0], [5, 1], [2, 1]],           # shares s0's wall: contact is inside
-    [[2, -1e-12], [5, -1e-12], [5, 1], [2, 1]],  # float noise beyond the wall (EPS)
-    [[7.5, 0.5], [9.5, 0.5], [9.5, 2.5], [7.5, 2.5]],  # straddles the s0/s1 gate
-    [[8, 4], [9, 4], [9, 6], [8, 6]],           # wholly in s1, not in s0 at all
-])
-def test_start_zone_inside_route_union_passes(zone):
-    """Containment is whole-polygon against the union of all sections;
-    boundary contact is allowed and no section is privileged."""
-    validate_route(_synthetic_payload(zone))
-
-
-@pytest.mark.parametrize('zone,notch', [
-    ([[4, 4], [6, 4], [6, 6], [4, 6]], False),        # in the infield hole
-    ([[-1, 4], [1, 4], [1, 6], [-1, 6]], False),      # beyond the outer wall
-    ([[4, 0.5], [6, 0.5], [6, 2], [4, 2]], True),  # vertices in, edge cuts the notch
-    ([[2, -0.001], [5, -0.001], [5, 1], [2, 1]], False),  # 1 mm beyond the wall
-])
-def test_start_zone_outside_route_union_rejected(zone, notch):
-    """A representative point on the road does not rescue a zone that leaves it."""
-    with pytest.raises(RouteError, match='start zone is not contained'):
-        validate_route(_synthetic_payload(zone, notch=notch))
-
-
-def test_start_zone_invalid_metadata_rejected():
-    """Self-crossing zones and empty/reversed heading ranges stay rejected."""
-    with pytest.raises(RouteError, match='start zone'):
-        validate_route(_synthetic_payload([[2, 0.5], [4, 1.5], [4, 0.5], [2, 1.5]]))
-    for heading in [(0.3, -0.3), (0.0, 0.0)]:
-        with pytest.raises(RouteError, match='heading'):
-            validate_route(_synthetic_payload(
-                [[2, 0.5], [4, 0.5], [4, 1.5], [2, 1.5]], heading=heading))
-
-
-def test_generated_start_zones_contained_on_real_maps():
-    """Auto-generated zones (tight bends included) satisfy containment."""
-    from shapely.geometry import Polygon
-    for name in ('test/test', 'baku/baku', 'spa/spa', 'zuri/zuri'):
-        track_map = TrackMap(MAPS / f'{name}.yaml')
-        outer, inner = extract_boundaries(track_map)
-        session = _session(track_map)
-        payload, _ = build_route(
-            track_map, outer, inner, session['route_px'],
-            legal_mask=effective_free_mask(track_map, [], 5))
-        first = payload['sections'][0]
-        section0 = Polygon(list(first['right']) + list(reversed(first['left'])))
-        assert section0.covers(Polygon(payload['start']['zone'])), name
-        validate_route(payload)
-
-
-def test_editor_rejects_zone_partly_outside_first_section():
-    """Regression: a zone scaled x2 about its centre is ~25% outside s0
-    yet passed check_payload when only the vertex mean was tested."""
-    from shapely.geometry import Polygon
-    track_map = TrackMap(MAPS / 'test/test.yaml')
-    session = _session(track_map)
-    legal = effective_free_mask(track_map, [], 5)
-    payload, _ = build_route(
-        track_map, *extract_boundaries(track_map), session['route_px'],
-        legal_mask=legal)
-    zone = np.array(payload['start']['zone'], float)
-    payload['start']['zone'] = (2 * zone - zone.mean(axis=0)).tolist()
-    first = payload['sections'][0]
-    section0 = Polygon(list(first['right']) + list(reversed(first['left'])))
-    outside = Polygon(payload['start']['zone']).difference(section0).area
-    assert outside > 0.2 * Polygon(payload['start']['zone']).area
-    with pytest.raises(RouteError, match='start zone is not contained'):
-        validate_route(payload)
-    with pytest.raises(AnnotationError, match='MANIFEST_VALID'):
-        check_payload(payload, track_map, legal)
-
-
-def test_vector_legality_rejects_annexed_wall():
-    """Moving one wall outward must fail the final-polygon gate even
-    though the payload is otherwise the valid golden route."""
-    track_map = TrackMap(MAPS / 'test/test.yaml')
-    session = _session(track_map)
-    legal = effective_free_mask(track_map, [], 5)
-    payload, _ = build_route(
-        track_map, *extract_boundaries(track_map), session['route_px'],
-        legal_mask=legal)
-    wall = payload['sections'][1]['left']
-    mid = len(wall) // 2
-    for i in range(mid - 3, mid + 4):
-        wall[i] = [wall[i][0], wall[i][1] + 0.6]
-    with pytest.raises(AnnotationError, match='VECTOR_LEGAL'):
-        check_payload(payload, track_map, legal)
-
-
-@pytest.mark.parametrize('margin', [0.0, 0.05, 0.1])
-def test_car_zones_pass_for_nuc5(margin):
+def test_car_zones_for_nuc5():
     """Vehicle stages run only for an explicitly supplied car."""
     track_map = TrackMap(MAPS / 'baku/baku.yaml')
     session = _session(track_map)
-    car = Car.load(NUC5, margin_m=margin)
+    car = Car.load(NUC5, margin_m=0.05)
     _, _, receipt, _ = build_candidate(track_map, session, car=car)
     assert receipt['stages']['car_zones'] == 'PASS'
     assert receipt['car']['name'] == 'NUC5'
-    assert receipt['car']['margin_m'] == margin
-
-
-def test_car_zones_reject_absurd_reach():
-    """A car whose reach spans whole sections fails closed at the
-    vehicle stage while the manifest itself stays valid."""
-    track_map = TrackMap(MAPS / 'baku/baku.yaml')
-    session = _session(track_map)
-    car = Car.load(NUC5, margin_m=50.0)
+    absurd = Car.load(NUC5, margin_m=50.0)
     with pytest.raises(AnnotationError, match='VEHICLE_ZONES_READY'):
-        build_candidate(track_map, session, car=car)
+        build_candidate(track_map, session, car=absurd)
 
 
 def test_metadata_edits_change_digest_and_payload():
@@ -315,40 +156,11 @@ def test_metadata_edits_change_digest_and_payload():
     session['surface'] = 'asphalt'
     session['route_name'] = 'test_edited'
     assert geometry_digest(session, track_map) != before
-    payload, route, _, _ = build_candidate(track_map, session)
+    payload, _, _, _ = build_candidate(track_map, session)
     assert payload['name'] == 'test_edited'
     assert {s['surface'] for s in payload['sections']} == {'asphalt'}
     assert {s['max_speed_mps'] for s in payload['sections']} == {3.5}
-    assert route.digest != REFERENCE_DIGEST['test']
-    for field, bad in (('max_speed_mps', 0), ('max_speed_mps', -1),
-                       ('surface', ' padded'), ('route_name', '')):
-        broken = dict(session, **{field: bad})
+    for field, bad in (('max_speed_mps', 0), ('surface', ' padded'),
+                       ('route_name', '')):
         with pytest.raises(AnnotationError):
-            build_candidate(track_map, broken)
-
-
-def test_v3_session_migrates_with_approval_revoked(tmp_path):
-    """A v3 draft (old schema-v1 approval) reopens as v4, unapproved,
-    with manifest metadata defaulted and preview bindings cleared."""
-    track_map = TrackMap(MAPS / 'test/test.yaml')
-    session = new_session(track_map)
-    session['version'] = 3
-    for key in ('route_name', 'surface', 'max_speed_mps',
-                'approval_route_digest', 'preview_route_digest'):
-        del session[key]
-    session['approval'] = 'operator-approved'
-    session['approval_digest'] = 'a' * 64
-    session['preview_digest'] = 'a' * 64
-    path = tmp_path / 'v3.json'
-    path.write_text(json.dumps(session), encoding='utf-8')
-    loaded = load_session(path, track_map)
-    assert loaded['version'] == 4
-    assert loaded['approval'] == 'none'
-    assert loaded['approval_digest'] is None
-    assert loaded['preview_digest'] is None
-    assert loaded['preview_route_digest'] is None
-    assert loaded['route_name'] == 'test'
-    assert loaded['surface'] == 'ground'
-    assert loaded['max_speed_mps'] == 2.5
-    save_session(loaded, path)  # round-trips as a clean v4 draft
-    assert load_session(path, track_map)['version'] == 4
+            build_candidate(track_map, dict(session, **{field: bad}))

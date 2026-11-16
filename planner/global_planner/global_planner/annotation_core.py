@@ -43,6 +43,7 @@ from pathlib import Path
 
 import numpy as np
 import shapely
+import yaml
 from shapely.geometry import Polygon
 
 try:
@@ -61,83 +62,52 @@ class AnnotationError(ValueError):
 # --------------------------------------------------------------------------
 
 def _parse_map_yaml(text):
-    """Parse the small flat subset of map YAML this tool accepts."""
-    meta, origin = {}, []
-    lines = text.splitlines()
-    for i, line in enumerate(lines):
-        if ':' not in line:
-            continue
-        key, _, rest = line.partition(':')
-        key, rest = key.strip(), rest.strip()
-        if key == 'origin':
-            try:
-                if rest.startswith('['):
-                    origin = [float(x)
-                              for x in rest.strip('[]').split(',')
-                              if x.strip()]
-                else:  # block sequence "- value" lines
-                    for nxt in lines[i + 1:]:
-                        nxt = nxt.strip()
-                        if nxt.startswith('- '):
-                            origin.append(float(nxt[2:]))
-                        else:
-                            break
-            except (TypeError, ValueError) as exc:
-                raise AnnotationError(
-                    'map origin is not a list of numbers') from exc
-        elif key in ('resolution', 'negate', 'occupied_thresh',
-                     'free_thresh'):
-            meta[key] = rest
-        elif key == 'image':
-            meta[key] = rest
-    if 'image' not in meta or 'resolution' not in meta or len(origin) != 3:
-        raise AnnotationError('map YAML missing image/resolution/origin')
-    if not all(math.isfinite(v) for v in origin):
-        # float() accepts nan/inf, and abs(nan) > 1e-12 is False, so a
-        # non-finite origin would slip past the yaw check below and
-        # poison pixel_to_world, map_identity, and saved drafts (nan
-        # != nan trips the identity check on reopen). Same finite guard
-        # as resolution.
-        raise AnnotationError('map origin must be finite numbers (m)')
-    # The image entry is a bare file name: strip a trailing YAML comment
-    # and one layer of surrounding quotes. A '#' inside a quoted name is
-    # kept; the result must still resolve to a readable file below, so a
-    # mis-parse fails closed instead of rebinding the map.
-    image = meta['image'].strip()
-    head, hash_, _ = image.partition('#')
-    if hash_ and (not head or head.endswith((' ', '\t'))):
-        image = head.strip()
-    if (len(image) >= 2 and image[0] == image[-1]
-            and image[0] in ('"', "'")):
-        image = image[1:-1].strip()
-    if not image:
-        raise AnnotationError('map YAML has an empty image entry')
-    meta['image'] = image
+    """Parse map YAML with PyYAML; validate the fields this tool reads.
+
+    Extra keys (e.g. the ``ot_interpolator`` blocks in ForzaETH map
+    YAMLs) are ignored. Only the Cartographer/ROS occupancy convention
+    is supported: ``negate`` 0/1 and a thresholds pair with
+    ``0 < free_thresh <= occupied_thresh <= 1``.
+    """
     try:
-        meta['resolution'] = float(meta['resolution'])
+        data = yaml.safe_load(text)
+    except yaml.YAMLError as exc:
+        raise AnnotationError(f'map YAML is not valid YAML: {exc}') from exc
+    if not isinstance(data, dict):
+        raise AnnotationError('map YAML must be a mapping')
+    image = data.get('image')
+    if not isinstance(image, str) or not image.strip():
+        raise AnnotationError('map YAML missing a nonempty image entry')
+    try:
+        resolution = float(data.get('resolution'))
     except (TypeError, ValueError) as exc:
         raise AnnotationError('map resolution is not a number') from exc
-    if not (math.isfinite(meta['resolution']) and meta['resolution'] > 0):
+    if not (math.isfinite(resolution) and resolution > 0):
         raise AnnotationError(
             'map resolution must be a finite positive number (m/px)')
-    meta['origin'] = origin
-    # Occupancy interpretation: only the Cartographer-style binary convention
-    # (negate 0/1, single thresholds pair) is supported. Anything else risks
-    # reading unknown/gray cells as legal free space, so it is rejected here
-    # instead of being silently approximated downstream.
+    origin = data.get('origin')
+    if not isinstance(origin, (list, tuple)) or len(origin) != 3:
+        raise AnnotationError('map origin must be a list of 3 numbers')
     try:
-        meta['negate'] = int(meta.get('negate', '0'))
+        origin = [float(v) for v in origin]
     except (TypeError, ValueError) as exc:
-        raise AnnotationError('UNSUPPORTED: map negate must be 0 or 1') from exc
-    if meta['negate'] not in (0, 1):
+        raise AnnotationError('map origin is not a list of numbers') from exc
+    if not all(math.isfinite(v) for v in origin):
+        raise AnnotationError('map origin must be finite numbers (m)')
+    negate = data.get('negate', 0)
+    if isinstance(negate, bool) or negate not in (0, 1):
         raise AnnotationError('UNSUPPORTED: map negate must be 0 or 1')
-    for thresh_key, default in (('occupied_thresh', 0.65),
-                                ('free_thresh', 0.196)):
+    meta = {'image': image.strip(), 'resolution': resolution,
+            'origin': origin, 'negate': int(negate)}
+    for key, default in (('occupied_thresh', 0.65), ('free_thresh', 0.196)):
         try:
-            meta[thresh_key] = float(meta.get(thresh_key, default))
+            meta[key] = float(data.get(key, default))
         except (TypeError, ValueError) as exc:
-            raise AnnotationError(
-                f'map {thresh_key} is not a number') from exc
+            raise AnnotationError(f'map {key} is not a number') from exc
+    if not (0.0 < meta['free_thresh'] <= meta['occupied_thresh'] <= 1.0):
+        raise AnnotationError(
+            'UNSUPPORTED: map thresholds must satisfy '
+            '0 < free_thresh <= occupied_thresh <= 1')
     return meta
 
 
@@ -173,12 +143,18 @@ class TrackMap:
         self.sha256 = hashlib.sha256(png_bytes).hexdigest()
 
     def map_identity(self):
-        """Full source-map interpretation contract bound by sessions."""
+        """Full source-map interpretation contract bound by sessions.
+
+        ``free_thresh`` is bound because it decides which gray cells
+        count as free (see ``patched_free_mask``); ``occupied_thresh``
+        never changes the conservative mask, so it stays unbound.
+        """
         return {'map_sha256': self.sha256,
                 'image_size': [int(self.width), int(self.height)],
                 'resolution': float(self.resolution),
                 'origin': [float(self.origin[0]), float(self.origin[1])],
-                'negate': int(self.negate)}
+                'negate': int(self.negate),
+                'free_thresh': float(self.free_thresh)}
 
     def pixel_to_world(self, uv):
         """Convert file pixel (u, v) to world (x, y) in metres."""
@@ -245,6 +221,7 @@ def new_session(track_map, author='operator'):
         'resolution': track_map.resolution,
         'origin': list(track_map.origin),
         'negate': int(track_map.negate),
+        'free_thresh': float(track_map.free_thresh),
         'boundary_strokes_px': [],   # list of polylines [[u, v], ...]
         'route_px': [],              # directed guide loop (direction + cuts)
         'stroke_width_px': 5,
@@ -264,47 +241,6 @@ def new_session(track_map, author='operator'):
         'revision': 1,               # incremented on every session mutation
         'author': author,
     }
-
-
-def _migrate_session(session):
-    """Upgrade old drafts; approval never survives migration.
-
-    v1 bound approval to a bare string with no geometry digest and bound the
-    map to hash+size only. v2 lacks the retained-region seed, so an approval
-    granted without it cannot authorize the selected-component geometry.
-    Carrying such an approval forward would authorize an unknown geometry
-    under a stronger contract, so it is revoked here.
-    """
-    if session.get('version') == 1:
-        session = dict(session)
-        session['version'] = 2
-        session.setdefault('negate', 0)
-        session['approval'] = 'none'
-        session['approval_digest'] = None
-        session.setdefault('revision', 1)
-    if session.get('version') == 2:
-        session = dict(session)
-        session['version'] = 3
-        session['retained_region_px'] = None
-        session['approval'] = 'none'
-        session['approval_digest'] = None
-        session.setdefault('revision', 1)
-    if session.get('version') == 3:
-        # v3 approvals authorized the retired schema-v1 manifest; under
-        # the route manifest they would authorize different geometry.
-        session = dict(session)
-        session['version'] = 4
-        session.setdefault('route_name',
-                           Path(str(session.get('map_png', 'route'))).stem)
-        session.setdefault('surface', DEFAULT_SURFACE)
-        session.setdefault('max_speed_mps', DEFAULT_MAX_SPEED_MPS)
-        session['approval'] = 'none'
-        session['approval_digest'] = None
-        session['approval_route_digest'] = None
-        session['preview_digest'] = None
-        session['preview_route_digest'] = None
-        session.setdefault('revision', 1)
-    return session
 
 
 def check_session_map(session, track_map):
@@ -329,6 +265,12 @@ def check_session_map(session, track_map):
     if int(session.get('negate', 0)) != int(track_map.negate):
         raise AnnotationError('map identity mismatch: negate flag differs; '
                               'occupied/free would invert')
+    # Sessions saved before free_thresh was bound default to the
+    # Cartographer value every ForzaETH map uses.
+    if abs(float(session.get('free_thresh', 0.196))
+           - track_map.free_thresh) > 1e-12:
+        raise AnnotationError('map identity mismatch: free_thresh differs; '
+                              'gray cells would be reinterpreted')
 
 
 def _checked_seed(retained_region_px, track_map):
@@ -450,32 +392,19 @@ def geometry_digest(session, track_map):
     return hashlib.sha256(canonical.encode('utf-8')).hexdigest()
 
 
-def check_source_current(track_map):
-    """Refuse when the on-disk source no longer matches this snapshot.
+def revoke_approval(session):
+    """Record an edit: bump revision, clear approval and preview binding.
 
-    A ``TrackMap`` is an immutable in-memory snapshot taken at open.
-    A long-lived server keeps that snapshot while the PNG/YAML on disk
-    can change underneath it; every digest computed from the snapshot
-    then still matches itself, so approval alone cannot notice. This
-    reloads the source and compares the full interpreted identity
-    (PNG bytes, size, resolution, origin, negate). Byte-identical
-    restoration passes; interpretation-irrelevant YAML fields (the
-    occupancy thresholds, which the binary interpretation never reads)
-    are not bound. Raises ``AnnotationError`` on drift or read failure.
-    Guarantee: the source matched at this check instant only - a writer
-    racing the check itself is not excluded (see ANNOTATION_TOOL.md).
+    Every geometry/metadata mutation on every transport funnels through
+    here, so no edit path can retain an approval granted to previous
+    geometry.
     """
-    try:
-        fresh = TrackMap(track_map.yaml_path)
-    except AnnotationError:
-        raise
-    except (OSError, ValueError) as exc:
-        raise AnnotationError(
-            f'source map unreadable since it was opened: {exc}') from exc
-    if fresh.map_identity() != track_map.map_identity():
-        raise AnnotationError(
-            'source map changed on disk since it was opened; reopen the '
-            'map and re-preview (approval does not carry over)')
+    session['revision'] = int(session.get('revision', 1)) + 1
+    session['approval'] = 'none'
+    session['approval_digest'] = None
+    session['approval_route_digest'] = None
+    session['preview_digest'] = None
+    session['preview_route_digest'] = None
 
 
 def require_approved(session, track_map):
@@ -486,7 +415,6 @@ def require_approved(session, track_map):
     granted for the last previewed manifest, not an older one).
     Export additionally rebuilds and compares ``Route.digest``.
     """
-    check_source_current(track_map)
     if session.get('approval') != 'operator-approved':
         raise AnnotationError(
             'export refused: session approval is not '
@@ -522,9 +450,11 @@ def load_session(path, track_map):
     if not isinstance(session, dict):
         raise AnnotationError(
             'cannot load session: top level must be an object')
-    session = _migrate_session(session)
     if session.get('version') != SESSION_VERSION:
-        raise AnnotationError('unsupported session version')
+        raise AnnotationError(
+            f'unsupported session version {session.get("version")!r} '
+            f'(this editor writes version {SESSION_VERSION}); '
+            'start a new draft on this map')
     check_session_map(session, track_map)
     session['retained_region_px'] = _checked_seed(
         session.get('retained_region_px'), track_map)
@@ -576,41 +506,6 @@ def export_name(track_map):
     return f'{map_namespace(track_map)}_legal_route.json'
 
 
-def _legacy_draft_names(track_map):
-    """Older draft filename schemes, newest first (migration chain)."""
-    png = Path(track_map.png_path)
-    stem = _safe_component(png.stem)
-    return [
-        # Commit 9ccf4b2 scheme: parent + stem + PNG hash, no context.
-        f'{_safe_component(png.parent.name)}__{stem}'
-        f'__{track_map.sha256[:8]}_annotation.json',
-        # Original bare-stem scheme.
-        f'{stem}_annotation.json',
-    ]
-
-
-def resolve_draft(out_dir, track_map):
-    """Draft path for a map, with non-destructive legacy migration.
-
-    Prefers the namespaced name; falls back through older schemes when
-    the namespaced file is absent. A legacy file is adopted only after
-    it loads AND validates against this map, then atomically renamed to
-    the new name so the ambiguous slot cannot trap a later map. Files
-    that fail validation are left untouched and opening fails closed.
-    Returns ``(path, migrate_from)`` with ``migrate_from`` None when no
-    rename is needed.
-    """
-    out_dir = Path(out_dir)
-    new = out_dir / draft_name(track_map)
-    if new.exists():
-        return new, None
-    for name in _legacy_draft_names(track_map):
-        cand = out_dir / name
-        if cand != new and cand.exists():
-            return new, cand
-    return new, None
-
-
 def atomic_write_text(path, text):
     """Write a file atomically; readers never see a partial file."""
     path = Path(path)
@@ -633,21 +528,19 @@ def atomic_write_text(path, text):
 def patched_free_mask(track_map, boundary_strokes_px, stroke_width_px=5):
     """Return uint8 free mask (255=free) of the patched in-memory copy.
 
-    The source image must be strictly binary: any gray/unknown level is
-    rejected instead of being read as legal free space. The YAML negate
-    flag selects which level counts as occupied.
+    Grayscale maps are binarized at ingestion with ROS occupancy
+    semantics: occupancy probability ``p = (255 - v) / 255`` (inverted
+    when ``negate`` is 1), and a cell counts as free only when
+    ``p < free_thresh`` proves it. Occupied and uncertain (gray) cells
+    alike stay occupied, so legal free space only ever shrinks and an
+    unknown cell never becomes road. Binary {0, 255} maps reduce to
+    exactly the strict binary reading. The source image is untouched.
     """
-    base = (track_map.image if track_map.negate == 0
-            else (255 - track_map.image).astype(track_map.image.dtype))
-    levels = np.unique(base)
-    if any(int(v) not in (0, 255) for v in levels):
-        raise AnnotationError(
-            'UNSUPPORTED: map image is not binary '
-            f'(levels {sorted(int(v) for v in levels)}); unknown cells '
-            'must not be read as legal free space')
     boundary_strokes_px = _checked_strokes(boundary_strokes_px)
     stroke_width_px = _checked_width(stroke_width_px)
-    occupied = base < 128
+    gray = track_map.image.astype(np.float64)
+    prob = (255.0 - gray) / 255.0 if track_map.negate == 0 else gray / 255.0
+    occupied = prob >= track_map.free_thresh
     patched = occupied.copy()
     for stroke in boundary_strokes_px:
         pts = np.array(stroke, dtype=np.int32).reshape(-1, 1, 2)

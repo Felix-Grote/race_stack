@@ -181,7 +181,12 @@ Document 22's gate G1 still wants explicit sign-off.
 - **Source identity** (`fix/source-identity-approval`): adopted
   as-is, plus the same `check_source_current` guard on
   `op_validate`/`op_suggest` so no candidate-building server op
-  mints a PASS against a stale snapshot.
+  mints a PASS against a stale snapshot. (Later simplification:
+  the per-op source-drift re-reads were removed as disproportionate
+  for this offline, operator-controlled tool; the interpreted map
+  identity, `free_thresh` included, stays bound into session and
+  approval digests, and the editor works on the snapshot taken at
+  open.)
 - `GENERATOR_VERSION` is `route-v2` (geometry changed for identical
   input; old approvals correctly stop authorizing).
   `build_route` gained a required `legal_mask` keyword;
