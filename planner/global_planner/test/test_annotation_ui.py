@@ -267,23 +267,73 @@ def test_browser_shows_loaded_snapshot_not_reread_file(syn_backend):
     assert 'map_view_error' not in view
 
 
+def _reversed_guide(route):
+    """Mirror of the UI's reversedGuide(): keep start, reverse order."""
+    pts = [list(p) for p in route]
+    if len(pts) > 1 and pts[0] == pts[-1]:
+        pts.pop()
+    return [pts[0]] + pts[1:][::-1] + [pts[0]]
+
+
+def test_reverse_direction_flow(backend):
+    """Reverse Direction through the existing update path: the stored
+    guide flips, approval is revoked, re-preview validates with a new
+    digest, and reversing twice restores the original guide."""
+    srv = backend
+    _open_drawn(srv, strokes=(), route=False)
+    srv.op_suggest({})
+    original = [list(p) for p in srv.STATE['session']['route_px']]
+    assert original[0] == original[-1]  # suggested guide is closed
+    prev = srv.op_preview({})
+    srv.op_approve({'approval_digest': prev['candidate_digest']})
+    rev = _reversed_guide(original)
+    assert rev[0] == original[0] and rev[-1] == original[-1]
+    assert rev != original
+    res = srv.op_update({'field': 'route_px', 'value': rev})
+    assert res['status'] == 'PASS'
+    assert srv.STATE['session']['route_px'] == rev
+    assert srv.STATE['session']['approval'] == 'none'  # revoked
+    with pytest.raises(AnnotationError, match='not .operator-approved'):
+        srv.op_export({})
+    rev_prev = srv.op_preview({})
+    assert rev_prev['status'] == 'VALIDATED'
+    assert rev_prev['route_digest'] != prev['route_digest']
+    srv.op_approve({'approval_digest': rev_prev['candidate_digest']})
+    assert srv.op_export({})['status'] == 'VALIDATED'
+    # Double reversal recovers the original ordered guide exactly.
+    srv.op_update({'field': 'route_px',
+                   'value': _reversed_guide(rev)})
+    assert srv.STATE['session']['route_px'] == original
+
+
 def test_html_contract():
-    """Static frontend contract: layers, bucket, digest-guarded approve."""
+    """Static frontend contract (Doc 23 UI-01..UI-07): grouped layout,
+    preferred labels, help panel, direction arrows, Reverse Direction,
+    no select-stroke mode, stage chip, digest-guarded approve."""
     html = UI_HTML.read_text(encoding='utf-8')
     for element in ('lay-map', 'lay-strokes', 'lay-extracted',
                     'lay-corridor', 'lay-center', 'lay-excluded',
-                    'selectBtn', 'removeStroke', 'strokeList', 'sessinfo',
-                    'bucketBtn', 'clearRegionBtn'):
+                    'removeStroke', 'strokeList', 'sessinfo',
+                    'bucketBtn', 'clearRegionBtn', 'reverseBtn'):
         assert f'id="{element}"' in html, f'missing #{element}'
-    assert 'Keep legal track' in html
+    assert 'id="selectBtn"' not in html  # UI-06: mode removed
+    assert 'nearestStroke' not in html and 'selecting' not in html
+    for label in ('Annotation Tool', 'Boundary Pencil', 'Route Pencil',
+                  'Select Drivable Region', 'Clear Region Selection',
+                  'Suggest Route', 'Reverse Direction', 'Preview Route',
+                  'Approve Route', 'Export Route', 'Save Draft',
+                  'Fit Map', 'How to use', 'Controls &amp; safety',
+                  'Stage: ${stageText()}'):
+        assert label in html, f'missing label {label!r}'
+    # Paint-bucket pictogram (inline SVG) + honest tooltip (UI-01).
+    assert '<svg' in html and 'does not paint new free space' in html
     assert 'retained_region_px' in html
     assert 'drawImage(mapImg,v.ox' in html  # aspect fit, never stretched
     assert 'drawImage(img,0,0,cv.width,cv.height)' not in html
     assert 'outside the map (letterbox)' in html
     move = html.split("addEventListener('mousemove'")[1].split('});')[0]
     assert 'api(' not in move and 'fetch(' not in move  # hover is local
-    assert 'preview a candidate first' in html  # digest-guarded approve
-    assert 'nearestStroke' in html and 'segDist' in html
+    assert 'Preview Route first, then Approve Route' in html
     assert 'refreshExtraction' in html
     assert 'imgDigest' in html  # cache keyed by image bytes, not name
     assert 'splice(-2)' not in html  # dblclick keeps its endpoint
@@ -294,6 +344,15 @@ def test_html_contract():
     assert 'function invalidateCandidate()' in html
     assert html.count('invalidateCandidate()') >= 8
     assert html.count('candidate=null') == 2  # declaration + the helper
+    # Direction: normalize nested section polylines before any length
+    # test, place arrows by arc length, mark the start (UI-04).
+    assert 'function flatLine(pts)' in html
+    assert 'nextAt+=80' in html  # arc-length spacing, not point index
+    assert 'function startMarker(pts,color)' in html
+    # Reverse Direction reverses the stored guide via the update path.
+    assert 'function reversedGuide(route)' in html
+    assert "getElementById('reverseBtn').disabled=!closed" in html
+    assert "e.code==='Escape'" in html  # cancel unfinished stroke
     # Viewport: content-box mouse math (no border bias), one affine
     # view, cursor zoom, space/middle pan, fit reset.
     assert 'cv.clientLeft' in html and 'cv.clientWidth' in html

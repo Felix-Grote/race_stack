@@ -3,42 +3,76 @@
 <title>ForzaETH — Route Map Annotation</title>
 <style>
 body{font-family:system-ui,sans-serif;margin:12px;background:#111;color:#eee}
-canvas{background:#222;border:1px solid #555;max-width:100%;cursor:crosshair}
+canvas{background:#222;border:1px solid #555;max-width:100%;cursor:crosshair;display:block;margin:8px 0}
 button{margin:2px;padding:6px 10px} .on{background:#2a7;color:#fff}
 button:disabled{opacity:.45}
-#status{white-space:pre-wrap;background:#000;padding:8px;min-height:60px}
+button svg{vertical-align:-2px}
+#status{white-space:pre-wrap;background:#000;padding:8px;min-height:60px;border:1px solid #444}
+.groups{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+fieldset{border:1px solid #444;border-radius:6px;padding:6px 10px;margin:0;min-width:200px}
+legend{color:#9cf;padding:0 4px;font-size:.9em}
+.howto{background:#1a1a1a;border:1px solid #444;border-radius:6px;padding:8px 12px;margin:8px 0;max-width:900px}
+.howto ol{margin:4px 0;padding-left:22px}
+.howto li{margin:3px 0}
+details{margin-top:6px}
 .legend span{margin-right:14px}
 #layers label{margin-right:12px}
-#strokeList button{display:block;margin:1px 0}
+#strokeList button{display:inline-block;margin:1px}
 .sel{background:#a60;color:#fff}
 </style></head><body>
-<h3>Route annotation — boundary pencil + direction &amp; section-cut guide</h3>
-<p>
- <button id="openBtn">Open map session…</button>
- <input id="mapYaml" size="42" placeholder="server map name e.g. test">
- <button data-tool="boundary" class="tool">✎ Boundary pencil (close gaps)</button>
- <button data-tool="route" class="tool">✎ Guide pencil (direction &amp; section cuts)</button>
- <button id="selectBtn">⭘ Select stroke (no drawing)</button>
- <button id="bucketBtn" title="Click a free pixel inside the track; other free pockets are excluded">Keep legal track</button>
- <button id="clearRegionBtn" title="Drop the retained component">Clear selection</button>
- <button id="undo">Undo stroke</button>
- <button id="removeStroke" disabled>Remove selected stroke</button>
- <button id="clearRoute">Clear route</button>
- <label>Stroke width <select id="width"><option>3</option><option selected>5</option><option>9</option><option>13</option></select></label>
- <button id="extract">Run extraction</button>
- <button id="suggest">Suggest guide loop</button>
- <button id="preview">Preview candidate</button>
- <button id="validate">Validate (offline)</button>
- <button id="approve">Approve preview</button>
- <button id="export">Export approved</button>
- <button id="save">Save draft</button>
- <button id="fitBtn" title="Reset zoom/pan to the full map">Fit map</button>
-</p>
-<p><label>Route name <input id="meta-name" size="14"></label>
- <label>Surface <input id="meta-surface" size="10"></label>
- <label>Max speed (m/s) <input id="meta-speed" size="5"></label>
- <button id="metaApply">Apply metadata</button>
- <span>applies to every section; any change revokes approval</span></p>
+<h3>Annotation Tool</h3>
+<div class="groups">
+ <fieldset><legend>1 · Map</legend>
+  <button id="openBtn">Open Map</button>
+  <input id="mapYaml" size="30" placeholder="server map name e.g. test">
+  <details><summary>Route metadata</summary>
+   <label>Route name <input id="meta-name" size="14"></label>
+   <label>Surface <input id="meta-surface" size="10"></label>
+   <label>Max speed (m/s) <input id="meta-speed" size="5"></label>
+   <button id="metaApply">Apply metadata</button>
+   <span>applies to every section; any change revokes approval</span>
+  </details>
+ </fieldset>
+ <fieldset><legend>2 · Road</legend>
+  <button data-tool="boundary" class="tool">✎ Boundary Pencil</button>
+  <button id="bucketBtn" title="Click a free pixel inside the road. The connected region containing that pixel is kept; other disconnected free regions are excluded. This does not paint new free space."><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/><path d="m5 2 5 5"/><path d="M2 13h15"/><path d="M22 20a2 2 0 1 1-4 0c0-1.7 2-3 2-3s2 1.3 2 3Z"/></svg> Select Drivable Region</button>
+  <button id="clearRegionBtn" title="Drop the retained region selection">Clear Region Selection</button>
+  <label>Stroke width <select id="width"><option>3</option><option selected>5</option><option>9</option><option>13</option></select></label>
+  <button id="extract" title="Rerun boundary extraction (a finished boundary stroke already refreshes it)">Extract</button>
+  <button id="undo">Undo stroke</button>
+  <button id="removeStroke" disabled>Remove selected stroke</button>
+  <div>Boundary strokes (click a stroke to select it): <span id="strokeList">none</span></div>
+ </fieldset>
+ <fieldset><legend>3 · Route</legend>
+  <button data-tool="route" class="tool">✎ Route Pencil</button>
+  <button id="suggest" title="Create an editable yellow route guide from the current legal boundaries; not a final trajectory">Suggest Route</button>
+  <button id="reverseBtn" disabled title="Reverse the stored guide's travel direction; needs a closed guide. Revokes preview and approval.">Reverse Direction</button>
+  <button id="clearRoute">Clear Route</button>
+ </fieldset>
+ <fieldset><legend>4 · Review &amp; Export</legend>
+  <button id="validate" title="Try the supported wall thinnings; may change thinning and invalidate the current preview">Validate</button>
+  <button id="preview">Preview Route</button>
+  <button id="approve">Approve Route</button>
+  <button id="export">Export Route</button>
+ </fieldset>
+ <fieldset><legend>Draft &amp; view</legend>
+  <button id="save">Save Draft</button>
+  <button id="fitBtn" title="Reset zoom/pan to the full map">Fit Map</button>
+ </fieldset>
+</div>
+<div class="howto"><strong>How to use</strong>
+ <ol>
+  <li><strong>Open map.</strong> Select a map and confirm the route name, surface, and maximum speed (Map ▸ Route metadata).</li>
+  <li><strong>Define road.</strong> Add missing walls with Boundary Pencil. Select Drivable Region by clicking inside the road; inspect excluded areas. Boundary strokes only add occupied cells.</li>
+  <li><strong>Extract.</strong> Check the derived (blue) boundaries against the intended drivable road. A completed boundary edit refreshes extraction automatically; Extract lets you rerun it manually.</li>
+  <li><strong>Set direction.</strong> Draw one closed loop with Route Pencil, or choose Suggest Route. Inspect its direction arrows; Reverse Direction changes only traversal order — the yellow guide sets direction and section cuts; it is not exported.</li>
+  <li><strong>Review.</strong> Preview Route; inspect the green section walls and derived centreline, gates and starting zone. If Validate is used to try an alternate wall thinning, Preview Route again — approval binds the preview.</li>
+  <li><strong>Approve and export.</strong> Approve Route for the specific preview, then Export Route. Any geometry or metadata edit revokes approval. Save Draft persists editable annotations; it is not approval.</li>
+ </ol>
+ <details><summary>Controls &amp; safety</summary>
+  <p>Click to add points; double-click to finish a stroke; Escape cancels an unfinished stroke. Wheel zooms at the cursor; Space+drag or middle-drag pans; Fit Map resets the view and never edits the draft. Source PNG/YAML are never written. Hover geometry is local-only. There is no free-space painting. A route preview is NOT a speed-optimized or vehicle-certified racing trajectory.</p>
+ </details>
+</div>
 <p id="layers">
  <label><input type="checkbox" id="lay-map" checked> map</label>
  <label><input type="checkbox" id="lay-excluded" checked> excluded pockets</label>
@@ -47,23 +81,23 @@ button:disabled{opacity:.45}
  <label><input type="checkbox" id="lay-corridor" checked> exported walls + gates + start zone</label>
  <label><input type="checkbox" id="lay-center" checked> guide + derived centreline</label>
 </p>
-<p class="legend"><span style="color:#f80">■ excluded pockets</span>
-<span style="color:#f66">■ manual boundary</span>
-<span style="color:#4cf">■ extracted boundaries (candidate)</span>
-<span style="color:#fd4">■ guide loop (direction + cuts only, not exported)</span>
-<span style="color:#4f4">■ exported walls + derived centreline (from walls)</span>
+<p class="legend"><span style="color:#f80">■ excluded pockets (not road)</span>
+<span style="color:#f66">■ manual boundary stroke</span>
+<span style="color:#4cf">■ extracted boundaries</span>
+<span style="color:#fd4">■ guide (direction + section cuts only, not exported) →</span>
+<span style="color:#4f4">■ exported walls + derived centreline →</span>
 <span style="color:#f4f">■ section gates</span> <span style="color:#fff">■ start zone</span>
-<span>Click to add points, double-click to finish a stroke. Mouse wheel zooms at the cursor; Space+drag or middle-drag pans; Fit map restores the full view (view only, never edits the draft). Guide: draw one closed lap in travel direction (arrows show direction), then double-click. The guide only sets direction and where sections are cut; the green centreline is derived from the exported walls by the route package. Flow: Preview → inspect green candidate → Approve → Export. Extraction is a button press, never per-mousemove: the hover line is a local preview only. Boundary strokes add occupied cells; there is no free-space brush and maps are never written. Adding any stroke after extraction clears the overlay — re-extract.</span></p>
+<span>○ S = start point (direction of travel follows the arrows)</span></p>
 <p id="sessinfo"></p>
-<p>Boundary strokes: <span id="strokeList">none</span></p>
 <!-- No frameworks: plain HTML/JS only, minimal viewport. -->
 <canvas id="cv" width="900" height="600"></canvas>
-<div id="status">No session. Enter a map name and press “Open map session…”.</div>
+<div id="status">No session. Enter a map name and press “Open Map”.</div>
 <script>
 const cv=document.getElementById('cv'), ctx=cv.getContext('2d'), st=document.getElementById('status');
 const si=document.getElementById('sessinfo'), sl=document.getElementById('strokeList');
-let S=null, tool='boundary', selecting=false, draft=[], hover=null, selected=-1;
+let S=null, tool='boundary', draft=[], hover=null, selected=-1;
 let validated={route:[],left:[],right:[],gates:[],start:[]}, candidate=null;
+let exported=false;
 let mapImg=null, mapKey=null, exclImg=null, exclKey=null, bucket=false;
 const layers={map:true,excluded:true,strokes:true,extracted:true,corridor:true,center:true};
 const say=t=>st.textContent=t;
@@ -93,8 +127,9 @@ function evToCanvas(e){ const r=cv.getBoundingClientRect();
           (e.clientY-r.top-cv.clientTop)*cv.height/cv.clientHeight]; }
 function info(){
   if(!S){ si.textContent=''; return; }
-  const n=(S.route_px||[]).length; const closed=n>2 && Math.hypot(S.route_px[0][0]-S.route_px[n-1][0],S.route_px[0][1]-S.route_px[n-1][1])<8;
-  si.textContent=`map ${S.map_png} rev ${S.revision} approval ${S.approval} candidate ${(S.candidate_digest||'none').slice(0,16)} strokes ${(S.boundary_strokes_px||[]).length} route ${n?`drawn ${closed?'closed':'OPEN'}`:'empty'} width ${S.stroke_width_px} track ${regionText()} mapview ${S.map_view_error||'ok'}`;
+  const n=(S.route_px||[]).length; const closed=closedGuide();
+  si.textContent=`Stage: ${stageText()} · map ${S.map_png} rev ${S.revision} approval ${S.approval} candidate ${(S.candidate_digest||'none').slice(0,16)} strokes ${(S.boundary_strokes_px||[]).length} route ${n?`drawn ${closed?'closed':'OPEN'}`:'empty'} width ${S.stroke_width_px} track ${regionText()} mapview ${S.map_view_error||'ok'}`;
+  document.getElementById('reverseBtn').disabled=!closed;
   const w=document.getElementById('width'); if(w) w.value=String(S.stroke_width_px);
   const mn=document.getElementById('meta-name'); if(mn&&document.activeElement!==mn) mn.value=S.route_name||'';
   const ms=document.getElementById('meta-surface'); if(ms&&document.activeElement!==ms) ms.value=S.surface||'';
@@ -123,20 +158,55 @@ async function api(path, body){
 // whenever a candidate-defining input changed (edit, selection change,
 // validate, metadata). Editable strokes, the guide loop and still-valid
 // extracted boundaries stay visible; approval stays the backend's call.
-function invalidateCandidate(){ validated={route:[],left:[],right:[],gates:[],start:[]}; candidate=null; }
+function invalidateCandidate(){ validated={route:[],left:[],right:[],gates:[],start:[]}; candidate=null; exported=false; }
+// Operator-facing workflow stage, derived only from backend state
+// (plus the export receipt): never claim approval from a preview.
+function stageText(){ if(!S) return 'No session';
+  if(exported) return 'Exported';
+  if(S.approval==='operator-approved') return 'Approved';
+  if(candidate) return 'Preview validated';
+  if(S.extraction) return 'Boundaries extracted';
+  return 'Draft modified'; }
+function closedGuide(){ const r=S?(S.route_px||[]):[];
+  return r.length>2 && Math.hypot(r[0][0]-r[r.length-1][0], r[0][1]-r[r.length-1][1])<8; }
 // Local-only failure path: keep the operator's strokes, drop every overlay
 // derived from geometry that just failed, never show a stale candidate.
 function fail(res){ if(S) S.extraction=null; invalidateCandidate();
   selected=-1; info(); say('FAIL: '+(res.message||res.reason||'unknown')); draw(); }
 function line(pts,color,close,width){ if(!pts||pts.length<2)return; ctx.strokeStyle=color; ctx.lineWidth=width||2; ctx.beginPath(); pts.forEach((p,i)=>{const q=toCanvas(p); i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);}); if(close)ctx.closePath(); ctx.stroke(); }
-function arrows(pts,color){ if(!pts||pts.length<8)return; ctx.fillStyle=color;
-  const flat=pts.flatMap(seg=>Array.isArray(seg[0])?seg:[seg]);
-  const n=flat.length, step=Math.max(1,Math.floor(n/12));
-  for(let i=0;i<n;i+=step){ const a=toCanvas(flat[i]), b=toCanvas(flat[(i+1)%n]);
+// Normalize a single polyline OR nested per-section polylines into
+// one flat point list BEFORE any length test (validated.route has 4
+// sections; testing the outer length first suppressed green arrows).
+function flatLine(pts){ if(!pts||!pts.length) return [];
+  return Array.isArray(pts[0][0]) ? pts.flat() : pts; }
+// Outlined arrowheads every ~80 canvas px of accumulated arc length:
+// placement is stable under denser/sparser sampling and zoom, and
+// follows the stored point order (never inferred from ring shape).
+function arrows(pts,color){ const flat=flatLine(pts); if(flat.length<2) return;
+  const cs=flat.map(toCanvas);
+  ctx.fillStyle=color; ctx.strokeStyle='#111'; ctx.lineWidth=1;
+  let dist=0, nextAt=30;
+  for(let i=1;i<=cs.length;i++){ const a=cs[i-1], b=cs[i%cs.length];
+    const seg=Math.hypot(b[0]-a[0],b[1]-a[1]); if(seg<1e-6) continue;
     const ang=Math.atan2(b[1]-a[1],b[0]-a[0]);
-    ctx.beginPath(); ctx.moveTo(a[0]+8*Math.cos(ang),a[1]+8*Math.sin(ang));
-    ctx.lineTo(a[0]-5*Math.cos(ang-0.4),a[1]-5*Math.sin(ang-0.4));
-    ctx.lineTo(a[0]-5*Math.cos(ang+0.4),a[1]-5*Math.sin(ang+0.4)); ctx.closePath(); ctx.fill(); } }
+    while(nextAt<=dist+seg){ const d=(nextAt-dist)/seg;
+      const x=a[0]+(b[0]-a[0])*d, y=a[1]+(b[1]-a[1])*d;
+      ctx.beginPath();
+      ctx.moveTo(x+11*Math.cos(ang), y+11*Math.sin(ang));
+      ctx.lineTo(x-7*Math.cos(ang-0.45), y-7*Math.sin(ang-0.45));
+      ctx.lineTo(x-7*Math.cos(ang+0.45), y-7*Math.sin(ang+0.45));
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      nextAt+=80; }
+    dist+=seg; } }
+// Start point marker: white S disc at the first stored point; the
+// first arrow shows the initial heading. A suggestion of where the
+// route starts, not a surveyed starting grid.
+function startMarker(pts,color){ const flat=flatLine(pts); if(flat.length<2) return;
+  const a=toCanvas(flat[0]);
+  ctx.fillStyle='#fff'; ctx.strokeStyle=color; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(a[0],a[1],7,0,7); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='#111'; ctx.font='bold 9px system-ui';
+  ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('S',a[0],a[1]); }
 function regionText(){ const rg=(S&&S.region)||{};
   if(rg.error) return 'error';
   const ret=rg.retained_region_px?`[${rg.retained_region_px}]`:'none';
@@ -174,23 +244,22 @@ function overlay(){
       ctx.strokeStyle='#f66'; ctx.setLineDash([4,3]); ctx.beginPath();
       ctx.moveTo(last[0],last[1]); ctx.lineTo(hover[0],hover[1]); ctx.stroke(); ctx.setLineDash([]); } }
   if(layers.extracted&&S.extraction){ line(S.extraction.outer_px,'#4cf'); line(S.extraction.inner_px,'#4cf'); }
-  if(layers.center){ line(S.route_px||[],'#fd4',true); arrows(S.route_px||[],'#fd4'); }
+  if(layers.center){ line(S.route_px||[],'#fd4',true); arrows(S.route_px||[],'#fd4'); startMarker(S.route_px||[],'#fd4'); }
   if(layers.corridor){ (validated.left||[]).forEach(p=>line(p,'#4f4'));
     (validated.right||[]).forEach(p=>line(p,'#4f4'));
     (validated.gates||[]).forEach(p=>line(p,'#f4f',false,3));
     line(validated.start||[],'#fff',true,2); }
-  if(layers.center){ (validated.route||[]).forEach(p=>line(p,'#4f4')); arrows(validated.route||[],'#4f4'); }
+  if(layers.center){ (validated.route||[]).forEach(p=>line(p,'#4f4')); arrows(validated.route||[],'#4f4'); startMarker(validated.route||[],'#4f4'); }
 }
-function segDist(p,a,b){ const vx=b[0]-a[0], vy=b[1]-a[1], L2=vx*vx+vy*vy;
-  let t=L2?((p[0]-a[0])*vx+(p[1]-a[1])*vy)/L2:0; t=Math.max(0,Math.min(1,t));
-  return Math.hypot(p[0]-(a[0]+t*vx),p[1]-(a[1]+t*vy)); }
-// Nearest line segment, not just nearest stored vertex, within 12px.
-function nearestStroke(cp){ let best=-1, bd=12;
-  (S.boundary_strokes_px||[]).forEach((stroke,i)=>{
-    const q=stroke.map(toCanvas);
-    for(let k=0;k<q.length;k++){ const d=segDist(cp,q[Math.max(0,k-1)],q[k]);
-      if(d<bd){ bd=d; best=i; } } });
-  return best; }
+// Reverse a stored closed guide in place-value: keep the starting
+// point and loop closure, reverse traversal order. An involution up
+// to closure normalization (an open tail point pair becomes one
+// explicit closing point, which route generation already assumed).
+function reversedGuide(route){ const pts=(route||[]).slice();
+  if(pts.length>1){ const a=pts[0], b=pts[pts.length-1];
+    if(Math.hypot(a[0]-b[0],a[1]-b[1])<1e-9) pts.pop(); }
+  if(pts.length<3) return null;
+  const rev=[pts[0], ...pts.slice(1).reverse()]; rev.push(pts[0]); return rev; }
 // Zoom (wheel, cursor-centred, 1x-12x of fit) and pan (Space+drag or
 // middle-drag). Both only move vp: no session state, revision, digest
 // or geometry can change, and a pan never adds or finishes a stroke.
@@ -214,13 +283,15 @@ window.addEventListener('mouseup',()=>{ if(pan&&pan.moved){ suppressClick=true; 
 // Space is the pan modifier everywhere except text entry (focus is
 // usually on the last-clicked button, so body/canvas-only would miss
 // it); suppressing keyup also stops Space re-triggering that button.
+window.addEventListener('keydown',e=>{ if(e.code==='Escape'&&draft.length){
+  draft=[]; hover=null; say('unfinished stroke cancelled'); draw(); } });
 window.addEventListener('keydown',e=>{ if(e.code==='Space'&&
   !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)){ spaceDown=true; e.preventDefault(); } });
 window.addEventListener('keyup',e=>{ if(e.code==='Space'){
   if(spaceDown) e.preventDefault(); spaceDown=false; } });
 cv.addEventListener('mousemove',e=>{ if(!S){hover=null;return;} if(pan) return;
   const cp=evToCanvas(e);
-  hover=(draft.length&&!selecting&&toMap(cp[0],cp[1]))?cp:null; draw(); });
+  hover=(draft.length&&toMap(cp[0],cp[1]))?cp:null; draw(); });
 cv.addEventListener('click',async e=>{ if(!S)return;
   if(suppressClick){ suppressClick=false; return; }
   if(e.button===1) return;
@@ -233,8 +304,6 @@ cv.addEventListener('click',async e=>{ if(!S)return;
     invalidateCandidate(); S=res.session; bucket=false;
     document.getElementById('bucketBtn').classList.remove('on');
     info(); say(res.status+': '+(res.message||'')); draw(); return; }
-  if(selecting){ const hit=nearestStroke(cp); selected=hit; info(); draw();
-    say(hit<0?'no stroke near click':'selected stroke '+(hit+1)); return; }
   const mp=toMap(cp[0],cp[1]); if(!mp){ say('click is outside the map (letterbox); nothing added'); return; }
   draft.push(mp); hover=null; draw(); });
 cv.addEventListener('dblclick',async()=>{
@@ -256,20 +325,14 @@ cv.addEventListener('dblclick',async()=>{
   // commit does not affect extraction, so it skips this roundtrip.
   if(tool==='boundary'){ await refreshExtraction(); return; }
   info(); say(res.status+': '+(res.message||'')); draw(); });
-document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool; selecting=false; bucket=false;
-  document.getElementById('selectBtn').classList.remove('on');
+document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool; bucket=false;
   document.getElementById('bucketBtn').classList.remove('on');
-  document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',x===b)); say('Tool: '+tool);});
-document.getElementById('selectBtn').onclick=e=>{ selecting=!selecting; bucket=false;
-  document.getElementById('bucketBtn').classList.remove('on');
-  e.target.classList.toggle('on',selecting);
-  document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',false));
-  say(selecting?'Select mode: click a stroke to select it, then Remove selected stroke':'Tool: '+tool); };
-document.getElementById('bucketBtn').onclick=e=>{ bucket=!bucket; selecting=false;
-  document.getElementById('selectBtn').classList.remove('on');
+  document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',x===b));
+  say('Tool: '+(tool==='boundary'?'Boundary Pencil':'Route Pencil'));});
+document.getElementById('bucketBtn').onclick=e=>{ bucket=!bucket;
   document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('on',false));
   e.target.classList.toggle('on',bucket);
-  say(bucket?'Keep legal track: click a free pixel inside the track':'Tool: '+tool); };
+  say(bucket?'Select Drivable Region: click a free pixel inside the road':'Tool: '+(tool==='boundary'?'Boundary Pencil':'Route Pencil')); };
 document.getElementById('clearRegionBtn').onclick=async()=>{
   if(!S)return;
   const res=await api('/api/session/update',{field:'retained_region_px', value:null});
@@ -293,10 +356,10 @@ document.getElementById('suggest').onclick=async()=>{
   if(res.status!=='PASS'){ fail(res); return; }
   S=res.session; invalidateCandidate(); selected=-1;
   info(); say(res.status+': '+(res.message||'')); draw(); };
-document.getElementById('preview').onclick=async()=>{ const res=await api('/api/session/preview',{}); if(res.status!=='VALIDATED'){ fail(res); return; } S=res.session; validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[],gates:res.gates_px||[],start:res.start_zone_px||[]}; candidate=res.candidate_digest||null; info(); say((res.status||'FAIL')+': '+(res.message||res.reason||'')); draw(); };
+document.getElementById('preview').onclick=async()=>{ const res=await api('/api/session/preview',{}); if(res.status!=='VALIDATED'){ fail(res); return; } S=res.session; validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[],gates:res.gates_px||[],start:res.start_zone_px||[]}; candidate=res.candidate_digest||null; exported=false; info(); say((res.status||'FAIL')+': '+(res.message||res.reason||'')); draw(); };
 document.getElementById('validate').onclick=async()=>{ const res=await api('/api/session/validate',{}); if(res.status!=='PASS'){ fail(res); return; } S=res.session; invalidateCandidate(); info(); const tries=(res.attempts||[]).length?` (tried: ${res.attempts.join('; ')})`:''; say(res.status+': '+(res.message||'')+tries+' — re-preview, then approve and export'); draw(); };
-document.getElementById('approve').onclick=async()=>{ if(!candidate){say('FAIL: preview a candidate first');return;} const res=await api('/api/session/approve',{approval_digest:candidate}); if(res.status!=='PASS'){ fail(res); return; } if(res.session){S=res.session;} info(); say(res.status+': '+(res.message||'')); draw(); };
-document.getElementById('export').onclick=async()=>{ const res=await api('/api/session/export',{}); if(res.status!=='VALIDATED'){ fail(res); return; } if(res.session){S=res.session;} validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[],gates:res.gates_px||[],start:res.start_zone_px||[]}; info(); say(res.status+': '+(res.message||'')); draw(); };
+document.getElementById('approve').onclick=async()=>{ if(!candidate){say('FAIL: Preview Route first, then Approve Route (approval binds the previewed candidate)');return;} const res=await api('/api/session/approve',{approval_digest:candidate}); if(res.status!=='PASS'){ fail(res); return; } if(res.session){S=res.session;} info(); say(res.status+': '+(res.message||'')); draw(); };
+document.getElementById('export').onclick=async()=>{ const res=await api('/api/session/export',{}); if(res.status!=='VALIDATED'){ fail(res); return; } if(res.session){S=res.session;} validated={route:res.validated_route_px||[],left:res.validated_left_px||[],right:res.validated_right_px||[],gates:res.gates_px||[],start:res.start_zone_px||[]}; exported=true; info(); say(res.status+': '+(res.message||'')); draw(); };
 document.getElementById('save').onclick=async()=>{ const res=await api('/api/session/save',{}); say(res.status+': '+(res.message||'')); };
 document.getElementById('fitBtn').onclick=()=>{ fitView(); draw(); };
 document.getElementById('metaApply').onclick=async()=>{ if(!S)return;
@@ -317,5 +380,12 @@ document.getElementById('undo').onclick=async()=>{ const res=await api('/api/ses
 document.getElementById('removeStroke').onclick=async()=>{ if(!(selected>=0)||!S) return;
   const value=(S.boundary_strokes_px||[]).filter((_,i)=>i!==selected);
   const res=await api('/api/session/update',{field:'boundary_strokes_px', value}); await appliedBoundaryEdit(res); };
+document.getElementById('reverseBtn').onclick=async()=>{ if(!S) return;
+  const rev=reversedGuide(S.route_px);
+  if(!rev){ say('FAIL: draw or suggest a closed route first, then Reverse Direction'); return; }
+  const res=await api('/api/session/update',{field:'route_px', value:rev});
+  if(res.status!=='PASS'){ fail(res); return; }
+  S=res.session; invalidateCandidate(); info();
+  say('PASS: direction reversed (draft rev '+S.revision+', unapproved) - Preview Route to check the reversed route'); draw(); };
 document.getElementById('clearRoute').onclick=async()=>{ const res=await api('/api/session/update',{field:'route_px', value:[]}); applied(res); };
 </script></body></html>

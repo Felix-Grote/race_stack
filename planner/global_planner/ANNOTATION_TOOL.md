@@ -1,7 +1,7 @@
 # Map annotation tool
 
-Open a map, close or cut legal boundaries with the boundary pencil,
-pick the retained track with the bucket when a cut splits free space,
+Open a map, close or cut legal boundaries with the Boundary Pencil,
+pick the retained track with Select Drivable Region when a cut splits free space,
 draw (or suggest) a directed guide loop, preview the candidate,
 approve exactly that candidate, and export a `global_planner.route`
 manifest (`{name, map, start, sections}`). Source maps are never
@@ -23,7 +23,10 @@ print(draft_name(TrackMap('<map>.yaml')))"` with
 validates the full stored identity and fails closed on mismatch.
 `--session` CLI users are unaffected (explicit path, no discovery).
 
-Preview → approve → export is enforced on every transport. Approval
+The browser UI groups controls by workflow (1 Map, 2 Road, 3 Route,
+4 Review & Export, plus Draft & view) and shows a Stage chip (Draft
+modified / Boundaries extracted / Preview validated / Approved /
+Exported) derived from backend state. Preview → approve → export is enforced on every transport. Approval
 binds two digests: the editor-input digest (map identity, strokes,
 bucket seed, guide loop, thinning, name/surface/speed, generator
 version) and the previewed manifest's `Route.digest`. Any edit clears
@@ -97,7 +100,15 @@ ROS_DOMAIN_ID=169 ros2 run global_planner annotation_node --ros-args \
 - Extraction = the two loops of the legal region (outer boundary +
   exactly one hole). Any other topology (open gap, split, extra
   island, frame contact) is rejected instead of guessed at.
-- The guide pencil is a direction & section-cut hint, not an exported
+- Reverse Direction (Route group) reverses the stored guide's
+  traversal order in place — same start point, loop closure kept —
+  through the normal session update path, so it revokes preview and
+  approval and needs a fresh Preview Route; reversing twice restores
+  the original guide. Both directions build through the same route
+  generation, so left/right walls, section order, portals and start
+  heading follow the reversed travel. The button is disabled until
+  a closed guide exists.
+- The Route Pencil is a direction & section-cut hint, not an exported
   centreline: joints are placed at locally straight guide points
   (4 sections), left/right walls are arcs of the extracted loops with
   exact shared end-caps, thinned by deviation-bounded simplification
@@ -106,7 +117,7 @@ ROS_DOMAIN_ID=169 ros2 run global_planner annotation_node --ros-args \
   ≤ ~1.2 raster cells). The
   route package derives each section's centreline from the walls;
   preview draws that derived centreline, the gates and the start zone.
-  `Suggest guide loop` fills the pencil (dense-pairing spline, then
+  `Suggest Route` fills the pencil (dense-pairing spline, then
   distance-ridge fallback), keeping the first seed that passes every
   check, in the operator's drawn direction.
 - The start zone is the middle half of the road over the first 1.2 m
