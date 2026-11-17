@@ -31,6 +31,8 @@ checked:    the settled speeds can be checked against the car's limits: its top 
             in as a cap, and the speeds never rise above their caps.
 fixed:      the arrays are the lap's own copies and cannot be written to; the speeds
             cannot either, once settled.
+twin:       optimizer/timing.py states the same rules for its solver. A change to a rule
+            here or in model.py belongs there too.
 """
 import math
 
