@@ -108,6 +108,15 @@ ROS_DOMAIN_ID=169 ros2 run global_planner annotation_node --ros-args \
   generation, so left/right walls, section order, portals and start
   heading follow the reversed travel. The button is disabled until
   a closed guide exists.
+- Guide closure contract (one rule everywhere): a guide counts as a
+  completed lap when its endpoint gap is at most 8 px. Storing a
+  guide whose gap is within that snaps it to exact closure (last
+  point copied from the first); a wider gap is stored as a draft but
+  refused by Preview/Validate/Approve/Export with an OPEN error —
+  the generator never silently wraps an unfinished loop into an
+  approval. This gate lives in candidate generation, so HTTP, CLI
+  and ROS transports all enforce it, including for approvals
+  persisted before the gate existed.
 - The Route Pencil is a direction & section-cut hint, not an exported
   centreline: joints are placed at locally straight guide points
   (4 sections), left/right walls are arcs of the extracted loops with

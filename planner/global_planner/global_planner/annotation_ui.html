@@ -352,7 +352,9 @@ document.getElementById('bucketBtn').onclick=e=>{ bucket=!bucket;
   draft=[]; hover=null; // entering/leaving bucket mode cancels a draft;
   // the pencil stays highlighted: it is still the active tool under
   // the one-click bucket gesture, so highlight == click behavior.
-  e.target.classList.toggle('on',bucket);
+  // currentTarget, not target: clicks on the SVG icon land on its
+  // paths, and the button (not the icon) carries the active state.
+  e.currentTarget.classList.toggle('on',bucket);
   say(bucket?'Select Drivable Region: click a free pixel inside the road'
            : tool ? 'Tool: '+(tool==='boundary'?'Boundary Pencil':'Route Pencil')
                   : 'Inspect: clicks do not draw; choose a pencil to annotate'); };

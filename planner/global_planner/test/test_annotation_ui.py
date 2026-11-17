@@ -6,6 +6,7 @@ edit -> re-preview -> re-approve lifecycle, bucket selection through
 the server, persisted previews across restarts, and the static HTML
 contract the single-page frontend relies on.
 """
+import json
 import sys
 from pathlib import Path
 
@@ -267,6 +268,14 @@ def test_browser_shows_loaded_snapshot_not_reread_file(syn_backend):
     assert 'map_view_error' not in view
 
 
+# Exact OPEN guide from the PR13 phase-2 investigation (R4b): every
+# 2nd point of the suggested test-map guide, a 95.5% lap whose 86.27px
+# endpoint gap previewed VALIDATED and reached operator-approved
+# before the closure gate existed. Do not regenerate or round it.
+R4B_OPEN_ROUTE = json.loads(
+    '[[206.21333333333334, 39.460765787760415], [190.00666666666666, 38.72409912109375], [174.53666666666666, 37.250765787760415], [158.32999999999998, 35.77743245442708], [142.85999999999999, 35.77743245442708], [128.86333333333332, 36.51409912109375], [114.86666666666666, 38.72409912109375], [103.08, 43.88076578776042], [92.76666666666667, 51.98409912109375], [85.39999999999999, 61.56076578776042], [82.45333333333333, 74.08409912109374], [83.92666666666666, 86.60743245442708], [89.08333333333333, 98.39409912109375], [97.18666666666667, 107.97076578776041], [107.5, 115.33743245442707], [120.02333333333333, 120.49409912109374], [134.01999999999998, 124.17743245442708], [149.48999999999998, 126.38743245442707], [164.95999999999998, 128.59743245442706], [180.42999999999998, 130.07076578776042], [195.89999999999998, 131.54409912109375], [210.63333333333333, 133.01743245442708], [225.36666666666665, 135.96409912109374], [238.62666666666667, 138.9107657877604], [251.88666666666666, 142.59409912109373], [263.67333333333335, 147.7507657877604], [274.7233333333333, 153.64409912109375], [284.3, 161.74743245442707], [293.14, 171.32409912109375], [300.50666666666666, 182.37409912109374], [306.4, 196.3707657877604], [310.82, 211.8407657877604], [313.03, 228.04743245442708], [313.76666666666665, 244.9907657877604], [311.5566666666667, 260.4607657877604], [307.13666666666666, 275.19409912109376], [299.77, 287.71743245442707], [290.1933333333333, 297.2940991210937], [279.88, 303.9240991210937], [268.83, 306.13409912109375], [258.51666666666665, 303.9240991210937], [248.20333333333332, 297.2940991210937], [237.89, 289.1907657877604], [227.57666666666665, 278.8774324544271], [216.52666666666667, 268.56409912109376], [206.21333333333334, 258.25076578776043], [194.42666666666665, 249.4107657877604], [183.37666666666667, 241.30743245442707], [170.85333333333332, 234.67743245442708], [158.32999999999998, 229.5207657877604], [145.07, 227.3107657877604], [131.81, 226.57409912109375], [117.81333333333333, 228.78409912109373], [104.55333333333333, 232.46743245442707], [91.29333333333332, 239.09743245442706], [79.50666666666666, 247.20076578776042], [69.92999999999999, 257.51409912109375], [63.3, 269.3007657877604], [58.879999999999995, 283.29743245442705], [57.406666666666666, 297.2940991210937], [58.14333333333333, 312.02743245442707], [61.82666666666666, 326.7607657877604], [66.98333333333333, 340.0207657877604], [74.35, 352.5440991210937], [83.19, 362.85743245442706], [93.50333333333333, 370.9607657877604], [105.28999999999999, 377.5907657877604], [117.81333333333333, 383.4840991210937], [131.07333333333332, 387.16743245442706], [145.07, 390.8507657877604], [159.06666666666666, 393.79743245442705], [173.06333333333333, 395.2707657877604], [187.79666666666665, 397.4807657877604], [201.79333333333332, 398.21743245442707], [215.79, 398.95409912109375], [230.5233333333333, 399.6907657877604], [245.25666666666666, 398.95409912109375], [259.99, 398.95409912109375], [273.9866666666667, 397.4807657877604], [288.71999999999997, 396.0074324544271], [303.4533333333333, 393.79743245442705], [317.45, 390.1140991210937], [330.71, 385.69409912109376], [343.2333333333333, 379.8007657877604], [355.02, 372.4340991210937], [365.3333333333333, 363.59409912109373], [374.1733333333333, 353.2807657877604], [382.2766666666666, 341.4940991210937], [388.9066666666666, 328.2340991210937], [394.0633333333333, 314.23743245442705], [397.7466666666666, 300.2407657877604], [400.69333333333327, 286.2440991210937], [402.16666666666663, 272.2474324544271], [402.90333333333325, 258.25076578776043], [402.16666666666663, 244.25409912109373], [401.42999999999995, 230.25743245442706], [399.9566666666666, 216.26076578776042], [399.2199999999999, 202.26409912109375], [397.7466666666666, 187.5307657877604], [397.7466666666666, 172.79743245442708], [397.7466666666666, 157.32743245442708], [398.4833333333333, 141.1207657877604], [399.2199999999999, 125.6507657877604], [399.9566666666666, 110.18076578776041], [398.4833333333333, 95.44743245442707], [396.27333333333326, 82.18743245442708], [391.8533333333333, 70.40076578776042], [384.4866666666666, 60.08743245442708], [374.90999999999997, 52.72076578776041], [363.12333333333333, 46.09076578776042], [349.86333333333334, 41.670765787760416], [335.8666666666667, 38.72409912109375], [321.1333333333333, 36.51409912109375], [306.4, 35.77743245442708], [292.4033333333333, 35.77743245442708]]')
+
+
 def _reversed_guide(route):
     """Mirror of the UI's reversedGuide(): keep start, reverse order,
     preserve the input's closure representation (a true involution)."""
@@ -299,6 +308,67 @@ def test_reversed_guide_closure_classes():
     assert _reversed_guide([[0, 0], [1, 1]]) is None
 
 
+def test_open_guide_cannot_be_approved(backend):
+    """D2 regression (exact R4b array): an OPEN guide is refused at
+    preview, validate, approve and export - on the server, and for a
+    forged legacy approval at export time."""
+    from global_planner.annotation_core import (
+        GUIDE_CLOSE_TOLERANCE_PX, geometry_digest)
+    srv = backend
+    srv.op_open({'map': 'test'})
+    srv.op_update({'field': 'route_px', 'value': R4B_OPEN_ROUTE})
+    with pytest.raises(AnnotationError, match='OPEN'):
+        srv.op_preview({})
+    with pytest.raises(AnnotationError, match='OPEN'):
+        srv.op_validate({})
+    assert srv.STATE['candidate_digest'] is None
+    assert srv.STATE['session']['approval'] == 'none'
+    # Forged legacy state: approval fields consistent with the open
+    # guide (as pre-gate code could have persisted). Export must
+    # still refuse at candidate generation, not trust the digests.
+    session = srv.STATE['session']
+    session['approval'] = 'operator-approved'
+    digest = geometry_digest(session, srv.STATE['map'])
+    session['approval_digest'] = digest
+    session['preview_digest'] = digest
+    session['preview_route_digest'] = 'a' * 64
+    session['approval_route_digest'] = 'a' * 64
+    srv.STATE['candidate_digest'] = digest
+    with pytest.raises(AnnotationError, match='OPEN'):
+        srv.op_export({})
+    # The gate constant is the one shared contract.
+    assert GUIDE_CLOSE_TOLERANCE_PX == 8.0
+
+
+def test_guide_closure_boundaries(backend):
+    """D1/D2 boundary cases: exact, near-closed (snapped at commit),
+    tolerance-edge, and clearly open stored guides."""
+    from global_planner.annotation_core import snapped_guide
+    srv = backend
+    srv.op_open({'map': 'test'})
+    srv.op_suggest({})
+    closed = [list(p) for p in srv.STATE['session']['route_px']]
+    # Near-closed (5px gap): snapped to exact closure when stored.
+    near = closed[:-1] + [[closed[0][0] + 3.0, closed[0][1] + 4.0]]
+    srv.op_update({'field': 'route_px', 'value': near})
+    stored = srv.STATE['session']['route_px']
+    assert stored[-1] == stored[0] and stored != near
+    assert srv.op_preview({})['status'] == 'VALIDATED'
+    # Exactly at tolerance (8.0px): still snapped; beyond: stored
+    # as-is (draft) but preview refuses.
+    edge = closed[:-1] + [[closed[0][0] + 8.0, closed[0][1]]]
+    srv.op_update({'field': 'route_px', 'value': edge})
+    assert srv.STATE['session']['route_px'][-1] == closed[0]
+    beyond = closed[:-1] + [[closed[0][0] + 8.5, closed[0][1]]]
+    srv.op_update({'field': 'route_px', 'value': beyond})
+    assert srv.STATE['session']['route_px'] == beyond
+    with pytest.raises(AnnotationError, match='OPEN'):
+        srv.op_preview({})
+    # snapped_guide is pure: exact and open inputs pass through.
+    assert snapped_guide(closed) == closed
+    assert snapped_guide(R4B_OPEN_ROUTE) == R4B_OPEN_ROUTE
+
+
 def test_reverse_direction_flow(backend):
     """Reverse Direction through the existing update path: the stored
     guide flips, approval is revoked, re-preview validates with a new
@@ -328,18 +398,21 @@ def test_reverse_direction_flow(backend):
     srv.op_update({'field': 'route_px',
                    'value': _reversed_guide(rev)})
     assert srv.STATE['session']['route_px'] == original
-    # Near-closed manual guide (tail within the UI's 8px closure
-    # tolerance, no exact closing point): reversal validates, and
-    # double reversal restores the stored list byte-for-byte.
+    # Near-closed manual guide (tail within the 8px closure
+    # tolerance, no exact closing point): the commit boundary snaps
+    # it to exact closure, reversal validates, and double reversal
+    # restores the stored (snapped) list byte-for-byte.
     manual = original[:-1] + [[original[0][0] + 2.0, original[0][1] + 2.0]]
     srv.op_update({'field': 'route_px', 'value': manual})
-    rev_manual = _reversed_guide(manual)
-    assert rev_manual[-1] != manual[0]  # open class preserved
+    stored = srv.STATE['session']['route_px']
+    assert stored == manual[:-1] + [list(manual[0])]  # snapped at commit
+    rev_manual = _reversed_guide(stored)
     srv.op_update({'field': 'route_px', 'value': rev_manual})
+    assert srv.STATE['session']['route_px'] == rev_manual
     assert srv.op_preview({})['status'] == 'VALIDATED'
     srv.op_update({'field': 'route_px',
                    'value': _reversed_guide(rev_manual)})
-    assert srv.STATE['session']['route_px'] == manual
+    assert srv.STATE['session']['route_px'] == stored
 
 
 def test_tool_state_synchronization():
@@ -356,6 +429,10 @@ def test_tool_state_synchronization():
     assert 'draft=[]' in bucket_block  # entering bucket cancels draft
     assert "'.tool'" not in bucket_block  # pencil highlight untouched
     assert "classList.toggle('on',x.dataset.tool===tool)" in html
+    # D4: the bucket button (not an SVG child) carries the active
+    # class; clicks on the icon must not toggle state onto the icon.
+    assert "e.currentTarget.classList.toggle('on',bucket)" in html
+    assert "e.target.classList.toggle('on',bucket)" not in html
 
 
 def test_html_contract():

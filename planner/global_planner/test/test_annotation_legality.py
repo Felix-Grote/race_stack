@@ -67,8 +67,11 @@ def _candidate(track_map, strokes=(), seed=None, width=5, guide='midline',
     session['retained_region_px'] = seed
     session.update(session_kw)
     outer, inner = extract_boundaries(track_map, strokes, width, seed)
-    session['route_px'] = (suggest_route(outer, inner) if guide == 'suggest'
-                           else midline_seed(outer, inner))
+    if guide == 'suggest':
+        guide_pts = suggest_route(outer, inner)
+        session['route_px'] = guide_pts + [guide_pts[0]]  # completed lap
+    else:
+        session['route_px'] = midline_seed(outer, inner)
     payload, route, receipt, _ = build_candidate(track_map, session)
     legal = effective_free_mask(track_map, strokes, width, seed)
     return payload, route, receipt, legal
@@ -256,7 +259,7 @@ def test_generated_zone_contained_at_rotated_starts():
     legal = effective_free_mask(track_map, [], 5)
     outer, inner = extract_boundaries(track_map)
     seed = midline_seed(outer, inner)
-    closed = seed + [seed[0]]
+    closed = seed  # conftest returns the completed (closed) lap
     for k in range(8):
         shift = (len(closed) - 1) * k // 8
         rot = closed[shift:-1] + closed[:shift] + [closed[shift]]

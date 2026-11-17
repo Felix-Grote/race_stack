@@ -106,8 +106,9 @@ def test_reversed_guide_validates_with_swapped_walls():
     track_map = TrackMap(MAPS / 'test/test.yaml')
     fwd_session = _session(track_map)
     rev_session = _session(track_map)
-    route = rev_session['route_px']  # open midline loop (no closing dup)
-    rev_session['route_px'] = [route[0]] + route[1:][::-1] + [route[0]]
+    route = rev_session['route_px']  # exactly closed midline loop
+    body = route[:-1] if route[0] == route[-1] else route
+    rev_session['route_px'] = [body[0]] + body[1:][::-1] + [body[0]]
     fwd_payload, fwd_route, fwd_receipt, _ = build_candidate(
         track_map, fwd_session)
     rev_payload, rev_route, rev_receipt, _ = build_candidate(

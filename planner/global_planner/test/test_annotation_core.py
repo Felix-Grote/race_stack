@@ -523,6 +523,23 @@ def test_cli_preview_approve_export_cycle(tmp_path):
     assert tool.main(['extract'] + sel + ['--out', str(out)]) == 1
 
 
+def test_cli_open_guide_refused(tmp_path):
+    """The headless CLI cannot preview/approve/export an OPEN guide."""
+    from global_planner import annotation_tool as tool
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map, [], 5)
+    session = new_session(track_map)
+    session['route_px'] = midline_seed(outer, inner)[:-6]  # open tail
+    session_path = tmp_path / 'open.json'
+    save_session(session, session_path)
+    base = ['--map', str(track_map.yaml_path),
+            '--session', str(session_path),
+            '--out', str(tmp_path / 'out')]
+    assert tool.main(['preview'] + base) == 1
+    assert tool.main(['approve'] + base + ['--candidate', 'x']) == 1
+    assert tool.main(['export'] + base) == 1
+
+
 def test_http_transport_fails_closed(backend, monkeypatch):
     """Malformed/oversized/backend-error posts get JSON FAIL, server lives."""
     import http.client
