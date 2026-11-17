@@ -33,11 +33,13 @@ flowchart LR
     lap -->|LapCurve| portals
     sampling -->|LapSample| optimizer([optimizer])
     portals -->|Crossing| optimizer
+    sampling -->|LapSample| speed([speed])
     car[/car_model.yaml/] -->|reach_m| zones
     manifest -->|Route| zones
     lap -->|LapCurve| zones
     zones -->|reach_boundaries| sampling
     zones -->|PortalZone| optimizer
+    zones -->|PortalZone| speed
     zones -->|PortalZone| checker([checker])
 ```
 
