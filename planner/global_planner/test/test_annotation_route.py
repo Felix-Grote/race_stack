@@ -99,6 +99,28 @@ def test_baku_cuts_need_selection_then_shorten_lap():
         assert validate_route(payload).digest == route.digest
 
 
+def test_reversed_guide_validates_with_swapped_walls():
+    """Reversal contract: the reversed guide builds a valid route with
+    a different digest (left/right ownership follows reversed travel)
+    over the same lap; both directions pass every check."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    fwd_session = _session(track_map)
+    rev_session = _session(track_map)
+    route = rev_session['route_px']  # exactly closed midline loop
+    body = route[:-1] if route[0] == route[-1] else route
+    rev_session['route_px'] = [body[0]] + body[1:][::-1] + [body[0]]
+    fwd_payload, fwd_route, fwd_receipt, _ = build_candidate(
+        track_map, fwd_session)
+    rev_payload, rev_route, rev_receipt, _ = build_candidate(
+        track_map, rev_session)
+    assert rev_route.digest != fwd_route.digest
+    assert rev_receipt['lap_length_m'] == pytest.approx(
+        fwd_receipt['lap_length_m'], abs=0.5)
+    # Travel flipped: the start heading points the other way.
+    assert rev_payload['start']['heading_range_rad'] != \
+        fwd_payload['start']['heading_range_rad']
+
+
 def test_test_map_kinked_cut_validates():
     """The old kinked corner cut builds under wall-derived centrelines."""
     track_map = TrackMap(MAPS / 'test/test.yaml')

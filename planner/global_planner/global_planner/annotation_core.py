@@ -464,6 +464,34 @@ def load_session(path, track_map):
     check_session_map(session, track_map)
     session['retained_region_px'] = _checked_seed(
         session.get('retained_region_px'), track_map)
+    # Load boundary (the one normalization point for every transport):
+    # canonicalize the stored guide under the shared closure contract.
+    # Snapping a near-closed legacy guide changes the geometry input,
+    # and an OPEN guide can never carry approval, so in both cases any
+    # preview/approval bound to the loaded form is revoked (strokes
+    # and the guide itself are preserved) and the revision records
+    # the mutation. Exact-closed and unapproved drafts load unchanged;
+    # canonicalization is idempotent.
+    route = session.get('route_px') or []
+    if route:
+        snapped = snapped_guide(route)
+        gap = _guide_gap_px(route)
+        mutated = snapped != route
+        if mutated:
+            session['route_px'] = snapped
+        if (mutated or (gap is not None
+                        and gap > GUIDE_CLOSE_TOLERANCE_PX)) and (
+                session.get('approval') != 'none'
+                or session.get('preview_digest')
+                or session.get('approval_digest')):
+            session['approval'] = 'none'
+            session['approval_digest'] = None
+            session['approval_route_digest'] = None
+            session['preview_digest'] = None
+            session['preview_route_digest'] = None
+            mutated = True
+        if mutated:
+            session['revision'] = int(session.get('revision', 1)) + 1
     return session
 
 
@@ -1463,6 +1491,54 @@ def check_payload(payload, track_map, legal_mask, car=None):
     return route, receipt
 
 
+#: Guide-closure contract, in map pixels (mirrored by the UI's
+#: closedGuide): a directed guide counts as a completed lap when its
+#: endpoint gap is at most this. Commit boundaries snap such guides
+#: to exact closure; candidate generation refuses wider gaps, so an
+#: unfinished loop can never be silently wrapped into an approval.
+GUIDE_CLOSE_TOLERANCE_PX = 8.0
+
+
+def _guide_gap_px(route_px):
+    """Endpoint gap of a guide in pixels (None when degenerate)."""
+    if not route_px or len(route_px) < 3:
+        return None
+    a, b = route_px[0], route_px[-1]
+    return math.hypot(float(a[0]) - float(b[0]), float(a[1]) - float(b[1]))
+
+
+def snapped_guide(route_px):
+    """Snap a near-closed guide to exact closure; else return as-is.
+
+    The last point becomes an exact copy of the first, preserving the
+    start point and traversal order. Clearly open guides are returned
+    unchanged: storing a work-in-progress draft stays legal, only
+    candidate generation refuses it (``require_closed_guide``).
+    """
+    pts = [list(p) for p in route_px]
+    gap = _guide_gap_px(pts)
+    if gap is not None and 1e-9 < gap <= GUIDE_CLOSE_TOLERANCE_PX:
+        pts[-1] = list(pts[0])
+    return pts
+
+
+def require_closed_guide(route_px):
+    """Return the guide snapped to exact closure, or raise if OPEN.
+
+    The approval-safety gate: ``_resample_closed`` wraps any guide's
+    tail back to its start, so without this check a geometrically
+    valid route would masquerade as a completed operator lap.
+    """
+    gap = _guide_gap_px(route_px)
+    if gap is not None and gap > GUIDE_CLOSE_TOLERANCE_PX:
+        raise AnnotationError(
+            f'route guide is OPEN (endpoint gap {gap:.1f} px, over the '
+            f'{GUIDE_CLOSE_TOLERANCE_PX:.0f} px closure tolerance); '
+            'close the loop before preview - an unfinished guide '
+            'cannot be previewed, approved or exported')
+    return snapped_guide(route_px)
+
+
 def build_candidate(track_map, session, car=None, chain_dp_epsilon_m=None):
     """Extract, build and check the session's candidate in one place.
 
@@ -1478,7 +1554,8 @@ def build_candidate(track_map, session, car=None, chain_dp_epsilon_m=None):
     extraction = extract_boundaries(track_map, strokes, width, retained)
     legal = effective_free_mask(track_map, strokes, width, retained)
     payload, info = build_route(
-        track_map, extraction[0], extraction[1], session['route_px'],
+        track_map, extraction[0], extraction[1],
+        require_closed_guide(session['route_px']),
         legal_mask=legal,
         name=session.get('route_name'),
         surface=session.get('surface', DEFAULT_SURFACE),

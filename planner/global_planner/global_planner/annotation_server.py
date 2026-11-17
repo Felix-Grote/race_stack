@@ -23,11 +23,13 @@ import numpy as np
 
 from .annotation_core import (AnnotationError, TrackMap,
                               atomic_write_text, build_candidate, draft_name,
+                              require_closed_guide,
                               effective_free_mask, export_name,
                               extract_boundaries, free_components,
                               geometry_digest, load_session, new_session,
                               patched_free_mask, require_approved,
                               revoke_approval, ridge_seed, save_session,
+                              snapped_guide,
                               suggest_route, try_thinnings, _checked_seed,
                               _checked_speed, _checked_text, _checked_width,
                               _signed_area)
@@ -224,7 +226,12 @@ def op_open(body):
     if (session.get('preview_route_digest')
             and session.get('preview_digest')
             == geometry_digest(session, track_map)):
-        candidate = session['preview_digest']
+        try:
+            require_closed_guide(session.get('route_px') or [])
+        except AnnotationError:
+            pass  # OPEN guide: no candidacy to restore or approve
+        else:
+            candidate = session['preview_digest']
     STATE.update(map=track_map, session=session, extraction=None,
                  candidate_digest=candidate)
     return {'status': 'PASS', 'message': message, 'session': _session_view()}
@@ -298,6 +305,11 @@ def op_update(body):
                 f'{field} has {total} points (limit {MAX_POINTS_PER_FIELD})')
         if field == 'route_px' and 0 < total < 3:
             raise AnnotationError('route needs at least 3 points (or empty to clear)')
+    if field == 'route_px' and value:
+        # Commit-boundary normalization (shared closure contract):
+        # a near-closed guide is stored exactly closed, so reversal,
+        # digests and the UI closure test all see one representation.
+        value = snapped_guide(value)
     session[field] = value
     if field in ('boundary_strokes_px', 'stroke_width_px'):
         # Boundary edits change the component layout; the stored seed no
@@ -498,6 +510,10 @@ def op_approve(body):
     and the geometry is unchanged since that preview. Writes no file.
     """
     session, track_map = require_open()
+    # Approval-state invariant: no OPEN guide may enter operator-
+    # approved, however it was loaded or previewed (persisted
+    # digests included). Checked before any state mutation.
+    require_closed_guide(session.get('route_px') or [])
     quoted = body.get('approval_digest')
     if not quoted or quoted != STATE.get('candidate_digest'):
         raise AnnotationError('approve refused: no fresh preview for this '

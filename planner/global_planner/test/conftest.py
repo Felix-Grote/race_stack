@@ -12,12 +12,19 @@ MAPS = Path(__file__).parents[3] / 'stack_master' / 'maps'
 
 
 def midline_seed(outer, inner, count=120):
-    """Crude directed guide: each outer point averaged with nearest inner."""
+    """Crude directed guide: each outer point averaged with nearest inner.
+
+    Returned exactly closed (first point repeated): the fixture is a
+    completed operator lap, and candidate generation refuses guides
+    whose endpoint gap exceeds the closure tolerance.
+    """
     step = max(1, len(outer) // count)
     seed = []
     for p in outer[::step]:
         j = int(np.argmin(np.linalg.norm(inner - p, axis=1)))
         seed.append(((p + inner[j]) / 2).tolist())
+    if seed and seed[0] != seed[-1]:
+        seed.append(list(seed[0]))
     return seed
 
 
