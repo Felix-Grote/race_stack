@@ -14,6 +14,14 @@ a_min: -5
 v_max: 15.0
 v_min: -5.0
 
+# sideways grip, motor and drag for the global planner's speed profile. copied from what the old
+# planner shared between all cars (veh_dyn_info/ggv.csv and ax_max_machines.csv, dragcoeff in
+# racecar_f110.ini), not measured on this car: to remeasure. forward and braking grip are a_max
+# and a_min above, not the 12 m/s2 of the old table
+a_lat_max: 12.0 # sideways grip [m/s2]
+a_motor: [[0.0, 9.109], [14.75, 1.475]] # most the motor speeds the car up at a speed, as [m/s, m/s2] points, straight between them and level beyond; never rising, above zero at the first
+drag_coeff: 0.0136 # air drag force divided by the speed squared [kg/m]
+
 C_0d: 0.48
 C_d: -0.87
 C_acc: 8.29

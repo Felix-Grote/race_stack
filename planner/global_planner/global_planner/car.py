@@ -11,9 +11,11 @@ turning:    the smallest radius base_link can drive: wheelbase / tan(max_steerin
 margin:     extra clearance the planner keeps around the body, the same distance in every
             direction; a planning choice, so it comes from the planner's settings, not
             from the car file.
+limits:     how fast the car can go, speed up, brake, corner and steer (CarLimits), for the
+            speed profile. Every value comes from the car file.
 """
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 import math
 from pathlib import Path
 
@@ -127,3 +129,88 @@ class Car:
 
         return cls(name, values['width_m'], values['body_front_m'], values['body_rear_m'],
                    wheelbase / math.tan(steering), margin_m)
+
+
+@dataclass(frozen=True)
+class CarLimits:
+    """
+    How fast one car can go, speed up, brake, corner and steer.
+
+    Every field but the name is a key of the car's car_model.yaml, under the same name.
+
+    name:                   the car, e.g. NUC5.
+    m:                      its mass, in kg.
+    wheelbase:              the distance between its axles, in m.
+    v_max:                  its top speed, in m/s.
+    a_max:                  the most its tyres speed it up, driving straight, in m/s2.
+    a_min:                  the most they slow it down, driving straight, in m/s2: negative.
+    a_lat_max:              the most they hold it in a bend, at a steady speed, in m/s2.
+    a_motor:                the most its motor speeds it up at a speed: (m/s, m/s2) points,
+                            straight between them and level beyond the first and the last;
+                            never rising with the speed, and more than nothing at the first.
+    drag_coeff:             air drag force divided by the speed squared, in kg/m.
+    max_steering_angle:     the furthest its front wheels turn, in rad.
+    max_steering_velocity:  the fastest its steering angle changes, in rad/s.
+    """
+
+    name: str
+    m: float
+    wheelbase: float
+    v_max: float
+    a_max: float
+    a_min: float
+    a_lat_max: float
+    a_motor: tuple[tuple[float, float], ...]
+    drag_coeff: float
+    max_steering_angle: float
+    max_steering_velocity: float
+
+    def __post_init__(self) -> None:
+        listed = (list, tuple)
+        if not isinstance(self.a_motor, listed) or not self.a_motor or not all(
+                isinstance(point, listed) and len(point) == 2 for point in self.a_motor):
+            raise ValueError(f'{self.name}: a_motor must be a list of [speed, acceleration] '
+                             f'points')
+
+        object.__setattr__(self, 'a_motor', tuple(tuple(point) for point in self.a_motor))
+        positive = ('m', 'wheelbase', 'v_max', 'a_max', 'a_lat_max', 'max_steering_angle',
+                    'max_steering_velocity')
+        numbers = [(key, getattr(self, key)) for key in (*positive, 'a_min', 'drag_coeff')]
+        numbers += [('every value in a_motor', v) for point in self.a_motor for v in point]
+        for key, value in numbers:
+            if not is_number(value):
+                hint = '; the car file reads 1e-2 as text, so write 0.01'
+                raise ValueError(f'{self.name}: {key} must be a finite number'
+                                 + (hint if isinstance(value, str) else ''))
+
+            if key in positive and value <= 0:
+                raise ValueError(f'{self.name}: {key} must be more than zero')
+
+        if self.a_min >= 0:
+            raise ValueError(f'{self.name}: a_min, the hardest braking, must be negative')
+
+        if self.max_steering_angle >= math.pi / 2:
+            raise ValueError(f'{self.name}: max_steering_angle must be below pi / 2')
+
+        if self.drag_coeff < 0:
+            raise ValueError(f'{self.name}: drag_coeff must not be negative')
+
+        """
+        A motor that pulled harder at a higher speed would make the fastest speed ambiguous,
+        and one that gives nothing at standstill never gets the car round the lap.
+        """
+        speeds, pulls = [p[0] for p in self.a_motor], [p[1] for p in self.a_motor]
+        ordered = all(a < b for a, b in zip(speeds, speeds[1:]))
+        falling = all(a >= b for a, b in zip(pulls, pulls[1:]))
+        if not ordered or not falling or speeds[0] < 0 or pulls[0] <= 0 or pulls[-1] < 0:
+            raise ValueError(f'{self.name}: a_motor needs points of rising speed, from zero '
+                             f'or above, whose acceleration starts above zero, never rises '
+                             f'and never goes negative')
+
+    @classmethod
+    def load(cls, car_model_yaml: str | Path) -> 'CarLimits':
+        """Read a car's limits from its car_model.yaml."""
+        keys = [field.name for field in fields(cls) if field.name != 'name']
+        name, values = _read(car_model_yaml, keys, 'the speed profile')
+
+        return cls(name, **{key: values[key] for key in keys})

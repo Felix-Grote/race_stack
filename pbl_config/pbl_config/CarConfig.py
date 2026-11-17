@@ -34,6 +34,12 @@ class CarConfig(BaseModel):
     """Maximum velocity"""
     v_min: float
     """Minimum velocity"""
+    a_lat_max: float | None = None
+    """Sideways grip in m/s2; needed by the global planner's speed profile"""
+    a_motor: list[tuple[float, float]] | None = None
+    """Most the motor speeds the car up, as (m/s, m/s2) points; for the planner's speed profile"""
+    drag_coeff: float | None = None
+    """Air drag force over speed squared in kg/m; needed by the global planner's speed profile"""
 
     C_0d: float
     """Steering Angle-to-Servo Offset"""
