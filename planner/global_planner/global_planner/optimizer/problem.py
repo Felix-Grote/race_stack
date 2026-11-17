@@ -12,7 +12,8 @@ poses:      at a point the body faces along the parabola through the point and i
             neighbours. Between two points it follows the cubic that leaves both along their
             headings; that cubic stays close to the spline the points are refitted with,
             where the chord between them does not.
-rows:       what the line must keep, each a value in metres that must not be negative:
+rows:       what the line must keep, each a value that must not be negative, in metres
+            unless said otherwise:
             walls       the planes and vertices of free_space, for the body at the poses
                         they were picked at and for base_link at the points;
             turning     the curvature at every point within the limit, times the spacing
@@ -23,9 +24,10 @@ recovery:   a row that is not met yet is elastic: it may fall short, at a cost o
             per metre. A pass can then always be solved, IPOPT pulls the line back as fast as
             the other rows allow, and once the line is legal the cost is zero. A row within
             `met` of met counts as met: it is not pulled back, it only pays for getting worse.
-straight:   within a pass every row is taken as a straight line: its value at the start and
-            how it changes with the first move. Only the energy, the spacing and the gates
-            keep their bends.
+straight:   within a pass every row above is taken as a straight line: its value at the
+            start and how it changes with the first move. The energy, the spacing and the
+            gates keep their bends, and so do the lap time and the speed rules when the
+            lap time is aimed at.
 trust:      no coordinate moves more than one step and no pose turns more than `turn` in a
             pass, so no wall beyond the reach its rows were picked with can be crossed.
 counts:     a pass counts only if the true rows bear its straight rows out. From a legal
@@ -42,9 +44,23 @@ corrected:  where the body turns around a wall corner its row bends, and the str
             the pass still does not count after _CORRECTIONS of these, the step was too
             long for straight rows and the caller tries a shorter one.
 trusted:    a pass that counted without a correction; the caller lets the next step grow.
-gain:       the cost of a pass is the energy plus what the rows fall short. A pass that
-            cannot lower it by more than `gain` of it leaves the line where it is: IPOPT
-            does not resolve less, and lines that close in cost are equally good.
+gain:       the cost of a pass is what it lowers, the energy or its mix with the lap time,
+            plus what the rows fall short. A pass that cannot lower it by more than `gain`
+            of it leaves the line where it is: IPOPT does not resolve less, and lines that
+            close in cost are equally good. With the lap time in it the cost is resolved
+            less finely (_TIME_GAIN).
+time:       given the car's speed limits, a pass can aim at lap time as well (aim). The
+            speed at every point then joins the points as unknowns, with the car's speed
+            rules as rows that keep their bends (timing.py), and the cost is a share of
+            the lap time plus a share of the energy. The lap time that counts is the one
+            of the points driven as fast as the car can (speed/points.py), worked out
+            before the pass and again after it, both with the track's limits looked up
+            where the points were when the pass began. If the moved points cannot be
+            timed at all, the pass does not count.
+agreed:     the solver and that lap time must tell the same story. After a solve the lap
+            time by the solver's own speeds is held against the one worked out for the
+            same points and limits; if they are apart, timing.py and speed/ no longer
+            state the same rules, and the pass raises.
 """
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -55,13 +71,43 @@ import numpy as np
 from scipy import sparse
 
 from .free_space import Plane, Vertex
-from ..car import Car
+from .timing import lap_time, speed_rows
+from ..car import Car, CarLimits
 from ..route.geometry import EPS, XY
+from ..speed.errors import SpeedError
+from ..speed.model import CarModel
+from ..speed.points import LapPoints
+from ..speed.speeds import SpeedSettings
 
 # How often a pass that does not count is solved again with its rows corrected, before the
 # step is given up as too long. One correction is nearly always enough, and a second leaves
 # the rows off by far less again; after that the step is halved instead.
 _CORRECTIONS = 2
+
+# The speed package's own settings: the lap time that judges a pass is worked out with
+# them, as the speed profile of the finished curve is.
+_SPEED = SpeedSettings()
+
+"""
+The slowest speed the solver may give a point, in m/s. The speed rules take the square root
+of the unknowns, which has no slope at zero; a centimetre a second is far below any speed
+a lap is driven at.
+"""
+_SLOWEST = 0.01
+
+"""
+The fraction of its cost a pass that aims at lap time must lower it by. IPOPT stops with
+its speeds a few hundred-thousandths of a m/s inside their rules, so its own lap time is
+good to about a hundred-thousandth, and so is its idea of whether a move pays.
+"""
+_TIME_GAIN = 1e-5
+
+"""
+How far apart, as a fraction, the lap time by the solver's own speeds and the one worked out
+by speed/ for the same points may be. They agree to a hundred-thousandth when both state
+the same rules; a thousandth is far outside that and well inside what a wrong rule gives.
+"""
+_TIMES_AGREE = 1e-3
 
 # A column of numbers or of symbols, and the x and y columns of some points or headings.
 Column = np.ndarray | ca.SX | ca.DM
@@ -251,13 +297,20 @@ class LapProblem:
     elastic:        cost per metre a row falls short while it recovers.
     met:            how far short of met a row may be and still count as met, in metres.
     gain:           the fraction of its cost a pass must lower it by to be worth making.
+    limits:         the car's limits, for a pass that aims at lap time; None if the
+                    problem is only ever asked for the least curvature.
     """
 
     def __init__(self, n: int, car: Car, spacing: float, equal_gaps: Sequence[int],
                  gates: Sequence[GateRow], start: tuple[int, XY] | None, turn: float,
                  elastic: float, met: float, gain: float, tolerance: float,
-                 max_iterations: int) -> None:
+                 max_iterations: int, limits: CarLimits | None = None) -> None:
         self.n = n
+        self.limits = limits
+        self.goal = None
+        self._timed_at = {}
+        if limits is not None and _SPEED.grip_exponent != 1:
+            raise ValueError('the speed rules of timing.py are written for grip_exponent 1')
         self.corners = np.array(car.corners)
         self.edges = car.edges
         self.spacing = spacing
@@ -290,6 +343,14 @@ class LapProblem:
         self._bent = ca.Function('bent', [x], [energy, ca.vertcat(gaps, *on_gate)])
         self._solver = None
 
+        # The lap time and the speed rules, with the square of every speed as unknowns.
+        if limits is not None:
+            squared = ca.SX.sym('squared', n)
+            self._gaps = ca.Function('gaps', [x], [_length(ahead)])
+            self._timed = ca.Function('timed', [x, squared], [
+                lap_time(_length(ahead), squared),
+                speed_rows(limits, curvature, _length(ahead), squared)])
+
         # What the turning and trust rows need at the start of a pass, and how each changes.
         turning = [*heading, *halfway]
         self._derived = ca.Function('derived', [x], [energy, curvature, ca.horzcat(*heading)])
@@ -321,14 +382,13 @@ class LapProblem:
 
         """
         IPOPT ends well inside EPS of every row, so that what it calls met also passes the
-        checks made with EPS afterwards. Every row with two different bounds is a straight
-        line, which jac_d_constant tells it.
+        checks made with EPS afterwards. While only the curvature is aimed at, every row
+        with two different bounds is a straight line, which jac_d_constant tells it.
         """
         self.options = {'ipopt.print_level': 0, 'ipopt.sb': 'yes', 'print_time': 0,
                         'ipopt.tol': tolerance, 'ipopt.max_iter': max_iterations,
                         'ipopt.constr_viol_tol': EPS / 10,
-                        'ipopt.bound_relax_factor': EPS / 10,
-                        'ipopt.jac_d_constant': 'yes'}
+                        'ipopt.bound_relax_factor': EPS / 10}
 
     @staticmethod
     def _across(points: ca.SX, row: GateRow) -> ca.SX:
@@ -338,6 +398,59 @@ class LapProblem:
         p = points[row.point, :]
 
         return across[0] * (p[0] - a[0]) + across[1] * (p[1] - a[1])
+
+    def aim(self, time_share: float, energy_share: float) -> None:
+        """
+        Aim the timed passes at lap time as well as curvature.
+
+        Their cost becomes time_share times the lap time plus energy_share times the energy.
+        """
+        self.goal = (time_share, energy_share)
+
+    def fastest(self, xy: np.ndarray, cap: np.ndarray) -> tuple[float, np.ndarray]:
+        """
+        Return the lap time of the points driven as fast as the car can, and those speeds.
+
+        cap:    the track's speed limit at every point.
+        """
+        if self.limits is None:
+            raise ValueError("a lap is timed only for a problem built with the car's limits")
+
+        # A pass asks for the same laps more than once: the answers of the last pass are kept.
+        key = (xy.tobytes(), cap.tobytes())
+        if key in self._timed_at:
+            return self._timed_at[key]
+
+        tightest = math.tan(self.limits.max_steering_angle) / self.limits.wheelbase
+        gap = np.asarray(self._gaps(xy.ravel())).ravel()
+
+        # A point may sit a hair past the turning limit, which the speeds need not refuse.
+        curvature = np.clip(self.evaluate(xy)[1], -tightest, tightest)
+        points = LapPoints(CarModel(self.limits, _SPEED.grip_exponent), gap, curvature, cap)
+        points.settle(_SPEED.resolved_mps, _SPEED.max_rounds)
+        self._timed_at[key] = (float(points.took_s.sum()), points.speed_mps)
+
+        return self._timed_at[key]
+
+    @staticmethod
+    def _agree(believed: float, worked_out: float) -> None:
+        """Raise unless the solver's lap time and the one worked out by speed/ agree."""
+        if abs(believed - worked_out) > _TIMES_AGREE * worked_out:
+            raise ValueError(
+                f'the solver takes a lap for {believed:.3f} s where speed/ works out '
+                f'{worked_out:.3f} s for the same points: optimizer/timing.py and speed/ '
+                f'no longer state the same rules')
+
+    def cost(self, xy: np.ndarray, cap: np.ndarray | None) -> float:
+        """Return what a pass lowers: the energy, or with limits its mix with the lap time."""
+        energy = self.evaluate(xy)[0]
+        if cap is None:
+            return energy
+
+        if self.goal is None:
+            raise ValueError('a pass aims at lap time only after aim() has said how much')
+
+        return self.goal[0] * self.fastest(xy, cap)[0] + self.goal[1] * energy
 
     def evaluate(self, xy: np.ndarray) -> tuple[float, np.ndarray, np.ndarray]:
         """Return the curvature energy, and the curvature and unit heading at every point."""
@@ -476,7 +589,8 @@ class LapProblem:
 
     def _straight(self, x0: np.ndarray, guess: np.ndarray, current: np.ndarray,
                   values: np.ndarray, slope: sparse.csr_matrix, turned: sparse.csr_matrix,
-                  step: float) -> tuple[np.ndarray | None, float, IpoptRun]:
+                  step: float, speeds: tuple[np.ndarray, np.ndarray] | None
+                  ) -> tuple[np.ndarray | None, float, IpoptRun, float | None]:
         """
         Solve a pass from x0 with every row a straight line.
 
@@ -488,9 +602,11 @@ class LapProblem:
                     hold the line back, and is left out.
         slope:      how the rows change with the points.
         turned:     how the headings turn with the points.
+        speeds:     for a pass that aims at lap time: the speeds the car can drive at x0,
+                    and the most the solver may give each point; None otherwise.
 
-        Returns the points, the cost they come at and what IPOPT did; no points if it did
-        not keep its own rows.
+        Returns the points, what the rows that fall short were charged, what IPOPT did, and
+        the lap time by its own speeds if it has any; no points if it did not keep its rows.
         """
         able = np.flatnonzero(values - step * np.asarray(abs(slope).sum(axis=1)).ravel() <= 0)
         negative = np.flatnonzero(current[able] < 0)
@@ -507,34 +623,56 @@ class LapProblem:
 
         most = np.full(turned.shape[0], math.sin(self.turn))
         zeros = np.zeros(bent.shape[0])
-        lbg = np.concatenate((lower, -most, zeros))
-        ubg = np.concatenate((np.full(len(able), np.inf), most, zeros))
-        solver = ca.nlpsol('pass', 'ipopt', {
-            'x': ca.vertcat(x, slack), 'f': cost + self.elastic * ca.sum1(slack),
-            'g': ca.vertcat(*straight, bent)}, self.options)
+        lbg = [lower, -most, zeros]
+        ubg = [np.full(len(able), np.inf), most, zeros]
+        unknowns, rows, options = [x, slack], [*straight, bent], dict(self.options)
         at_guess = values[able] + slope[able] @ (guess - x0)
-        out = solver(x0=np.concatenate((guess, np.maximum(0., lower - at_guess)[negative])),
-                     lbg=lbg, ubg=ubg,
-                     lbx=np.concatenate((x0 - step, np.zeros(len(negative)))),
-                     ubx=np.concatenate((x0 + step, np.full(len(negative), np.inf))))
+        start = [guess, np.maximum(0., lower - at_guess)[negative]]
+        lbx = [x0 - step, np.zeros(len(negative))]
+        ubx = [x0 + step, np.full(len(negative), np.inf)]
+        if speeds is None:
+            options['ipopt.jac_d_constant'] = 'yes'
+        else:
+            # The speeds join the unknowns, squared, each between a crawl and its cap.
+            driven, cap = speeds
+            squared = ca.MX.sym('squared', self.n)
+            time, rules = self._timed(x, squared)
+            cost = self.goal[0] * time + self.goal[1] * cost
+            unknowns.append(squared)
+            rows.append(rules)
+            lbg.append(np.zeros(rules.shape[0]))
+            ubg.append(np.full(rules.shape[0], np.inf))
+            slowest = np.minimum(_SLOWEST, cap / 2)
+            start.append(np.clip(driven, slowest, cap) ** 2)
+            lbx.append(slowest ** 2)
+            ubx.append(cap ** 2)
+
+        lbg, ubg = np.concatenate(lbg), np.concatenate(ubg)
+        solver = ca.nlpsol('pass', 'ipopt', {
+            'x': ca.vertcat(*unknowns), 'f': cost + self.elastic * ca.sum1(slack),
+            'g': ca.vertcat(*rows)}, options)
+        out = solver(x0=np.concatenate(start), lbg=lbg, ubg=ubg,
+                     lbx=np.concatenate(lbx), ubx=np.concatenate(ubx))
         ipopt = IpoptRun(solver.stats()['return_status'], int(solver.stats()['iter_count']),
                          len(lbg))
         self._solver = solver
-        found, rows = np.asarray(out['x']).ravel(), np.asarray(out['g']).ravel()
-        result, paid = found[:len(x0)], found[len(x0):]
-
-        # IPOPT may end a slack a hair below zero, which the cost must not count as a gain.
-        cost = self.evaluate(result.reshape(-1, 2))[0] + self.elastic * np.maximum(0., paid).sum()
+        found, held = np.asarray(out['x']).ravel(), np.asarray(out['g']).ravel()
+        result, paid = found[:len(x0)], found[len(x0):len(x0) + len(negative)]
 
         # IPOPT must have kept its own rows, whatever it calls its result.
-        if np.max(np.concatenate((lbg - rows, rows - ubg))) > EPS:
+        if np.max(np.concatenate((lbg - held, held - ubg))) > EPS:
             result = None
 
-        return result, cost, ipopt
+        believed = None
+        if speeds is not None and result is not None:
+            believed = float(self._timed(result, found[len(x0) + len(negative):])[0])
+
+        # IPOPT may end a slack a hair below zero, which must not count as a gain.
+        return result, float(self.elastic * np.maximum(0., paid).sum()), ipopt, believed
 
     def solve(self, xy: np.ndarray, bodies: Sequence[BodyWalls], points: Sequence[PointWalls],
               curvature_limit: float, heading_range: tuple[float, float] | None,
-              step: float) -> PassResult:
+              step: float, cap: np.ndarray | None = None) -> PassResult:
         """
         Run one pass from xy.
 
@@ -543,36 +681,54 @@ class LapProblem:
         heading_range:      the angles the start point may face between, measured from the
                             direction given as `start`; None for no limit.
         step:               the most a coordinate may move.
+        cap:                the track's speed limit at every point, for a pass that aims
+                            at lap time as well (aim); None for the least curvature alone.
         """
         x0 = xy.ravel()
         picked = self._picked(bodies, points)
         current, slope = self._kept(xy, picked, curvature_limit, heading_range)
         short = _short(current, self.met)
-        cost_before = self.evaluate(xy)[0] + self.elastic * short
+        cost_before = self.cost(xy, cap) + self.elastic * short
         turned = self._turned(xy)
+        resolved = self.gain * cost_before
+        speeds = None
+        if cap is not None:
+            # The solver is held to the track's limits and to the car's top speed.
+            speeds = (self.fastest(xy, cap)[1], np.minimum(cap, self.limits.v_max))
+            resolved = max(self.gain, _TIME_GAIN) * cost_before
+            self._timed_at = {(xy.tobytes(), cap.tobytes()): self.fastest(xy, cap)}
 
         guess, correction, runs = x0, np.zeros(len(current)), []
         for solves in range(1, _CORRECTIONS + 2):
-            result, cost, run = self._straight(x0, guess, current, current + correction, slope,
-                                               turned, step)
+            result, charged, run, believed = self._straight(
+                x0, guess, current, current + correction, slope, turned, step, speeds)
             runs.append(run)
             ipopt = IpoptRun(run.status, sum(r.iterations for r in runs), run.rows, solves)
             if result is None:
                 break
 
+            # Moved points that cannot be timed at all are a move that does not count.
+            moved = result.reshape(-1, 2)
+            try:
+                if believed is not None and run.status == 'Solve_Succeeded':
+                    self._agree(believed, self.fastest(moved, cap)[0])
+
+                cost = self.cost(moved, cap) + charged
+            except SpeedError:
+                break
+
             """
-            IPOPT resolves the cost to about `gain` of it. With no more than that to gain,
+            IPOPT resolves the cost to about `resolved`. With no more than that to gain,
             the line stays where it is; a solve that ends worse by more than that went
             astray, and the step is too long.
             """
             gained = cost_before - cost
-            if gained < -self.gain * cost_before:
+            if gained < -resolved:
                 break
 
-            if gained <= self.gain * cost_before:
+            if gained <= resolved:
                 return PassResult(xy, True, True, short, short, short, ipopt)
 
-            moved = result.reshape(-1, 2)
             straight = current + slope @ (result - x0)
             said = straight + correction
             true = self._kept(moved, picked, curvature_limit, heading_range)[0]
