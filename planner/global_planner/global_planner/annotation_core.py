@@ -464,6 +464,34 @@ def load_session(path, track_map):
     check_session_map(session, track_map)
     session['retained_region_px'] = _checked_seed(
         session.get('retained_region_px'), track_map)
+    # Load boundary (the one normalization point for every transport):
+    # canonicalize the stored guide under the shared closure contract.
+    # Snapping a near-closed legacy guide changes the geometry input,
+    # and an OPEN guide can never carry approval, so in both cases any
+    # preview/approval bound to the loaded form is revoked (strokes
+    # and the guide itself are preserved) and the revision records
+    # the mutation. Exact-closed and unapproved drafts load unchanged;
+    # canonicalization is idempotent.
+    route = session.get('route_px') or []
+    if route:
+        snapped = snapped_guide(route)
+        gap = _guide_gap_px(route)
+        mutated = snapped != route
+        if mutated:
+            session['route_px'] = snapped
+        if (mutated or (gap is not None
+                        and gap > GUIDE_CLOSE_TOLERANCE_PX)) and (
+                session.get('approval') != 'none'
+                or session.get('preview_digest')
+                or session.get('approval_digest')):
+            session['approval'] = 'none'
+            session['approval_digest'] = None
+            session['approval_route_digest'] = None
+            session['preview_digest'] = None
+            session['preview_route_digest'] = None
+            mutated = True
+        if mutated:
+            session['revision'] = int(session.get('revision', 1)) + 1
     return session
 
 

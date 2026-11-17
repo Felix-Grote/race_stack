@@ -141,7 +141,7 @@ def test_session_roundtrip_and_map_identity(tmp_path):
     """Save/reopen works; reinterpreted maps and old versions rejected."""
     track_map = TrackMap(MAPS / 'test/test.yaml')
     session = new_session(track_map)
-    session['route_px'] = [[1, 2], [3, 4], [5, 6]]
+    session['route_px'] = [[1, 2], [30, 40], [50, 60]]  # clearly open
     path = tmp_path / 'draft.json'
     save_session(session, path)
     assert load_session(path, track_map)['route_px'] == session['route_px']
@@ -521,6 +521,47 @@ def test_cli_preview_approve_export_cycle(tmp_path):
     assert tool.main(['extract'] + sel + ['--out', str(out)]) == 0
     assert tool.main(['select-region'] + sel + ['--clear']) == 0
     assert tool.main(['extract'] + sel + ['--out', str(out)]) == 1
+
+
+def test_load_session_guide_canonicalization(tmp_path):
+    """Load boundary: exact-closed approvals survive untouched;
+    near-closed snaps (approval revoked, revision bumped) and is
+    idempotent on reload; OPEN guides stay editable, unapproved."""
+    track_map = TrackMap(MAPS / 'test/test.yaml')
+    outer, inner = extract_boundaries(track_map, [], 5)
+    closed = midline_seed(outer, inner)
+    path = tmp_path / 'legacy.json'
+    # Exact-closed + bound approval: loads byte-identical.
+    session = new_session(track_map)
+    session['route_px'] = closed
+    session['approval'] = 'operator-approved'
+    session['approval_digest'] = geometry_digest(session, track_map)
+    session['preview_route_digest'] = 'a' * 64
+    session['approval_route_digest'] = 'a' * 64
+    session['preview_digest'] = session['approval_digest']
+    save_session(session, path)
+    loaded = load_session(path, track_map)
+    assert loaded == session
+    # Near-closed: snapped, approval revoked, revision bumped once;
+    # saving and reloading changes nothing further.
+    legacy = dict(session)
+    legacy['route_px'] = closed[:-1] + [[closed[0][0] + 3.0,
+                                         closed[0][1] + 4.0]]
+    save_session(legacy, path)
+    snapped = load_session(path, track_map)
+    assert snapped['route_px'] == closed
+    assert snapped['approval'] == 'none'
+    assert snapped['preview_digest'] is None
+    assert snapped['revision'] == session['revision'] + 1
+    save_session(snapped, path)
+    assert load_session(path, track_map) == snapped
+    # Clearly OPEN: guide preserved for editing, approval revoked.
+    opened = dict(session)
+    opened['route_px'] = closed[:-6]
+    save_session(opened, path)
+    loaded_open = load_session(path, track_map)
+    assert loaded_open['route_px'] == closed[:-6]
+    assert loaded_open['approval'] == 'none'
 
 
 def test_cli_open_guide_refused(tmp_path):

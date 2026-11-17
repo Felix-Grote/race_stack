@@ -340,6 +340,74 @@ def test_open_guide_cannot_be_approved(backend):
     assert GUIDE_CLOSE_TOLERANCE_PX == 8.0
 
 
+def test_open_guide_persisted_approval_refused(backend, tmp_path):
+    """Defect A (C3 A4): persisted preview/approval digests for the
+    verbatim R4b OPEN guide must not yield approval on any path."""
+    from global_planner.annotation_core import (
+        draft_name, geometry_digest, load_session, save_session)
+    srv = backend
+    srv.op_open({'map': 'test'})
+    srv.op_update({'field': 'route_px', 'value': R4B_OPEN_ROUTE})
+    session = srv.STATE['session']
+    track_map = srv.STATE['map']
+    # Genuine persisted binding (geometry_digest is fix-stable).
+    digest = geometry_digest(session, track_map)
+    session['preview_digest'] = digest
+    session['preview_route_digest'] = 'a' * 64
+    srv.STATE['candidate_digest'] = digest
+    with pytest.raises(AnnotationError, match='OPEN'):
+        srv.op_approve({'approval_digest': digest})
+    assert srv.STATE['session']['approval'] == 'none'
+    # Legacy draft already marked approved: reopening revokes the
+    # invalid approval, restores no candidacy, keeps the guide.
+    session['approval'] = 'operator-approved'
+    session['approval_digest'] = digest
+    session['approval_route_digest'] = 'a' * 64
+    draft = Path(srv.STATE['out_dir']) / draft_name(track_map)
+    save_session(session, draft)
+    srv.STATE.update(map=None, session=None, extraction=None,
+                     candidate_digest=None)
+    reopened = srv.op_open({'map': 'test'})
+    assert reopened['session']['approval'] == 'none'
+    assert srv.STATE['session']['route_px'] == R4B_OPEN_ROUTE
+    assert srv.STATE['candidate_digest'] is None
+    with pytest.raises(AnnotationError):
+        srv.op_export({})
+    assert list(Path(srv.STATE['out_dir']).glob('*_legal_route.json')) == []
+    loaded = load_session(draft, track_map)
+    assert loaded['approval'] == 'none'
+
+
+def test_legacy_near_closed_reopens_canonical(backend):
+    """Defect B (C3 A3): a legacy near-closed draft is canonicalized
+    at load; double reversal then restores the stored array exactly."""
+    from global_planner.annotation_core import draft_name, save_session
+    srv = backend
+    srv.op_open({'map': 'test'})
+    srv.op_suggest({})
+    closed = [list(p) for p in srv.STATE['session']['route_px']]
+    legacy = [list(p) for p in closed]
+    legacy[-1] = [closed[0][0] + 3.0, closed[0][1] + 4.0]  # 5px gap
+    track_map = srv.STATE['map']
+    draft = Path(srv.STATE['out_dir']) / draft_name(track_map)
+    legacy_session = dict(srv.STATE['session'], route_px=legacy,
+                          approval='operator-approved',
+                          approval_digest='stale')
+    save_session(legacy_session, draft)
+    srv.STATE.update(map=None, session=None, extraction=None,
+                     candidate_digest=None)
+    srv.op_open({'map': 'test'})
+    stored = srv.STATE['session']['route_px']
+    assert stored[-1] == stored[0]  # exactly closed after load
+    assert stored == legacy[:-1] + [list(legacy[0])]
+    assert srv.STATE['session']['approval'] == 'none'  # snap revoked it
+    rev = _reversed_guide(stored)
+    srv.op_update({'field': 'route_px', 'value': rev})
+    assert srv.op_preview({})['status'] == 'VALIDATED'
+    srv.op_update({'field': 'route_px', 'value': _reversed_guide(rev)})
+    assert srv.STATE['session']['route_px'] == stored
+
+
 def test_guide_closure_boundaries(backend):
     """D1/D2 boundary cases: exact, near-closed (snapped at commit),
     tolerance-edge, and clearly open stored guides."""
