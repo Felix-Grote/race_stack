@@ -28,6 +28,11 @@ _MAX_STROKE_COORD_PX = 1e6
 class AnnotationError(ValueError):
     """The map or the operator's annotation cannot give a route; the message says why."""
 
+    def __init__(self, message: str, at_px=()) -> None:
+        super().__init__(message)
+        # Where on the map it fails, in file pixels, for the page to mark.
+        self.at_px = [[float(u), float(v)] for u, v in at_px]
+
 
 def _read_yaml(path: Path) -> dict:
     """Return the map file's keys, checked for what this tool reads."""

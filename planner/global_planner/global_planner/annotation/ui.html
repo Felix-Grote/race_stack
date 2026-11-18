@@ -3,7 +3,7 @@
 <style>
 /* One palette, read by the legend and by the drawing. */
 :root{--stroke:#f87171;--excluded:#fb923c;--walls:#38bdf8;--guide:#facc15;--route:#4ade80;
-      --gates:#e879f9;--start:#ffffff;--picked:#ffffff;--startmark:#22d3ee}
+      --gates:#e879f9;--start:#ffffff;--picked:#ffffff;--startmark:#22d3ee;--problem:#ff2d2d}
 body{font-family:system-ui,sans-serif;margin:12px;background:#111;color:#eee}
 body.busy,body.busy canvas{cursor:progress}
 fieldset{display:inline-block;border:1px solid #444;border-radius:6px;margin:0 6px 6px 0;padding:4px 8px}
@@ -47,7 +47,8 @@ canvas{display:block;background:#1b1b1b;border:1px solid #555;cursor:crosshair;m
  <i style="--c:var(--walls)"></i>road walls</label>
 <label><input type="checkbox" class="layer" value="guide" checked>
  <i style="--c:var(--guide)"></i>guide (direction and cuts only)
- <i style="--c:var(--startmark);border-radius:6px"></i>start</label>
+ <i style="--c:var(--startmark);border-radius:6px"></i>start
+ <i style="--c:var(--problem);border-radius:6px"></i>problem</label>
 <label><input type="checkbox" class="layer" value="route" checked>
  <i style="--c:var(--route)"></i>route walls <i style="--c:var(--gates)"></i>gates
  <i style="--c:var(--start);opacity:.5"></i>start zone</label></p>

@@ -26,6 +26,7 @@ def _handler(editor: Editor) -> type[BaseHTTPRequestHandler]:
     actions = {'open': lambda b: editor.open(b.get('map')),
                'edit': lambda b: editor.edit(b.get('field'), b.get('value')),
                'suggest': lambda b: editor.suggest(),
+               'reverse': lambda b: editor.reverse(),
                'export': lambda b: editor.export(), 'save': lambda b: editor.save()}
 
     class Handler(BaseHTTPRequestHandler):

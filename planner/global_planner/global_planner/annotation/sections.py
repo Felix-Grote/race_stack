@@ -1,7 +1,8 @@
 """
 The route manifest built from the walls and the guide; checks.py checks it.
 
-guide:      it must stay on the kept cells all the way round, never crossing a wall.
+guide:      it must stay on the kept cells all the way round, never crossing a wall;
+            where it does not is marked for the page.
 joints:     the guide is resampled, at least _MIN_SEED_POINTS times round the lap, smoothed
             and pulled into the middle half of the road. Which loop is the left wall follows
             from the way the guide turns: the infield is on the left of a counterclockwise
@@ -217,12 +218,13 @@ def build(track_map: TrackMap, outer_px: np.ndarray, inner_px: np.ndarray, guide
 
     # The guide is not exported, but a guide through a wall cuts the lap where no car drives.
     off = off_road(kept, guide_px)
-    if off is not None:
-        raise AnnotationError(f'the guide crosses a wall or leaves the road at pixel {off}: '
-                              f'redraw it there, inside the road')
+    if len(off):
+        raise AnnotationError('the guide crosses a wall or leaves the road (marked red): redraw '
+                              'it there, or press Suggest', at_px=off)
 
-    if off_road(kept, [start_px]) is not None:
-        raise AnnotationError('the start is off the road: set it again')
+    if len(off_road(kept, [start_px])):
+        raise AnnotationError('the start is off the road (marked red): set it again',
+                              at_px=[start_px])
 
     guide_px = starting_at(guide_px, start_px)
 

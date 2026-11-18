@@ -34,7 +34,8 @@ def check(payload: dict, track_map: TrackMap, kept: np.ndarray,
             worst = max(shapely.get_parts(outside), key=lambda g: g.area)
             x, y = shapely.centroid(worst).coords[0]
             raise AnnotationError(f'section {section["uid"]} covers {outside.area:.6f} m2 off '
-                                  f'the kept road, near ({x:.2f}, {y:.2f})')
+                                  f'the kept road (marked red)',
+                                  at_px=[track_map.world_to_pixel((x, y))])
 
     try:
         route = validate_route(payload)

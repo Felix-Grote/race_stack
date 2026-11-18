@@ -8,7 +8,10 @@ draft:      strokes, picked region, guide, start, route name, surface and speed 
 edits:      refused when the map cannot take them: a wall that touches no wall of the map, a
             click off the road. With no region picked, or when a wall leaves the picked one no
             track, the largest region that is a track is kept. After every edit the route is
-            built and checked again, so the page always shows whether it is valid.
+            built and checked again, so the page always shows whether it is valid, and where
+            it fails.
+guide:      the road's midline unless the operator draws one: a suggested guide follows the
+            road as walls change, keeping its direction; a drawn one stays as drawn.
 export:     writes exactly the route checked after the last edit, so only a valid one. It is
             read back through load_route to confirm it holds the same route.
 """
@@ -60,6 +63,7 @@ class Editor:
         self.draft = {}
         self.result = None
         self.route = ''
+        self.route_at = []
         self._map_name = None
         self._map_url = None
 
@@ -80,8 +84,8 @@ class Editor:
         self._map_name = name
         self._map_url = _png_url(self.track_map.png)
         self.draft = {'strokes_px': [], 'stroke_width_px': 5, 'region_px': None,
-                      'guide_px': [], 'start_px': None, 'name': self.track_map.name,
-                      'surface': 'ground', 'max_speed_mps': 2.5}
+                      'guide_px': [], 'guide_auto': True, 'start_px': None,
+                      'name': self.track_map.name, 'surface': 'ground', 'max_speed_mps': 2.5}
         path = self._path('annotation')
         saved = json.loads(path.read_text(encoding='utf-8')) if path.exists() else None
         if saved is None:
@@ -89,10 +93,12 @@ class Editor:
         elif saved.get('map_sha256') != self.track_map.sha256:
             message = f'{path.name} was made for other map bytes: new draft'
         else:
-            self.draft.update({k: saved[k] for k in _FIELDS if k in saved})
+            self.draft.update({k: saved[k] for k in _FIELDS if k in saved},
+                              guide_auto=saved.get('guide_auto', False))
             message = f'draft loaded from {path.name}'
 
         self.draft['region_px'] = self._region(self._free(), self.draft['region_px'])
+        self._follow()
         self._recheck()
         return message
 
@@ -111,8 +117,12 @@ class Editor:
         if field == 'start_px' and value is not None:
             kept = kept_mask(free_mask(self.track_map, draft['strokes_px'],
                                        draft['stroke_width_px']), draft['region_px'])
-            if guide.off_road(kept, [value]) is not None:
+            if len(guide.off_road(kept, [value])):
                 raise AnnotationError('the start must be on the road: click inside the track')
+
+        if field == 'guide_px':
+            # A drawn guide stays as drawn.
+            draft['guide_auto'] = False
 
         if field in ('strokes_px', 'stroke_width_px', 'region_px'):
             # Refuse a wall or a click the map cannot take now, not at the next check.
@@ -134,6 +144,7 @@ class Editor:
                 draft['region_px'] = self._region(free, draft['region_px'])
 
         self.draft = draft
+        self._follow()
         self._recheck()
         return f'{field} changed'
 
@@ -169,21 +180,47 @@ class Editor:
 
         return (payload, *checks.check(payload, self.track_map, kept, self.car))
 
-    def suggest(self) -> str:
-        """Replace the guide by the road's midline, the way the guide drawn runs, if any."""
-        self._require_open()
-        kept, _, inner = self._road(self._free())
+    def _follow(self) -> None:
+        """Lay a suggested guide on the road's midline, the way it ran before, if any."""
+        if not self.draft['guide_auto']:
+            return
+
+        try:
+            kept, _, inner = self._road(self._free())
+        except AnnotationError:
+            # No track yet: the guide waits for one.
+            return
+
         loop = guide.midline(kept, inner)
-        drawn = self.draft['guide_px']
-        if len(drawn) >= 3 and guide.signed_area(drawn) * guide.signed_area(loop) < 0:
+        before = self.draft['guide_px']
+        if len(before) >= 3 and guide.signed_area(before) * guide.signed_area(loop) < 0:
             loop = loop[:1] + loop[:0:-1]
 
-        self.edit('guide_px', loop + loop[:1])
-        return 'guide suggested; redraw it where it looks wrong'
+        self.draft['guide_px'] = loop + loop[:1]
+
+    def suggest(self) -> str:
+        """Make the guide the road's midline again, following the road from now on."""
+        self._require_open()
+        self._road(self._free())
+        self.draft['guide_auto'] = True
+        self._follow()
+        self._recheck()
+        return 'guide suggested: it follows the road until you draw one'
+
+    def reverse(self) -> str:
+        """Turn the guide round, from the same first point."""
+        self._require_open()
+        g = self.draft['guide_px']
+        if len(g) < 3:
+            raise AnnotationError('there is no guide to reverse')
+
+        self.draft['guide_px'] = [g[0], *g[-2:0:-1], g[0]]
+        self._recheck()
+        return 'guide reversed'
 
     def _recheck(self) -> None:
         """Build and check the route for the draft, and keep it, or why it fails, to show."""
-        self.result = None
+        self.result, self.route_at = None, []
         if len(self.draft['guide_px']) < 3:
             self.route = 'no guide yet: draw one, or press Suggest'
             return
@@ -196,6 +233,7 @@ class Editor:
             payload, route, lap = self._build(self.draft['guide_px'])
         except (AnnotationError, ValueError) as exc:
             self.route = f'not valid: {exc}'
+            self.route_at = getattr(exc, 'at_px', [])
             return
 
         def px(chain) -> list[list[float]]:
@@ -238,6 +276,7 @@ class Editor:
             return {'maps': self.maps()}
 
         view = dict(self.draft, maps=self.maps(), map=self._map_name, route=self.route,
+                    problem_px=self.route_at,
                     size=[self.track_map.width, self.track_map.height], png=self._map_url,
                     result={k: v for k, v in self.result.items() if k not in ('payload', 'digest')}
                     if self.result else None)

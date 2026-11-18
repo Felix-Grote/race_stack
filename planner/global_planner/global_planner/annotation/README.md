@@ -30,9 +30,13 @@ It writes two files next to the map's YAML and never touches the map itself:
    none is refused, and stays on screen to fix. The largest piece of free space that is a
    closed ring is kept as the track; **Pick region** keeps another. The blue lines are the
    road's walls; orange is free space left out of the road.
-3. **Draw guide**: one loop inside the track, in the direction of travel, or **Suggest** one.
-   It sets the direction and roughly where the sections are cut; it is not exported.
-   **Reverse** turns it round. It must stay on the road all the way round.
+3. **The guide** sets the direction and roughly where the sections are cut; it is not
+   exported. Once the track is closed, the road's midline is suggested and follows the road
+   as walls change. **Draw guide** replaces it with your own loop, which then stays as drawn;
+   **Suggest** goes back to the midline. **Reverse** turns it round. It must stay on the road
+   all the way round.
+   Wherever the route fails (a guide through a wall, a start off the road, a section off the
+   road) is ringed in red; a refused wall stays dashed red, to fix.
 4. **Set start**: click where the car starts. The start zone is centred there, facing along
    the guide, and the first gate is the straightest point near it; the others follow at
    quarters of the lap. There is no route until the start is set.

@@ -2,6 +2,8 @@
 const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
 const $ = id => document.getElementById(id);
 let V = {}, tool = null, draft = [], vp = null, pan = null, hover = null, picked = -1;
+// Whether the line being drawn was refused: it stays, dashed in the problem colour, to fix.
+let refused = false;
 const images = {}, shown = {map: true, road: true, guide: true, route: true};
 const HINTS = {
   null: 'Pick a tool. Wheel zooms; drag with the right or middle button pans.',
@@ -10,7 +12,8 @@ const HINTS = {
   region: 'Pick region: the track is picked for you; click inside another piece of free ' +
           'space to keep that one instead.',
   guide: 'Draw guide: click points round the track in the direction of travel; click the first ' +
-         'point (or double-click) to close it. Backspace drops the last point, Escape all.',
+         'point (or double-click) to close it. Backspace drops the last point, Escape all. ' +
+         'A drawn guide stays as drawn; Suggest makes it follow the road again.',
   start: 'Set start: click on the track where the car starts; the first gate and the start ' +
          'zone are placed there, facing along the guide.'};
 // How close, in canvas pixels, a click must be to the guide's first point to close it.
@@ -119,9 +122,17 @@ function draw() {
     line(R.start_px, C('start'), true, 1.5);
     R.gates_px.forEach(g => line(g, C('gates'), false, 3.5));
   }
+  // Where the route fails: a ring round every cell named.
+  ctx.strokeStyle = C('problem'); ctx.lineWidth = 2.5;
+  (V.problem_px || []).forEach(p => {
+    const [x, y] = toCanvas(p);
+    ctx.beginPath(); ctx.arc(x, y, Math.max(5, vp.s), 0, 2 * Math.PI); ctx.stroke();
+  });
   // The line being drawn: its points, and dashed where the next click would take it.
-  const color = tool === 'stroke' ? C('stroke') : C('guide');
+  const color = refused ? C('problem') : tool === 'stroke' ? C('stroke') : C('guide');
+  if (refused) ctx.setLineDash([6, 4]);
   line(draft, color);
+  ctx.setLineDash([]);
   ctx.fillStyle = color;
   draft.forEach(p => { const [x, y] = toCanvas(p); ctx.fillRect(x - 3, y - 3, 6, 6); });
   if (draft.length && hover) {
@@ -154,18 +165,19 @@ function show(view, message) {
     return b;
   }));
   $('status').textContent = (message ? message + '\n' : '') + (V.map ?
-    `${V.map} · road: ${V.walls_error || 'closed ring'}\nroute: ${V.route}` : '');
+    `${V.map} · road: ${V.walls_error || 'closed ring'} · guide: ` +
+    `${V.guide_auto ? 'suggested, follows the road' : 'drawn'}\nroute: ${V.route}` : '');
   draw();
 }
 async function finish() {
   // A double-click also fired two clicks on the same spot: keep one.
   while (draft.length > 1 && Math.hypot(...draft.at(-1).map((v, i) => v - draft.at(-2)[i])) < .5) draft.pop();
-  const done = draft, drawing = tool; draft = []; hover = null;
+  const done = draft, drawing = tool; draft = []; hover = null; refused = false;
   if (done.length < 2 || (drawing === 'guide' && done.length < 3)) return draw();
   const ok = drawing === 'stroke' ? await edit('strokes_px', [...V.strokes_px, done])
                                   : await edit('guide_px', [...done, done[0]]);
   // Keep a refused line on screen, to fix it rather than draw it again.
-  if (!ok && tool === drawing) { draft = done; draw(); }
+  if (!ok && tool === drawing) { draft = done; refused = true; draw(); }
 }
 async function call(action, body) {
   document.body.classList.add('busy');
@@ -190,7 +202,7 @@ cv.addEventListener('click', e => {
   const [fx, fy] = draft.length > 2 ? toCanvas(draft[0]) : [Infinity, Infinity];
   const [cx, cy] = toCanvas(p);
   if (tool === 'guide' && Math.hypot(cx - fx, cy - fy) < CLOSE_PX) return finish();
-  draft.push(p); draw();
+  draft.push(p); refused = false; draw();
 });
 cv.addEventListener('dblclick', finish);
 cv.addEventListener('mousemove', e => { if (draft.length && !pan) { hover = toPixel(e); draw(); } });
@@ -211,12 +223,12 @@ cv.addEventListener('wheel', e => {
 }, {passive: false});
 window.addEventListener('keydown', e => {
   if (/INPUT|SELECT/.test(e.target.tagName)) return;
-  if (e.key === 'Escape') { draft = []; draw(); }
+  if (e.key === 'Escape') { draft = []; refused = false; draw(); }
   if (e.key === 'Backspace' && draft.length) { e.preventDefault(); draft.pop(); draw(); }
 });
 
 document.querySelectorAll('.tool').forEach(b => b.onclick = () => {
-  tool = tool === b.dataset.tool ? null : b.dataset.tool; draft = []; hover = null;
+  tool = tool === b.dataset.tool ? null : b.dataset.tool; draft = []; hover = null; refused = false;
   document.querySelectorAll('.tool').forEach(x => x.classList.toggle('on', x.dataset.tool === tool));
   $('hint').textContent = HINTS[tool];
   draw();
@@ -227,8 +239,7 @@ $('surface').onchange = e => edit('surface', e.target.value);
 $('max_speed_mps').onchange = e => edit('max_speed_mps', parseFloat(e.target.value));
 $('stroke_width_px').onchange = e => edit('stroke_width_px', parseInt(e.target.value));
 $('suggest').onclick = () => call('suggest');
-// Same start point, the other way round.
-$('reverse').onclick = () => { const g = V.guide_px || []; if (g.length > 2) edit('guide_px', [g[0], ...g.slice(1, -1).reverse(), g[0]]); };
+$('reverse').onclick = () => call('reverse');
 $('clearGuide').onclick = () => edit('guide_px', []);
 for (const a of ['export', 'save']) $(a).onclick = () => call(a);
 $('fit').onclick = () => { fit(); draw(); };

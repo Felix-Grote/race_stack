@@ -80,8 +80,8 @@ def starting_at(loop, point) -> list[list[float]]:
     return [start] + rest
 
 
-def off_road(kept: np.ndarray, loop) -> tuple[int, int] | None:
-    """Return the first pixel where a closed loop leaves the kept cells, or None if none is."""
+def off_road(kept: np.ndarray, loop) -> np.ndarray:
+    """Return the cells, in order round a closed loop, where it leaves the kept cells."""
     pts = np.asarray(loop, float).reshape(-1, 2)
     ends = np.roll(pts, -1, 0)
     # Four samples per pixel of length, so no cell a segment passes through is skipped.
@@ -94,11 +94,9 @@ def off_road(kept: np.ndarray, loop) -> tuple[int, int] | None:
     inside = (uv[:, 0] >= 0) & (uv[:, 0] < width) & (uv[:, 1] >= 0) & (uv[:, 1] < height)
     bad = ~inside
     bad[inside] = kept[uv[inside, 1], uv[inside, 0]] == 0
-    if not bad.any():
-        return None
+    cells, first = np.unique(uv[bad], axis=0, return_index=True)
 
-    u, v = uv[int(np.argmax(bad))]
-    return int(u), int(v)
+    return cells[np.argsort(first)]
 
 
 def midline(kept: np.ndarray, inner: np.ndarray, smooth_px: int = 4,
@@ -118,11 +116,11 @@ def midline(kept: np.ndarray, inner: np.ndarray, smooth_px: int = 4,
     window = np.ones(2 * smooth_px + 1) / (2 * smooth_px + 1)
     padded = np.vstack((loop[-smooth_px:], loop, loop[:smooth_px]))
     smooth = np.column_stack([np.convolve(padded[:, k], window, 'valid') for k in (0, 1)])
-    if off_road(kept, smooth) is None:
+    if not len(off_road(kept, smooth)):
         loop = smooth
 
     def on_road(pts: list[np.ndarray], a: int, b: int) -> bool:
-        return off_road(kept, [pts[a], pts[b]]) is None
+        return not len(off_road(kept, [pts[a], pts[b]]))
 
     closed = douglas_peucker(list(loop) + [loop[0]], eps_px, on_road)
 
