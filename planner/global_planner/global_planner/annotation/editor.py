@@ -152,6 +152,13 @@ class Editor:
         region = self.draft['region_px']
         if draft['region_px'] is None and region is not None \
                 and is_track(kept_mask(self._free(), region)):
+            try:
+                loops(kept_mask(free_mask(self.track_map, draft['strokes_px'],
+                                          draft['stroke_width_px']), region), True)
+            except AnnotationError as exc:
+                # Say where the ring breaks, when the walls can tell.
+                if exc.at_px:
+                    raise
             raise AnnotationError('this wall cuts the track, leaving no closed ring: walls may '
                                   'close gaps and cut off pockets, but not cross the whole road')
 

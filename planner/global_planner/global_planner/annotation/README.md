@@ -71,10 +71,11 @@ flowchart LR
 | `ui.html` · `ui.js` | the page |
 
 1. **Free cells.** A cell is free only when its occupancy is below the map's `free_thresh`:
-   unknown cells stay occupied. Strokes add occupied cells; picking a region keeps only the
-   free cells connected to it.
+   unknown cells stay occupied. Strokes add occupied cells; a free cell in no 2x2 block of
+   free cells is dropped too, a sliver no car fits in. Picking a region keeps only the free
+   cells connected to it.
 2. **Walls.** The kept cells must form one ring clear of the image edge: one outer boundary
-   and one hole. Anything else is refused, never guessed at.
+   and one hole, never one cell wide. Anything else is refused, never guessed at.
 3. **Cuts.** The guide is resampled (at least 64 points round the lap), smoothed and pulled
    into the middle half of the road; the way it turns says which wall is on the left. It is
    cut into four sections near even quarters of the lap, each cut on the straightest guide

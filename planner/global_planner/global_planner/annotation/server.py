@@ -53,6 +53,7 @@ def _handler(editor: Editor) -> type[BaseHTTPRequestHandler]:
         def do_POST(self) -> None:  # noqa: N802 - the name http.server calls
             """Run one action; the reply is its message, or why it failed, and the new view."""
             action = actions.get(self.path.removeprefix('/api/'))
+            at_px = []
             try:
                 if action is None:
                     raise AnnotationError(f'no action {self.path}')
@@ -65,10 +66,14 @@ def _handler(editor: Editor) -> type[BaseHTTPRequestHandler]:
                 reply = {'ok': True, 'message': action(body)}
             except (AnnotationError, ValueError, OSError) as exc:
                 reply = {'ok': False, 'message': str(exc)}
+                at_px = list(getattr(exc, 'at_px', []))
             except Exception as exc:  # noqa: BLE001 - a bug must reach the page, not hang it
                 reply = {'ok': False, 'message': f'unexpected {type(exc).__name__}: {exc}'}
 
             reply['view'] = editor.view()
+            if at_px:
+                # A refused edit is marked where it fails, until the next reply.
+                reply['view']['problem_px'] = at_px
             self._send(200, json.dumps(reply).encode(), 'application/json')
 
     return Handler

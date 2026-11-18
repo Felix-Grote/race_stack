@@ -59,8 +59,14 @@ def loops(kept: np.ndarray, region_picked: bool) -> tuple[np.ndarray, np.ndarray
         raise AnnotationError(f'the track must enclose exactly one infield, not {len(holes)}: '
                               f'draw a stroke to close any open wall, or remove stray marks')
 
-    return (contours[outer[0]].reshape(-1, 2).astype(float),
-            contours[holes[0]].reshape(-1, 2).astype(float))
+    walls = [contours[i].reshape(-1, 2) for i in (outer[0], holes[0])]
+    # Walls through a cell twice, one or both, touch there: the road is one cell wide.
+    cells, count = np.unique(np.vstack(walls), axis=0, return_counts=True)
+    if (count > 1).any():
+        raise AnnotationError('the road narrows to a single cell (marked red): close the gap '
+                              'there or leave it wider', at_px=cells[count > 1].tolist())
+
+    return walls[0].astype(float), walls[1].astype(float)
 
 
 def is_track(kept: np.ndarray, region_picked: bool = True) -> bool:

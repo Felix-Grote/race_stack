@@ -149,7 +149,10 @@ def free_mask(track_map: TrackMap, strokes_px: list, stroke_width_px: int) -> np
     for stroke in strokes_px:
         _draw(occupied, stroke, stroke_width_px)
 
-    return np.where(occupied, 0, 255).astype(np.uint8)
+    # A cell in no 2x2 block of free cells is a sliver no car fits in, and a wall traced
+    # round it would run out and back over itself; dropping it only shrinks the road.
+    free = np.where(occupied, 0, 255).astype(np.uint8)
+    return cv2.morphologyEx(free, cv2.MORPH_OPEN, np.ones((2, 2), np.uint8))
 
 
 def floating_strokes(track_map: TrackMap, strokes_px: list, stroke_width_px: int) -> list[int]:
