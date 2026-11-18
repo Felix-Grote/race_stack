@@ -102,7 +102,7 @@ legal, the checked curve is; it spares most lines a refinement.
   rules when the fastest line is asked for.
 - **Elastic rows.** A row that is not met yet (a start off the road, too tight, or facing the
   wrong way) may fall short at a cost of `elastic` per metre, so IPOPT pulls the line back.
-  A row within `met_m` of met counts as met.
+  A row within `met_m` of met counts as met: it is not pulled back, and may not get worse.
 - **A pass counts** only if the true rows bear its straight rows out. From a legal line,
   every true row must still be met after it, so the line stays legal and its cost falls.
   From a line that is not legal yet, the true rows must come at least half as much closer as

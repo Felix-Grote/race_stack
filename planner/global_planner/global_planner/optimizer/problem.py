@@ -23,7 +23,10 @@ rows:       what the line must keep, each a value that must not be negative, in 
 recovery:   a row that is not met yet is elastic: it may fall short, at a cost of `elastic`
             per metre. A pass can then always be solved, IPOPT pulls the line back as fast as
             the other rows allow, and once the line is legal the cost is zero. A row within
-            `met` of met counts as met: it is not pulled back, it only pays for getting worse.
+            `met` of met counts as met: it is not pulled back, and it may not get worse. It
+            gets no slack: a slack starts on its bound, IPOPT moves every start off its
+            bounds, and from a start shaken that way it can end on a line worse than the
+            one it was given.
 straight:   within a pass every row above is taken as a straight line: its value at the
             start and how it changes with the first move. The energy, the spacing and the
             gates keep their bends, and so do the lap time and the speed rules when the
@@ -661,8 +664,8 @@ class LapProblem:
         Solve a pass from x0 with every row a straight line.
 
         guess:      where IPOPT starts looking.
-        current:    the true rows at x0. Every one that falls short there gets a slack: back
-                    to zero if it is not met, to where it is now if it is within `met`.
+        current:    the true rows at x0. One that is not met there gets a slack, back to
+                    zero; one within `met` of met stays at least where it is now.
         values:     the rows at x0 as this solve takes them: current, plus any correction.
                     A row that stays positive wherever the step lets the points go cannot
                     hold the line back, and is left out.
@@ -677,7 +680,7 @@ class LapProblem:
         the lap time by its own speeds if it has any; no points if it did not keep its rows.
         """
         able = np.flatnonzero(values - step * np.asarray(abs(slope).sum(axis=1)).ravel() <= 0)
-        negative = np.flatnonzero(current[able] < 0)
+        negative = np.flatnonzero(current[able] < -self.met)
         lower = np.where(current[able] < -self.met, 0., np.minimum(0., current[able]))
         lift = sparse.csc_matrix((np.ones(len(negative)), (negative, np.arange(len(negative)))),
                                  shape=(len(able), len(negative)))
