@@ -7,10 +7,9 @@ package_name = 'global_planner'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name, package_name + '.route',
-              package_name + '.annotation'],
-    package_data={package_name + '.annotation': ['annotation_ui.html'],
-                  package_name + '.route': ['manifest.schema.json']},
+    packages=[package_name, package_name + '.route', package_name + '.annotation'],
+    package_data={package_name + '.route': ['manifest.schema.json'],
+                  package_name + '.annotation': ['ui.html', 'ui.js']},
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -19,8 +18,7 @@ setup(
         (os.path.join('share', package_name, 'rviz'), glob(os.path.join('rviz', '*.rviz'))),
 
     ],
-    install_requires=['setuptools', 'numpy', 'scipy', 'shapely',
-                      'jsonschema', 'pyyaml', 'opencv-python-headless'],
+    install_requires=['setuptools'],
     zip_safe=True,
     maintainer='ForzaETH',
     maintainer_email='nicolas.baumann@pbl.ee.ethz.ch',
@@ -32,9 +30,7 @@ setup(
             'global_planner = global_planner.global_planner_node:main',
             'mapping_node = global_planner.mapping_node:main',
             'global_trajectory_publisher = global_planner.global_trajectory_publisher:main',
-            'annotation_tool = global_planner.annotation.annotation_tool:main',
-            'annotation_server = global_planner.annotation.annotation_server:main',
-            'annotation_node = global_planner.annotation.annotation_node:main'
+            'annotation = global_planner.annotation.server:main'
         ],
     },
 )

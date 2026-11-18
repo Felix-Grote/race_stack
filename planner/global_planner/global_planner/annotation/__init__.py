@@ -1,5 +1,6 @@
-"""Offline map annotation editor for the global planner.
+"""
+The global planner's annotation editor, built on the route package.
 
-Raster edits in, canonical ``global_planner.route`` manifest out.
-See ANNOTATION_TOOL.md for the operator guide and contracts.
+Turns an occupancy map from mapping into a route manifest the optimizer can take; see
+README.md.
 """

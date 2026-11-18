@@ -14,13 +14,6 @@
 
   <exec_depend>stack_master</exec_depend>
   <exec_depend>pbl_config</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
-  <exec_depend>python3-numpy</exec_depend>
-  <exec_depend>python3-opencv</exec_depend>
-  <exec_depend>python3-scipy</exec_depend>
-  <exec_depend>python3-shapely</exec_depend>
-  <exec_depend>python3-jsonschema</exec_depend>
-  <exec_depend>python3-yaml</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>
