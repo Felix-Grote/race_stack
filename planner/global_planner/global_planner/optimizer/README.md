@@ -62,7 +62,7 @@ The dotted arrows are only there when the fastest line is asked for.
 |---|---|
 | `free_space.py` | where the car may be, as the walls near a pose |
 | `problem.py` | one pass as a nonlinear program: objective and rows |
-| `timing.py` | lap time and the car's speed rules, written for the solver |
+| `timing.py` | lap time and the car's speed rules over one gap, written for the solver |
 | `solve.py` | the points, the passes, the step, the settle rule, the checked curve |
 
 ## What a pass keeps to
@@ -134,9 +134,14 @@ Asked with `limits`, the optimizer first finds the smoothest line as above and t
   `smoothness` 0 the optimizer failed or came out slower on three of four tracks tried.
 - **Speeds in the solver.** The speed at every point joins the points as unknowns. The
   car's speed rules are those of `speed/` (the bend, speeding up and braking with shared
-  grip at both ends of a gap, the steering), written for the solver in `timing.py`. They
-  keep their bends in a pass. The walls, the turning limit and the start heading are still
-  taken as straight lines.
+  grip at both ends of a gap, the steering), written in `timing.py` for one gap and applied
+  to every gap of the lap. They keep their bends in a pass. The walls, the turning limit
+  and the start heading are still taken as straight lines.
+- **Speed rows left out.** Most speed rows cannot bind in a pass; on a lap driven at the
+  track's limit none can. A gap's speed rows are given to the solver only if one of them is
+  within half its limit of binding where the solve starts. The answer is then held against
+  the rows of every gap: if it breaks one that was left out, that gap is kept and the pass
+  is solved again. The answer that comes out keeps every row, for far less work.
 - **The track's limit** at a point is its section's, or the lower of two within a portal's
   reach. A point also keeps to the limits of its two neighbours, so that a gap is driven at
   the lower limit of its ends; just outside a reach that is a little stricter than the speed

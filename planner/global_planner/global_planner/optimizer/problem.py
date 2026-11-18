@@ -57,6 +57,12 @@ time:       given the car's speed limits, a pass can aim at lap time as well (ai
             before the pass and again after it, both with the track's limits looked up
             where the points were when the pass began. If the moved points cannot be
             timed at all, the pass does not count.
+left out:   most speed rows cannot bind in a pass; on a lap driven at the track's limit
+            none can. A gap's speed rows are given to the solver only if one of them is
+            within _NEAR of binding where the solve starts, as a share of its limit. The
+            answer is then held against every gap's rows. If it breaks rows that were
+            left out, their gaps are kept as well and the pass is solved again, until an
+            answer breaks none; every such solve keeps more gaps, so that ends.
 agreed:     the solver and that lap time must tell the same story. After a solve the lap
             time by the solver's own speeds is held against the one worked out for the
             same points and limits; if they are apart, timing.py and speed/ no longer
@@ -64,6 +70,7 @@ agreed:     the solver and that lap time must tell the same story. After a solve
 """
 from collections.abc import Sequence
 from dataclasses import dataclass
+from itertools import count
 import math
 
 import casadi as ca
@@ -71,7 +78,7 @@ import numpy as np
 from scipy import sparse
 
 from .free_space import Plane, Vertex
-from .timing import lap_time, speed_rows
+from .timing import gap_rows, gap_time
 from ..car import Car, CarLimits
 from ..route.geometry import EPS, XY
 from ..speed.errors import SpeedError
@@ -108,6 +115,16 @@ by speed/ for the same points may be. They agree to a hundred-thousandth when bo
 the same rules; a thousandth is far outside that and well inside what a wrong rule gives.
 """
 _TIMES_AGREE = 1e-3
+
+"""
+A gap's speed rows are given to the solver if one of them is within this share of its limit
+of binding where the solve starts. Half is generous: on the tracks it was tried on, no
+answer broke a row left out with it.
+"""
+_NEAR = 0.5
+
+# A row that was left out is broken once the answer is this share of its limit beyond it.
+_BROKEN = 1e-7
 
 # A column of numbers or of symbols, and the x and y columns of some points or headings.
 Column = np.ndarray | ca.SX | ca.DM
@@ -157,7 +174,8 @@ class IpoptRun:
     status:     its verdict on the last solve.
     iterations: its iterations over all solves of the pass.
     rows:       the rows of its last program.
-    solves:     how often the pass was solved: once, and once more for every correction.
+    solves:     how often the pass was solved: once, once more for every correction, and
+                once more every time speed rows that were left out were put back.
     """
 
     status: str
@@ -225,6 +243,15 @@ def _length(v: Pair) -> Column:
     return (v[0] ** 2 + v[1] ** 2) ** 0.5
 
 
+def _curvature(before: Pair, at: Pair, after: Pair) -> Column:
+    """Return the curvature of the circle through three points."""
+    back, ahead = (at[0] - before[0], at[1] - before[1]), (after[0] - at[0], after[1] - at[1])
+    across = _length((after[0] - before[0], after[1] - before[1]))
+
+    return (2 * (back[0] * ahead[1] - back[1] * ahead[0])
+            / (_length(back) * _length(ahead) * across))
+
+
 def _heading(before: Pair, at: Pair, after: Pair) -> Pair:
     """
     Return the unit heading at `at` of the parabola through three points.
@@ -260,7 +287,7 @@ def _cubic(p0: Pair, p1: Pair, t0: Pair, t1: Pair, u: Column | float) -> tuple[P
     return (at[0], at[1]), (along[0] / speed, along[1] / speed)
 
 
-def _neighbour(m: ca.SX, k: int) -> ca.SX:
+def _neighbour(m: ca.SX | ca.MX, k: int) -> ca.SX | ca.MX:
     """Return, for every row i of m, the row i + k around the closed lap."""
     return ca.vertcat(m[k:, :], m[:k, :])
 
@@ -325,9 +352,7 @@ class LapProblem:
         before, here, after = (_columns(_neighbour(points, k)) for k in (-1, 0, 1))
         back = (here[0] - before[0], here[1] - before[1])
         ahead = (after[0] - here[0], after[1] - here[1])
-        across = _length((after[0] - before[0], after[1] - before[1]))
-        curvature = (2 * (back[0] * ahead[1] - back[1] * ahead[0])
-                     / (_length(back) * _length(ahead) * across))
+        curvature = _curvature(before, here, after)
         energy = ca.sum1(curvature ** 2 * (_length(back) + _length(ahead)) / 2)
         heading = _heading(before, here, after)
         following = (_neighbour(heading[0], 1), _neighbour(heading[1], 1))
@@ -342,14 +367,6 @@ class LapProblem:
         on_gate = [self._across(points, row) for row in gates]
         self._bent = ca.Function('bent', [x], [energy, ca.vertcat(gaps, *on_gate)])
         self._solver = None
-
-        # The lap time and the speed rules, with the square of every speed as unknowns.
-        if limits is not None:
-            squared = ca.SX.sym('squared', n)
-            self._gaps = ca.Function('gaps', [x], [_length(ahead)])
-            self._timed = ca.Function('timed', [x, squared], [
-                lap_time(_length(ahead), squared),
-                speed_rows(limits, curvature, _length(ahead), squared)])
 
         # What the turning and trust rows need at the start of a pass, and how each changes.
         turning = [*heading, *halfway]
@@ -381,14 +398,63 @@ class LapProblem:
                                    [beyond, ca.jacobian(beyond, around)])
 
         """
+        The lap time and the speed rules, for a pass that aims at lap time. A gap's time and
+        its rows are small functions of the four points around it and of the squared speeds
+        at its two ends, applied to every gap: the solver then works out the derivatives of
+        one gap, not of the whole lap at once. `_timed` gives the lap time of some points
+        and speeds, and for every gap how near its nearest row is to binding, as a share
+        of that row's limit; below zero the row is broken.
+        """
+        if limits is not None:
+            ends = ca.SX.sym('ends', 2)
+            length = _length((four[2][0] - four[1][0], four[2][1] - four[1][1]))
+            rows, against = gap_rows(
+                limits, length, (_curvature(*four[:3]), _curvature(*four[1:])), ends)
+            self._gaps = ca.Function('gaps', [x], [_length(ahead)])
+            self._gap_time = ca.Function('gap_time', [around, ends], [gap_time(length, ends)])
+            self._gap_rows = ca.Function('gap_rows', [around, ends], [rows])
+            nearest = ca.Function('nearest', [around, ends], [ca.mmin(rows / against)])
+            lap, squared = ca.MX.sym('x', 2 * n), ca.MX.sym('squared', n)
+            wide = self._wide(lap, squared)
+            self._timed = ca.Function('timed', [lap, squared], [
+                ca.sum2(self._gap_time.map(n)(*wide)), nearest.map(n)(*wide)])
+
+        """
         IPOPT ends well inside EPS of every row, so that what it calls met also passes the
         checks made with EPS afterwards. While only the curvature is aimed at, every row
-        with two different bounds is a straight line, which jac_d_constant tells it.
+        with two different bounds is a straight line, which jac_d_constant tells it. A pass
+        starts from a line close to its answer; there IPOPT's adaptive strategy, which
+        sets how hard it keeps away from the rows by the progress of each iteration and
+        not on a fixed schedule, needs fewer iterations than its default.
         """
         self.options = {'ipopt.print_level': 0, 'ipopt.sb': 'yes', 'print_time': 0,
                         'ipopt.tol': tolerance, 'ipopt.max_iter': max_iterations,
                         'ipopt.constr_viol_tol': EPS / 10,
-                        'ipopt.bound_relax_factor': EPS / 10}
+                        'ipopt.bound_relax_factor': EPS / 10,
+                        'ipopt.mu_strategy': 'adaptive'}
+
+    def _wide(self, x: ca.MX, squared: ca.MX) -> tuple[ca.MX, ca.MX]:
+        """
+        Return what the gap functions take for every gap of the lap, a column a gap.
+
+        The four points around the gap, x and y in turn, and the squared speeds at its two
+        ends.
+        """
+        points = ca.reshape(x, 2, self.n).T
+        around = ca.horzcat(*[_neighbour(points, k) for k in (-1, 0, 1, 2)]).T
+        ends = ca.horzcat(squared, _neighbour(squared, 1)).T
+
+        return around, ends
+
+    def _rules(self, wide: tuple[ca.MX, ca.MX] | None, kept: np.ndarray | None) -> ca.MX:
+        """Return the speed rows of the gaps that are kept, out of all the gaps of `wide`."""
+        gaps = [] if kept is None else [int(i) for i in np.flatnonzero(kept)]
+        if not gaps:
+            return ca.MX(0, 1)
+
+        around, ends = wide
+
+        return ca.vec(self._gap_rows.map(len(gaps))(around[:, gaps], ends[:, gaps]))
 
     @staticmethod
     def _across(points: ca.SX, row: GateRow) -> ca.SX:
@@ -603,7 +669,9 @@ class LapProblem:
         slope:      how the rows change with the points.
         turned:     how the headings turn with the points.
         speeds:     for a pass that aims at lap time: the speeds the car can drive at x0,
-                    and the most the solver may give each point; None otherwise.
+                    and the most the solver may give each point; None otherwise. The
+                    speed rows of gaps far from binding are left out, and put back if the
+                    answer breaks them (left out, above).
 
         Returns the points, what the rows that fall short were charged, what IPOPT did, and
         the lap time by its own speeds if it has any; no points if it did not keep its rows.
@@ -630,42 +698,56 @@ class LapProblem:
         start = [guess, np.maximum(0., lower - at_guess)[negative]]
         lbx = [x0 - step, np.zeros(len(negative))]
         ubx = [x0 + step, np.full(len(negative), np.inf)]
+        wide, kept = None, None
         if speeds is None:
             options['ipopt.jac_d_constant'] = 'yes'
         else:
             # The speeds join the unknowns, squared, each between a crawl and its cap.
             driven, cap = speeds
             squared = ca.MX.sym('squared', self.n)
-            time, rules = self._timed(x, squared)
+            wide = self._wide(x, squared)
+            time = ca.sum2(self._gap_time.map(self.n)(*wide))
             cost = self.goal[0] * time + self.goal[1] * cost
             unknowns.append(squared)
-            rows.append(rules)
-            lbg.append(np.zeros(rules.shape[0]))
-            ubg.append(np.full(rules.shape[0], np.inf))
             slowest = np.minimum(_SLOWEST, cap / 2)
             start.append(np.clip(driven, slowest, cap) ** 2)
             lbx.append(slowest ** 2)
             ubx.append(cap ** 2)
+            kept = np.asarray(self._timed(guess, start[-1])[1]).ravel() <= _NEAR
 
-        lbg, ubg = np.concatenate(lbg), np.concatenate(ubg)
-        solver = ca.nlpsol('pass', 'ipopt', {
-            'x': ca.vertcat(*unknowns), 'f': cost + self.elastic * ca.sum1(slack),
-            'g': ca.vertcat(*rows)}, options)
-        out = solver(x0=np.concatenate(start), lbg=lbg, ubg=ubg,
-                     lbx=np.concatenate(lbx), ubx=np.concatenate(ubx))
-        ipopt = IpoptRun(solver.stats()['return_status'], int(solver.stats()['iter_count']),
-                         len(lbg))
+        iterations = 0
+        for solves in count(1):
+            rules = self._rules(wide, kept)
+            low = np.concatenate((*lbg, np.zeros(rules.shape[0])))
+            high = np.concatenate((*ubg, np.full(rules.shape[0], np.inf)))
+            solver = ca.nlpsol('pass', 'ipopt', {
+                'x': ca.vertcat(*unknowns), 'f': cost + self.elastic * ca.sum1(slack),
+                'g': ca.vertcat(*rows, rules)}, options)
+            out = solver(x0=np.concatenate(start), lbg=low, ubg=high,
+                         lbx=np.concatenate(lbx), ubx=np.concatenate(ubx))
+            iterations += int(solver.stats()['iter_count'])
+            found, held = np.asarray(out['x']).ravel(), np.asarray(out['g']).ravel()
+            result, believed = found[:len(x0)], None
+
+            # IPOPT must have kept its own rows, whatever it calls its result.
+            if np.max(np.concatenate((low - held, held - high))) > EPS:
+                result = None
+
+            if result is None or speeds is None:
+                break
+
+            # The answer is held against the rows of every gap, those left out too.
+            believed, nearest = self._timed(result, found[len(x0) + len(negative):])
+            believed = float(believed)
+            broken = (np.asarray(nearest).ravel() < -_BROKEN) & ~kept
+            if not broken.any():
+                break
+
+            kept |= broken
+
+        ipopt = IpoptRun(solver.stats()['return_status'], iterations, len(low), solves)
         self._solver = solver
-        found, held = np.asarray(out['x']).ravel(), np.asarray(out['g']).ravel()
-        result, paid = found[:len(x0)], found[len(x0):len(x0) + len(negative)]
-
-        # IPOPT must have kept its own rows, whatever it calls its result.
-        if np.max(np.concatenate((lbg - held, held - ubg))) > EPS:
-            result = None
-
-        believed = None
-        if speeds is not None and result is not None:
-            believed = float(self._timed(result, found[len(x0) + len(negative):])[0])
+        paid = found[len(x0):len(x0) + len(negative)]
 
         # IPOPT may end a slack a hair below zero, which must not count as a gain.
         return result, float(self.elastic * np.maximum(0., paid).sum()), ipopt, believed
@@ -703,7 +785,8 @@ class LapProblem:
             result, charged, run, believed = self._straight(
                 x0, guess, current, current + correction, slope, turned, step, speeds)
             runs.append(run)
-            ipopt = IpoptRun(run.status, sum(r.iterations for r in runs), run.rows, solves)
+            ipopt = IpoptRun(run.status, sum(r.iterations for r in runs), run.rows,
+                             sum(r.solves for r in runs))
             if result is None:
                 break
 
