@@ -25,7 +25,7 @@ import numpy as np
 
 from . import checks, guide, sections
 from .track_map import AnnotationError, floating_strokes, free_mask, kept_mask, TrackMap
-from .walls import find_track, loops
+from .walls import is_track, keep_track, loops
 from ..car import Car
 from ..route.lap import LapCurve
 from ..route.manifest import load_route
@@ -97,7 +97,7 @@ class Editor:
                               guide_auto=saved.get('guide_auto', False))
             message = f'draft loaded from {path.name}'
 
-        self.draft['region_px'] = self._region(self._free(), self.draft['region_px'])
+        self.draft['region_px'] = keep_track(self._free(), self.draft['region_px'])
         self._follow()
         self._recheck()
         return message
@@ -130,35 +130,30 @@ class Editor:
             if field == 'region_px' and value is not None:
                 kept_mask(free, value)
             else:
+                draft['region_px'] = keep_track(free, draft['region_px'])
+                # Removing walls is always allowed, so a draft can lose a bad one.
                 if len(draft['strokes_px']) >= len(self.draft['strokes_px']):
-                    # Removing walls is always allowed, so a draft with a floating wall can
-                    # lose it.
-                    floating = floating_strokes(self.track_map, draft['strokes_px'],
-                                                draft['stroke_width_px'])
-                    if floating:
-                        names = ', '.join(str(i + 1) for i in floating)
-                        raise AnnotationError(f'wall {names} touches no wall of the map, so the '
-                                              f'track would get an island a route cannot go '
-                                              f'round: start and end it on a black wall')
-
-                draft['region_px'] = self._region(free, draft['region_px'])
+                    self._refuse_bad_walls(draft)
 
         self.draft = draft
         self._follow()
         self._recheck()
         return f'{field} changed'
 
-    @staticmethod
-    def _region(free: np.ndarray, region_px: list | None) -> list | None:
-        """Return the region to keep: the one given while it is still a track, else the track."""
-        if region_px is not None:
-            try:
-                loops(kept_mask(free, region_px), True)
-                return region_px
-            except AnnotationError:
-                pass
+    def _refuse_bad_walls(self, draft: dict) -> None:
+        """Refuse walls that leave an island in the road, or that cut a closed track open."""
+        floating = floating_strokes(self.track_map, draft['strokes_px'], draft['stroke_width_px'])
+        if floating:
+            names = ', '.join(str(i + 1) for i in floating)
+            raise AnnotationError(f'wall {names} touches no wall of the map, so the track would '
+                                  f'get an island a route cannot go round: start and end it on '
+                                  f'a black wall')
 
-        return find_track(free)
+        region = self.draft['region_px']
+        if draft['region_px'] is None and region is not None \
+                and is_track(kept_mask(self._free(), region)):
+            raise AnnotationError('this wall cuts the track, leaving no closed ring: walls may '
+                                  'close gaps and cut off pockets, but not cross the whole road')
 
     def _free(self) -> np.ndarray:
         """Return the free cells left by the draft's strokes."""

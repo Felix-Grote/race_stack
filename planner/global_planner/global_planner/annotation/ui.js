@@ -2,8 +2,9 @@
 const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
 const $ = id => document.getElementById(id);
 let V = {}, tool = null, draft = [], vp = null, pan = null, hover = null, picked = -1;
-// Whether the line being drawn was refused: it stays, dashed in the problem colour, to fix.
+// Whether the line on screen was refused: it shows, dashed in the problem colour, for a moment.
 let refused = false;
+const REFUSED_MS = 2000;
 const images = {}, shown = {map: true, road: true, guide: true, route: true};
 const HINTS = {
   null: 'Pick a tool. Wheel zooms; drag with the right or middle button pans.',
@@ -143,16 +144,16 @@ function draw() {
   }
 }
 
-let framed = null;
+let framed = null, framedMap = null;
 function show(view, message) {
   V = view;
   $('maps').replaceChildren(...V.maps.map(m => new Option(m, m, false, m === V.map)));
   for (const k of ['name', 'surface', 'max_speed_mps', 'stroke_width_px'])
     if (k in V && document.activeElement !== $(k)) $(k).value = V[k];
   // Frame the track again when another map opens or the track changes; zoom and pan stay
-  // otherwise.
-  const frame = V.size && V.map + bounds().join();
-  if (frame !== framed) { framed = frame; fit(); }
+  // otherwise, also while the track is open.
+  const frame = V.walls_px || V.map !== framedMap ? V.size && V.map + bounds().join() : framed;
+  if (frame !== framed) { framed = frame; framedMap = V.map; fit(); }
   $('export').disabled = !V.result;
   // One button per drawn wall, to remove it.
   picked = -1;
@@ -176,8 +177,13 @@ async function finish() {
   if (done.length < 2 || (drawing === 'guide' && done.length < 3)) return draw();
   const ok = drawing === 'stroke' ? await edit('strokes_px', [...V.strokes_px, done])
                                   : await edit('guide_px', [...done, done[0]]);
-  // Keep a refused line on screen, to fix it rather than draw it again.
-  if (!ok && tool === drawing) { draft = done; refused = true; draw(); }
+  // A refused line shows where it was.
+  if (!ok && tool === drawing) {
+    draft = done; refused = true; draw();
+    // Shown for a moment, then gone; the status keeps saying why.
+    setTimeout(() => { if (refused && draft === done) { draft = []; refused = false; draw(); } },
+               REFUSED_MS);
+  }
 }
 async function call(action, body) {
   document.body.classList.add('busy');
@@ -198,14 +204,16 @@ cv.addEventListener('click', e => {
   if (tool === 'region') return edit('region_px', p.map(Math.round));
   if (tool === 'start') return edit('start_px', p);
   if (!tool) return;
+  // A click while a refused line shows starts a new one.
+  if (refused) { draft = []; refused = false; }
   // A click on the guide's first point closes it.
   const [fx, fy] = draft.length > 2 ? toCanvas(draft[0]) : [Infinity, Infinity];
   const [cx, cy] = toCanvas(p);
   if (tool === 'guide' && Math.hypot(cx - fx, cy - fy) < CLOSE_PX) return finish();
-  draft.push(p); refused = false; draw();
+  draft.push(p); draw();
 });
 cv.addEventListener('dblclick', finish);
-cv.addEventListener('mousemove', e => { if (draft.length && !pan) { hover = toPixel(e); draw(); } });
+cv.addEventListener('mousemove', e => { if (draft.length && !pan && !refused) { hover = toPixel(e); draw(); } });
 cv.addEventListener('mouseleave', () => { hover = null; draw(); });
 cv.addEventListener('contextmenu', e => e.preventDefault());
 cv.addEventListener('mousedown', e => { if (e.button > 0 && vp) pan = {x: e.clientX, y: e.clientY, vx: vp.x, vy: vp.y}; });

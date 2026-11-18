@@ -36,7 +36,7 @@ It writes two files next to the map's YAML and never touches the map itself:
    **Suggest** goes back to the midline. **Reverse** turns it round. It must stay on the road
    all the way round.
    Wherever the route fails (a guide through a wall, a start off the road, a section off the
-   road) is ringed in red; a refused wall stays dashed red, to fix.
+   road) is ringed in red; a refused wall shows dashed red for a moment, and the status says why.
 4. **Set start**: click where the car starts. The start zone is centred there, facing along
    the guide, and the first gate is the straightest point near it; the others follow at
    quarters of the lap. There is no route until the start is set.

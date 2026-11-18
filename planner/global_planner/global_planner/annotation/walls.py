@@ -5,7 +5,7 @@ loops:      the kept free space must be one ring, clear of the image edge: one o
             boundary and one hole. Anything else (a gap to the outside, a split, an island) is
             refused, never guessed at: the operator closes it with a stroke or picks a region.
 find_track: the largest free region that is such a ring, the region kept unless the operator
-            picks another.
+            picks another; keep_track keeps the one picked while it is still a ring.
             The loops run through the centres of the boundary's free pixels.
 legal:      the road may cover only the squares of kept free cells. Touching an occupied
             square is fine; covering any of its area is not.
@@ -22,7 +22,7 @@ import numpy as np
 import shapely
 from shapely.geometry import Polygon
 
-from .track_map import AnnotationError, TrackMap
+from .track_map import AnnotationError, kept_mask, TrackMap
 
 # Area in m2 below which a polygon covers nothing: numeric zero for exact area sums. Any real
 # overlap with an occupied square is far larger.
@@ -63,6 +63,28 @@ def loops(kept: np.ndarray, region_picked: bool) -> tuple[np.ndarray, np.ndarray
             contours[holes[0]].reshape(-1, 2).astype(float))
 
 
+def is_track(kept: np.ndarray, region_picked: bool = True) -> bool:
+    """Return whether loops takes the kept cells as a track."""
+    try:
+        loops(kept, region_picked)
+        return True
+    except AnnotationError:
+        return False
+
+
+def keep_track(free: np.ndarray, region_px: list | None) -> list | None:
+    """Return the region to keep: the one given while it is still a track, else find_track's."""
+    if region_px is not None:
+        try:
+            if is_track(kept_mask(free, region_px)):
+                return region_px
+        except AnnotationError:
+            # The picked pixel is under a wall now.
+            pass
+
+    return find_track(free)
+
+
 def find_track(free: np.ndarray) -> list[int] | None:
     """Return a pixel of the largest free region loops takes as a track, or None if none is."""
     count, labels, stats, _ = cv2.connectedComponentsWithStats(
@@ -76,9 +98,7 @@ def find_track(free: np.ndarray) -> list[int] | None:
             continue
 
         region = labels[v:v + h, u:u + w] == i
-        try:
-            loops(np.pad(region, 1).astype(np.uint8) * 255, True)
-        except AnnotationError:
+        if not is_track(np.pad(region, 1).astype(np.uint8) * 255):
             continue
 
         dv, du = np.argwhere(region)[0]
