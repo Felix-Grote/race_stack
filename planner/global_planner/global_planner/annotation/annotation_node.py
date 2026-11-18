@@ -70,7 +70,7 @@ class AnnotationNode(Node if rclpy else object):
             out_dir = self.get_parameter('out_dir').value or out_dir
             car_model = self.get_parameter('car_model').value
             if car is None and car_model:
-                from .car import Car
+                from ..car import Car
                 car = Car.load(
                     car_model,
                     margin_m=float(

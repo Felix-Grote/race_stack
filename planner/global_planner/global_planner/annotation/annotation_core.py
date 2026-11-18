@@ -1440,11 +1440,11 @@ def check_payload(payload, track_map, legal_mask, car=None):
     when a ``Car`` was explicitly supplied. The first failure raises
     ``AnnotationError`` naming its stage; nothing is repaired silently.
     """
-    from .route.errors import LapError, RouteError
-    from .route.lap import centre_curve
-    from .route.manifest import validate_route
-    from .route.portals import portal_crossings
-    from .route.sampling import sample_lap
+    from ..route.errors import LapError, RouteError
+    from ..route.lap import centre_curve
+    from ..route.manifest import validate_route
+    from ..route.portals import portal_crossings
+    from ..route.sampling import sample_lap
 
     annexed = _vector_legality(track_map, payload, legal_mask)
     stages = {'vector_legal': {'status': 'PASS',
@@ -1469,7 +1469,7 @@ def check_payload(payload, track_map, legal_mask, car=None):
     stages['samples'] = len(samples)
     car_info = None
     if car is not None:
-        from .route.zones import portal_zones, reach_boundaries
+        from ..route.zones import portal_zones, reach_boundaries
 
         def car_stages():
             zones = portal_zones(route, car.reach_m)

@@ -2,7 +2,7 @@
 """Headless CLI for the annotation pipeline (same core as the web/ROS UI).
 
 Examples:
-    python3 -m global_planner.annotation_tool extract \
+    python3 -m global_planner.annotation.annotation_tool extract \
         --map stack_master/maps/test/test.yaml \
         --session draft.json --out out/
 
@@ -21,7 +21,7 @@ from .annotation_core import (AnnotationError, TrackMap,
                               extract_boundaries, geometry_digest,
                               load_session, require_approved, revoke_approval,
                               save_session, try_thinnings)
-from .route.manifest import load_route
+from ..route.manifest import load_route
 
 
 def _receipt(checked):
@@ -67,7 +67,7 @@ def main(argv=None):
         session = load_session(args.session, track_map)
         car = None
         if args.car:
-            from .car import Car
+            from ..car import Car
             car = Car.load(args.car, margin_m=args.car_margin)
         if args.command == 'select-region':
             if args.clear:

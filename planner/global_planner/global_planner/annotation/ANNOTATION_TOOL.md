@@ -17,7 +17,7 @@ a draft saved by an earlier revision of this unmerged branch keeps the
 old filename and is not auto-discovered — the server opens a new
 session and leaves the old file untouched. To recover it, rename the
 old file to the current draft name (`python3 -c "from
-global_planner.annotation_core import TrackMap, draft_name;
+global_planner.annotation.annotation_core import TrackMap, draft_name;
 print(draft_name(TrackMap('<map>.yaml')))"` with
 `PYTHONPATH=planner/global_planner`) and reopen; loading still
 validates the full stored identity and fails closed on mismatch.
@@ -49,7 +49,7 @@ re-reads: a file changed on disk after open is only picked up on reopen.
 ```bash
 # from the repo root, in an environment with the package's deps
 # (numpy, opencv, scipy, shapely, jsonschema, pyyaml)
-PYTHONPATH=planner/global_planner python3 -m global_planner.annotation_server \
+PYTHONPATH=planner/global_planner python3 -m global_planner.annotation.annotation_server \
   --maps stack_master/maps --out /tmp/annotation_out --port 8766
 # open http://127.0.0.1:8766/
 ```
@@ -143,7 +143,7 @@ bad stage:
 1. `vector_legal` — exact continuous containment: the emitted
    section polygons (after thinning and cap re-pinning) must annex
    zero area over the occupied cell squares of the selected legal
-   raster (boundary contact allowed; see LEGALITY.md for the full
+   raster (boundary contact allowed; see ../LEGALITY.md for the full
    contract, evidence and the one policy decision it rests on).
    The generator guarantees this by construction — every
    simplification chord cuts off an ear whose exact occupied area

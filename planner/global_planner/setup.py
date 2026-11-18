@@ -7,8 +7,9 @@ package_name = 'global_planner'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name, package_name + '.route'],
-    package_data={package_name: ['annotation_ui.html'],
+    packages=[package_name, package_name + '.route',
+              package_name + '.annotation'],
+    package_data={package_name + '.annotation': ['annotation_ui.html'],
                   package_name + '.route': ['manifest.schema.json']},
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -31,9 +32,9 @@ setup(
             'global_planner = global_planner.global_planner_node:main',
             'mapping_node = global_planner.mapping_node:main',
             'global_trajectory_publisher = global_planner.global_trajectory_publisher:main',
-            'annotation_tool = global_planner.annotation_tool:main',
-            'annotation_server = global_planner.annotation_server:main',
-            'annotation_node = global_planner.annotation_node:main'
+            'annotation_tool = global_planner.annotation.annotation_tool:main',
+            'annotation_server = global_planner.annotation.annotation_server:main',
+            'annotation_node = global_planner.annotation.annotation_node:main'
         ],
     },
 )

@@ -8,7 +8,7 @@ when rclpy is available; geometry never depends on either transport.
 Binds to loopback only, never touches the driving stack, and never
 writes to the source map files.
 
-Run: ``python3 -m global_planner.annotation_server --maps <dir> --port 8766``
+Run: ``python3 -m global_planner.annotation.annotation_server --maps <dir> --port 8766``
 then open http://127.0.0.1:8766/ in a browser.
 """
 import argparse
@@ -33,7 +33,7 @@ from .annotation_core import (AnnotationError, TrackMap,
                               suggest_route, try_thinnings, _checked_seed,
                               _checked_speed, _checked_text, _checked_width,
                               _signed_area)
-from .route.manifest import load_route
+from ..route.manifest import load_route
 
 STATE = {'map': None, 'session': None, 'extraction': None, 'maps_dir': None,
          'out_dir': None, 'candidate_digest': None, 'car': None}
@@ -734,7 +734,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     car = None
     if args.car:
-        from .car import Car
+        from ..car import Car
         car = Car.load(args.car, margin_m=args.car_margin)
         print(f'vehicle checks on: {car.name}, reach {car.reach_m:.3f} m '
               f'(margin {car.margin_m} m)')
