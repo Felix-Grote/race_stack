@@ -18,10 +18,11 @@ from ..car import Car
 
 # The files the page is made of, and their content types.
 _FILES = {'/': ('ui.html', 'text/html; charset=utf-8'),
-          '/ui.js': ('ui.js', 'text/javascript; charset=utf-8')}
+          '/ui.js': ('ui.js', 'text/javascript; charset=utf-8'),
+          '/win95.css': ('win95.css', 'text/css; charset=utf-8')}
 
 
-def _handler(editor: Editor) -> type[BaseHTTPRequestHandler]:
+def handler(editor: Editor, before_action=None) -> type[BaseHTTPRequestHandler]:
     """Return the request handler serving the page and the editor's actions."""
     actions = {'open': lambda b: editor.open(b.get('map')),
                'edit': lambda b: editor.edit(b.get('field'), b.get('value')),
@@ -63,6 +64,8 @@ def _handler(editor: Editor) -> type[BaseHTTPRequestHandler]:
                 if not isinstance(body, dict):
                     raise AnnotationError('the request must be a JSON object')
 
+                if before_action is not None:
+                    before_action(self.path.removeprefix('/api/'))
                 reply = {'ok': True, 'message': action(body)}
             except (AnnotationError, ValueError, OSError) as exc:
                 reply = {'ok': False, 'message': str(exc)}
@@ -106,7 +109,7 @@ def main(argv: list[str] | None = None) -> None:
 
         raise SystemExit(1 if failed else 0)
 
-    server = HTTPServer(('127.0.0.1', args.port), _handler(editor))
+    server = HTTPServer(('127.0.0.1', args.port), handler(editor))
     print(f'annotation editor on http://127.0.0.1:{args.port}')
     try:
         server.serve_forever()

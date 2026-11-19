@@ -19,12 +19,13 @@ import base64
 import json
 import os
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 import cv2
 import numpy as np
 
 from . import checks, guide, sections
-from .track_map import AnnotationError, floating_strokes, free_mask, kept_mask, TrackMap
+from .track_map import AnnotationError, floating_strokes, free_mask, kept_mask, read_source, TrackMap
 from .walls import is_track, keep_track, loops
 from ..car import Car
 from ..route.lap import LapCurve
@@ -45,9 +46,14 @@ def _png_url(image: np.ndarray | bytes) -> str:
 
 def _write(path: Path, text: str) -> None:
     """Write a file whole: a reader sees the old file or the new one, never part of it."""
-    tmp = path.with_name(path.name + '.tmp')
-    tmp.write_text(text, encoding='utf-8')
-    os.replace(tmp, path)
+    with NamedTemporaryFile(mode='w', encoding='utf-8', dir=path.parent, delete=False) as stream:
+        tmp = Path(stream.name)
+        try:
+            stream.write(text)
+            stream.close()
+            os.replace(tmp, path)
+        finally:
+            tmp.unlink(missing_ok=True)
 
 
 class Editor:
@@ -64,7 +70,7 @@ class Editor:
         self.result = None
         self.route = ''
         self.route_at = []
-        self._map_name = None
+        self.map_name = None
         self._map_url = None
 
     def maps(self) -> list[str]:
@@ -81,17 +87,25 @@ class Editor:
             raise AnnotationError(f'no map {name!r} in {self.maps_dir}')
 
         self.track_map = TrackMap(self.maps_dir / f'{name}.yaml')
-        self._map_name = name
+        self.map_name = name
         self._map_url = _png_url(self.track_map.png)
         self.draft = {'strokes_px': [], 'stroke_width_px': 5, 'region_px': None,
                       'guide_px': [], 'guide_auto': True, 'start_px': None,
                       'name': self.track_map.name, 'surface': 'ground', 'max_speed_mps': 2.5}
         path = self._path('annotation')
-        saved = json.loads(path.read_text(encoding='utf-8')) if path.exists() else None
-        if saved is None:
+        try:
+            saved = json.loads(path.read_text(encoding='utf-8')) if path.exists() else None
+        except (ValueError, OSError):
+            saved = {}
+
+        if saved == {}:
+            message = f'{path.name} is unreadable or empty: new draft'
+        elif saved is None:
             message = 'new draft'
-        elif saved.get('map_sha256') != self.track_map.sha256:
-            message = f'{path.name} was made for other map bytes: new draft'
+        elif (not isinstance(saved, dict) or saved.get('map_sha256') != self.track_map.sha256
+              or saved.get('map_source_digest', self.track_map.source_digest)
+              != self.track_map.source_digest):
+            message = f'{path.name} was made for a different map source: new draft'
         else:
             self.draft.update({k: saved[k] for k in _FIELDS if k in saved},
                               guide_auto=saved.get('guide_auto', False))
@@ -105,6 +119,18 @@ class Editor:
     def _require_open(self) -> None:
         if self.track_map is None:
             raise AnnotationError('open a map first')
+
+    def _require_current_source(self) -> None:
+        self._require_open()
+        if read_source(self.track_map.yaml_path).digest != self.track_map.source_digest:
+            raise AnnotationError('the map changed on disk: reopen it before saving or exporting')
+
+    def set_car(self, car: Car | None) -> None:
+        """Refresh optional portal-zone checks when the configured car changes."""
+        if car != self.car:
+            self.car = car
+            if self.track_map is not None:
+                self._recheck()
 
     def edit(self, field: str, value: object) -> str:
         """Change one field of the draft, or refuse it, and check the route again."""
@@ -253,14 +279,15 @@ class Editor:
 
     def save(self) -> str:
         """Write the draft next to the map."""
-        self._require_open()
+        self._require_current_source()
         path = self._path('annotation')
-        _write(path, json.dumps(dict(self.draft, map_sha256=self.track_map.sha256), indent=1))
+        _write(path, json.dumps(dict(self.draft, map_sha256=self.track_map.sha256,
+                                    map_source_digest=self.track_map.source_digest), indent=1))
         return f'draft saved to {path}'
 
     def export(self) -> str:
         """Write the route last checked next to the map, and confirm it reads back the same."""
-        self._require_open()
+        self._require_current_source()
         if self.result is None:
             raise AnnotationError(f'nothing written, the route is {self.route}')
 
@@ -270,6 +297,9 @@ class Editor:
             raise AnnotationError(f'{path} does not read back as the checked route')
 
         self.save()
+        receipt = path.with_suffix('.source.json')
+        _write(receipt, json.dumps({'route': self.result['digest'],
+                                   'map': self.track_map.source_digest}, indent=1))
         return f'route written to {path}'
 
     def view(self) -> dict:
@@ -277,7 +307,7 @@ class Editor:
         if self.track_map is None:
             return {'maps': self.maps()}
 
-        view = dict(self.draft, maps=self.maps(), map=self._map_name, route=self.route,
+        view = dict(self.draft, maps=self.maps(), map=self.map_name, route=self.route,
                     problem_px=self.route_at,
                     size=[self.track_map.width, self.track_map.height], png=self._map_url,
                     result={k: v for k, v in self.result.items() if k not in ('payload', 'digest')}

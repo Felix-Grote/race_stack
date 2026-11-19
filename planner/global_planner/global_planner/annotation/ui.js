@@ -1,7 +1,10 @@
 // The annotation page: draws the map and the draft, and sends the operator's edits.
 const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
 const $ = id => document.getElementById(id);
+const embedded = window.parent !== window;
+document.body.classList.toggle('embedded', embedded);
 let V = {}, tool = null, draft = [], vp = null, pan = null, hover = null, picked = -1;
+let sourceChanged = false, carUnavailable = false;
 // Whether the line on screen was refused: it shows, dashed in the problem colour, for a moment.
 let refused = false;
 const REFUSED_MS = 2000;
@@ -147,6 +150,15 @@ function draw() {
 }
 
 let framed = null, framedMap = null;
+function showAvailability() {
+  for (const [action, disabled] of Object.entries({
+    save: sourceChanged, export: !V.result || sourceChanged || carUnavailable
+  })) {
+    $(action).disabled = disabled;
+    document.querySelector('[data-command="' + action + '"]').disabled = disabled;
+  }
+}
+
 function show(view, message) {
   V = view;
   $('caption').textContent = `${V.map || 'Untitled'} - ForzaETH Annotation`;
@@ -157,8 +169,7 @@ function show(view, message) {
   // otherwise, also while the track is open.
   const frame = V.walls_px || V.map !== framedMap ? V.size && V.map + bounds().join() : framed;
   if (frame !== framed) { framed = frame; framedMap = V.map; fit(); }
-  $('export').disabled = !V.result;
-  document.querySelector('[data-command="export"]').disabled = !V.result;
+  showAvailability();
   // One button per drawn wall, to remove it.
   picked = -1;
   $('strokes').replaceChildren(...(V.strokes_px || []).map((_, i) => {
@@ -195,8 +206,15 @@ async function finish() {
 async function call(action, body) {
   document.body.classList.add('busy');
   try {
-    const r = await (await fetch('/api/' + action, {method: 'POST', body: JSON.stringify(body || {})})).json();
+    const response = await fetch('api/' + action, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body || {})
+    });
+    const r = await response.json();
+    if (!response.ok) throw Error(r.error || response.statusText);
     show(r.view, (r.ok ? '' : 'REFUSED: ') + r.message);
+    if (embedded) window.parent.postMessage({type: 'annotation-updated'}, location.origin);
     return r.ok;
   } catch (e) {
     $('status').textContent = 'FAILED: the editor is not answering (' + e + ')';
@@ -287,4 +305,15 @@ menus.addEventListener('keydown', e => {
 
 new ResizeObserver(resize).observe(cv);
 resize();
-fetch('/api/view').then(r => r.json()).then(v => show(v));
+if (embedded) window.addEventListener('message', event => {
+  if (event.origin !== location.origin || event.source !== window.parent) return;
+  if (event.data?.type === 'open-map') call('open', {map: event.data.map});
+  if (event.data?.type === 'annotation-status') {
+    sourceChanged = event.data.sourceChanged;
+    carUnavailable = event.data.carUnavailable;
+    showAvailability();
+  }
+});
+fetch('api/view').then(r => r.json()).then(v => show(v)).catch(error => {
+  $('status').textContent = 'FAILED: the editor is not answering (' + error + ')';
+});

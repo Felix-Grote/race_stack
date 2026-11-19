@@ -31,7 +31,8 @@ def is_number(value: object) -> bool:
             and math.isfinite(value))
 
 
-def _read(car_model_yaml: str | Path, keys: Sequence[str], needed: str) -> tuple[str, dict]:
+def _read(car_model_yaml: str | Path, keys: Sequence[str], needed: str,
+          source: str | None) -> tuple[str, dict]:
     """
     Return the car's name and the values of its car_model.yaml.
 
@@ -39,7 +40,7 @@ def _read(car_model_yaml: str | Path, keys: Sequence[str], needed: str) -> tuple
     needed: what they are needed for, to say so if one is missing.
     """
     path = Path(car_model_yaml)
-    values = yaml.safe_load(path.read_text(encoding='utf-8')) or {}
+    values = yaml.safe_load(path.read_text(encoding='utf-8') if source is None else source) or {}
     if not isinstance(values, dict):
         raise ValueError(f'{path} is not a car file: it holds no keys')
 
@@ -116,11 +117,12 @@ class Car:
         return Polygon([(x + a * cos - b * sin, y + a * sin + b * cos) for a, b in self.corners])
 
     @classmethod
-    def load(cls, car_model_yaml: str | Path, margin_m: float) -> 'Car':
-        """Read a car's body and steering from its car_model.yaml; margin_m is the planner's."""
+    def load(cls, car_model_yaml: str | Path, margin_m: float, *,
+             source: str | None = None) -> 'Car':
+        """Read a car's body and steering, optionally from captured YAML text."""
         keys = ('width_m', 'body_front_m', 'body_rear_m', 'wheelbase', 'max_steering_angle')
         name, values = _read(car_model_yaml, keys, 'the body, whose extents are measured from '
-                             'base_link (rear axle centre on the ground), and the steering')
+                             'base_link (rear axle centre on the ground), and the steering', source)
         wheelbase, steering = values['wheelbase'], values['max_steering_angle']
         numbers = is_number(wheelbase) and is_number(steering)
         if not numbers or wheelbase <= 0 or not 0 < steering < math.pi / 2:
@@ -208,9 +210,9 @@ class CarLimits:
                              f'and never goes negative')
 
     @classmethod
-    def load(cls, car_model_yaml: str | Path) -> 'CarLimits':
-        """Read a car's limits from its car_model.yaml."""
+    def load(cls, car_model_yaml: str | Path, *, source: str | None = None) -> 'CarLimits':
+        """Read a car's limits, optionally from captured YAML text."""
         keys = [field.name for field in fields(cls) if field.name != 'name']
-        name, values = _read(car_model_yaml, keys, 'the speed profile')
+        name, values = _read(car_model_yaml, keys, 'the speed profile', source)
 
         return cls(name, **{key: values[key] for key in keys})

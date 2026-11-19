@@ -230,8 +230,8 @@ def validate_route(payload: object) -> Route:
     return Route(tuple(sections), tuple(portals), start, digest)
 
 
-def load_route(path: str | Path) -> Route:
-    """Read strict UTF-8 JSON, rejecting duplicate keys, then validate it."""
+def decode_manifest(data: bytes) -> object:
+    """Decode strict UTF-8 JSON, rejecting duplicate keys and nonfinite numbers."""
     def pairs(items: list[tuple[str, object]]) -> dict:
         result = {}
         for k, v in items:
@@ -244,9 +244,11 @@ def load_route(path: str | Path) -> Route:
         raise RouteError('nonfinite JSON number: ' + value)
 
     try:
-        payload = json.loads(Path(path).read_text(encoding='utf-8'), object_pairs_hook=pairs,
-                             parse_constant=invalid)
+        return json.loads(data.decode('utf-8'), object_pairs_hook=pairs, parse_constant=invalid)
     except (UnicodeError, json.JSONDecodeError) as exc:
         raise RouteError('invalid UTF-8 JSON') from exc
 
-    return validate_route(payload)
+
+def load_route(path: str | Path) -> Route:
+    """Read and validate a route manifest."""
+    return validate_route(decode_manifest(Path(path).read_bytes()))

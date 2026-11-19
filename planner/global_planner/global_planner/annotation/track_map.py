@@ -12,7 +12,9 @@ strokes:    lines the operator draws to close gaps in the walls; they only add o
 region:     a free pixel the operator picks; only the free cells connected to it stay free.
             Strokes and region only ever shrink the free space.
 """
+from dataclasses import dataclass
 import hashlib
+import json
 import math
 from pathlib import Path
 
@@ -66,6 +68,36 @@ def _read_yaml(path: Path) -> dict:
     return dict(meta, resolution=resolution, origin=origin, free_thresh=free_thresh)
 
 
+@dataclass(frozen=True)
+class MapSource:
+    """The map bytes and the settings that affect their interpretation."""
+
+    png: bytes
+    sha256: str
+    digest: str
+    resolution: float
+    origin: tuple[float, float]
+    free_thresh: float
+    negate: int
+
+
+def read_source(yaml_path: Path) -> MapSource:
+    """Read one map source without decoding the image."""
+    meta = _read_yaml(yaml_path)
+    png_path = yaml_path.parent / meta['image']
+    try:
+        png = png_path.read_bytes()
+    except OSError as exc:
+        raise AnnotationError(f'cannot read the map image {png_path}') from exc
+
+    sha = hashlib.sha256(png).hexdigest()
+    resolution, origin = meta['resolution'], tuple(meta['origin'][:2])
+    threshold, negate = meta['free_thresh'], int(meta.get('negate', 0))
+    identity = json.dumps([sha, resolution, origin, threshold, negate]).encode()
+    return MapSource(png, sha, hashlib.sha256(identity).hexdigest(),
+                     resolution, origin, threshold, negate)
+
+
 class TrackMap:
     """
     One occupancy map, read once.
@@ -78,25 +110,18 @@ class TrackMap:
 
     def __init__(self, yaml_path: str | Path) -> None:
         self.yaml_path = Path(yaml_path)
-        meta = _read_yaml(self.yaml_path)
-        png_path = self.yaml_path.parent / meta['image']
-        try:
-            self.png = png_path.read_bytes()
-        except OSError as exc:
-            raise AnnotationError(f'cannot read the map image {png_path}') from exc
-
-        image = cv2.imdecode(np.frombuffer(self.png, np.uint8), cv2.IMREAD_GRAYSCALE)
+        source = read_source(self.yaml_path)
+        image = cv2.imdecode(np.frombuffer(source.png, np.uint8), cv2.IMREAD_GRAYSCALE)
         if image is None:
-            raise AnnotationError(f'{png_path.name} is not an image')
+            raise AnnotationError(f'{self.yaml_path.name} does not point to a readable image')
 
         self.name = self.yaml_path.stem
-        self.sha256 = hashlib.sha256(self.png).hexdigest()
-        self.resolution = meta['resolution']
-        self.origin = (meta['origin'][0], meta['origin'][1])
+        self.png, self.sha256, self.source_digest = source.png, source.sha256, source.digest
+        self.resolution, self.origin = source.resolution, source.origin
         self.height, self.width = image.shape
         gray = image.astype(np.float64)
-        occupancy = (255. - gray) / 255. if meta.get('negate', 0) == 0 else gray / 255.
-        self.occupied = occupancy >= meta['free_thresh']
+        occupancy = (255. - gray) / 255. if source.negate == 0 else gray / 255.
+        self.occupied = occupancy >= source.free_thresh
 
     def pixel_to_world(self, uv) -> tuple[float, float]:
         """Return the map-frame point, in metres, at file pixel (u, v)."""
@@ -152,7 +177,11 @@ def free_mask(track_map: TrackMap, strokes_px: list, stroke_width_px: int) -> np
     # A cell in no 2x2 block of free cells is a sliver no car fits in, and a wall traced
     # round it would run out and back over itself; dropping it only shrinks the road.
     free = np.where(occupied, 0, 255).astype(np.uint8)
-    return cv2.morphologyEx(free, cv2.MORPH_OPEN, np.ones((2, 2), np.uint8))
+    block = np.ones((2, 2), np.uint8)
+    # The two anchors must complement each other, or the even kernel shifts the road.
+    corners = cv2.erode(free, block, anchor=(0, 0), borderType=cv2.BORDER_CONSTANT, borderValue=0)
+    return cv2.dilate(corners, block, anchor=(1, 1),
+                      borderType=cv2.BORDER_CONSTANT, borderValue=0)
 
 
 def floating_strokes(track_map: TrackMap, strokes_px: list, stroke_width_px: int) -> list[int]:

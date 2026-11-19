@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ForzaETH Operational Centre</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 1h12v14H2z'/%3E%3Cpath fill='white' d='M3 2h10v12H3z'/%3E%3Cpath fill='teal' d='M4 3h8v10H4z'/%3E%3Cpath fill='none' stroke='white' stroke-width='2' d='M7 5h3v6H6V7h1z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/annotator/win95.css">
+<link rel="stylesheet" href="centre.css">
+<script type="module" src="centre.js"></script>
+</head>
+<body>
+<main class="window">
+  <header class="titlebar">
+    <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+      <path fill="#000" d="M2 1h12v14H2z"/>
+      <path fill="#fff" d="M3 2h10v12H3z"/>
+      <path fill="#008080" d="M4 3h8v10H4z"/>
+      <path fill="none" stroke="#fff" stroke-width="2" d="M7 5h3v6H6V7h1z"/>
+      <path fill="#ff0" d="M9 4h2v2H9zm-4 6h2v2H5z"/>
+    </svg>
+    <span>ForzaETH Operational Centre</span>
+  </header>
+  <div class="tabs" role="tablist" aria-label="Operational Centre">
+    <button id="tab-annotator" role="tab" aria-controls="annotator" aria-selected="false" tabindex="-1">Annotator</button>
+    <button id="tab-hyperparameters" role="tab" aria-controls="hyperparameters" aria-selected="false" tabindex="-1">Hyperparameters</button>
+    <button id="tab-tracks" role="tab" aria-controls="tracks" aria-selected="true">Tracks</button>
+  </div>
+  <div id="connection" class="notice" role="status" hidden></div>
+
+  <section id="annotator" class="panel annotation-panel" role="tabpanel" aria-labelledby="tab-annotator" hidden>
+    <iframe id="editor" title="ForzaETH track annotation editor" src="/annotator/"></iframe>
+    <div class="statusbar"><div id="annotation-status" role="status">Connecting to the annotator…</div></div>
+  </section>
+
+  <section id="hyperparameters" class="panel" role="tabpanel" aria-labelledby="tab-hyperparameters" hidden>
+    <nav class="menubar" aria-label="Hyperparameter commands">
+      <details name="settings-menu"><summary>File</summary><div class="popup">
+        <button data-command="apply">Apply settings</button>
+        <button data-command="reload-settings">Reload saved</button>
+      </div></details>
+      <details name="settings-menu"><summary>Edit</summary><div class="popup">
+        <button data-command="defaults">Restore defaults</button>
+      </div></details>
+      <details name="settings-menu"><summary>Help</summary><div class="popup">
+        <button data-help>About the Operational Centre</button>
+      </div></details>
+    </nav>
+    <form id="parameters-form" class="parameters-form" novalidate>
+      <fieldset>
+        <legend>Optimizer settings</legend>
+        <p>Set working bounds and a value for each parameter. Tracks uses the applied values for every map.</p>
+        <div class="sheet">
+          <table class="parameters">
+            <thead><tr><th scope="col">Parameter</th><th scope="col">Value</th>
+              <th scope="col">Lower bound</th><th scope="col">Upper bound</th></tr></thead>
+            <tbody id="parameter-rows"></tbody>
+          </table>
+        </div>
+      </fieldset>
+      <div class="form-actions">
+        <button id="defaults" type="button">Restore defaults</button>
+        <div>
+          <button id="reload-settings" type="button">Reload saved</button>
+          <button id="apply" class="default-button" type="submit" disabled>Apply</button>
+        </div>
+      </div>
+      <p id="settings-error" class="notice" role="status" hidden></p>
+    </form>
+    <footer class="statusbar settings-status">
+      <div id="worksheet-status" role="status">Loading worksheet…</div>
+      <div>Applies to minimum curvature and lap time</div>
+    </footer>
+  </section>
+
+  <section id="tracks" class="panel tracks-panel" role="tabpanel" aria-labelledby="tab-tracks">
+    <nav class="menubar" aria-label="Track commands">
+      <details name="track-menu"><summary>File</summary><div class="popup">
+        <button data-command="open-in-editor">Open in Annotator</button>
+        <hr>
+        <button data-command="generate">Generate…</button>
+        <button data-command="stop">Stop generation</button>
+        <hr>
+        <button data-command="refresh">Refresh inputs</button>
+      </div></details>
+      <details name="track-menu"><summary>View</summary><div class="popup">
+        <button data-command="fit">Fit track</button>
+        <button data-command="zoom-in">Zoom in</button>
+        <button data-command="zoom-out">Zoom out</button>
+      </div></details>
+      <details name="track-menu"><summary>Help</summary><div class="popup">
+        <button data-help>About the Operational Centre</button>
+      </div></details>
+    </nav>
+    <div class="documentbar">
+      <label>Map <select id="map"><option value="">Loading…</option></select></label>
+      <button id="open-in-editor" disabled>Open in Annotator</button>
+      <span id="car" class="car" title="">Car model loading…</span>
+      <div class="run-actions">
+        <button id="generate" class="default-button" disabled>Generate…</button>
+        <button id="stop" disabled>Stop</button>
+      </div>
+    </div>
+    <div class="statusbar route-status">
+      <div id="route-status" role="status">Checking route exports…</div>
+      <div id="route-identity"></div>
+    </div>
+
+    <div class="workbench">
+      <div class="plots">
+        <fieldset class="map-field">
+          <legend>Lap overlay</legend>
+          <div class="plot-tools" aria-label="Overlay navigation">
+            <button id="zoom-in" aria-label="Zoom in" title="Zoom in" disabled>+</button>
+            <button id="zoom-out" aria-label="Zoom out" title="Zoom out" disabled>−</button>
+            <button id="fit" disabled>Fit</button>
+            <span id="map-scale">Map frame · metres</span>
+          </div>
+          <div class="sunken map-well">
+            <svg id="track-plot" role="img" aria-label="Route walls, start zone and trajectory overlay"></svg>
+            <p id="no-route" class="plot-note">Open a map in Annotator and export a route.</p>
+          </div>
+        </fieldset>
+        <fieldset class="speed-field">
+          <legend>Flying lap speed</legend>
+          <div class="sunken speed-well">
+            <svg id="speed-plot" viewBox="0 0 720 150" role="img"
+                 aria-label="Speed in metres per second against shared lap progress"></svg>
+            <p id="no-speed" class="plot-note">Generate and show a timed trajectory to compare speeds.</p>
+          </div>
+        </fieldset>
+      </div>
+
+      <aside class="comparison" aria-label="Trajectory comparison">
+        <fieldset>
+          <legend>Trajectory layers</legend>
+          <div id="trajectory-list" class="trajectory-list"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Current comparison</legend>
+          <div class="sheet">
+            <table class="metrics">
+              <thead><tr><th scope="col">Trajectory</th><th scope="col">Length</th><th scope="col">Lap time</th></tr></thead>
+              <tbody id="metrics-rows"></tbody>
+            </table>
+          </div>
+          <p id="lap-delta" class="lap-delta" hidden></p>
+          <p>Times are flying-lap estimates from the configured car model.</p>
+        </fieldset>
+        <fieldset>
+          <legend>Generation</legend>
+          <p id="job-status" role="status">No job running.</p>
+          <div id="progress" class="progress" role="progressbar" aria-label="Trajectory categories processed" hidden><i></i></div>
+          <p id="track-error" class="notice" role="status" hidden></p>
+        </fieldset>
+      </aside>
+    </div>
+    <footer class="statusbar tracks-status">
+      <div id="generation-inputs" role="status">Checking workspace…</div>
+      <div id="layer-status">0 trajectories ready</div>
+    </footer>
+  </section>
+</main>
+
+<dialog id="generate-dialog" aria-labelledby="generate-title">
+  <header class="titlebar" id="generate-title">Generate trajectories</header>
+  <form id="generate-form">
+    <p id="generate-map"></p>
+    <fieldset>
+      <legend>Categories</legend>
+      <div id="generate-choices" class="choices"></div>
+    </fieldset>
+    <div id="legacy-warning" class="notice" hidden>
+      <p id="legacy-message"></p>
+      <label><input id="allow-unverified" type="checkbox"> Use this export for comparison</label>
+    </div>
+    <p id="generate-error" class="notice" role="status" hidden></p>
+    <div class="dialog-actions">
+      <button id="run" class="default-button" type="submit">Generate</button>
+      <button type="button" data-close>Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="help-dialog" aria-labelledby="help-title">
+  <header class="titlebar" id="help-title">ForzaETH Operational Centre Help</header>
+  <div class="help-content">
+    <dl>
+      <dt>Annotator</dt><dd>Open a map, place the start and export a validated route.</dd>
+      <dt>Hyperparameters</dt><dd>Apply optimizer values and working bounds. Bounds alone do not affect existing trajectories.</dd>
+      <dt>Tracks</dt><dd>Select a route and generate the centreline, minimum-curvature line or lap-time optimized line. Drag the overlay to pan after zooming.</dd>
+    </dl>
+    <p>The centreline is a geometry reference. The optimizer checks vehicle clearance and steering on the optimized lines.</p>
+    <div class="dialog-actions"><button class="default-button" data-close autofocus>OK</button></div>
+  </div>
+</dialog>
+</body>
+</html>

@@ -5,21 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ForzaETH Annotation</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 1h12v14H2z'/%3E%3Cpath fill='white' d='M3 2h10v12H3z'/%3E%3Cpath fill='teal' d='M4 3h8v10H4z'/%3E%3Cpath fill='none' stroke='white' stroke-width='2' d='M7 5h3v6H6V7h1z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="win95.css">
 <style>
 :root {
-  --face: #c0c0c0;
-  --shadow: #808080;
-  --navy: #000080;
-  --raised: inset 1px 1px #fff, inset -1px -1px #000,
-            inset 2px 2px #dfdfdf, inset -2px -2px var(--shadow);
-  --sunken: inset 1px 1px var(--shadow), inset -1px -1px #fff,
-            inset 2px 2px #000, inset -2px -2px #dfdfdf;
   /* The swatches and canvas share the annotation colours. */
   --stroke: #f87171; --excluded: #fb923c; --walls: #38bdf8; --guide: #facc15;
   --route: #4ade80; --gates: #e879f9; --start: #fff; --picked: #fff;
   --startmark: #22d3ee; --problem: #ff2d2d;
 }
-* { box-sizing: border-box; }
 body {
   margin: 0;
   padding: clamp(4px, 1.5vw, 20px);
@@ -28,7 +21,6 @@ body {
   display: grid;
   color: #000;
   background: #008080;
-  font: 0.75rem/1.35 "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Arial, sans-serif;
 }
 body.busy, body.busy canvas { cursor: progress; }
 .window {
@@ -39,80 +31,13 @@ body.busy, body.busy canvas { cursor: progress; }
   background: var(--face);
   box-shadow: var(--raised);
 }
-.titlebar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 23px;
-  padding: 3px 5px;
-  color: #fff;
-  background: var(--navy);
-  font-weight: bold;
-  overflow-wrap: anywhere;
-}
-.icon { width: 16px; height: 16px; flex: none; shape-rendering: crispEdges; }
-button, input, select { font: inherit; color: inherit; }
-button, input, select { border: 0; border-radius: 0; }
-button {
-  min-height: 24px;
-  padding: 3px 9px;
-  background: var(--face);
-  box-shadow: var(--raised);
-}
-button:disabled { color: #555; }
-button:active:not(:disabled), button.on { box-shadow: var(--sunken); }
-:focus-visible { outline: 1px dotted currentColor; outline-offset: -3px; }
-input:not([type="checkbox"]), select {
-  min-width: 0;
-  min-height: 24px;
-  padding: 3px 5px;
-  background: #fff;
-  box-shadow: var(--sunken);
-}
-input[type="checkbox"] { accent-color: var(--navy); }
-.menubar, .documentbar { display: flex; flex-wrap: wrap; align-items: center; }
-.menubar { position: relative; z-index: 1; padding: 2px 0; }
-.menubar details { position: relative; }
-.menubar details:last-child { position: static; }
-.menubar summary {
-  display: block;
-  padding: 3px 8px;
-  list-style: none;
-  cursor: default;
-}
-.menubar summary::-webkit-details-marker { display: none; }
-.menubar details[open] > summary { box-shadow: var(--sunken); }
-.popup {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: max-content;
-  min-width: 9rem;
-  max-width: calc(100vw - 24px);
-  padding: 4px;
-  background: var(--face);
-  box-shadow: var(--raised);
-}
-.popup button, .popup label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  text-align: left;
-  padding: 4px 8px;
-  box-shadow: none;
-}
-.popup button:hover:not(:disabled), .popup button:focus-visible, .popup label:hover {
-  color: #fff;
-  background: var(--navy);
-}
-.popup hr { border: 0; border-top: 1px solid var(--shadow); border-bottom: 1px solid #fff; margin: 3px 2px; }
 .menu-note { margin: 3px 8px; }
 #strokes { max-height: 12rem; overflow: auto; }
 .help { width: min(21rem, 100%); padding: 6px 10px; }
 .help ol { margin: 4px 0; padding-left: 20px; }
 .help li + li { margin-top: 4px; }
 .documentbar {
+  display: flex; flex-wrap: wrap; align-items: center;
   gap: 4px 8px;
   padding: 5px 6px;
   border-top: 1px solid var(--shadow);
@@ -174,10 +99,15 @@ canvas { display: block; width: 100%; height: 100%; background: #fff; cursor: cr
 .swatches span { display: flex; align-items: center; gap: 4px; }
 .swatch { display: inline-block; width: 14px; height: 14px; flex: none; background: var(--c); box-shadow: var(--sunken); }
 .statusbar { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 3px; }
-.statusbar > div { padding: 5px 7px; box-shadow: var(--sunken); overflow-wrap: anywhere; }
 #hint, #status { height: 5em; overflow: auto; }
 #status { white-space: pre-wrap; }
-[hidden] { display: none; }
+body.embedded { padding: 0; background: var(--face); }
+.embedded .window {
+  padding: 0;
+  box-shadow: none;
+  grid-template-rows: auto auto minmax(16rem, 1fr) auto auto;
+}
+.embedded .titlebar { display: none; }
 @media (max-width: 640px) {
   .swatches { grid-template-columns: repeat(2, max-content); }
   .statusbar { grid-template-columns: minmax(0, 1fr); }
