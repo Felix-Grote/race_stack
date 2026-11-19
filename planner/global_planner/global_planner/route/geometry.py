@@ -4,9 +4,8 @@ Small planar geometry helpers for walls and sections, built on shapely.
 points:     (x, y) tuples in metres; polygons are tuples of points, not closed.
 EPS:        tolerance in metres for "the same point"; coordinates stay within 1e5 m.
 """
-
-import math
 from collections.abc import Iterator
+import math
 
 from shapely.geometry import LinearRing, LineString, Polygon
 

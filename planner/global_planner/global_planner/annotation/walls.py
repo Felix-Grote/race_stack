@@ -14,16 +14,15 @@ thinning:   a traced wall has a point per pixel. Points are dropped while the wa
             cuts off covers no occupied area at all, however far inside the road it strays.
             The final polygons are still checked against the legal squares (checks.py).
 """
-
-import math
 from collections.abc import Callable, Sequence
+import math
 
 import cv2
 import numpy as np
 import shapely
 from shapely.geometry import Polygon
 
-from .track_map import AnnotationError, TrackMap, kept_mask
+from .track_map import AnnotationError, kept_mask, TrackMap
 
 # Area in m2 below which a polygon covers nothing: numeric zero for exact area sums. Any real
 # overlap with an occupied square is far larger.
@@ -39,42 +38,33 @@ ChordOk = Callable[[list[np.ndarray], int, int], bool]
 def loops(kept: np.ndarray, region_picked: bool) -> tuple[np.ndarray, np.ndarray]:
     """Return the outer and inner loops of the kept free space, in file pixels, or refuse."""
     if kept[0, :].any() or kept[-1, :].any() or kept[:, 0].any() or kept[:, -1].any():
-        raise AnnotationError(
-            "the free space reaches the edge of the map: draw a stroke to "
-            "close the outer wall"
-        )
+        raise AnnotationError('the free space reaches the edge of the map: draw a stroke to '
+                              'close the outer wall')
 
     contours, hierarchy = cv2.findContours(kept, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
     if hierarchy is None:
-        raise AnnotationError("the map has no free space")
+        raise AnnotationError('the map has no free space')
 
     parents = hierarchy[0][:, 3]
     outer = [i for i, p in enumerate(parents) if p == -1]
     if len(outer) != 1:
         if not region_picked:
-            raise AnnotationError(
-                f"the free space is in {len(outer)} pieces and none is a "
-                f"closed track: draw walls to close it"
-            )
+            raise AnnotationError(f'the free space is in {len(outer)} pieces and none is a '
+                                  f'closed track: draw walls to close it')
 
-        raise AnnotationError(f"the free space is in {len(outer)} pieces")
+        raise AnnotationError(f'the free space is in {len(outer)} pieces')
 
     holes = [i for i, p in enumerate(parents) if p == outer[0]]
     if len(holes) != 1:
-        raise AnnotationError(
-            f"the track must enclose exactly one infield, not {len(holes)}: "
-            f"draw a stroke to close any open wall, or remove stray marks"
-        )
+        raise AnnotationError(f'the track must enclose exactly one infield, not {len(holes)}: '
+                              f'draw a stroke to close any open wall, or remove stray marks')
 
     walls = [contours[i].reshape(-1, 2) for i in (outer[0], holes[0])]
     # Walls through a cell twice, one or both, touch there: the road is one cell wide.
     cells, count = np.unique(np.vstack(walls), axis=0, return_counts=True)
     if (count > 1).any():
-        raise AnnotationError(
-            "the road narrows to a single cell (marked red): close the gap "
-            "there or leave it wider",
-            at_px=cells[count > 1].tolist(),
-        )
+        raise AnnotationError('the road narrows to a single cell (marked red): close the gap '
+                              'there or leave it wider', at_px=cells[count > 1].tolist())
 
     return walls[0].astype(float), walls[1].astype(float)
 
@@ -104,24 +94,16 @@ def keep_track(free: np.ndarray, region_px: list | None) -> list | None:
 def find_track(free: np.ndarray) -> list[int] | None:
     """Return a pixel of the largest free region loops takes as a track, or None if none is."""
     count, labels, stats, _ = cv2.connectedComponentsWithStats(
-        (free > 0).astype(np.uint8), connectivity=8
-    )
+        (free > 0).astype(np.uint8), connectivity=8)
     height, width = free.shape
     for i in sorted(range(1, count), key=lambda k: -stats[k, cv2.CC_STAT_AREA]):
-        u, v, w, h = (
-            int(stats[i, k])
-            for k in (
-                cv2.CC_STAT_LEFT,
-                cv2.CC_STAT_TOP,
-                cv2.CC_STAT_WIDTH,
-                cv2.CC_STAT_HEIGHT,
-            )
-        )
+        u, v, w, h = (int(stats[i, k]) for k in (cv2.CC_STAT_LEFT, cv2.CC_STAT_TOP,
+                                                 cv2.CC_STAT_WIDTH, cv2.CC_STAT_HEIGHT))
         # A track is clear of the image edge and has room for an infield.
         if u == 0 or v == 0 or u + w == width or v + h == height or min(w, h) < 3:
             continue
 
-        region = labels[v : v + h, u : u + w] == i
+        region = labels[v:v + h, u:u + w] == i
         if not is_track(np.pad(region, 1).astype(np.uint8) * 255):
             continue
 
@@ -149,18 +131,12 @@ def occupied_area(poly, track_map: TrackMap, occupied: np.ndarray) -> float:
     u1 = min(track_map.width - 1, int(math.ceil(max(ua, ub))) + 1)
     v0 = max(0, int(math.floor(min(va, vb))) - 1)
     v1 = min(track_map.height - 1, int(math.ceil(max(va, vb))) + 1)
-    vs, us = np.nonzero(occupied[v0 : v1 + 1, u0 : u1 + 1])
+    vs, us = np.nonzero(occupied[v0:v1 + 1, u0:u1 + 1])
     if not len(vs):
-        return 0.0
+        return 0.
 
-    return max(
-        0.0,
-        float(
-            shapely.area(
-                shapely.intersection(_boxes(track_map, us + u0, vs + v0), poly)
-            ).sum()
-        ),
-    )
+    return max(0., float(shapely.area(shapely.intersection(_boxes(track_map, us + u0, vs + v0),
+                                                           poly)).sum()))
 
 
 def legal_union(track_map: TrackMap, kept: np.ndarray):
@@ -173,15 +149,9 @@ def legal_union(track_map: TrackMap, kept: np.ndarray):
 
         edges = np.flatnonzero(np.diff(np.concatenate(([0], row.view(np.int8), [0]))))
         y = track_map.origin[1] + (track_map.height - 1 - v) * res
-        rects += [
-            (
-                track_map.origin[0] + (u0 - 0.5) * res,
-                y - res / 2,
-                track_map.origin[0] + (u1 - 0.5) * res,
-                y + res / 2,
-            )
-            for u0, u1 in zip(edges[0::2], edges[1::2])
-        ]
+        rects += [(track_map.origin[0] + (u0 - .5) * res, y - res / 2,
+                   track_map.origin[0] + (u1 - .5) * res, y + res / 2)
+                  for u0, u1 in zip(edges[0::2], edges[1::2])]
 
     if not rects:
         return Polygon()
@@ -193,9 +163,8 @@ def legal_union(track_map: TrackMap, kept: np.ndarray):
 
 def ear_ok(track_map: TrackMap, occupied: np.ndarray) -> ChordOk:
     """Return the check that the ear chord a-b cuts off pts covers no occupied area."""
-
     def ok(pts: list[np.ndarray], a: int, b: int) -> bool:
-        ring = [(float(p[0]), float(p[1])) for p in pts[a : b + 1]]
+        ring = [(float(p[0]), float(p[1])) for p in pts[a:b + 1]]
         if len(ring) < 3:
             return True
 
@@ -209,9 +178,8 @@ def ear_ok(track_map: TrackMap, occupied: np.ndarray) -> ChordOk:
     return ok
 
 
-def _refine(
-    pts: list[np.ndarray], kept: list[bool], eps: float, chord_ok: ChordOk | None
-) -> list[tuple[float, float]]:
+def _refine(pts: list[np.ndarray], kept: list[bool], eps: float,
+            chord_ok: ChordOk | None) -> list[tuple[float, float]]:
     """
     Keep more of pts until every chord between kept points is close enough and allowed.
 
@@ -219,13 +187,8 @@ def _refine(
     when chord_ok says so. Otherwise the farthest point between its ends is kept too, and both
     halves are looked at again.
     """
-    stack = [
-        (a, b)
-        for a, b in zip(
-            [i for i, k in enumerate(kept) if k][:-1],
-            [i for i, k in enumerate(kept) if k][1:],
-        )
-    ]
+    stack = [(a, b) for a, b in zip([i for i, k in enumerate(kept) if k][:-1],
+                                    [i for i, k in enumerate(kept) if k][1:])]
     while stack:
         a, b = stack.pop()
         if b - a < 2:
@@ -233,10 +196,10 @@ def _refine(
 
         seg = pts[b] - pts[a]
         denom = float(np.dot(seg, seg))
-        dist, idx = 0.0, -1
+        dist, idx = 0., -1
         for i in range(a + 1, b):
-            t = 0.0 if denom < 1e-18 else float(np.dot(pts[i] - pts[a], seg) / denom)
-            d = float(np.linalg.norm(pts[i] - (pts[a] + min(1.0, max(0.0, t)) * seg)))
+            t = 0. if denom < 1e-18 else float(np.dot(pts[i] - pts[a], seg) / denom)
+            d = float(np.linalg.norm(pts[i] - (pts[a] + min(1., max(0., t)) * seg)))
             if d > dist:
                 dist, idx = d, i
 
@@ -248,9 +211,8 @@ def _refine(
     return [tuple(pts[i]) for i, k in enumerate(kept) if k]
 
 
-def thin(
-    points: Sequence, spacing: float, eps: float = 0.0, chord_ok: ChordOk | None = None
-) -> list[tuple[float, float]]:
+def thin(points: Sequence, spacing: float, eps: float = 0.,
+         chord_ok: ChordOk | None = None) -> list[tuple[float, float]]:
     """
     Drop points closer than spacing to the last one kept; both ends stay.
 
@@ -279,9 +241,8 @@ def thin(
     return _refine(pts, kept, eps, chord_ok)
 
 
-def douglas_peucker(
-    points: Sequence, eps: float, chord_ok: ChordOk | None = None
-) -> list[tuple[float, float]]:
+def douglas_peucker(points: Sequence, eps: float,
+                    chord_ok: ChordOk | None = None) -> list[tuple[float, float]]:
     """Return the fewest points, ends included, whose polyline stays within eps and allowed."""
     pts = [np.array(p, float) for p in points]
     if len(pts) < 3 or eps <= 0:
