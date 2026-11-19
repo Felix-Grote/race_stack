@@ -1,0 +1,266 @@
+"""
+The route manifest built from the walls and the guide; checks.py checks it.
+
+guide:      it must stay on the kept cells all the way round, never crossing a wall;
+            where it does not is marked for the page.
+joints:     the guide is resampled, at least _MIN_SEED_POINTS times round the lap, smoothed
+            and pulled into the middle half of the road. Which loop is the left wall follows
+            from the way the guide turns: the infield is on the left of a counterclockwise
+            lap. The guide is cut into n_sections near even fractions of the lap, each cut on
+            the straightest guide point nearby where the nearest point of the left wall lies
+            to its left and that of the right wall to its right: gates on straights keep the
+            portal charts unfolded. A cut's gate joins those two points.
+walls:      each wall is walked one way round for the whole lap, the way that passes the
+            gates in order in exactly one turn; a guide whose gates allow neither is refused.
+            Each section's walls are the stretches between its gates, thinned (walls.py) so
+            the route package's centreline stays fast. Both sections at a gate share its two
+            end points exactly.
+start:      a zone in the middle of the road centred on the start the operator set, facing
+            along the guide: a strip that follows the walls for 1.2 m or, where that does not
+            fit, ever smaller boxes. The first cut is the one nearest the start, so the zone
+            may straddle its gate. The route package needs it wholly on the road.
+"""
+import math
+
+import numpy as np
+import shapely
+from shapely.geometry import LinearRing, Polygon
+
+from .guide import off_road, resample, signed_area, starting_at
+from .track_map import AnnotationError, TrackMap
+from .walls import douglas_peucker, ear_ok, MAX_THINNING_PX, thin
+
+# How far apart the thinned walls may stray from the traced ones, in metres; capped at
+# MAX_THINNING_PX on fine maps.
+WALL_EPS_M = 0.02
+
+# Where the start zone's corners sit along the guide from the start, and across the road
+# (0 right, 1 left).
+_START_STATIONS_M = (-0.6, -0.3, 0., 0.3, 0.6)
+_START_BOXES = ((1.2, 0.25), (0.8, 0.30), (0.5, 0.35), (0.3, 0.40))
+
+# How far either way the start heading may turn from the guide's, in radians.
+_HEADING_SPREAD_RAD = 0.3
+
+# The fewest points the resampled guide has round a lap: enough for well separated cuts on a
+# short track. Longer laps keep the given spacing.
+_MIN_SEED_POINTS = 64
+
+
+def _gap(a: int, b: int, n: int) -> int:
+    """Return how many steps apart indices a and b are around a loop of n."""
+    return min((a - b) % n, (b - a) % n)
+
+
+def _arc(chain: np.ndarray, start: int, end: int, step: int) -> list[np.ndarray]:
+    """Return a closed chain's points from start to end, both included, stepping by step."""
+    out, i = [], start
+    while True:
+        out.append(chain[i])
+        if i == end:
+            return out
+
+        i = (i + step) % len(chain)
+
+
+def _seed(track_map: TrackMap, outer: np.ndarray, inner: np.ndarray, guide_px,
+          spacing_m: float, smoothing_passes: int) -> list[np.ndarray]:
+    """Return the guide in metres, resampled, smoothed and pulled into the middle of the road."""
+    closed = np.vstack((np.asarray(guide_px, float), np.asarray(guide_px[:1], float)))
+    perimeter_px = float(np.sum(np.linalg.norm(np.diff(closed, axis=0), axis=1)))
+    spacing_px = min(spacing_m / track_map.resolution, perimeter_px / _MIN_SEED_POINTS)
+    arr = np.array(resample(guide_px, spacing_px), float)
+    kernel = np.array([1., 2., 3., 2., 1.])
+    kernel /= kernel.sum()
+    for _ in range(smoothing_passes):
+        arr = np.stack([sum(kernel[k] * np.roll(arr[:, c], k - 2) for k in range(5))
+                        for c in range(2)], axis=1)
+
+    seed = []
+    for p in (np.array(track_map.pixel_to_world(q)) for q in arr):
+        lo = outer[int(np.argmin(np.linalg.norm(outer - p, axis=1)))]
+        li = inner[int(np.argmin(np.linalg.norm(inner - p, axis=1)))]
+        mid, half = (lo + li) / 2., (lo - li) / 2.
+        denom = float(np.dot(half, half))
+        alpha = 0. if denom < 1e-12 else float(np.clip(np.dot(p - mid, half) / denom, -.5, .5))
+        seed.append(mid + alpha * half)
+
+    return seed
+
+
+def _sides(seed: list[np.ndarray], left: np.ndarray,
+           right: np.ndarray) -> tuple[list[int], list[int], list[bool]]:
+    """
+    Return, for every seed point, the nearest point of each wall and whether a gate fits there.
+
+    A gate fits where the nearest left-wall point lies left of the direction of travel and
+    the nearest right-wall point right of it.
+    """
+    def nearest(chain: np.ndarray, p: np.ndarray) -> int:
+        return int(np.argmin(np.linalg.norm(chain - p, axis=1)))
+
+    lj, rj, fits = [], [], []
+    for i, p in enumerate(seed):
+        tangent = seed[(i + 1) % len(seed)] - seed[i - 1]
+        norm = np.linalg.norm(tangent)
+        lj.append(nearest(left, p))
+        rj.append(nearest(right, p))
+        if norm < 1e-12:
+            fits.append(False)
+            continue
+
+        normal = np.array([-tangent[1], tangent[0]]) / norm
+        fits.append(float(np.dot(left[lj[-1]] - p, normal)) > 0
+                    and float(np.dot(right[rj[-1]] - p, normal)) < 0)
+
+    return lj, rj, fits
+
+
+def _direction(idxs: list[int], n: int, side: str) -> int:
+    """Return the step, 1 or -1, that walks a closed wall of n points through idxs in one turn."""
+    for step in (1, -1):
+        gaps = [((b - a) * step) % n for a, b in zip(idxs, idxs[1:] + idxs[:1])]
+        if all(gaps) and sum(gaps) == n:
+            return step
+
+    raise AnnotationError(f'the gates do not follow each other along the {side} wall: redraw the '
+                          f'guide')
+
+
+def _cuts(seed: list[np.ndarray], n_sections: int, fits: list[bool]) -> list[int]:
+    """Return where to cut the seed: near even fractions, on its straightest points that fit."""
+    n = len(seed)
+    turn = []
+    for i, p in enumerate(seed):
+        a, b = seed[i] - seed[i - 1], seed[(i + 1) % n] - p
+        turn.append(abs(math.atan2(a[0] * b[1] - a[1] * b[0], float(np.dot(a, b)))))
+
+    # Cuts must stay well apart: neighbouring windows overlap.
+    min_sep = max(8, n // 8)
+    cuts = []
+    for k in range(n_sections):
+        target = int(round(k * n / n_sections))
+        window = [j % n for j in range(target - n // 8, target + n // 8)]
+        window = [j for j in window if fits[j] and all(_gap(j, c, n) >= min_sep for c in cuts)]
+        if not window:
+            raise AnnotationError('cannot cut the guide into well separated sections: redraw '
+                                  'it more evenly, between the walls')
+
+        # Rounded so near-straight points, equal up to float noise, tie the same way on
+        # every machine.
+        cuts.append(min(window, key=lambda j: round(turn[j], 6)))
+
+    cuts.sort()
+    if len(set(cuts)) != n_sections or any(_gap(a, b, n) < min_sep
+                                           for a, b in zip(cuts, cuts[1:] + cuts[:1])):
+        raise AnnotationError('cannot cut the guide into well separated sections: redraw it '
+                              'more evenly')
+
+    return cuts
+
+
+def _heading_range(heading: float) -> list[float]:
+    """
+    Return the start heading range: _HEADING_SPREAD_RAD either way of heading, in [-pi, pi].
+
+    The manifest cannot hold a range across pi, so near it the range slides inward, keeping
+    its width and heading, rather than losing a side.
+    """
+    first = min(max(heading - _HEADING_SPREAD_RAD, -math.pi), math.pi - 2 * _HEADING_SPREAD_RAD)
+
+    return [first, first + 2 * _HEADING_SPREAD_RAD]
+
+
+def _start_zone(sections: list[dict], seed: list[np.ndarray], left: np.ndarray,
+                right: np.ndarray) -> list[list[float]]:
+    """Return the first start zone shape, centred on the seed's first point, on the road."""
+    road = shapely.union_all([Polygon(list(s['right']) + list(reversed(s['left'])))
+                              for s in sections])
+    path = LinearRing(seed)
+    walls = LinearRing(left), LinearRing(right)
+
+    def across(dist_m: float, frac: float) -> np.ndarray:
+        p = path.interpolate(dist_m % path.length)
+        lp, rp = (np.array(w.interpolate(w.project(p)).coords[0]) for w in walls)
+        return rp + frac * (lp - rp)
+
+    shapes = [[across(d, .25) for d in _START_STATIONS_M]
+              + [across(d, .75) for d in reversed(_START_STATIONS_M)]]
+    shapes += [[across(-length / 2, f), across(length / 2, f), across(length / 2, 1 - f),
+                across(-length / 2, 1 - f)] for length, f in _START_BOXES]
+    for shape in shapes:
+        zone = []
+        for p in shape:
+            point = [float(p[0]), float(p[1])]
+            if not zone or math.dist(point, zone[-1]) > 1e-9:
+                zone.append(point)
+
+        if len(zone) > 1 and math.dist(zone[0], zone[-1]) <= 1e-9:
+            zone.pop()
+
+        if len(zone) >= 3:
+            poly = Polygon(zone)
+            if poly.is_valid and road.covers(poly):
+                return zone
+
+    raise AnnotationError('no start zone fits on the road there: set the start on a '
+                          'straighter part of the track')
+
+
+def build(track_map: TrackMap, outer_px: np.ndarray, inner_px: np.ndarray, guide_px,
+          start_px, kept: np.ndarray, name: str, surface: str, max_speed_mps: float,
+          n_sections: int = 4, spacing_m: float = 0.75, smoothing_passes: int = 4) -> dict:
+    """Return the route manifest for the walls and the guide; checks.check checks it."""
+    try:
+        max_speed_mps = float(max_speed_mps)
+    except (TypeError, ValueError) as exc:
+        raise AnnotationError('the speed limit must be a number') from exc
+
+    # The guide is not exported, but a guide through a wall cuts the lap where no car drives.
+    off = off_road(kept, guide_px)
+    if len(off):
+        raise AnnotationError('the guide crosses a wall or leaves the road (marked red): redraw '
+                              'it there, or press Suggest', at_px=off)
+
+    if len(off_road(kept, [start_px])):
+        raise AnnotationError('the start is off the road (marked red): set it again',
+                              at_px=[start_px])
+
+    guide_px = starting_at(guide_px, start_px)
+
+    outer = np.array([track_map.pixel_to_world(p) for p in outer_px])
+    inner = np.array([track_map.pixel_to_world(p) for p in inner_px])
+    seed = _seed(track_map, outer, inner, guide_px, spacing_m, smoothing_passes)
+    left, right = (inner, outer) if signed_area(seed) > 0 else (outer, inner)
+    lj, rj, fits = _sides(seed, left, right)
+    cuts = _cuts(seed, n_sections, fits)
+    left_step = _direction([lj[c] for c in cuts], len(left), 'left')
+    right_step = _direction([rj[c] for c in cuts], len(right), 'right')
+
+    chord_ok = ear_ok(track_map, kept == 0)
+    spacing = max(2., .05 / track_map.resolution) * track_map.resolution
+    floor_m = MAX_THINNING_PX * track_map.resolution
+    eps_m = min(WALL_EPS_M, floor_m)
+
+    def wall(chain: np.ndarray, j0: int, j1: int, step: int) -> list[tuple[float, float]]:
+        pts = douglas_peucker(thin(_arc(chain, j0, j1, step), spacing, floor_m, chord_ok),
+                              eps_m, chord_ok)
+        pts[0], pts[-1] = tuple(chain[j0]), tuple(chain[j1])
+        return pts
+
+    sections = []
+    for k, (a, b) in enumerate(zip(cuts, cuts[1:] + cuts[:1])):
+        sections.append({'uid': f's{k}', 'surface': surface, 'max_speed_mps': max_speed_mps,
+                         'left': [[float(x), float(y)]
+                                  for x, y in wall(left, lj[a], lj[b], left_step)],
+                         'right': [[float(x), float(y)]
+                                   for x, y in wall(right, rj[a], rj[b], right_step)]})
+
+    # The start faces along the guide.
+    ahead = seed[1] - seed[-1]
+    heading = math.atan2(ahead[1], ahead[0])
+
+    return {'name': name, 'map': {'frame_id': 'map', 'sha256': track_map.sha256},
+            'start': {'heading_range_rad': _heading_range(heading),
+                      'zone': _start_zone(sections, seed, left, right)},
+            'sections': sections}

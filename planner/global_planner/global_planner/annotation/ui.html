@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Route annotation</title>
+<style>
+/* One palette, read by the legend and by the drawing. */
+:root{--stroke:#f87171;--excluded:#fb923c;--walls:#38bdf8;--guide:#facc15;--route:#4ade80;
+      --gates:#e879f9;--start:#ffffff;--picked:#ffffff;--startmark:#22d3ee;--problem:#ff2d2d}
+body{font-family:system-ui,sans-serif;margin:12px;background:#111;color:#eee}
+body.busy,body.busy canvas{cursor:progress}
+fieldset{display:inline-block;border:1px solid #444;border-radius:6px;margin:0 6px 6px 0;padding:4px 8px}
+legend{color:#9cf;font-size:.9em}
+button{margin:2px;padding:5px 9px} button.on{background:#2a7;color:#fff}
+#export:enabled{background:#2a7;color:#fff}
+input,select{margin:2px}
+canvas{display:block;background:#1b1b1b;border:1px solid #555;cursor:crosshair;margin:6px 0}
+#status{white-space:pre-wrap;background:#000;border:1px solid #444;padding:6px;height:4.5em;overflow:auto}
+.key label{margin-right:20px;white-space:nowrap}
+.key i{display:inline-block;width:12px;height:12px;border-radius:2px;background:var(--c);
+       margin:0 4px 0 8px;vertical-align:-1px}
+#hint{color:#9cf}
+</style></head><body>
+<fieldset><legend>Map</legend>
+ <select id="maps"></select> <button id="open">Open</button>
+ name <input id="name" size="12"> surface <input id="surface" size="8">
+ speed limit <input id="max_speed_mps" size="4"> m/s
+</fieldset>
+<fieldset><legend>Road</legend>
+ <button class="tool" data-tool="stroke">Draw wall</button>
+ <button class="tool" data-tool="region">Pick region</button>
+ width <select id="stroke_width_px"><option>3</option><option>5</option><option>9</option>
+ <option>13</option></select>
+ <span id="strokes"></span>
+</fieldset>
+<fieldset><legend>Guide</legend>
+ <button class="tool" data-tool="guide">Draw guide</button>
+ <button id="suggest">Suggest</button> <button id="reverse">Reverse</button>
+ <button id="clearGuide">Clear</button>
+ <button class="tool" data-tool="start">Set start</button>
+</fieldset>
+<fieldset><legend>Route</legend>
+ <button id="export" disabled>Export</button>
+ <button id="save">Save draft</button> <button id="fit">Fit view</button>
+</fieldset>
+<p class="key">
+<label><input type="checkbox" class="layer" value="map" checked> map</label>
+<label><input type="checkbox" class="layer" value="road" checked>
+ <i style="--c:var(--stroke)"></i>drawn walls <i style="--c:var(--excluded)"></i>left out
+ <i style="--c:var(--walls)"></i>road walls</label>
+<label><input type="checkbox" class="layer" value="guide" checked>
+ <i style="--c:var(--guide)"></i>guide (direction and cuts only)
+ <i style="--c:var(--startmark);border-radius:6px"></i>start
+ <i style="--c:var(--problem);border-radius:6px"></i>problem</label>
+<label><input type="checkbox" class="layer" value="route" checked>
+ <i style="--c:var(--route)"></i>route walls <i style="--c:var(--gates)"></i>gates
+ <i style="--c:var(--start);opacity:.5"></i>start zone</label></p>
+<div id="hint">Pick a tool. Wheel zooms; drag with the right or middle button pans.</div>
+<div id="status">Pick a map and press Open.</div>
+<canvas id="cv"></canvas>
+<script src="ui.js"></script></body></html>
