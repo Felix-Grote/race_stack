@@ -44,6 +44,10 @@ It writes two files next to the map's YAML and never touches the map itself:
    valid or why not; a valid one shows green walls, magenta gates and the white start zone.
    **Export**, enabled only then, writes exactly that route.
 
+The left tool box holds the drawing tools and wall width. Use **Edit** to remove a numbered
+wall, **View** to toggle overlays or fit the track, and **Help** for the workflow. Scroll the
+wheel to zoom, or drag with the right or middle mouse button to pan.
+
 ## How it works
 
 ```mermaid
