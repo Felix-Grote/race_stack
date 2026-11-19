@@ -34,10 +34,12 @@ function fit() {
   const s = Math.min(cv.width / (u1 - u0 + 2 * m), cv.height / (v1 - v0 + 2 * m));
   vp = {s, x: cv.width / 2 - s * (u0 + u1) / 2, y: cv.height / 2 - s * (v0 + v1) / 2};
 }
-// The canvas fills the window below the controls.
+// Match the backing store to the laid-out canvas so clicks use the same pixels as drawing.
 function resize() {
-  cv.width = Math.max(320, innerWidth - 26);
-  cv.height = Math.max(320, innerHeight - cv.getBoundingClientRect().top - 16);
+  const {clientWidth: width, clientHeight: height} = cv;
+  if (!width || !height || (cv.width === width && cv.height === height)) return;
+  cv.width = width;
+  cv.height = height;
   fit(); draw();
 }
 const toCanvas = p => [vp.x + p[0] * vp.s, vp.y + p[1] * vp.s];
@@ -82,8 +84,8 @@ function arrows(pts, color) {
   }
 }
 function draw() {
+  if (!V.size) { ctx.clearRect(0, 0, cv.width, cv.height); return; }
   ctx.fillStyle = '#222'; ctx.fillRect(0, 0, cv.width, cv.height);
-  if (!V.size) return;
   ctx.imageSmoothingEnabled = false;
   // The map dimmed, so the road is a mid grey and every line shows on it.
   for (const [url, layer, alpha] of [[V.png, 'map', .55], [V.excluded_png, 'road', 1]]) {
@@ -147,6 +149,7 @@ function draw() {
 let framed = null, framedMap = null;
 function show(view, message) {
   V = view;
+  $('caption').textContent = `${V.map || 'Untitled'} - ForzaETH Annotation`;
   $('maps').replaceChildren(...V.maps.map(m => new Option(m, m, false, m === V.map)));
   for (const k of ['name', 'surface', 'max_speed_mps', 'stroke_width_px'])
     if (k in V && document.activeElement !== $(k)) $(k).value = V[k];
@@ -155,19 +158,23 @@ function show(view, message) {
   const frame = V.walls_px || V.map !== framedMap ? V.size && V.map + bounds().join() : framed;
   if (frame !== framed) { framed = frame; framedMap = V.map; fit(); }
   $('export').disabled = !V.result;
+  document.querySelector('[data-command="export"]').disabled = !V.result;
   // One button per drawn wall, to remove it.
   picked = -1;
   $('strokes').replaceChildren(...(V.strokes_px || []).map((_, i) => {
     const b = document.createElement('button');
     b.textContent = `remove wall ${i + 1}`;
-    b.onmouseenter = () => { picked = i; draw(); };
-    b.onmouseleave = () => { picked = -1; draw(); };
+    b.onmouseenter = b.onfocus = () => { picked = i; draw(); };
+    b.onmouseleave = b.onblur = () => { picked = -1; draw(); };
     b.onclick = () => edit('strokes_px', V.strokes_px.filter((_, k) => k !== i));
     return b;
   }));
+  $('no-walls').hidden = $('strokes').childElementCount > 0;
   $('status').textContent = (message ? message + '\n' : '') + (V.map ?
     `${V.map} · road: ${V.walls_error || 'closed ring'} · guide: ` +
-    `${V.guide_auto ? 'suggested, follows the road' : 'drawn'}\nroute: ${V.route}` : '');
+    `${V.guide_auto ? 'suggested, follows the road' : 'drawn'}\nroute: ${V.route}` :
+    message ? '' : 'Pick a map and press Open.');
+  $('status').scrollTop = 0;
   draw();
 }
 async function finish() {
@@ -237,8 +244,12 @@ window.addEventListener('keydown', e => {
 
 document.querySelectorAll('.tool').forEach(b => b.onclick = () => {
   tool = tool === b.dataset.tool ? null : b.dataset.tool; draft = []; hover = null; refused = false;
-  document.querySelectorAll('.tool').forEach(x => x.classList.toggle('on', x.dataset.tool === tool));
+  document.querySelectorAll('.tool').forEach(x => {
+    const active = x.classList.toggle('on', x.dataset.tool === tool);
+    x.setAttribute('aria-pressed', active);
+  });
   $('hint').textContent = HINTS[tool];
+  $('hint').scrollTop = 0;
   draw();
 });
 $('open').onclick = () => call('open', {map: $('maps').value});
@@ -252,6 +263,28 @@ $('clearGuide').onclick = () => edit('guide_px', []);
 for (const a of ['export', 'save']) $(a).onclick = () => call(a);
 $('fit').onclick = () => { fit(); draw(); };
 document.querySelectorAll('.layer').forEach(c => c.onchange = () => { shown[c.value] = c.checked; draw(); });
-window.addEventListener('resize', resize);
+
+const menus = document.querySelector('.menubar');
+function dismissMenu(restoreFocus = false) {
+  const open = menus.querySelector('details[open]');
+  if (!open) return;
+  open.open = false;
+  if (restoreFocus) open.querySelector('summary').focus();
+}
+document.addEventListener('click', e => {
+  if (!menus.contains(e.target)) { dismissMenu(); return; }
+  const button = e.target.closest('button');
+  if (!button) return;
+  dismissMenu(true);
+  if (button.dataset.command) $(button.dataset.command).click();
+});
+document.addEventListener('focusin', e => { if (!menus.contains(e.target)) dismissMenu(); });
+menus.addEventListener('keydown', e => {
+  if (e.key !== 'Escape' || !menus.querySelector('details[open]')) return;
+  e.stopPropagation();
+  dismissMenu(true);
+});
+
+new ResizeObserver(resize).observe(cv);
 resize();
 fetch('/api/view').then(r => r.json()).then(v => show(v));
