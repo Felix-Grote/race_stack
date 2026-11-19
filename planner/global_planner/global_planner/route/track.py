@@ -1,9 +1,10 @@
 """The track as data: sections of road, the portals joining them, and the route."""
+
 from dataclasses import dataclass
 from functools import cached_property
 from itertools import accumulate
 
-from .geometry import Chain, distance, outline, XY
+from .geometry import XY, Chain, distance, outline
 
 
 @dataclass(frozen=True)
@@ -93,4 +94,4 @@ class Route:
     @cached_property
     def section_bounds(self) -> tuple[float, ...]:
         """Return the lap progress q where each section starts, plus the lap length."""
-        return (0.,) + tuple(accumulate(s.length for s in self.sections))
+        return (0.0,) + tuple(accumulate(s.length for s in self.sections))

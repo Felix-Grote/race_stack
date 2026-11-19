@@ -1,6 +1,7 @@
 """Numerical tolerances and work budgets for curve geometry."""
-from dataclasses import dataclass
+
 import math
+from dataclasses import dataclass
 
 from .errors import GeometryError
 
@@ -24,7 +25,7 @@ class NumericPolicy:
     def __post_init__(self) -> None:
         for x in (self.station_abs, self.join_abs, self.min_speed):
             if not math.isfinite(x) or x <= 0:
-                raise GeometryError('invalid numerical tolerance')
+                raise GeometryError("invalid numerical tolerance")
 
         if type(self.max_samples) is not int or self.max_samples <= 0:
-            raise GeometryError('invalid numerical resource budget')
+            raise GeometryError("invalid numerical resource budget")

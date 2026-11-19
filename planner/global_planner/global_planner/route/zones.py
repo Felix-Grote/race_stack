@@ -16,20 +16,21 @@ boundaries: on a given lap, the q where the line enters and leaves a portal's re
             they depend on the line, so they are computed per lap. They need not come
             in pairs: a section that bends back can start within reach of its own end gate.
 """
+
+import math
 from dataclasses import dataclass
 from functools import cached_property
-import math
 
 import numpy as np
+import shapely
 from numpy.polynomial.polynomial import polyval
 from numpy.typing import ArrayLike
 from scipy.optimize import brentq
-import shapely
 from shapely.geometry import LineString, Polygon
 from shapely.ops import unary_union
 
-from .errors import require, RouteError
-from .geometry import Chain, XY
+from .errors import RouteError, require
+from .geometry import XY, Chain
 from .lap import LapCurve
 from .track import Portal, Route
 
@@ -63,24 +64,35 @@ class PortalZone:
 
 def portal_zones(route: Route, reach_m: float) -> tuple[PortalZone, ...]:
     """Return every portal's zone for a car of the given reach (Car.reach_m)."""
-    require(math.isfinite(reach_m) and reach_m > 0, 'reach_m must be positive and finite')
+    require(
+        math.isfinite(reach_m) and reach_m > 0, "reach_m must be positive and finite"
+    )
     for i, section in enumerate(route.sections):
-        apart = LineString(route.portals[i - 1].gate).distance(LineString(route.portals[i].gate))
-        require(apart >= reach_m,
-                f'section {section.uid} is too short for this car: its gates come within '
-                f'{apart:.2f} m of each other and the car reaches {reach_m:.2f} m, so its body '
-                f'could lie across three sections; merge it with a neighbour or move a cut')
+        apart = LineString(route.portals[i - 1].gate).distance(
+            LineString(route.portals[i].gate)
+        )
+        require(
+            apart >= reach_m,
+            f"section {section.uid} is too short for this car: its gates come within "
+            f"{apart:.2f} m of each other and the car reaches {reach_m:.2f} m, so its body "
+            f"could lie across three sections; merge it with a neighbour or move a cut",
+        )
 
     zones = []
     for i, portal in enumerate(route.portals):
-        source, target = route.sections[i], route.sections[(i + 1) % len(route.sections)]
+        source, target = (
+            route.sections[i],
+            route.sections[(i + 1) % len(route.sections)],
+        )
         gate = LineString(portal.gate)
         joined = unary_union([Polygon(source.polygon), Polygon(target.polygon)])
         near = joined.intersection(gate.buffer(reach_m))
         parts = [g for g in shapely.get_parts(near) if g.intersects(gate)]
         if len(parts) != 1 or not parts[0].covers(gate) or parts[0].interiors:
-            raise RouteError(f'portal {portal.uid}: within {reach_m:.2f} m of the gate, the '
-                             f'road is not one piece without holes')
+            raise RouteError(
+                f"portal {portal.uid}: within {reach_m:.2f} m of the gate, the "
+                f"road is not one piece without holes"
+            )
 
         support = tuple(tuple(p) for p in parts[0].exterior.coords[:-1])
         zones.append(PortalZone(portal, reach_m, support))
@@ -88,7 +100,9 @@ def portal_zones(route: Route, reach_m: float) -> tuple[PortalZone, ...]:
     return tuple(zones)
 
 
-def reach_boundaries(lap: LapCurve, zone: PortalZone, steps: int = 8) -> tuple[float, ...]:
+def reach_boundaries(
+    lap: LapCurve, zone: PortalZone, steps: int = 8
+) -> tuple[float, ...]:
     """
     Return the q where the line enters or leaves the zone's reach of its gate.
 
@@ -96,7 +110,7 @@ def reach_boundaries(lap: LapCurve, zone: PortalZone, steps: int = 8) -> tuple[f
             of a piece cancel out and are missed.
     """
     found = []
-    t = np.linspace(0., 1., steps + 1)
+    t = np.linspace(0.0, 1.0, steps + 1)
     for i, segment in enumerate(lap.curve.segments):
         if not zone.portal.joins(lap.curve.owners[i]):
             continue

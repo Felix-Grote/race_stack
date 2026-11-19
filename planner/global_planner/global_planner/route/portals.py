@@ -1,13 +1,14 @@
 """Where a lap curve crosses each portal gate: exactly once, forwards, in lap order."""
-from dataclasses import dataclass
+
 import math
+from dataclasses import dataclass
 
 import numpy as np
 from numpy.polynomial.polynomial import polyder, polyroots, polyval
 
 from .cubic import CubicSegment
 from .errors import LapError
-from .geometry import cross, dot, EPS, sub
+from .geometry import EPS, cross, dot, sub
 from .lap import LapCurve
 from .track import Portal
 
@@ -40,7 +41,7 @@ def _gate_parameters(segment: CubicSegment, portal: Portal) -> tuple[float, ...]
 
     uncertainty = EPS * math.hypot(*g) + 128 * np.finfo(float).eps * sum(abs(f))
     if max(abs(f)) <= uncertainty:
-        raise LapError(f'portal {portal.uid}: a piece of the line runs along the gate')
+        raise LapError(f"portal {portal.uid}: a piece of the line runs along the gate")
 
     roots = list(polyroots(f))
 
@@ -56,11 +57,13 @@ def _gate_parameters(segment: CubicSegment, portal: Portal) -> tuple[float, ...]
 
     result = []
     for root in roots:
-        if 1e-10 < abs(root.imag) < 1e-7 and -.001 < root.real < 1.001:
-            raise LapError(f'portal {portal.uid}: the line may touch the gate without crossing')
+        if 1e-10 < abs(root.imag) < 1e-7 and -0.001 < root.real < 1.001:
+            raise LapError(
+                f"portal {portal.uid}: the line may touch the gate without crossing"
+            )
 
         if abs(root.imag) <= 1e-10 and -EPS <= root.real <= 1 + EPS:
-            result.append(max(0., min(1., float(root.real))))
+            result.append(max(0.0, min(1.0, float(root.real))))
 
     return tuple(result)
 
@@ -89,32 +92,44 @@ def portal_crossings(lap: LapCurve) -> tuple[Crossing, ...]:
                 xy, d = seg.evaluate(t), seg.evaluate(t, 1)
                 u = dot(sub(xy, a), g) / dot(g, g)
                 if -EPS <= u <= EPS or 1 - EPS <= u <= 1 + EPS:
-                    raise LapError(f'portal {portal.uid}: the line crosses at a gate end')
+                    raise LapError(
+                        f"portal {portal.uid}: the line crosses at a gate end"
+                    )
 
                 if not 0 < u < 1:
                     continue
 
                 if abs(cross(g, sub(xy, a))) > EPS * math.hypot(*g):
-                    raise LapError(f'portal {portal.uid}: crossing point not on the gate')
+                    raise LapError(
+                        f"portal {portal.uid}: crossing point not on the gate"
+                    )
 
                 if cross(g, d) >= -EPS:
-                    raise LapError(f'portal {portal.uid}: the line crosses backwards or grazes')
+                    raise LapError(
+                        f"portal {portal.uid}: the line crosses backwards or grazes"
+                    )
 
                 s = lap.curve.wrap(lap.curve.station(i, t))
-                if not any(lap.curve.separation(s, x.s) < lap.curve.policy.station_abs
-                           for x in hits):
+                if not any(
+                    lap.curve.separation(s, x.s) < lap.curve.policy.station_abs
+                    for x in hits
+                ):
                     hits.append(Crossing(portal.uid, s, i, t, q))
 
         if len(hits) != 1:
-            raise LapError(f'portal {portal.uid}: crossed {len(hits)} times, expected once')
+            raise LapError(
+                f"portal {portal.uid}: crossed {len(hits)} times, expected once"
+            )
 
         result.append(hits[0])
 
     # The closing gate may be just before/after q=0: compare q relative to each gate.
-    unwrapped = [bounds[j + 1] + lap.wrapped_offset(hit.q, bounds[j + 1])
-                 for j, hit in enumerate(result)]
+    unwrapped = [
+        bounds[j + 1] + lap.wrapped_offset(hit.q, bounds[j + 1])
+        for j, hit in enumerate(result)
+    ]
 
     if any(a >= b for a, b in zip(unwrapped, unwrapped[1:])):
-        raise LapError('gates are crossed out of lap order')
+        raise LapError("gates are crossed out of lap order")
 
     return tuple(result)

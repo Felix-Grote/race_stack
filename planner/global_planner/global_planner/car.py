@@ -8,8 +8,9 @@ margin:     extra clearance the planner keeps around the body, the same distance
             direction; a planning choice, so it comes from the planner's settings, not
             from the car file.
 """
-from dataclasses import dataclass
+
 import math
+from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
@@ -34,16 +35,18 @@ class Car:
     margin_m: float
 
     def __post_init__(self) -> None:
-        for field in ('width_m', 'body_front_m', 'body_rear_m', 'margin_m'):
+        for field in ("width_m", "body_front_m", "body_rear_m", "margin_m"):
             value = getattr(self, field)
             if isinstance(value, bool) or not isinstance(value, (int, float)):
-                raise ValueError(f'{self.name}: {field} must be a number')
+                raise ValueError(f"{self.name}: {field} must be a number")
 
             if not math.isfinite(value) or value < 0:
-                raise ValueError(f'{self.name}: {field} must be finite and not negative')
+                raise ValueError(
+                    f"{self.name}: {field} must be finite and not negative"
+                )
 
         if self.width_m == 0 or self.body_front_m + self.body_rear_m == 0:
-            raise ValueError(f'{self.name}: the body must have a width and a length')
+            raise ValueError(f"{self.name}: the body must have a width and a length")
 
     @property
     def reach_m(self) -> float:
@@ -53,16 +56,25 @@ class Car:
         return corner + self.margin_m
 
     @classmethod
-    def load(cls, car_model_yaml: str | Path, margin_m: float) -> 'Car':
+    def load(cls, car_model_yaml: str | Path, margin_m: float) -> "Car":
         """Read a car's body from its car_model.yaml; margin_m comes from the planner settings."""
         path = Path(car_model_yaml)
-        values = yaml.safe_load(path.read_text(encoding='utf-8')) or {}
-        name = str(values.get('racecar_version', path.parent.name))
+        values = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        name = str(values.get("racecar_version", path.parent.name))
 
-        missing = [k for k in ('width_m', 'body_front_m', 'body_rear_m') if k not in values]
+        missing = [
+            k for k in ("width_m", "body_front_m", "body_rear_m") if k not in values
+        ]
         if missing:
-            raise ValueError(f'{name}: {path.name} has no {", ".join(missing)}; measure them '
-                             f'from base_link (rear axle centre on the ground)')
+            raise ValueError(
+                f"{name}: {path.name} has no {', '.join(missing)}; measure them "
+                f"from base_link (rear axle centre on the ground)"
+            )
 
-        return cls(name, values['width_m'], values['body_front_m'], values['body_rear_m'],
-                   margin_m)
+        return cls(
+            name,
+            values["width_m"],
+            values["body_front_m"],
+            values["body_rear_m"],
+            margin_m,
+        )

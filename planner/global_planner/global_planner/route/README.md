@@ -12,14 +12,16 @@ from global_planner.route.portals import portal_crossings
 from global_planner.route.sampling import sample_lap
 from global_planner.route.zones import portal_zones, reach_boundaries
 
-route = load_route('track.json')        # validated, immutable Route
-lap = centre_curve(route)               # closed curve through every section's centreline
-crossings = portal_crossings(lap)       # one forward crossing per portal, in lap order
+route = load_route("track.json")  # validated, immutable Route
+lap = centre_curve(route)  # closed curve through every section's centreline
+crossings = portal_crossings(lap)  # one forward crossing per portal, in lap order
 
-car = Car.load('car_model.yaml', margin_m=0.05)
-zones = portal_zones(route, car.reach_m)                     # where each portal applies
+car = Car.load("car_model.yaml", margin_m=0.05)
+zones = portal_zones(route, car.reach_m)  # where each portal applies
 boundaries = [q for z in zones for q in reach_boundaries(lap, z)]
-samples = sample_lap(lap, 0.25, extra_anchors=boundaries)    # every 25 cm, plus the anchors
+samples = sample_lap(
+    lap, 0.25, extra_anchors=boundaries
+)  # every 25 cm, plus the anchors
 ```
 
 ## Pipeline
