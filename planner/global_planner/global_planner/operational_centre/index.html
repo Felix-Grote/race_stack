@@ -69,7 +69,7 @@
     </form>
     <footer class="statusbar settings-status">
       <div id="worksheet-status" role="status">Loading worksheet…</div>
-      <div>Applies to minimum curvature and lap time</div>
+      <div>Applies to all three driving profiles</div>
     </footer>
   </section>
 
@@ -114,43 +114,55 @@
             <button id="zoom-in" aria-label="Zoom in" title="Zoom in" disabled>+</button>
             <button id="zoom-out" aria-label="Zoom out" title="Zoom out" disabled>−</button>
             <button id="fit" disabled>Fit</button>
-            <span id="map-scale">Map frame · metres</span>
+            <label>Display <select id="map-mode">
+              <option value="trajectories">Trajectories</option>
+              <option value="utilization">Constraint utilisation</option>
+              <option value="clearance">Wall clearance</option>
+            </select></label>
+            <label id="heat-profile-label" hidden>Heatmap profile <select id="heat-profile"></select></label>
           </div>
           <div class="sunken map-well">
             <svg id="track-plot" role="img" aria-label="Route walls, start zone and trajectory overlay"></svg>
             <p id="no-route" class="plot-note">Open a map in Annotator and export a route.</p>
           </div>
+          <div id="heat-legend" class="heat-legend" aria-label="Heatmap scale" hidden></div>
         </fieldset>
-        <fieldset class="speed-field">
-          <legend>Flying lap speed</legend>
-          <div class="sunken speed-well">
-            <svg id="speed-plot" viewBox="0 0 720 150" role="img"
-                 aria-label="Speed in metres per second against shared lap progress"></svg>
-            <p id="no-speed" class="plot-note">Generate and show a timed trajectory to compare speeds.</p>
+        <fieldset class="telemetry-field">
+          <legend>Telemetry</legend>
+          <div class="plot-tools">
+            <label>Quantity <select id="telemetry-quantity"></select></label>
+            <span>Shared route progress <i>q</i> (m)</span>
+          </div>
+          <div class="sunken telemetry-well">
+            <svg id="telemetry-plot" viewBox="0 0 720 150" role="img" tabindex="0"
+                 aria-label="Telemetry by route progress. Use arrow keys to inspect the lap."></svg>
+            <p id="no-telemetry" class="plot-note">Generate and select a profile to see telemetry.</p>
           </div>
         </fieldset>
       </div>
 
       <aside class="comparison" aria-label="Trajectory comparison">
         <fieldset>
-          <legend>Trajectory layers</legend>
+          <legend>Driving profiles</legend>
           <div id="trajectory-list" class="trajectory-list"></div>
         </fieldset>
         <fieldset>
-          <legend>Current comparison</legend>
+          <legend>Predicted flying lap</legend>
           <div class="sheet">
             <table class="metrics">
-              <thead><tr><th scope="col">Trajectory</th><th scope="col">Length</th><th scope="col">Lap time</th></tr></thead>
+              <thead><tr><th scope="col">Profile</th><th scope="col">Lap time</th><th scope="col">Δ Balanced</th></tr></thead>
               <tbody id="metrics-rows"></tbody>
             </table>
           </div>
-          <p id="lap-delta" class="lap-delta" hidden></p>
-          <p>Times are flying-lap estimates from the configured car model.</p>
+        </fieldset>
+        <fieldset>
+          <legend>Inspect</legend>
+          <div id="inspection" tabindex="0">Point at the graph or a heatmap line to inspect a location.</div>
         </fieldset>
         <fieldset>
           <legend>Generation</legend>
           <p id="job-status" role="status">No job running.</p>
-          <div id="progress" class="progress" role="progressbar" aria-label="Trajectory categories processed" hidden><i></i></div>
+          <div id="progress" class="progress" role="progressbar" aria-label="Driving profiles completed" hidden><i></i></div>
           <p id="track-error" class="notice" role="status" hidden></p>
         </fieldset>
       </aside>
@@ -167,7 +179,7 @@
   <form id="generate-form">
     <p id="generate-map"></p>
     <fieldset>
-      <legend>Categories</legend>
+      <legend>Driving profiles</legend>
       <div id="generate-choices" class="choices"></div>
     </fieldset>
     <div id="legacy-warning" class="notice" hidden>
@@ -188,9 +200,9 @@
     <dl>
       <dt>Annotator</dt><dd>Open a map, place the start and export a validated route.</dd>
       <dt>Hyperparameters</dt><dd>Apply optimizer values and working bounds. Bounds alone do not affect existing trajectories.</dd>
-      <dt>Tracks</dt><dd>Select a route and generate the centreline, minimum-curvature line or lap-time optimized line. Drag the overlay to pan after zooming.</dd>
+      <dt>Tracks</dt><dd>Generate the driving profiles, then select the layers to compare. Choose one profile for a heatmap. Point at the map or graph to inspect constraints at a location.</dd>
     </dl>
-    <p>The centreline is a geometry reference. The optimizer checks vehicle clearance and steering on the optimized lines.</p>
+    <p>Times and telemetry are predictions from the vehicle model. The profile presets are provisional.</p>
     <div class="dialog-actions"><button class="default-button" data-close autofocus>OK</button></div>
   </div>
 </dialog>

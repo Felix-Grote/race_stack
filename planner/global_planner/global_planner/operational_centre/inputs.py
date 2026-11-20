@@ -72,11 +72,11 @@ class Vehicle:
 
     @classmethod
     def read(cls, path: Path | None, margin: float) -> 'Vehicle':
-        """Read the configured car without preventing geometry-only work."""
+        """Read the configured car without blocking annotation."""
         if path is None:
             return cls(None, None, None, 'Set --car to enable optimization.')
         try:
-            return _vehicle(path, path.read_text(encoding='utf-8'), margin)
+            return _vehicle(path, path.read_bytes().decode('utf-8'), margin)
         except (OSError, ValueError, OverflowError, yaml.YAMLError) as exc:
             return cls(None, None, None, str(exc))
 
@@ -84,7 +84,7 @@ class Vehicle:
 @lru_cache(maxsize=8)
 def _vehicle(path: Path, source: str, margin: float) -> Vehicle:
     car = Car.load(path, margin_m=margin, source=source)
-    revision = digest(f'{margin!r}\n{source}'.encode())
+    revision = digest(source.encode('utf-8'))
     try:
         return Vehicle(car, CarLimits.load(path, source=source), revision)
     except (ValueError, OverflowError) as exc:

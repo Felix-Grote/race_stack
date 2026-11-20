@@ -9,20 +9,22 @@ from uuid import uuid4
 
 from ..annotation.editor import Editor
 from ..annotation.track_map import AnnotationError, read_source
-from .generation import CATEGORIES, RESULT_VERSION, provenance, run_job
+from .generation import PROFILES, RESULT_VERSION, profile_info, provenance, run_job
 from .inputs import Track, Vehicle
 from .settings import Worksheet, parameter_info, validate
 from .storage import digest
 
 _CHANGED = {'route': 'Route export changed', 'map': 'Map source changed',
-            'car': 'Car model or clearance changed', 'optimizer': 'Optimizer values changed'}
+            'car': 'Car model changed', 'optimizer': 'Optimizer values changed',
+            'profile': 'Profile policy changed', 'speed_model': 'Speed model settings changed',
+            'planner': 'Planner source changed'}
 
 
 @lru_cache(maxsize=18)
 def _artifact(data: bytes) -> dict:
     result = json.loads(data)
     if (not isinstance(result, dict) or result.get('version') != RESULT_VERSION
-            or not {'id', 'inputs', 'metrics', 'points', 'speed', 'timing_error'} <= result.keys()
+            or not {'id', 'inputs', 'metrics', 'telemetry'} <= result.keys()
             or not isinstance(result['inputs'], dict)):
         raise ValueError('Unrecognized result format.')
     return result
@@ -51,7 +53,7 @@ class Workspace:
         worksheet = Worksheet.read(self.worksheet_path)
         settings = None if worksheet.error else validate(worksheet.parameters)
         revision = digest(json.dumps([track.status, track.route.digest if track.route else None,
-                                      track.source, vehicle.revision, worksheet.revision]).encode())
+                                      track.source, vehicle.revision, self.margin, worksheet.revision]).encode())
         return track, vehicle, worksheet, settings, revision
 
     def prepare_annotation(self, action: str) -> None:
@@ -96,7 +98,7 @@ class Workspace:
     def _comparison(self, name: str | None, track: Track, vehicle: Vehicle,
                     settings) -> tuple[dict, dict]:
         summaries, current = {}, {}
-        for kind in CATEGORIES:
+        for kind in PROFILES:
             if name is None:
                 summaries[kind] = {'status': 'missing'}
                 continue
@@ -112,11 +114,13 @@ class Workspace:
             expected = provenance(kind, track, vehicle, settings)
             changed = [label for key, label in _CHANGED.items()
                        if artifact['inputs'].get(key) != expected.get(key)]
+            if not changed and artifact['inputs'] != expected:
+                changed = ['Effective planning inputs changed']
             if not changed:
                 current[kind] = artifact
             summaries[kind] = {
                 'status': 'stale' if changed else 'current',
-                'message': ', '.join(changed) + '.' if changed else artifact['timing_error'],
+                'message': ', '.join(changed) + '.' if changed else None,
                 'metrics': artifact['metrics'],
             }
         return summaries, current
@@ -139,9 +143,10 @@ class Workspace:
             'track': {'status': track.status, 'name': track.name, 'message': track.message,
                       'digest': route.digest if route else None,
                       'sections': len(route.sections) if route else 0},
-            'car': {'name': vehicle.car.name if vehicle.car else None, 'margin': self.margin,
+            'car': {'name': vehicle.car.name if vehicle.car else None,
                     'timing': vehicle.limits is not None, 'message': vehicle.message},
             'settings': asdict(worksheet), 'parameters': parameter_info(),
+            'profiles': {kind: profile_info(kind, self.margin, settings) for kind in PROFILES},
             'summaries': summaries, 'job': self.job,
         }
         if seen_view != view_id:
@@ -150,8 +155,8 @@ class Workspace:
                 'walls': [section.polygon for section in route.sections] if route else [],
                 'gates': [portal.gate for portal in route.portals] if route else [],
                 'start': route.start.zone if route else [],
-                'lines': {kind: {'points': item['points'], 'speed': item['speed']}
-                          for kind, item in current.items()},
+                'period_m': route.section_bounds[-1] if route else 0.,
+                'lines': {kind: item['telemetry'] for kind, item in current.items()},
             }
         return state
 
@@ -168,9 +173,9 @@ class Workspace:
         if name not in self.editor.maps():
             raise ValueError('Select a map from the workspace.')
         if (not isinstance(categories, list) or not categories
-                or not all(kind in CATEGORIES for kind in categories)
+                or not all(kind in PROFILES for kind in categories)
                 or len(set(categories)) != len(categories)):
-            raise ValueError('Select at least one trajectory category.')
+            raise ValueError('Select at least one driving profile.')
 
         track, vehicle, worksheet, settings, revision = self._inputs(name)
         if body.get('revision') != revision:
@@ -178,19 +183,18 @@ class Workspace:
         if track.route is None or (track.status == 'unverified'
                                    and body.get('allow_unverified') is not True):
             raise ValueError(track.message)
-        if any(kind != 'centreline' for kind in categories):
-            if worksheet.error:
-                raise ValueError(worksheet.error)
-            if vehicle.car is None or ('laptime' in categories and vehicle.limits is None):
-                raise ValueError(vehicle.message)
+        if worksheet.error:
+            raise ValueError(worksheet.error)
+        if vehicle.car is None or vehicle.limits is None:
+            raise ValueError(vehicle.message)
 
         job = {'id': uuid4().hex, 'map': name, 'running': True,
-               'attempts': {kind: {'status': 'queued'} for kind in CATEGORIES if kind in categories}}
+               'attempts': {kind: {'status': 'queued'} for kind in PROFILES if kind in categories}}
         scratch = TemporaryDirectory(prefix='forzaeth-planner-')
         progress = Path(scratch.name) / 'progress.json'
         worker = get_context('spawn').Process(target=run_job, daemon=True,
                                               args=(self._results(name), progress, job,
-                                                    track, vehicle, settings))
+                                                    track, vehicle, settings, worksheet.revision))
         try:
             worker.start()
         except BaseException:

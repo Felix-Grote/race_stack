@@ -1,72 +1,92 @@
-"""Run the native planner on captured inputs and serialize the comparison samples."""
+"""Optimize the driving profiles independently using captured planning inputs."""
 import traceback
-from dataclasses import asdict
+from dataclasses import asdict, replace
+from functools import cache
 from pathlib import Path
 
+from ..car import Car, CarLimits
 from ..optimizer.solve import OptimizerSettings, optimize
-from ..route.lap import centre_curve
-from ..route.portals import portal_crossings
-from ..route.sampling import sample_lap
-from ..route.zones import portal_zones
-from ..speed.speeds import speed_profile
+from ..speed.speeds import SpeedSettings
 from .inputs import Track, Vehicle
-from .storage import write_json
+from .storage import digest, write_json
+from .telemetry import measure
 
-CATEGORIES = ('centreline', 'curvature', 'laptime')
-RESULT_VERSION = 1
+# Provisional performance fractions, added clearance in metres, and multipliers on Balanced γ.
+PROFILES = {
+    'gentle': (0.80, 0.050, 2.0),
+    'balanced': (0.90, 0.025, 1.0),
+    'aggressive': (0.95, 0.000, 0.5),
+}
+RESULT_VERSION = 2
+
+
+@cache
+def _planner_revision() -> str:
+    """Fingerprint the planner sources shipped with the installed package."""
+    root = Path(__file__).resolve().parents[1]
+    sources = [root / 'car.py']
+    for package in ('optimizer', 'route', 'speed'):
+        sources.extend(sorted((root / package).glob('*.py')))
+    sources.append(root / 'route' / 'manifest.schema.json')
+    return digest(''.join(digest(path.read_bytes()) for path in sources).encode())
+
+
+def profile_info(kind: str, margin: float, settings: OptimizerSettings | None) -> dict:
+    """Return the effective policy shown to the operator and saved with the result."""
+    alpha, extra, multiplier = PROFILES[kind]
+    return {'alpha': alpha, 'margin_m': margin + extra,
+            'gamma': None if settings is None else settings.smoothness * multiplier}
+
+
+def _effective(kind: str, vehicle: Vehicle, settings: OptimizerSettings
+               ) -> tuple[Car, CarLimits, OptimizerSettings]:
+    policy = profile_info(kind, vehicle.car.margin_m, settings)
+    limits = vehicle.limits
+    alpha = policy['alpha']
+    reduced = replace(
+        limits,
+        v_max=limits.v_max * alpha,
+        a_max=limits.a_max * alpha,
+        a_min=limits.a_min * alpha,
+        a_lat_max=limits.a_lat_max * alpha,
+        a_motor=tuple((speed, acceleration * alpha) for speed, acceleration in limits.a_motor),
+        max_steering_velocity=limits.max_steering_velocity * alpha,
+    )
+    return (replace(vehicle.car, margin_m=policy['margin_m']), reduced,
+            replace(settings, smoothness=policy['gamma']))
 
 
 def provenance(kind: str, track: Track, vehicle: Vehicle,
                settings: OptimizerSettings | None) -> dict:
-    """Identify just the inputs used by this trajectory category."""
-    inputs = {'route': track.route.digest if track.route else None, 'map': track.source}
-    if kind != 'centreline':
-        values = asdict(settings) if settings is not None else None
-        if values is not None and kind == 'curvature':
-            values.pop('smoothness')
-        inputs.update(car=vehicle.revision, optimizer=values)
+    """Identify the captured sources and all effective settings of one profile."""
+    inputs = {'route': track.route.digest if track.route else None,
+              'map': track.source, 'car': vehicle.revision,
+              'profile': None, 'body': None, 'limits': None, 'optimizer': None,
+              'speed_model': asdict(SpeedSettings()), 'planner': _planner_revision()}
+    if vehicle.car is not None and vehicle.limits is not None and settings is not None:
+        car, limits, optimizer = _effective(kind, vehicle, settings)
+        inputs.update(profile=profile_info(kind, vehicle.car.margin_m, settings),
+                      body=asdict(car), limits=asdict(limits), optimizer=asdict(optimizer))
+        inputs['limits']['a_motor'] = [list(point) for point in limits.a_motor]
     return inputs
 
 
-def generate(kind: str, track: Track, vehicle: Vehicle, settings: OptimizerSettings | None) -> dict:
-    """Generate one line, leaving certification and refusals to the native planner."""
-    profile, timing_error, passes = None, None, None
-    if kind == 'centreline':
-        lap = centre_curve(track.route)
-        portal_crossings(lap)
-    else:
-        by_time = kind == 'laptime'
-        result = optimize(track.route, vehicle.car, settings,
-                          limits=vehicle.limits if by_time else None)
-        lap, profile, passes = result.lap, result.profile, len(result.passes)
-        if not by_time:
-            if vehicle.limits is None:
-                timing_error = vehicle.message
-            else:
-                try:
-                    zones = portal_zones(track.route, vehicle.car.reach_m)
-                    profile = speed_profile(lap, zones, vehicle.limits)
-                except ValueError as exc:
-                    timing_error = str(exc)
-
-    samples = profile.samples if profile is not None else sample_lap(lap, 0.1)
+def generate(kind: str, track: Track, vehicle: Vehicle, settings: OptimizerSettings) -> dict:
+    """Run a full geometry and speed solve and sample its validated result."""
+    car, limits, optimizer = _effective(kind, vehicle, settings)
+    result = optimize(track.route, car, optimizer, limits=limits)
+    telemetry = measure(result.lap, car, result.profile)
     return {
-        'metrics': {'length_m': lap.curve.length,
-                    'peak_curvature_inv_m': max(abs(sample.curvature) for sample in samples),
-                    'lap_time_s': None if profile is None else profile.lap_time_s,
-                    'passes': passes},
-        'points': [sample.xy for sample in samples],
-        'speed': [] if profile is None else [
-            [sample.q / lap.period, float(speed)]
-            for sample, speed in zip(samples, profile.points.speed_mps)
-        ],
-        'timing_error': timing_error,
+        'metrics': {'length_m': result.lap.curve.length,
+                    'lap_time_s': result.profile.lap_time_s,
+                    'min_clearance_m': min(telemetry['values']['clearance'])},
+        'telemetry': telemetry,
     }
 
 
 def run_job(directory: Path, progress: Path, job: dict, track: Track, vehicle: Vehicle,
-            settings: OptimizerSettings | None) -> None:
-    """Publish each completed result independently in the worker process."""
+            settings: OptimizerSettings, worksheet_revision: str) -> None:
+    """Publish each completed profile independently in the worker process."""
     for kind, attempt in job['attempts'].items():
         attempt['status'] = 'running'
         write_json(progress, job)
@@ -74,7 +94,8 @@ def run_job(directory: Path, progress: Path, job: dict, track: Track, vehicle: V
             result = generate(kind, track, vehicle, settings)
             write_json(directory / f'{kind}.json',
                        dict(result, version=RESULT_VERSION, id=job['id'],
-                            inputs=provenance(kind, track, vehicle, settings)))
+                            inputs=provenance(kind, track, vehicle, settings),
+                            worksheet_revision=worksheet_revision))
         except (ValueError, OSError) as exc:
             attempt.update(status='failed', message=str(exc))
         except Exception as exc:  # noqa: BLE001 - report unexpected worker failures to the UI

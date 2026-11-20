@@ -1,8 +1,8 @@
 :root {
   --desktop: #008080;
-  --centreline: #505080;
-  --curvature: #008000;
-  --laptime: #c00030;
+  --gentle: #0000a0;
+  --balanced: #008000;
+  --aggressive: #c00030;
 }
 
 body {
@@ -98,28 +98,38 @@ fieldset {
 legend { padding: 0 4px; }
 p { margin: 4px 0; }
 .map-field { display: flex; flex-direction: column; }
-.plot-tools { display: flex; align-items: center; gap: 3px; margin-bottom: 4px; }
+.plot-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 6px; margin-bottom: 4px; }
+.plot-tools label { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.plot-tools select { max-width: 100%; }
 .plot-tools button { min-width: 25px; }
-#map-scale { margin-left: auto; padding: 0 3px; }
 .sunken { box-shadow: var(--sunken); padding: 3px; }
-.map-well, .speed-well { position: relative; display: grid; background: #fff; }
+.map-well, .telemetry-well { position: relative; display: grid; background: #fff; }
 .map-well { flex: 1; min-height: 17rem; }
-.speed-well { height: clamp(7.75rem, 19vh, 10.5rem); }
-.map-well svg, .speed-well svg { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; }
+.telemetry-well { height: clamp(7.75rem, 19vh, 10.5rem); }
+.map-well svg, .telemetry-well svg { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; }
 #track-plot { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); }
 #track-plot.pannable { cursor: grab; touch-action: none; }
 #track-plot.dragging { cursor: grabbing; }
 .plot-note { align-self: center; justify-self: center; text-align: center; padding: 4px; }
-#speed-plot { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); }
+#telemetry-plot { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); }
 .road { fill: #e5e5e5; stroke: #666; stroke-width: 1; vector-effect: non-scaling-stroke; }
 .gate { fill: none; stroke: #777; stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
 .start { fill: #fff8bc; stroke: #000; stroke-width: 1; vector-effect: non-scaling-stroke; }
 .curve { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.centreline { --ink: var(--centreline); }
-.curvature { --ink: var(--curvature); }
-.laptime { --ink: var(--laptime); }
-.curve.centreline { stroke-dasharray: 2 4; stroke-width: 2; }
-.curve.curvature { stroke-dasharray: 7 3; }
+.gentle { --ink: var(--gentle); }
+.balanced { --ink: var(--balanced); }
+.aggressive { --ink: var(--aggressive); }
+.curve.gentle { stroke-dasharray: 2 4; stroke-width: 2; }
+.curve.balanced { stroke-dasharray: 7 3; }
+.heat-line { fill: none; stroke-width: 4; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.heat-legend { display: flex; flex-wrap: wrap; gap: 3px 8px; padding: 4px 1px 0; }
+.heat-legend span { display: inline-flex; gap: 4px; align-items: center; }
+.heat-legend i { width: 12px; height: 12px; box-shadow: var(--sunken); }
+.cursor { stroke: #000; stroke-dasharray: 3 2; vector-effect: non-scaling-stroke; }
+.marker { fill: var(--ink); stroke: #fff; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+#inspection { min-height: 4em; max-height: 10.5em; overflow: auto; }
+#inspection p { margin: 2px 0; }
+#inspection ul { padding: 0 0 0 15px; margin: 3px 0; }
 .axis { stroke: #000; stroke-width: 1; }
 .gridline { stroke: #ccc; stroke-width: 1; shape-rendering: crispEdges; }
 .graph-label { fill: #000; font: 12px Arial, sans-serif; }
@@ -150,7 +160,6 @@ tbody tr + tr { border-top: 1px solid #dfdfdf; }
 .metrics tbody th { font-weight: normal; }
 .metrics th:first-child { width: 42%; }
 .metrics td { font-variant-numeric: tabular-nums; }
-.lap-delta { font-weight: bold; }
 .progress {
   height: 17px;
   margin: 5px 0 2px;

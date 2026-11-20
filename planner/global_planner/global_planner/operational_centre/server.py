@@ -106,7 +106,7 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--maps', type=Path, required=True, help='directory of map folders')
     parser.add_argument('--car', type=Path, help='car_model.yaml for optimization')
-    parser.add_argument('--margin', type=float, default=0.05, help='body clearance in metres')
+    parser.add_argument('--margin', type=float, default=0.05, help='minimum body clearance in metres (Aggressive profile)')
     parser.add_argument('--workspace', type=Path, default=Path('.forzaeth/operational-centre'),
                         help='directory for the optimizer worksheet and cached results')
     parser.add_argument('--port', type=int, default=8767)
