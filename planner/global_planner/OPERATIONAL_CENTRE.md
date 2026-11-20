@@ -37,6 +37,10 @@ Each profile runs the native geometry and flying-lap optimizer independently. Th
 - **Wall clearance** is sampled from the oriented, uninflated vehicle rectangle to physical side walls of the owning section and its immediate neighbours. Gates and artificial portal support edges are excluded. A footprint outside its legal road is reported with zero clearance. The legend relates this measurement to the required clearance. The optimizer's own geometry checks determine validity.
 - The graph and map use the planner's shared route progress `q` in metres. Longitudinal acceleration, steering rate and limit usage describe the outgoing sample interval. The graph's steering rate is the mean over that interval. The map uses the native conservative endpoint speed cap. Use the graph's arrow keys to move the inspection cursor and Home or End to jump to either end of the lap.
 
+### High-speed-cap demonstration
+
+On a scratch copy of `test/test`, set **Speed limit** to 20 m/s in Annotator and export the route. Generate Balanced and Aggressive with the NUC5 car model. In Tracks, select **Active Constraints** and inspect Balanced. With the road cap above the planning top speed, the map shows where cornering grip, tyre drive and braking grip limit the lap. At about 45 m of route progress the inspector shows the cornering demand alongside both lateral limits.
+
 ## Data and limits
 
 The existing [annotation workflow](global_planner/annotation/README.md) validates and exports the route and its source receipt. The Centre detects changes to the saved route or its map calibration. An export without a receipt can be used after operator review if its image hash matches. An open draft can differ from the saved export used by Tracks.

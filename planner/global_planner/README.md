@@ -1,5 +1,13 @@
 # Global Planner 
 
+## Operational Centre
+
+The local Windows 95-style workspace uses the route, optimizer and speed packages to prepare tracks and compare predicted flying laps. Use **Annotator** to export a validated route, **Hyperparameters** to tune the optimizer and **Tracks** to generate Gentle, Balanced and Aggressive driving profiles.
+
+Tracks includes a trajectory overlay, an Active Constraints map, a wall-clearance heatmap and telemetry linked by route progress. The inspector shows the effective profile limits alongside the original vehicle limits. Route, vehicle or optimizer changes mark affected results stale.
+
+See the [Operational Centre guide](OPERATIONAL_CENTRE.md) for launch commands, profile settings and the high-speed-cap demonstration.
+
 ## Description
 The Global Planner package is a ROS2 package designed to generate a global trajectory around a race track. It provides a node that subscribes to map and car pose information, processes this data, and publishes global waypoints, track boundaries and map informations and saves everything in a JSON file. The logic of the Global Planner is separated into three parts: ROS2 node, logic and utility functions. The logic of the Global Planner is implemented in the `global_planner_logic.py` module and the utility function are in the `global_planner_utils.py` module. This package is implemented in Python and uses the `rclpy` library for ROS interactions. For the calculation of the global trajectory, it uses the [TUM Global Race Trajectory Optimization](https://github.com/TUMFTM/global_racetrajectory_optimization) package, which was modified so that it was possible to integrate it in our race stack. The main node `global_planner_node.py` is launched with the `mapping_launch.xml` file from the `stack_master` package or if the `map_editor` is used. There is also a node `global_trajectory_publisher.py` for publishing the global waypoints and markers and track bounds markers frequently after they have been calculated which is launched every time the base system is launched.
 
