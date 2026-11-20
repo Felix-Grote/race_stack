@@ -127,9 +127,10 @@ p { margin: 4px 0; }
 .heat-legend i { width: 12px; height: 12px; box-shadow: var(--sunken); }
 .cursor { stroke: #000; stroke-dasharray: 3 2; vector-effect: non-scaling-stroke; }
 .marker { fill: var(--ink); stroke: #fff; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-#inspection { min-height: 4em; max-height: 10.5em; overflow: auto; }
+#inspection { min-height: 4em; max-height: 15em; overflow: auto; }
 #inspection p { margin: 2px 0; }
 #inspection ul { padding: 0 0 0 15px; margin: 3px 0; }
+#inspection li + li { margin-top: 3px; }
 .axis { stroke: #000; stroke-width: 1; }
 .gridline { stroke: #ccc; stroke-width: 1; shape-rendering: crispEdges; }
 .graph-label { fill: #000; font: 12px Arial, sans-serif; }

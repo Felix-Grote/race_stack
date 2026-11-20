@@ -23,7 +23,7 @@ _CHANGED = {'route': 'Route export changed', 'map': 'Map source changed',
 @lru_cache(maxsize=18)
 def _artifact(data: bytes) -> dict:
     result = json.loads(data)
-    if (not isinstance(result, dict) or result.get('version') != RESULT_VERSION
+    if (not isinstance(result, dict) or result.get('version') not in (2, RESULT_VERSION)
             or not {'id', 'inputs', 'metrics', 'telemetry'} <= result.keys()
             or not isinstance(result['inputs'], dict)):
         raise ValueError('Unrecognized result format.')
@@ -109,6 +109,11 @@ class Workspace:
                 continue
             except (OSError, ValueError) as exc:
                 summaries[kind] = {'status': 'invalid', 'message': str(exc)}
+                continue
+
+            if artifact['version'] != RESULT_VERSION:
+                summaries[kind] = {'status': 'stale',
+                                   'message': 'Regenerate to calculate active constraints.'}
                 continue
 
             expected = provenance(kind, track, vehicle, settings)

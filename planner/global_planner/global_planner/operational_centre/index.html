@@ -116,16 +116,16 @@
             <button id="fit" disabled>Fit</button>
             <label>Display <select id="map-mode">
               <option value="trajectories">Trajectories</option>
-              <option value="utilization">Constraint utilisation</option>
+              <option value="constraints">Active Constraints</option>
               <option value="clearance">Wall clearance</option>
             </select></label>
-            <label id="heat-profile-label" hidden>Heatmap profile <select id="heat-profile"></select></label>
+            <label id="heat-profile-label" hidden>Inspect profile <select id="heat-profile"></select></label>
           </div>
           <div class="sunken map-well">
             <svg id="track-plot" role="img" aria-label="Route walls, start zone and trajectory overlay"></svg>
             <p id="no-route" class="plot-note">Open a map in Annotator and export a route.</p>
           </div>
-          <div id="heat-legend" class="heat-legend" aria-label="Heatmap scale" hidden></div>
+          <div id="heat-legend" class="heat-legend" aria-label="Map legend" hidden></div>
         </fieldset>
         <fieldset class="telemetry-field">
           <legend>Telemetry</legend>
@@ -157,7 +157,7 @@
         </fieldset>
         <fieldset>
           <legend>Inspect</legend>
-          <div id="inspection" tabindex="0">Point at the graph or a heatmap line to inspect a location.</div>
+          <div id="inspection" tabindex="0">Point at the graph or a diagnostic line to inspect a location.</div>
         </fieldset>
         <fieldset>
           <legend>Generation</legend>
@@ -200,7 +200,7 @@
     <dl>
       <dt>Annotator</dt><dd>Open a map, place the start and export a validated route.</dd>
       <dt>Hyperparameters</dt><dd>Apply optimizer values and working bounds. Bounds alone do not affect existing trajectories.</dd>
-      <dt>Tracks</dt><dd>Generate the driving profiles, then select the layers to compare. Choose one profile for a heatmap. Point at the map or graph to inspect constraints at a location.</dd>
+      <dt>Tracks</dt><dd>Generate the driving profiles, then select the layers to compare. Choose one profile for Active Constraints or Wall clearance. Point at the map or graph to inspect the location.</dd>
     </dl>
     <p>Times and telemetry are predictions from the vehicle model. The profile presets are provisional.</p>
     <div class="dialog-actions"><button class="default-button" data-close autofocus>OK</button></div>

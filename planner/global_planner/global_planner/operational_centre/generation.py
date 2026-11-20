@@ -17,7 +17,7 @@ PROFILES = {
     'balanced': (0.90, 0.025, 1.0),
     'aggressive': (0.95, 0.000, 0.5),
 }
-RESULT_VERSION = 2
+RESULT_VERSION = 3
 
 
 @cache
@@ -61,13 +61,15 @@ def provenance(kind: str, track: Track, vehicle: Vehicle,
     """Identify the captured sources and all effective settings of one profile."""
     inputs = {'route': track.route.digest if track.route else None,
               'map': track.source, 'car': vehicle.revision,
-              'profile': None, 'body': None, 'limits': None, 'optimizer': None,
+              'profile': None, 'body': None, 'base_limits': None, 'limits': None, 'optimizer': None,
               'speed_model': asdict(SpeedSettings()), 'planner': _planner_revision()}
     if vehicle.car is not None and vehicle.limits is not None and settings is not None:
         car, limits, optimizer = _effective(kind, vehicle, settings)
         inputs.update(profile=profile_info(kind, vehicle.car.margin_m, settings),
-                      body=asdict(car), limits=asdict(limits), optimizer=asdict(optimizer))
-        inputs['limits']['a_motor'] = [list(point) for point in limits.a_motor]
+                      body=asdict(car), base_limits=asdict(vehicle.limits),
+                      limits=asdict(limits), optimizer=asdict(optimizer))
+        for key in ('base_limits', 'limits'):
+            inputs[key]['a_motor'] = [list(point) for point in inputs[key]['a_motor']]
     return inputs
 
 
@@ -75,7 +77,7 @@ def generate(kind: str, track: Track, vehicle: Vehicle, settings: OptimizerSetti
     """Run a full geometry and speed solve and sample its validated result."""
     car, limits, optimizer = _effective(kind, vehicle, settings)
     result = optimize(track.route, car, optimizer, limits=limits)
-    telemetry = measure(result.lap, car, result.profile)
+    telemetry = measure(result.lap, car, result.profile, vehicle.limits)
     return {
         'metrics': {'length_m': result.lap.curve.length,
                     'lap_time_s': result.profile.lap_time_s,

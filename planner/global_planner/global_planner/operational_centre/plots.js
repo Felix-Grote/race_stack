@@ -10,17 +10,43 @@ const metrics = {
   angle: {label: 'Steering angle', unit: 'rad'},
   steering_rate: {label: 'Steering rate', unit: 'rad/s', step: true},
   clearance: {label: 'Actual wall clearance', unit: 'm'},
-  utilization: {label: 'Constraint utilisation', unit: '%', factor: 100, step: true},
 };
-const constraintUnits = {
-  'Road speed': 'm/s', 'Vehicle speed': 'm/s', 'Combined tyre grip': '%',
-  'Motor acceleration': 'm/s²', 'Steering angle': 'rad', 'Steering rate cap': 'rad/s',
+const usageMetrics = {
+  vehicle_usage: 'Vehicle utilisation (base)',
+  speed_usage: 'Vehicle speed (base)',
+  grip_usage: 'Combined tyre grip (base)',
+  motor_usage: 'Motor drive (base)',
+  angle_usage: 'Steering angle (base)',
+  steering_usage: 'Mean steering rate (base)',
+  road_usage: 'Road speed limit use',
+};
+for (const [key, label] of Object.entries(usageMetrics)) {
+  metrics[key] = {label, unit: '%', factor: 100, step: true};
+}
+
+const constraintTypes = {
+  road: {label: 'Road speed', unit: 'm/s', color: '#147566'},
+  vehicle_speed: {label: 'Vehicle speed', unit: 'm/s', color: '#3030a0'},
+  cornering: {label: 'Cornering grip', unit: 'm/s²', color: '#a57000'},
+  drive: {label: 'Tyre drive', unit: 'm/s²', color: '#4d7200'},
+  motor: {label: 'Motor drive', unit: 'm/s²', color: '#a74900'},
+  braking: {label: 'Braking grip', unit: 'm/s²', color: '#a10027'},
+  steering_cap: {label: 'Steering rate cap', unit: 'rad/s', color: '#8a268e'},
+  multiple: {label: 'Multiple limits', color: '#151515'},
+  slack: {label: 'No local limit reached', color: '#777777'},
 };
 const heatColors = ['#247540', '#c29000', '#da5a00', '#a30021'];
 const frame = {left: 49, right: 693, top: 12, bottom: 118};
 let scene, fitted, dragging, cursorQ;
 
-for (const [id, metric] of Object.entries(metrics)) quantity.add(new Option(metric.label, id));
+const capabilityOptions = document.createElement('optgroup');
+capabilityOptions.label = 'Limit usage (%)';
+for (const [id, metric] of Object.entries(metrics)) {
+  const option = new Option(metric.label, id);
+  if (id in usageMetrics) capabilityOptions.append(option);
+  else quantity.add(option);
+}
+quantity.append(capabilityOptions);
 
 function title(kind) {
   return kind[0].toUpperCase() + kind.slice(1);
@@ -64,11 +90,7 @@ map.addEventListener('lostpointercapture', () => {
   map.classList.remove('dragging');
 });
 
-function heatScale(required) {
-  if (mode.value === 'utilization') {
-    return {breaks: [0.70, 0.90, 1.0], colors: heatColors,
-            labels: ['Below 70%', '70–90%', '90–100%', 'At or over 100%']};
-  }
+function clearanceScale(required) {
   return {
     breaks: [required, required + 0.05, required + 0.15],
     colors: [...heatColors].reverse(),
@@ -76,15 +98,37 @@ function heatScale(required) {
   };
 }
 
-function drawHeat(line, scale) {
-  const buckets = scale.colors.map(() => []);
-  const values = line.values[mode.value];
+function activeConstraints(line, index) {
+  return Object.keys(line.constraints).filter(key => line.constraints[key].active[index]);
+}
+
+function constraintCategory(line, index) {
+  const active = activeConstraints(line, index);
+  if (active.length > 1) return 'multiple';
+  return active[0] || 'slack';
+}
+
+function drawMapOverlay(line, legend, required) {
+  const categorical = mode.value === 'constraints';
+  const scale = categorical ? null : clearanceScale(required);
+  const palette = categorical ? constraintTypes : Object.fromEntries(scale.labels.map((label, i) =>
+    [i, {label, color: scale.colors[i]}]));
+  const buckets = new Map();
   for (const [i, here] of line.points.entries()) {
-    const bucket = scale.breaks.filter(limit => values[i] >= limit).length;
-    buckets[bucket].push(path([here, line.points[(i + 1) % line.points.length]]));
+    const key = categorical ? constraintCategory(line, i)
+      : String(scale.breaks.filter(limit => line.values.clearance[i] >= limit).length);
+    if (!buckets.has(key)) buckets.set(key, []);
+    buckets.get(key).push(path([here, line.points[(i + 1) % line.points.length]]));
   }
-  return buckets.map((segments, i) =>
-    '<path class="heat-line" stroke="' + scale.colors[i] + '" d="' + segments.join('') + '"/>').join('');
+  for (const [key, style] of Object.entries(palette)) {
+    if (categorical && !buckets.has(key)) continue;
+    const label = document.createElement('span'), swatch = document.createElement('i');
+    swatch.style.background = style.color;
+    label.append(swatch, document.createTextNode(style.label));
+    legend.append(label);
+  }
+  return Array.from(buckets, ([key, segments]) =>
+    '<path class="heat-line" stroke="' + palette[key].color + '" d="' + segments.join('') + '"/>').join('');
 }
 
 function drawMap() {
@@ -129,16 +173,9 @@ function drawMap() {
   if (!isHeatmap) {
     overlay = lines.map(([kind, line]) => drawPath(line.points, 'curve ' + kind, true)).join('');
   } else if (active) {
-    const scale = heatScale(profiles[active].margin_m);
-    overlay = drawHeat(view.lines[active], scale);
-    for (const [i, text] of scale.labels.entries()) {
-      const label = document.createElement('span'), swatch = document.createElement('i');
-      swatch.style.background = scale.colors[i];
-      label.append(swatch, document.createTextNode(text));
-      legend.append(label);
-    }
+    overlay = drawMapOverlay(view.lines[active], legend, profiles[active].margin_m);
   } else {
-    legend.textContent = 'Select a current profile to show its heatmap.';
+    legend.textContent = 'Select a current profile to inspect its trajectory.';
   }
   map.innerHTML = '<g transform="scale(1,-1)">' + road.join('') + overlay + '<g id="map-cursor"/></g>';
 }
@@ -147,6 +184,7 @@ function yScale(lines, metric, key) {
   let low = 0, high = 0;
   for (const [, line] of lines) {
     for (const value of line.values[key]) {
+      if (value === null) continue;
       low = Math.min(low, value * (metric.factor || 1));
       high = Math.max(high, value * (metric.factor || 1));
     }
@@ -183,13 +221,23 @@ function drawGraph() {
   }
   const curves = lines.map(([kind, line]) => {
     const values = line.values[key];
-    const vertices = [[x(line.q[0]), y(values[0] * factor)]];
-    for (let i = 1; i <= line.q.length; i++) {
+    const paths = [];
+    let vertices = [];
+    for (let i = 0; i <= line.q.length; i++) {
       const station = i === line.q.length ? view.period_m : line.q[i];
-      if (metric.step) vertices.push([x(station), y(values[i - 1] * factor)]);
-      vertices.push([x(station), y(values[i % values.length] * factor)]);
+      if (metric.step && i > 0 && values[i - 1] !== null) {
+        vertices.push([x(station), y(values[i - 1] * factor)]);
+      }
+      const value = values[i % values.length];
+      if (value === null) {
+        paths.push(path(vertices));
+        vertices = [];
+      } else {
+        vertices.push([x(station), y(value * factor)]);
+      }
     }
-    return drawPath(vertices, 'curve ' + kind);
+    paths.push(path(vertices));
+    return '<path class="curve ' + kind + '" d="' + paths.join('') + '"/>';
   });
   graph.innerHTML = grid + '<path class="axis" fill="none" d="M49,12V118H693"/>'
     + '<text class="graph-label" x="2" y="11">' + metric.unit + '</text>' + curves.join('')
@@ -218,28 +266,48 @@ function appendText(tag, text) {
   return item;
 }
 
+function percent(value) {
+  return (value * 100).toFixed(1) + '%';
+}
+
+function capacity(actual, limit, unit) {
+  return limit.toFixed(2) + ' ' + unit + (limit > 0 ? ' (' + percent(actual / limit) + ')' : ' (—)');
+}
+
+function constraintRow(list, label, actual, profile, base, unit) {
+  const row = document.createElement('li');
+  row.textContent = label + ' · ' + actual.toFixed(2) + ' ' + unit;
+  const bounds = document.createElement('div');
+  bounds.textContent = base === null ? 'Road cap ' + capacity(actual, profile, unit)
+    : 'Profile ' + capacity(actual, profile, unit) + ' · Base ' + capacity(actual, base, unit);
+  row.append(bounds);
+  list.append(row);
+}
+
 function showConstraints(line, index) {
-  const details = Object.entries(line.constraints).map(([name, [actual, limit]]) => {
-    const allowed = Array.isArray(limit) ? limit[index] : limit;
-    return {name, actual: actual[index], allowed, ratio: allowed > 0 ? actual[index] / allowed : null};
-  });
-  details.sort((a, b) => (b.ratio ?? -1) - (a.ratio ?? -1));
-  appendText('strong', details[0].name + ' · ' + (details[0].ratio * 100).toFixed(1) + '%');
+  const active = activeConstraints(line, index);
+  appendText('strong', active.length
+    ? 'Active · ' + active.map(key => constraintTypes[key].label).join(' + ')
+    : 'No local limit reached');
+  appendText('p', 'Base vehicle utilisation ' + percent(line.values.vehicle_usage[index])
+    + ' · Road limit use ' + percent(line.values.road_usage[index]));
+  appendText('p', 'Combined tyre grip · Profile ' + percent(line.profile_grip[index])
+    + ' · Base ' + percent(line.values.grip_usage[index]));
   const rows = appendText('ul', '');
-  for (const {name, actual, allowed, ratio} of details) {
-    const row = document.createElement('li'), unit = constraintUnits[name];
-    const factor = unit === '%' ? 100 : 1;
-    row.textContent = name + ' · ' + (actual * factor).toFixed(2) + ' / '
-      + (allowed * factor).toFixed(2) + ' ' + unit + (ratio === null ? ' (no available drive)' :
-        ' · ' + (ratio * 100).toFixed(1) + '%');
-    rows.append(row);
+  const inactive = Object.keys(line.constraints).filter(key => !active.includes(key));
+  for (const key of [...active, ...inactive]) {
+    const data = line.constraints[key], {label, unit} = constraintTypes[key];
+    const end = data.end[index] ? 'end' : 'start';
+    const where = data.active[index] === 3 ? 'both active, showing ' + end
+      : data.active[index] ? end + ' active' : end;
+    constraintRow(rows, label + ' (' + where + ')', data.actual[index], data.profile[index],
+                  data.base?.[index] ?? null, unit);
   }
-  const {grip} = line;
-  const tyreDemand = grip.longitudinal[index];
-  appendText('p', 'Grip at gap ' + (grip.end[index] ? 'end' : 'start') + ' · lateral '
-    + grip.lateral[index].toFixed(2) + ' / ' + grip.lateral_limit.toFixed(2)
-    + ', ' + (tyreDemand < 0 ? 'braking ' : 'drive ') + Math.abs(tyreDemand).toFixed(2) + ' / '
-    + grip.longitudinal_limit[index].toFixed(2) + ' m/s²');
+  const [angleProfile, angleBase, rateProfile, rateBase] = line.steering_limits;
+  constraintRow(rows, 'Steering angle at start', Math.abs(line.values.angle[index]),
+                angleProfile, angleBase, 'rad');
+  constraintRow(rows, 'Mean steering rate', Math.abs(line.values.steering_rate[index]),
+                rateProfile, rateBase, 'rad/s');
 }
 
 function inspect(q) {
@@ -252,7 +320,7 @@ function inspect(q) {
   cursorQ = q;
   inspection.replaceChildren();
   if (q == null || !lines.length) {
-    inspection.textContent = 'Point at the graph or a heatmap line to inspect a location.';
+    inspection.textContent = 'Point at the graph or a diagnostic line to inspect a location.';
     graphCursor?.removeAttribute('d');
     if (mapCursor) mapCursor.innerHTML = '';
     return;
@@ -266,16 +334,18 @@ function inspect(q) {
   for (const [kind, line] of lines) {
     const sample = sampleAt(line, lapQ, view.period_m);
     const {xy: [x, y]} = sample;
-    const value = sample.value(line.values[key], metric.step) * (metric.factor || 1);
-    appendText('p', title(kind) + ' · ' + value.toFixed(key === 'curvature' ? 3 : 2) + ' ' + metric.unit);
+    const value = sample.value(line.values[key], metric.step);
+    const display = value === null ? '—' : (value * (metric.factor || 1))
+      .toFixed(key === 'curvature' ? 3 : 2) + ' ' + metric.unit;
+    appendText('p', title(kind) + ' · ' + display);
     if (isHeatmap && kind !== heatProfile.value) continue;
     markers.push('<circle class="marker ' + kind + '" cx="' + x + '" cy="' + y + '" r="' + 4 / scale + '"/>');
   }
   if (isHeatmap && heatProfile.value) {
     const kind = heatProfile.value, line = view.lines[kind];
     const {index} = sampleAt(line, lapQ, view.period_m);
-    appendText('p', title(kind) + ' heatmap sample · q ' + line.q[index].toFixed(2) + ' m');
-    if (mode.value === 'utilization') {
+    appendText('p', title(kind) + ' · interval starts at q ' + line.q[index].toFixed(2) + ' m');
+    if (mode.value === 'constraints') {
       showConstraints(line, index);
     } else {
       const actual = line.values.clearance[index], required = profiles[kind].margin_m;
