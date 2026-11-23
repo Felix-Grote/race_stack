@@ -1,22 +1,23 @@
-"""Editable optimizer values and their operator-defined working bounds."""
-import json
+"""Editable optimizer values, one worksheet applied to every map."""
 from dataclasses import dataclass, replace
+import json
 from pathlib import Path
 
+from .storage import digest, write_json
 from ..car import is_number
 from ..optimizer.solve import OptimizerSettings
-from .storage import digest, write_json
 
 # The other optimizer settings control convergence precision or geometric checks.
 # They use the planner defaults in every run.
 DEFAULTS = OptimizerSettings()
+# label, unit, smallest and largest value accepted, hint
 PARAMETERS = {
     'spacing_m': ('Point spacing', 'm', 0.05, 1.0,
                   'Maximum initial distance between optimizer points.'),
     'step_m': ('Step limit', 'm', 0.002, 0.5,
                'Maximum movement per coordinate in one pass. At most point spacing.'),
     'smoothness': ('Balanced smoothness γ', '', 0.0, 10.0,
-                   'Curvature penalty for Balanced. Gentle uses 2× this value and Aggressive uses ½×.'),
+                   'Curvature penalty for Balanced. Gentle uses 2× and Aggressive ½× this.'),
     'max_passes': ('Pass limit', '', 1, 500,
                    'Maximum passes per refinement.'),
     'max_refinements': ('Refinement limit', '', 0, 20,
@@ -27,35 +28,30 @@ PARAMETERS = {
 
 
 def defaults() -> dict:
-    """Provide a fresh default worksheet."""
-    return {key: {'value': getattr(DEFAULTS, key), 'lower': lower, 'upper': upper}
-            for key, (_, _, lower, upper, _) in PARAMETERS.items()}
+    """Return the default worksheet."""
+    return {key: getattr(DEFAULTS, key) for key in PARAMETERS}
 
 
 def parameter_info() -> dict:
-    """Describe the worksheet, including absolute input limits."""
-    return {key: {'label': label, 'unit': unit, 'lower': lower, 'upper': upper, 'hint': hint,
-                  'integer': isinstance(lower, int), 'default': getattr(DEFAULTS, key)}
-            for key, (label, unit, lower, upper, hint) in PARAMETERS.items()}
+    """Describe each value and the range the page accepts."""
+    return {key: {'label': label, 'unit': unit, 'min': low, 'max': high, 'hint': hint,
+                  'integer': isinstance(low, int), 'default': getattr(DEFAULTS, key)}
+            for key, (label, unit, low, high, hint) in PARAMETERS.items()}
 
 
-def validate(parameters: object) -> OptimizerSettings:
-    """Validate the worksheet and hand its values to the native settings validator."""
-    if not isinstance(parameters, dict) or parameters.keys() != PARAMETERS.keys():
-        raise ValueError('Supply a value and working bounds for each optimizer parameter.')
-    for key, (label, _, floor, ceiling, _) in PARAMETERS.items():
-        row = parameters[key]
-        if not isinstance(row, dict) or row.keys() != {'value', 'lower', 'upper'}:
-            raise ValueError(f'{label} needs a value, lower bound and upper bound.')
-        values = row['lower'], row['value'], row['upper']
-        if not all(is_number(value) for value in values):
-            raise ValueError(f'{label} needs finite numbers.')
-        if isinstance(floor, int) and not all(isinstance(value, int) for value in values):
-            raise ValueError(f'{label} needs whole numbers.')
-        lower, value, upper = values
-        if not floor <= lower <= value <= upper <= ceiling:
-            raise ValueError(f'{label}: keep lower ≤ value ≤ upper within {floor:g}–{ceiling:g}.')
-    return replace(DEFAULTS, **{key: row['value'] for key, row in parameters.items()})
+def validate(values: object) -> OptimizerSettings:
+    """Check the worksheet and hand its values to the native settings validator."""
+    if not isinstance(values, dict) or values.keys() != PARAMETERS.keys():
+        raise ValueError('Supply a value for each optimizer parameter.')
+    for key, (label, _, low, high, _) in PARAMETERS.items():
+        value = values[key]
+        if not is_number(value):
+            raise ValueError(f'{label} needs a finite number.')
+        if isinstance(low, int) and not isinstance(value, int):
+            raise ValueError(f'{label} needs a whole number.')
+        if not low <= value <= high:
+            raise ValueError(f'{label} must lie within {low:g}–{high:g}.')
+    return replace(DEFAULTS, **values)
 
 
 @dataclass(frozen=True)

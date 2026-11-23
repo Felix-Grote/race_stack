@@ -1,15 +1,15 @@
 """Optimize the driving profiles independently using captured planning inputs."""
-import traceback
 from dataclasses import asdict, replace
 from functools import cache
 from pathlib import Path
+import traceback
 
-from ..car import Car, CarLimits
-from ..optimizer.solve import OptimizerSettings, optimize
-from ..speed.speeds import SpeedSettings
 from .inputs import Track, Vehicle
 from .storage import digest, write_json
 from .telemetry import measure
+from ..car import Car, CarLimits
+from ..optimizer.solve import optimize, OptimizerSettings
+from ..speed.speeds import SpeedSettings
 
 # Provisional performance fractions, added clearance in metres, and multipliers on Balanced γ.
 PROFILES = {
@@ -61,8 +61,9 @@ def provenance(kind: str, track: Track, vehicle: Vehicle,
     """Identify the captured sources and all effective settings of one profile."""
     inputs = {'route': track.route.digest if track.route else None,
               'map': track.source, 'car': vehicle.revision,
-              'profile': None, 'body': None, 'base_limits': None, 'limits': None, 'optimizer': None,
-              'speed_model': asdict(SpeedSettings()), 'planner': _planner_revision()}
+              'profile': None, 'body': None, 'base_limits': None, 'limits': None,
+              'optimizer': None, 'speed_model': asdict(SpeedSettings()),
+              'planner': _planner_revision()}
     if vehicle.car is not None and vehicle.limits is not None and settings is not None:
         car, limits, optimizer = _effective(kind, vehicle, settings)
         inputs.update(profile=profile_info(kind, vehicle.car.margin_m, settings),
@@ -87,7 +88,7 @@ def generate(kind: str, track: Track, vehicle: Vehicle, settings: OptimizerSetti
 
 
 def run_job(directory: Path, progress: Path, job: dict, track: Track, vehicle: Vehicle,
-            settings: OptimizerSettings, worksheet_revision: str) -> None:
+            settings: OptimizerSettings) -> None:
     """Publish each completed profile independently in the worker process."""
     for kind, attempt in job['attempts'].items():
         attempt['status'] = 'running'
@@ -96,8 +97,7 @@ def run_job(directory: Path, progress: Path, job: dict, track: Track, vehicle: V
             result = generate(kind, track, vehicle, settings)
             write_json(directory / f'{kind}.json',
                        dict(result, version=RESULT_VERSION, id=job['id'],
-                            inputs=provenance(kind, track, vehicle, settings),
-                            worksheet_revision=worksheet_revision))
+                            inputs=provenance(kind, track, vehicle, settings)))
         except (ValueError, OSError) as exc:
             attempt.update(status='failed', message=str(exc))
         except Exception as exc:  # noqa: BLE001 - report unexpected worker failures to the UI

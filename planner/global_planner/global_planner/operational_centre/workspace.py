@@ -1,18 +1,18 @@
 """Coordinate the editor, worksheet, jobs and comparison state for one workspace."""
-import json
 from dataclasses import asdict
 from functools import lru_cache
+import json
 from multiprocessing import get_context
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from uuid import uuid4
 
+from .generation import profile_info, PROFILES, provenance, RESULT_VERSION, run_job
+from .inputs import Track, Vehicle
+from .settings import parameter_info, validate, Worksheet
+from .storage import digest
 from ..annotation.editor import Editor
 from ..annotation.track_map import AnnotationError, read_source
-from .generation import PROFILES, RESULT_VERSION, profile_info, provenance, run_job
-from .inputs import Track, Vehicle
-from .settings import Worksheet, parameter_info, validate
-from .storage import digest
 
 _CHANGED = {'route': 'Route export changed', 'map': 'Map source changed',
             'car': 'Car model changed', 'optimizer': 'Optimizer values changed',
@@ -53,7 +53,8 @@ class Workspace:
         worksheet = Worksheet.read(self.worksheet_path)
         settings = None if worksheet.error else validate(worksheet.parameters)
         revision = digest(json.dumps([track.status, track.route.digest if track.route else None,
-                                      track.source, vehicle.revision, self.margin, worksheet.revision]).encode())
+                                      track.source, vehicle.revision, self.margin,
+                                      worksheet.revision]).encode())
         return track, vehicle, worksheet, settings, revision
 
     def prepare_annotation(self, action: str) -> None:
@@ -81,7 +82,8 @@ class Workspace:
         elif editor.car != vehicle.car:
             message = 'Car model changed. The next editor action will recheck the route.'
         else:
-            opened = track if track_name == editor.map_name else Track.read(editor.track_map.yaml_path)
+            opened = (track if track_name == editor.map_name
+                      else Track.read(editor.track_map.yaml_path))
             if editor.result and opened.route and editor.result['digest'] == opened.route.digest:
                 message = opened.message
             elif opened.route:
@@ -141,8 +143,8 @@ class Workspace:
         annotation = self._annotation(name, track, vehicle)
         summaries, current = self._comparison(name, track, vehicle, settings)
         route = track.route
-        view_id = digest(json.dumps([name, route.digest if route else None,
-                                    {kind: item['id'] for kind, item in current.items()}]).encode())
+        ids = {kind: item['id'] for kind, item in current.items()}
+        view_id = digest(json.dumps([name, route.digest if route else None, ids]).encode())
         state = {
             'maps': maps, 'map': name, 'annotation': annotation, 'revision': revision,
             'track': {'status': track.status, 'name': track.name, 'message': track.message,
@@ -199,7 +201,7 @@ class Workspace:
         progress = Path(scratch.name) / 'progress.json'
         worker = get_context('spawn').Process(target=run_job, daemon=True,
                                               args=(self._results(name), progress, job,
-                                                    track, vehicle, settings, worksheet.revision))
+                                                    track, vehicle, settings))
         try:
             worker.start()
         except BaseException:

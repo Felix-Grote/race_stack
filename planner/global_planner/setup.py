@@ -11,9 +11,8 @@ setup(
               package_name + '.speed', package_name + '.annotation',
               package_name + '.operational_centre'],
     package_data={package_name + '.route': ['manifest.schema.json'],
-                  package_name + '.annotation': ['ui.html', 'ui.js', 'win95.css'],
-                  package_name + '.operational_centre': ['index.html', 'centre.css',
-                                                         'centre.js', 'plots.js']},
+                  package_name + '.annotation': ['*.html', '*.js', '*.css'],
+                  package_name + '.operational_centre': ['*.html', '*.js', '*.css']},
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),

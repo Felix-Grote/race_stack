@@ -151,12 +151,8 @@ function draw() {
 
 let framed = null, framedMap = null;
 function showAvailability() {
-  for (const [action, disabled] of Object.entries({
-    save: sourceChanged, export: !V.result || sourceChanged || carUnavailable
-  })) {
-    $(action).disabled = disabled;
-    document.querySelector('[data-command="' + action + '"]').disabled = disabled;
-  }
+  $('save').disabled = sourceChanged;
+  $('export').disabled = !V.result || sourceChanged || carUnavailable;
 }
 
 function show(view, message) {
@@ -281,27 +277,6 @@ $('clearGuide').onclick = () => edit('guide_px', []);
 for (const a of ['export', 'save']) $(a).onclick = () => call(a);
 $('fit').onclick = () => { fit(); draw(); };
 document.querySelectorAll('.layer').forEach(c => c.onchange = () => { shown[c.value] = c.checked; draw(); });
-
-const menus = document.querySelector('.menubar');
-function dismissMenu(restoreFocus = false) {
-  const open = menus.querySelector('details[open]');
-  if (!open) return;
-  open.open = false;
-  if (restoreFocus) open.querySelector('summary').focus();
-}
-document.addEventListener('click', e => {
-  if (!menus.contains(e.target)) { dismissMenu(); return; }
-  const button = e.target.closest('button');
-  if (!button) return;
-  dismissMenu(true);
-  if (button.dataset.command) $(button.dataset.command).click();
-});
-document.addEventListener('focusin', e => { if (!menus.contains(e.target)) dismissMenu(); });
-menus.addEventListener('keydown', e => {
-  if (e.key !== 'Escape' || !menus.querySelector('details[open]')) return;
-  e.stopPropagation();
-  dismissMenu(true);
-});
 
 new ResizeObserver(resize).observe(cv);
 resize();

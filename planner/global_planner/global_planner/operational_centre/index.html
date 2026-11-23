@@ -7,6 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 1h12v14H2z'/%3E%3Cpath fill='white' d='M3 2h10v12H3z'/%3E%3Cpath fill='teal' d='M4 3h8v10H4z'/%3E%3Cpath fill='none' stroke='white' stroke-width='2' d='M7 5h3v6H6V7h1z'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/annotator/win95.css">
 <link rel="stylesheet" href="centre.css">
+<script src="/annotator/menubar.js"></script>
 <script type="module" src="centre.js"></script>
 </head>
 <body>
@@ -49,11 +50,10 @@
     <form id="parameters-form" class="parameters-form" novalidate>
       <fieldset>
         <legend>Optimizer settings</legend>
-        <p>Set working bounds and a value for each parameter. Tracks uses the applied values for every map.</p>
+        <p>Set a value for each parameter. Tracks uses the applied values for every map.</p>
         <div class="sheet">
           <table class="parameters">
-            <thead><tr><th scope="col">Parameter</th><th scope="col">Value</th>
-              <th scope="col">Lower bound</th><th scope="col">Upper bound</th></tr></thead>
+            <thead><tr><th scope="col">Parameter</th><th scope="col">Value</th></tr></thead>
             <tbody id="parameter-rows"></tbody>
           </table>
         </div>
@@ -81,7 +81,7 @@
         <button data-command="generate">Generate…</button>
         <button data-command="stop">Stop generation</button>
         <hr>
-        <button data-command="refresh">Refresh inputs</button>
+        <button id="refresh-inputs">Refresh inputs</button>
       </div></details>
       <details name="track-menu"><summary>View</summary><div class="popup">
         <button data-command="fit">Fit track</button>
@@ -199,7 +199,7 @@
   <div class="help-content">
     <dl>
       <dt>Annotator</dt><dd>Open a map, place the start and export a validated route.</dd>
-      <dt>Hyperparameters</dt><dd>Apply optimizer values and working bounds. Bounds alone do not affect existing trajectories.</dd>
+      <dt>Hyperparameters</dt><dd>Apply optimizer values. Changing one marks the trajectories it affects as stale.</dd>
       <dt>Tracks</dt><dd>Generate the driving profiles, then select the layers to compare. Choose one profile for Active Constraints or Wall clearance. Point at the map or graph to inspect the location.</dd>
     </dl>
     <p>Times and telemetry are predictions from the vehicle model. The profile presets are provisional.</p>

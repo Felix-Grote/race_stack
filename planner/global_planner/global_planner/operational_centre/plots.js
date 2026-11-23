@@ -1,60 +1,15 @@
-const $ = id => document.getElementById(id);
+// The lap overlay and the Inspect panel, kept in step with the telemetry graph.
+import {$, path} from './common.js';
+import {constraintCategory, constraintTypes, showConstraints} from './constraints.js';
+import {drawGraph, frame, metrics, quantity, sampleAt} from './graph.js';
+
 const map = $('track-plot'), graph = $('telemetry-plot'), inspection = $('inspection');
-const mode = $('map-mode'), heatProfile = $('heat-profile'), quantity = $('telemetry-quantity');
-
-const metrics = {
-  speed: {label: 'Speed', unit: 'm/s'},
-  longitudinal: {label: 'Longitudinal acceleration / braking', unit: 'm/s²', step: true},
-  lateral: {label: 'Lateral acceleration', unit: 'm/s²'},
-  curvature: {label: 'Curvature', unit: '1/m'},
-  angle: {label: 'Steering angle', unit: 'rad'},
-  steering_rate: {label: 'Steering rate', unit: 'rad/s', step: true},
-  clearance: {label: 'Actual wall clearance', unit: 'm'},
-};
-const usageMetrics = {
-  vehicle_usage: 'Vehicle utilisation (base)',
-  speed_usage: 'Vehicle speed (base)',
-  grip_usage: 'Combined tyre grip (base)',
-  motor_usage: 'Motor drive (base)',
-  angle_usage: 'Steering angle (base)',
-  steering_usage: 'Mean steering rate (base)',
-  road_usage: 'Road speed limit use',
-};
-for (const [key, label] of Object.entries(usageMetrics)) {
-  metrics[key] = {label, unit: '%', factor: 100, step: true};
-}
-
-const constraintTypes = {
-  road: {label: 'Road speed', unit: 'm/s', color: '#147566'},
-  vehicle_speed: {label: 'Vehicle speed', unit: 'm/s', color: '#3030a0'},
-  cornering: {label: 'Cornering grip', unit: 'm/s²', color: '#a57000'},
-  drive: {label: 'Tyre drive', unit: 'm/s²', color: '#4d7200'},
-  motor: {label: 'Motor drive', unit: 'm/s²', color: '#a74900'},
-  braking: {label: 'Braking grip', unit: 'm/s²', color: '#a10027'},
-  steering_cap: {label: 'Steering rate cap', unit: 'rad/s', color: '#8a268e'},
-  multiple: {label: 'Multiple limits', color: '#151515'},
-  slack: {label: 'No local limit reached', color: '#777777'},
-};
+const mode = $('map-mode'), heatProfile = $('heat-profile');
 const heatColors = ['#247540', '#c29000', '#da5a00', '#a30021'];
-const frame = {left: 49, right: 693, top: 12, bottom: 118};
 let scene, fitted, dragging, cursorQ;
-
-const capabilityOptions = document.createElement('optgroup');
-capabilityOptions.label = 'Limit usage (%)';
-for (const [id, metric] of Object.entries(metrics)) {
-  const option = new Option(metric.label, id);
-  if (id in usageMetrics) capabilityOptions.append(option);
-  else quantity.add(option);
-}
-quantity.append(capabilityOptions);
 
 function title(kind) {
   return kind[0].toUpperCase() + kind.slice(1);
-}
-
-function path(points, closed = false) {
-  return points.length ? 'M' + points.map(([x, y]) => [Number(x), Number(y)].join(',')).join('L')
-    + (closed ? 'Z' : '') : '';
 }
 
 function drawPath(points, style, closed = false) {
@@ -96,16 +51,6 @@ function clearanceScale(required) {
     colors: [...heatColors].reverse(),
     labels: ['Below required gap', '0–5 cm spare', '5–15 cm spare', '15 cm or more spare'],
   };
-}
-
-function activeConstraints(line, index) {
-  return Object.keys(line.constraints).filter(key => line.constraints[key].active[index]);
-}
-
-function constraintCategory(line, index) {
-  const active = activeConstraints(line, index);
-  if (active.length > 1) return 'multiple';
-  return active[0] || 'slack';
 }
 
 function drawMapOverlay(line, legend, required) {
@@ -180,134 +125,11 @@ function drawMap() {
   map.innerHTML = '<g transform="scale(1,-1)">' + road.join('') + overlay + '<g id="map-cursor"/></g>';
 }
 
-function yScale(lines, metric, key) {
-  let low = 0, high = 0;
-  for (const [, line] of lines) {
-    for (const value of line.values[key]) {
-      if (value === null) continue;
-      low = Math.min(low, value * (metric.factor || 1));
-      high = Math.max(high, value * (metric.factor || 1));
-    }
-  }
-  const target = Math.max(high - low, 0.05) / 4;
-  const power = 10 ** Math.floor(Math.log10(target));
-  const tick = [1, 2, 5, 10].find(n => n * power >= target) * power;
-  return {low: Math.floor(low / tick) * tick, high: Math.max(tick, Math.ceil(high / tick) * tick),
-          tick};
-}
-
-function drawGraph() {
-  const {lines, view} = scene, key = quantity.value;
-  const metric = metrics[key], factor = metric.factor || 1;
-  $('no-telemetry').hidden = Boolean(lines.length);
-  if (!lines.length) {
-    graph.innerHTML = '';
-    return;
-  }
-  const {left, right, top, bottom} = frame;
-  const {low, high, tick} = yScale(lines, metric, key);
-  const x = q => left + (right - left) * q / view.period_m;
-  const y = value => bottom - (bottom - top) * (value - low) / (high - low);
-  let grid = '';
-  for (let value = low; value <= high + tick / 1000; value += tick) {
-    const row = y(value);
-    const label = Math.abs(value) < tick / 1000 ? 0 : Number(value.toPrecision(4));
-    grid += '<path class="' + (label === 0 ? 'axis' : 'gridline') + '" d="M' + left + ',' + row + 'H' + right + '"/>';
-    grid += '<text class="graph-label" x="43" y="' + (row + 4) + '" text-anchor="end">' + label + '</text>';
-  }
-  for (let i = 0; i <= 4; i++) {
-    const q = view.period_m * i / 4;
-    grid += '<text class="graph-label" x="' + x(q) + '" y="136" text-anchor="middle">' + q.toFixed(1) + '</text>';
-  }
-  const curves = lines.map(([kind, line]) => {
-    const values = line.values[key];
-    const paths = [];
-    let vertices = [];
-    for (let i = 0; i <= line.q.length; i++) {
-      const station = i === line.q.length ? view.period_m : line.q[i];
-      if (metric.step && i > 0 && values[i - 1] !== null) {
-        vertices.push([x(station), y(values[i - 1] * factor)]);
-      }
-      const value = values[i % values.length];
-      if (value === null) {
-        paths.push(path(vertices));
-        vertices = [];
-      } else {
-        vertices.push([x(station), y(value * factor)]);
-      }
-    }
-    paths.push(path(vertices));
-    return '<path class="curve ' + kind + '" d="' + paths.join('') + '"/>';
-  });
-  graph.innerHTML = grid + '<path class="axis" fill="none" d="M49,12V118H693"/>'
-    + '<text class="graph-label" x="2" y="11">' + metric.unit + '</text>' + curves.join('')
-    + '<path class="cursor" id="graph-cursor"/>';
-}
-
-function sampleAt(line, q, period) {
-  let low = 0, high = line.q.length;
-  while (low + 1 < high) {
-    const mid = Math.floor((low + high) / 2);
-    if (line.q[mid] <= q) low = mid;
-    else high = mid;
-  }
-  const next = high % line.q.length;
-  const fraction = (q - line.q[low]) / ((line.q[high] ?? period) - line.q[low]);
-  const blend = (a, b) => a + (b - a) * fraction;
-  const [x, y] = line.points[low], [nextX, nextY] = line.points[next];
-  return {index: low, xy: [blend(x, nextX), blend(y, nextY)],
-          value: (values, step) => step ? values[low] : blend(values[low], values[next])};
-}
-
 function appendText(tag, text) {
   const item = document.createElement(tag);
   item.textContent = text;
   inspection.append(item);
   return item;
-}
-
-function percent(value) {
-  return (value * 100).toFixed(1) + '%';
-}
-
-function capacity(actual, limit, unit) {
-  return limit.toFixed(2) + ' ' + unit + (limit > 0 ? ' (' + percent(actual / limit) + ')' : ' (—)');
-}
-
-function constraintRow(list, label, actual, profile, base, unit) {
-  const row = document.createElement('li');
-  row.textContent = label + ' · ' + actual.toFixed(2) + ' ' + unit;
-  const bounds = document.createElement('div');
-  bounds.textContent = base === null ? 'Road cap ' + capacity(actual, profile, unit)
-    : 'Profile ' + capacity(actual, profile, unit) + ' · Base ' + capacity(actual, base, unit);
-  row.append(bounds);
-  list.append(row);
-}
-
-function showConstraints(line, index) {
-  const active = activeConstraints(line, index);
-  appendText('strong', active.length
-    ? 'Active · ' + active.map(key => constraintTypes[key].label).join(' + ')
-    : 'No local limit reached');
-  appendText('p', 'Base vehicle utilisation ' + percent(line.values.vehicle_usage[index])
-    + ' · Road limit use ' + percent(line.values.road_usage[index]));
-  appendText('p', 'Combined tyre grip · Profile ' + percent(line.profile_grip[index])
-    + ' · Base ' + percent(line.values.grip_usage[index]));
-  const rows = appendText('ul', '');
-  const inactive = Object.keys(line.constraints).filter(key => !active.includes(key));
-  for (const key of [...active, ...inactive]) {
-    const data = line.constraints[key], {label, unit} = constraintTypes[key];
-    const end = data.end[index] ? 'end' : 'start';
-    const where = data.active[index] === 3 ? 'both active, showing ' + end
-      : data.active[index] ? end + ' active' : end;
-    constraintRow(rows, label + ' (' + where + ')', data.actual[index], data.profile[index],
-                  data.base?.[index] ?? null, unit);
-  }
-  const [angleProfile, angleBase, rateProfile, rateBase] = line.steering_limits;
-  constraintRow(rows, 'Steering angle at start', Math.abs(line.values.angle[index]),
-                angleProfile, angleBase, 'rad');
-  constraintRow(rows, 'Mean steering rate', Math.abs(line.values.steering_rate[index]),
-                rateProfile, rateBase, 'rad/s');
 }
 
 function inspect(q) {
@@ -346,7 +168,7 @@ function inspect(q) {
     const {index} = sampleAt(line, lapQ, view.period_m);
     appendText('p', title(kind) + ' · interval starts at q ' + line.q[index].toFixed(2) + ' m');
     if (mode.value === 'constraints') {
-      showConstraints(line, index);
+      showConstraints(line, index, appendText);
     } else {
       const actual = line.values.clearance[index], required = profiles[kind].margin_m;
       appendText('p', 'Actual ' + (actual * 100).toFixed(1) + ' cm · required '
@@ -358,7 +180,7 @@ function inspect(q) {
 
 function display() {
   drawMap();
-  drawGraph();
+  drawGraph(scene.lines, scene.view);
   inspect(null);
 }
 

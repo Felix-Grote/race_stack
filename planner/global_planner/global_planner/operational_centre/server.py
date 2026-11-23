@@ -1,20 +1,20 @@
 """Serve the ForzaETH Operational Centre on the local machine."""
 import argparse
+from http.server import ThreadingHTTPServer
 import json
 import math
 import os
-from http.server import ThreadingHTTPServer
 from pathlib import Path
 from threading import Lock
 from urllib.parse import parse_qs, urlsplit
 
-from ..annotation.server import handler as annotation_handler
 from .workspace import Workspace
+from ..annotation.server import handler as annotation_handler
 
-_ASSETS = {'/': ('index.html', 'text/html'),
-           '/centre.css': ('centre.css', 'text/css'),
-           '/centre.js': ('centre.js', 'text/javascript'),
-           '/plots.js': ('plots.js', 'text/javascript')}
+_ASSETS = {'/': ('index.html', 'text/html'), '/centre.css': ('centre.css', 'text/css'),
+           **{f'/{name}': (name, 'text/javascript')
+              for name in ('centre.js', 'common.js', 'constraints.js', 'graph.js', 'plots.js',
+                           'worksheet.js')}}
 _MAX_BODY = 2 * 1024 * 1024
 
 
@@ -73,7 +73,8 @@ def handler(workspace: Workspace, lock: Lock):
                 return
             try:
                 length = int(self.headers.get('Content-Length', 0))
-                if self.headers.get_content_type() != 'application/json' or not 0 < length <= _MAX_BODY:
+                if (self.headers.get_content_type() != 'application/json'
+                        or not 0 < length <= _MAX_BODY):
                     raise ValueError('Send a JSON object with a valid content length.')
 
                 if self.path.startswith('/annotator/api/'):
@@ -106,7 +107,8 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--maps', type=Path, required=True, help='directory of map folders')
     parser.add_argument('--car', type=Path, help='car_model.yaml for optimization')
-    parser.add_argument('--margin', type=float, default=0.05, help='minimum body clearance in metres (Aggressive profile)')
+    parser.add_argument('--margin', type=float, default=0.05,
+                        help='minimum body clearance in metres (Aggressive profile)')
     parser.add_argument('--workspace', type=Path, default=Path('.forzaeth/operational-centre'),
                         help='directory for the optimizer worksheet and cached results')
     parser.add_argument('--port', type=int, default=8767)

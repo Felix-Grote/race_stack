@@ -26,7 +26,7 @@ The `--workspace` directory defaults to `.forzaeth/operational-centre` relative 
 
 Each profile runs the native geometry and flying-lap optimizer independently. The performance fraction scales vehicle top speed, lateral and longitudinal tyre limits, braking, motor acceleration at the calibrated speed breakpoints and steering-rate limits. Mass, drag, steering geometry and the source calibration stay fixed. The clearance baseline defaults to 0.05 m and the added clearance is in metres.
 
-**Hyperparameters** applies one worksheet across all maps. Its value and working bounds for γ refer to Balanced. Gentle uses twice that value and Aggressive uses half. The chosen γ weights curvature energy in the native lap-time objective. The presets are provisional. Changing the weight can change convergence and the relative lap times.
+**Hyperparameters** applies one worksheet across all maps. Its γ value refers to Balanced. Gentle uses twice that value and Aggressive uses half. The chosen γ weights curvature energy in the native lap-time objective. The presets are provisional. Changing the weight can change convergence and the relative lap times.
 
 ## Compare and inspect
 

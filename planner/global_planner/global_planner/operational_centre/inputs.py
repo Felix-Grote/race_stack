@@ -1,16 +1,16 @@
 """Capture route and car inputs with their provenance."""
-import json
 from dataclasses import dataclass
 from functools import lru_cache
+import json
 from pathlib import Path
 
 import yaml
 
+from .storage import digest
 from ..annotation.track_map import read_source
 from ..car import Car, CarLimits
 from ..route.manifest import decode_manifest, validate_route
 from ..route.track import Route
-from .storage import digest
 
 
 @lru_cache(maxsize=12)

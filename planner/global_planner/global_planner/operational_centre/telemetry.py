@@ -45,7 +45,8 @@ def _constraint(demand: np.ndarray, planning, baseline, active: np.ndarray) -> d
     return {
         'actual': demand[index].tolist(),
         'profile': np.broadcast_to(planning, demand.shape)[index].tolist(),
-        'base': None if baseline is None else np.broadcast_to(baseline, demand.shape)[index].tolist(),
+        'base': (None if baseline is None
+                 else np.broadcast_to(baseline, demand.shape)[index].tolist()),
         'end': end.tolist(),
         'active': (active[0].astype(int) + 2 * active[1]).tolist(),
     }
@@ -109,7 +110,7 @@ def measure(lap: LapCurve, car: Car, profile: SpeedProfile, base_limits: CarLimi
     steering = abs(steering_rate) / base_limits.max_steering_velocity
     with np.errstate(over='ignore'):
         motor_ratio = np.divide(np.maximum(tyre, 0), base_motor,
-                               out=np.full_like(base_motor, np.nan), where=base_motor > 0)
+                                out=np.full_like(base_motor, np.nan), where=base_motor > 0)
     motor_ratio[~np.isfinite(motor_ratio)] = np.nan
     base_motor_usage = np.fmax(motor_ratio[0], motor_ratio[1])
     vehicle_usage = np.maximum.reduce(
@@ -130,7 +131,8 @@ def measure(lap: LapCurve, car: Car, profile: SpeedProfile, base_limits: CarLimi
             'road_usage': (end_speed / road).max(axis=0).tolist(),
             'speed_usage': vehicle_speed.tolist(),
             'grip_usage': base_grip.tolist(),
-            'motor_usage': [float(value) if np.isfinite(value) else None for value in base_motor_usage],
+            'motor_usage': [float(value) if np.isfinite(value) else None
+                            for value in base_motor_usage],
             'angle_usage': steering_angle.tolist(),
             'steering_usage': steering.tolist(),
         },

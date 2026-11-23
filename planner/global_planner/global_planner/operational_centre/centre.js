@@ -1,41 +1,13 @@
+// The Operational Centre: tabs, the embedded editor, and the Tracks comparison.
+import {$, api, element, notice, status} from './common.js';
 import {drawPlots, fit, zoom} from './plots.js';
+import {bindWorksheet, showWorksheet, unapplied} from './worksheet.js';
 
-const $ = id => document.getElementById(id);
 const labels = {gentle: 'Gentle', balanced: 'Balanced', aggressive: 'Aggressive'};
 const visible = new Set(Object.keys(labels));
 const tabs = [...document.querySelectorAll('[role="tab"]')];
-let state, view, mapName, requestNumber = 0;
-let edited = false, revision, saving = false, selection;
-let connected = false;
+let state, view, mapName, selection, requestNumber = 0, connected = false;
 const emptyView = {walls: [], gates: [], start: [], period_m: 0, lines: {}};
-
-function status(id, message) {
-  const element = $(id);
-  if (element.textContent !== message) element.textContent = message;
-}
-
-function notice(id, message = '') {
-  status(id, message);
-  $(id).hidden = !message;
-}
-
-function element(tag, label, className) {
-  const item = document.createElement(tag);
-  if (label) item.textContent = label;
-  if (className) item.className = className;
-  return item;
-}
-
-async function api(action, body) {
-  const response = await fetch('/api/centre/' + action, body === undefined ? {} : {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(body),
-  });
-  const payload = await response.json();
-  if (!response.ok) throw Error(payload.error || response.statusText);
-  return payload;
-}
 
 function activate(id, focus = false) {
   for (const tab of tabs) {
@@ -92,96 +64,6 @@ $('open-in-editor').onclick = () => {
 $('map').onchange = () => {
   mapName = $('map').value;
   refresh();
-};
-
-function buildWorksheet(values) {
-  const rows = Object.entries(state.parameters).map(([key, parameter]) => {
-    const row = element('tr');
-    const heading = element('th');
-    heading.scope = 'row';
-    heading.append(element('strong', parameter.label + (parameter.unit ? ' (' + parameter.unit + ')' : '')));
-    heading.append(element('span', parameter.hint));
-    row.append(heading);
-    for (const [field, label] of [['value', 'value'], ['lower', 'lower bound'], ['upper', 'upper bound']]) {
-      const cell = element('td');
-      const input = element('input');
-      input.type = 'number';
-      input.step = parameter.integer ? '1' : 'any';
-      input.min = parameter.lower;
-      input.max = parameter.upper;
-      input.value = values[key][field];
-      input.name = key + '-' + field;
-      input.setAttribute('aria-label', parameter.label + ' ' + label);
-      row.append(cell);
-      cell.append(input);
-    }
-    return row;
-  });
-  $('parameter-rows').replaceChildren(...rows);
-}
-
-function loadWorksheet() {
-  revision = state.settings.revision;
-  edited = false;
-  buildWorksheet(state.settings.parameters);
-  notice('settings-error');
-  updateWorksheet();
-}
-
-function updateWorksheet() {
-  if (!state) return;
-  const conflict = revision !== state.settings.revision;
-  if ((revision === undefined || conflict) && !edited && !saving) {
-    loadWorksheet();
-    return;
-  }
-  status('worksheet-status', conflict
-    ? 'Saved values changed on disk. Reload saved values before applying.'
-    : state.settings.error || (edited ? 'Unapplied changes' : 'Using applied values'));
-  $('apply').disabled = !connected || saving || conflict || (!edited && !state.settings.error);
-  $('parameters-form').querySelector('fieldset').disabled = saving;
-  $('reload-settings').disabled = saving;
-  $('defaults').disabled = saving;
-}
-
-$('parameters-form').oninput = () => {
-  edited = true;
-  notice('settings-error');
-  updateWorksheet();
-  if (state) updateTracks();
-};
-$('reload-settings').onclick = () => { if (state) { loadWorksheet(); updateTracks(); } };
-$('defaults').onclick = () => {
-  if (!state) return;
-  const defaults = Object.fromEntries(Object.entries(state.parameters).map(([key, item]) =>
-    [key, {value: item.default, lower: item.lower, upper: item.upper}]));
-  buildWorksheet(defaults);
-  edited = true;
-  notice('settings-error');
-  updateWorksheet();
-  updateTracks();
-};
-
-$('parameters-form').onsubmit = async event => {
-  event.preventDefault();
-  if ($('apply').disabled) return;
-  const inputs = $('parameters-form').elements;
-  const values = Object.fromEntries(Object.keys(state.parameters).map(key =>
-    [key, Object.fromEntries(['value', 'lower', 'upper'].map(field =>
-      [field, inputs.namedItem(key + '-' + field).valueAsNumber]))]));
-  saving = true;
-  updateWorksheet();
-  try {
-    await api('settings', {revision, parameters: values});
-    edited = false;
-    revision = undefined;
-    notice('settings-error');
-  } catch (error) {
-    notice('settings-error', error.message);
-  } finally {
-    saving = false;
-    await refresh();
-  }
 };
 
 for (const [kind, title] of Object.entries(labels)) {
@@ -280,15 +162,11 @@ function updateTracks() {
   $('progress').firstElementChild.style.width = (allAttempts.length ? completed / allAttempts.length * 100 : 0) + '%';
   status('generation-inputs', [
     annotation.draft_differs && 'Draft differs from the saved route.',
-    edited && 'Unapplied values. Generation uses the saved worksheet.',
+    unapplied() && 'Unapplied values. Generation uses the saved worksheet.',
     settings.error && 'Saved optimizer settings need attention.',
     car.message,
   ].filter(Boolean).join(' ') || 'Using saved route and applied optimizer values.');
   status('layer-status', current + ' of 3 profiles current');
-  for (const button of document.querySelectorAll('[data-command]')) {
-    const target = $(button.dataset.command);
-    if (target) button.disabled = target.disabled;
-  }
 }
 
 async function refresh() {
@@ -308,14 +186,14 @@ async function refresh() {
     }
     notice('connection');
     updateAnnotation();
-    updateWorksheet();
+    showWorksheet(state, connected);
     updateTracks();
   } catch (error) {
     if (request !== requestNumber) return;
     connected = false;
     notice('connection', 'Workspace unavailable. ' + error.message);
     if (state) {
-      updateWorksheet();
+      showWorksheet(state, connected);
       updateTracks();
     }
   }
@@ -368,6 +246,7 @@ $('stop').onclick = async () => {
   }
   await refresh();
 };
+$('refresh-inputs').onclick = refresh;
 $('fit').onclick = fit;
 $('zoom-in').onclick = () => zoom(0.75);
 $('zoom-out').onclick = () => zoom(1 / 0.75);
@@ -375,26 +254,6 @@ document.querySelectorAll('[data-close]').forEach(button =>
   button.onclick = () => button.closest('dialog').close());
 document.querySelectorAll('[data-help]').forEach(button =>
   button.onclick = () => $('help-dialog').showModal());
-document.addEventListener('click', event => {
-  for (const menu of document.querySelectorAll('.menubar details[open]')) {
-    const button = event.target.closest('button');
-    if (!menu.contains(event.target) || button) menu.open = false;
-    if (button && menu.contains(button)) {
-      if (!document.querySelector('dialog[open]')) menu.querySelector('summary').focus();
-      const command = button.dataset.command;
-      if (command === 'refresh') refresh();
-      else if (command) $(command)?.click();
-    }
-  }
-});
-document.addEventListener('keydown', event => {
-  if (event.key !== 'Escape') return;
-  const openMenu = document.querySelector('.menubar details[open]');
-  if (openMenu) {
-    openMenu.open = false;
-    openMenu.querySelector('summary').focus();
-  }
-});
-
+bindWorksheet(refresh, () => { if (state) updateTracks(); });
 refresh();
 setInterval(refresh, 1800);
