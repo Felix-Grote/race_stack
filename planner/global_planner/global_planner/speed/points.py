@@ -67,6 +67,7 @@ class LapPoints:
     angle:      the steering angle at each point.
     cap_mps:    the most each point allows by itself: the track limit it is given, the
                 car's top speed, the bend, and the steering on the gaps before and after.
+    track_cap_mps: the route speed cap, including its portal rules.
     speed_mps:  the speed at each point: the caps to begin with, lowered by settle().
     accel_mps2: the steady acceleration from each point to the next.
     took_s:     the time from each point to the next.
@@ -121,10 +122,11 @@ class LapPoints:
         with np.errstate(divide='ignore'):
             steering = limits.max_steering_velocity * gap_m / self._turn
 
+        self.track_cap_mps = track_cap_mps
         self.cap_mps = np.minimum(limits.v_max, np.minimum.reduce((
             track_cap_mps, self._bend_mps, steering, np.roll(steering, 1))))
         self.speed_mps = self.cap_mps.copy()
-        for fixed in (self.gap_m, self.curvature, self.angle, self.cap_mps):
+        for fixed in (self.gap_m, self.curvature, self.angle, self.cap_mps, self.track_cap_mps):
             fixed.flags.writeable = False
 
     @property

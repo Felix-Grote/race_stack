@@ -169,7 +169,7 @@ def _check_section_contacts(sections: list[Section], portals: list[Portal]) -> N
             _check_neighbours(sections[i], sections[j])
 
 
-def _start(value: dict) -> Start:
+def _start(value: dict, sections: list[Section]) -> Start:
     """Check the start zone and heading range."""
     heading = value['heading_range_rad']
     require(heading[0] < heading[1], 'start heading range must run from a smaller to a larger '
@@ -178,6 +178,14 @@ def _start(value: dict) -> Start:
     zone = _points(value['zone'], 'start zone')
     require(simple_polygon(zone), 'start zone must be a polygon with an area that does not '
             'cross itself')
+    # The whole zone, edges included, must lie on the road: within the union
+    # of all sections. It may straddle a gate or sit in any section; PR #10
+    # assigns it no section of its own. Boundary contact counts as inside,
+    # as in geometry.covers (EPS slack for float noise).
+    road = unary_union([Polygon(s.polygon) for s in sections])
+    require(road.buffer(EPS).covers(Polygon(zone)),
+            'start zone is not contained in the route sections; move the '
+            'zone wholly inside the track')
 
     return Start(zone, tuple(heading))
 
@@ -217,13 +225,13 @@ def validate_route(payload: object) -> Route:
 
     _check_section_contacts(sections, portals)
 
-    start = _start(payload['start'])
+    start = _start(payload['start'], sections)
 
     return Route(tuple(sections), tuple(portals), start, digest)
 
 
-def load_route(path: str | Path) -> Route:
-    """Read strict UTF-8 JSON, rejecting duplicate keys, then validate it."""
+def decode_manifest(data: bytes) -> object:
+    """Decode strict UTF-8 JSON, rejecting duplicate keys and nonfinite numbers."""
     def pairs(items: list[tuple[str, object]]) -> dict:
         result = {}
         for k, v in items:
@@ -236,9 +244,11 @@ def load_route(path: str | Path) -> Route:
         raise RouteError('nonfinite JSON number: ' + value)
 
     try:
-        payload = json.loads(Path(path).read_text(encoding='utf-8'), object_pairs_hook=pairs,
-                             parse_constant=invalid)
+        return json.loads(data.decode('utf-8'), object_pairs_hook=pairs, parse_constant=invalid)
     except (UnicodeError, json.JSONDecodeError) as exc:
         raise RouteError('invalid UTF-8 JSON') from exc
 
-    return validate_route(payload)
+
+def load_route(path: str | Path) -> Route:
+    """Read and validate a route manifest."""
+    return validate_route(decode_manifest(Path(path).read_bytes()))

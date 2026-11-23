@@ -66,6 +66,10 @@ class CarModel:
 
         return (1. - used ** self.grip_exponent) ** (1. / self.grip_exponent)
 
+    def motor_accel(self, speed: Numbers) -> Numbers:
+        """Return the motor's acceleration envelope before drag."""
+        return np.interp(speed, *self._motor)
+
     def accel(self, speed: Numbers, curvature: Numbers, bound: Bound) -> Numbers:
         """Return the highest or the lowest acceleration the car can make at a speed on a bend."""
         left = self.grip_left(speed, curvature)
@@ -73,7 +77,7 @@ class CarModel:
 
         if bound is Bound.LOWEST:
             return self.limits.a_min * left - drag
-        return np.minimum(self.limits.a_max * left, np.interp(speed, *self._motor)) - drag
+        return np.minimum(self.limits.a_max * left, self.motor_accel(speed)) - drag
 
     def steering_angle(self, curvature: Numbers) -> Numbers:
         """Return the angle of the front wheels on a bend, in radians."""

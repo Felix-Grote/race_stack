@@ -1,0 +1,80 @@
+:root {
+  --face: #c0c0c0;
+  --shadow: #808080;
+  --navy: #000080;
+  --raised: inset 1px 1px #fff, inset -1px -1px #000,
+            inset 2px 2px #dfdfdf, inset -2px -2px var(--shadow);
+  --sunken: inset 1px 1px var(--shadow), inset -1px -1px #fff,
+            inset 2px 2px #000, inset -2px -2px #dfdfdf;
+}
+* { box-sizing: border-box; }
+body { font: 0.75rem/1.35 "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Arial, sans-serif; }
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 23px;
+  padding: 3px 5px;
+  color: #fff;
+  background: var(--navy);
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+.icon { width: 16px; height: 16px; flex: none; shape-rendering: crispEdges; }
+button, input, select { font: inherit; color: inherit; }
+button, input, select { border: 0; border-radius: 0; }
+button {
+  min-height: 24px;
+  padding: 3px 9px;
+  background: var(--face);
+  box-shadow: var(--raised);
+}
+button:disabled { color: #555; }
+button:active:not(:disabled), button.on { box-shadow: var(--sunken); }
+:focus-visible { outline: 1px dotted currentColor; outline-offset: -3px; }
+input:not([type="checkbox"]), select {
+  min-width: 0;
+  min-height: 24px;
+  padding: 3px 5px;
+  background: #fff;
+  box-shadow: var(--sunken);
+}
+input[type="checkbox"] { accent-color: var(--navy); }
+.menubar { display: flex; flex-wrap: wrap; align-items: center; position: relative; z-index: 1; padding: 2px 0; }
+.menubar details { position: relative; }
+.menubar details:last-child { position: static; }
+.menubar summary {
+  display: block;
+  padding: 3px 8px;
+  list-style: none;
+  cursor: default;
+}
+.menubar summary::-webkit-details-marker { display: none; }
+.menubar details[open] > summary { box-shadow: var(--sunken); }
+.popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: max-content;
+  min-width: 9rem;
+  max-width: calc(100vw - 24px);
+  padding: 4px;
+  background: var(--face);
+  box-shadow: var(--raised);
+}
+.popup button, .popup label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  text-align: left;
+  padding: 4px 8px;
+  box-shadow: none;
+}
+.popup button:hover:not(:disabled), .popup button:focus-visible, .popup label:hover {
+  color: #fff;
+  background: var(--navy);
+}
+.popup hr { border: 0; border-top: 1px solid var(--shadow); border-bottom: 1px solid #fff; margin: 3px 2px; }
+.statusbar > div { padding: 5px 7px; box-shadow: var(--sunken); overflow-wrap: anywhere; }
+[hidden] { display: none !important; }

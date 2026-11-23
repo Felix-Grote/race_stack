@@ -121,7 +121,7 @@ for that car.
 
 | Field | Meaning |
 |---|---|
-| `start` | the start box the car stands in before the race (`zone`), and the directions it may face there (`heading_range_rad`) |
+| `start` | the start box the car stands in before the race (`zone`), and the directions it may face there (`heading_range_rad`); the whole zone must lie within the union of the section polygons — it may straddle a gate or sit in any section, but no part of it may leave the road |
 | `surface` | groups sections on one physical surface (a bridge deck vs. the road below) |
 | `max_speed_mps` | speed limit over the whole section; to change it, cut a new section |
 | `left`, `right` | the walls, in driving direction; `right` + reversed `left` closes the section; the end cap is the gate into the next section, the last one closes the lap |

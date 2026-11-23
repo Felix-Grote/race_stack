@@ -8,8 +8,11 @@ setup(
     name=package_name,
     version='0.0.0',
     packages=[package_name, package_name + '.route', package_name + '.optimizer',
-              package_name + '.speed'],
-    package_data={package_name + '.route': ['manifest.schema.json']},
+              package_name + '.speed', package_name + '.annotation',
+              package_name + '.operational_centre'],
+    package_data={package_name + '.route': ['manifest.schema.json'],
+                  package_name + '.annotation': ['*.html', '*.js', '*.css'],
+                  package_name + '.operational_centre': ['*.html', '*.js', '*.css']},
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -29,7 +32,9 @@ setup(
         'console_scripts': [
             'global_planner = global_planner.global_planner_node:main',
             'mapping_node = global_planner.mapping_node:main',
-            'global_trajectory_publisher = global_planner.global_trajectory_publisher:main'
+            'global_trajectory_publisher = global_planner.global_trajectory_publisher:main',
+            'annotation = global_planner.annotation.server:main',
+            'operational_centre = global_planner.operational_centre.server:main'
         ],
     },
 )
