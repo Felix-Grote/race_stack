@@ -18,15 +18,20 @@ The `--workspace` directory defaults to `.forzaeth/operational-centre` relative 
 
 ## Driving profiles
 
-| Profile | Performance fraction α | Extra clearance above `--margin` | Smoothness γ with defaults |
-|---|---:|---:|---:|
-| Gentle | 80% | 0.050 m | 0.20 |
-| Balanced | 90% | 0.025 m | 0.10 |
-| Aggressive | 95% | 0 m | 0.05 |
+| Profile | Line | Performance fraction α | Extra clearance above `--margin` | Smoothness γ with defaults |
+|---|---|---:|---:|---:|
+| Gentle | fastest | 80% | 0.050 m | 0.20 |
+| Balanced | fastest | 90% | 0.025 m | 0.10 |
+| Aggressive | fastest | 95% | 0 m | 0.10 |
+| Shortest | shortest it can steer | 90% | 0.025 m | 0.03 |
 
 Each profile runs the native geometry and flying-lap optimizer independently. The performance fraction scales vehicle top speed, lateral and longitudinal tyre limits, braking, motor acceleration at the calibrated speed breakpoints and steering-rate limits. Mass, drag, steering geometry and the source calibration stay fixed. The clearance baseline defaults to 0.05 m and the added clearance is in metres.
 
-**Settings** applies one worksheet across all maps. Its γ value refers to Balanced. Gentle uses twice that value and Aggressive uses half. The chosen γ weights curvature energy in the native lap-time objective. The presets are provisional. Changing the weight can change convergence and the relative lap times.
+**Settings** applies one worksheet across all maps. Its γ value is Balanced's and Aggressive's. Gentle uses twice that value and Shortest 0.3 times it. The chosen γ weights curvature energy in the native lap-time objective, or in the length for Shortest. The presets are provisional. Changing the weight can change convergence and the relative lap times.
+
+Aggressive is more aggressive by α and clearance, not by γ: a lower γ does not make a line faster, it lets the passes get stuck sooner. With half of Balanced's γ, Aggressive came out slower than Balanced on some tracks. A fastest line is also never returned slower than the smoothest line it starts from (optimizer README).
+
+Shortest is the line for the shortest-path slot of the car's file. Overtaking sectors are found where the raceline and the shortest path part, so it has to be a different line: the shortest one the car can steer, with its body and margin on the road. It is timed like the others.
 
 ## Compare and inspect
 
@@ -39,7 +44,7 @@ Each profile runs the native geometry and flying-lap optimizer independently. Th
 
 ### High-speed-cap demonstration
 
-On a scratch copy of `test/test`, set **Speed limit** to 20 m/s in Annotator and export the route. Generate Balanced and Aggressive with the NUC5 car model. In Tracks, select **Active Constraints** and inspect Balanced. With the road cap above the planning top speed, the map shows where cornering grip, tyre drive and braking grip limit the lap. At about 45 m of route progress the inspector shows the cornering demand alongside both lateral limits.
+A new draft's **Speed limit** is 20 m/s, above the car's top speed, so that the car's own limits bound the line; drafts saved before keep theirs (it was 2.5 m/s). On a scratch copy of `test/test`, check **Speed limit** is 20 m/s in Annotator and export the route. Generate Balanced and Aggressive with the NUC5 car model. In Tracks, select **Active Constraints** and inspect Balanced. With the road cap above the planning top speed, the map shows where cornering grip, tyre drive and braking grip limit the lap. At about 45 m of route progress the inspector shows the cornering demand alongside both lateral limits.
 
 ## Is it current?
 
@@ -56,7 +61,7 @@ On a scratch copy of `test/test`, set **Speed limit** to 20 m/s in Annotator and
 | Raceline | `/global_waypoints` | `raceline:=mincurv` (the default) |
 | Shortest path | `/global_waypoints/shortest_path` | `raceline:=shortest_path`; also the line overtaking sectors are tuned on |
 
-Each slot takes Gentle, Balanced, Aggressive or Centreline. Only profiles with a current result are offered, so a stale line never reaches the car. Results generated before export existed must be generated again. The file's third slot, `/centerline_waypoints`, always holds the centreline; where the car cannot steer it, the raceline's choice stands in.
+Each slot takes Gentle, Balanced, Aggressive, Shortest or Centreline; the defaults are Balanced and Shortest. Only profiles with a current result are offered, so a stale line never reaches the car. Results generated before export existed must be generated again. The file's third slot, `/centerline_waypoints`, always holds the centreline; where the car cannot steer it, the raceline's choice stands in, and the export and the status bar say so. The file replaced is kept as `global_waypoints.json.bak`.
 
 The centreline is the route's centre curve timed for the car's unscaled limits. Unlike the profiles it is not optimized, and nothing checks that the body stays clear of the walls along it. Retune `ot_sectors.yaml` and `speed_scaling.yaml` after exporting a new raceline, since they index its waypoints.
 

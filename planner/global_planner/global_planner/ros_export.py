@@ -11,8 +11,11 @@ speeds:     from the lap's speed profile. Between two of its points the car spee
 widths:     d_left and d_right are the distance to the nearest point of the left and of the
             right wall, as the old planner measured them, among the walls on the waypoint's
             surface and those of its two neighbouring sections.
-slots:      the file holds three lines the car can drive: the raceline, the "shortest path"
-            and the centreline. Any line may be put in any slot (write_lines).
+slots:      the file holds three lines the car can drive: the raceline, the shortest path
+            and the centreline. Any line may be put in any slot (write_lines), but the
+            overtaking sectors (sector_tuner) are found where the raceline and the shortest
+            path part: the shortest path should be the shortest line (optimize, shortest).
+backup:     the file a write replaces is kept beside it as global_waypoints.json.bak.
 """
 import argparse
 import json
@@ -20,6 +23,7 @@ import logging
 import math
 import os
 from pathlib import Path
+import shutil
 
 import numpy as np
 from shapely.geometry import LineString, MultiLineString, Point
@@ -149,6 +153,8 @@ def write_lines(map_dir: str | Path, route: Route, raceline: list[dict],
 
     # Written aside and moved into place: the car never reads half a file.
     path = Path(map_dir) / 'global_waypoints.json'
+    if path.exists():
+        shutil.copy2(path, path.with_suffix('.json.bak'))
     aside = path.with_suffix('.json.tmp')
     aside.write_text(json.dumps(payload, allow_nan=False), encoding='utf-8')
     os.replace(aside, path)
@@ -157,7 +163,7 @@ def write_lines(map_dir: str | Path, route: Route, raceline: list[dict],
 
 
 def main(argv: list[str] | None = None) -> None:
-    """Optimize a route for a car and write it in all three slots of the car's file."""
+    """Optimize a route for a car; write its fastest and shortest lines to the car's file."""
     parser = argparse.ArgumentParser(description=main.__doc__)
     parser.add_argument('route', help='the track manifest, e.g. track.json')
     parser.add_argument('car', help="the car's car_model.yaml")
@@ -169,10 +175,18 @@ def main(argv: list[str] | None = None) -> None:
 
     logging.basicConfig(level=logging.INFO, format='%(message)s')   # the optimizer's progress
     route = load_route(args.route)
-    result = optimize(route, Car.load(args.car, args.margin), limits=CarLimits.load(args.car))
-    line = waypoints(result.lap, result.profile, result.start_q)
-    path = write_lines(args.map_dir, route, line, line, line)
-    print(f'{path}: {result.lap.curve.length:.2f} m, {result.profile.lap_time_s:.3f} s')
+    car, limits = Car.load(args.car, args.margin), CarLimits.load(args.car)
+    fastest = optimize(route, car, limits=limits)
+    shortest = optimize(route, car, limits=limits, shortest=True)
+    race, short = (waypoints(r.lap, r.profile, r.start_q) for r in (fastest, shortest))
+    try:
+        centre = centreline_waypoints(route, car, limits)
+    except ValueError:
+        centre = race   # the car cannot steer the centre line: the raceline stands in
+    path = write_lines(args.map_dir, route, race, short, centre,
+                       'raceline: fastest; shortest_path: shortest; ')
+    for what, r in (('fastest', fastest), ('shortest', shortest)):
+        print(f'{path} {what}: {r.lap.curve.length:.2f} m, {r.profile.lap_time_s:.3f} s')
 
 
 if __name__ == '__main__':
