@@ -37,11 +37,12 @@ It writes two files next to the map's YAML and never touches the map itself:
    all the way round.
    Wherever the route fails (a guide through a wall, a start off the road, a section off the
    road) is ringed in red; a refused wall shows dashed red for a moment, and the status says why.
-4. **Set start**: click where the car starts. The start zone is centred there, facing along
-   the guide, and the first gate is the straightest point near it; the others follow at
-   quarters of the lap. There is no route until the start is set.
+4. **Set start**: draw the start line with two clicks, one on each side of the road. The
+   line through them is run on to the walls and is the first gate; the others follow at
+   quarters of the lap, each on the straightest point near it. There is no route until the
+   start is set.
 5. After every edit the route is built and checked again, and the status says whether it is
-   valid or why not; a valid one shows green walls, magenta gates and the white start zone.
+   valid or why not; a valid one shows green walls, magenta gates and the white start line.
    **Export**, enabled only then, writes exactly that route.
 
 The left tool box holds the drawing tools and wall width. Use **Edit** to remove a numbered
@@ -68,7 +69,7 @@ flowchart LR
 | `track_map.py` | reads the map; the free cells left by the strokes, and the region kept |
 | `walls.py` | the two wall loops of the kept ring; finds the track; exact area checks and wall thinning |
 | `guide.py` | resamples a guide, checks it stays on the road, and suggests the midline |
-| `sections.py` | cuts the guide into sections, takes their walls, places the start zone |
+| `sections.py` | cuts the guide into sections, the first at the start, and takes their walls |
 | `checks.py` | the checks a manifest must pass before it can be exported |
 | `editor.py` | the open map, the draft, its edits and files |
 | `server.py` | the local web server and the command line |
@@ -89,8 +90,10 @@ flowchart LR
    passes the gates in order in one turn. Each section takes the stretches between its
    gates, thinned to keep the route package's centreline fast; a shortcut is only taken
    when the ear it cuts off covers no occupied area at all.
-5. **Start zone.** A strip in the middle of the road just after the first gate, facing along
-   the guide; where it does not fit, ever smaller boxes.
+5. **Start line.** The first gate, where the operator drew it: the line through the two
+   clicks, run on to the nearest place it meets each wall. It runs from wall to wall, so it
+   pins nothing about the line. A draft whose start is a single click gets the gate that fits
+   nearest after it.
 6. **Checks**, the first failure refusing the route: the sections cover no area outside the
    kept cells' squares, measured exactly; the route package reads the manifest, builds the
    lap, finds its gate crossings and samples it; given a car, it works out the portal zones.

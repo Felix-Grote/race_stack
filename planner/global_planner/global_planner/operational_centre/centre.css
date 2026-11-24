@@ -114,7 +114,8 @@ p { margin: 4px 0; }
 #telemetry-plot { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); }
 .road { fill: #e5e5e5; stroke: #666; stroke-width: 1; vector-effect: non-scaling-stroke; }
 .gate { fill: none; stroke: #777; stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
-.start { fill: #fff8bc; stroke: #000; stroke-width: 1; vector-effect: non-scaling-stroke; }
+/* The start line, wall to wall: black over yellow, wider than a gate. */
+.start { fill: none; stroke: #000; stroke-width: 4; stroke-dasharray: 5 5; vector-effect: non-scaling-stroke; }
 .curve { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .gentle { --ink: var(--gentle); }
 .balanced { --ink: var(--balanced); }

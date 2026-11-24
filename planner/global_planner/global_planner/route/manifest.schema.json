@@ -4,7 +4,7 @@
   "description": "Structure only; geometry is checked in manifest.py. Metres, x forward, y left. A definition's message is shown when it fails.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["name", "map", "start", "sections"],
+  "required": ["name", "map", "sections"],
   "properties": {
     "name": {"$ref": "#/definitions/text"},
     "map": {
@@ -18,20 +18,6 @@
           "message": "must be a string of 64 lowercase hexadecimal digits",
           "pattern": "^[0-9a-f]{64}$"
         }
-      }
-    },
-    "start": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["heading_range_rad", "zone"],
-      "properties": {
-        "heading_range_rad": {
-          "type": "array",
-          "items": {"type": "number", "minimum": -3.141592653589793, "maximum": 3.141592653589793},
-          "minItems": 2,
-          "maxItems": 2
-        },
-        "zone": {"$ref": "#/definitions/polygon"}
       }
     },
     "sections": {

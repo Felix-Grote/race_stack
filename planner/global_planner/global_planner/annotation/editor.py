@@ -98,10 +98,22 @@ class Editor:
 
         draft = dict(self.draft, **{field: value})
         if field == 'start_px' and value is not None:
+            # The two ends of the start line the operator drew, or one click from an older draft.
+            try:
+                ends = np.asarray(value, float).reshape(-1, 2)
+            except (TypeError, ValueError) as exc:
+                raise AnnotationError(f'cannot set {field!r} to {value!r}') from exc
+
+            same_place = len(ends) == 2 and np.ptp(ends, axis=0).max() < 1
+            if len(ends) > 2 or not np.all(np.isfinite(ends)) or same_place:
+                raise AnnotationError('the start line needs two clicks apart: one on each side '
+                                      'of the road')
+
             kept = kept_mask(free_mask(self.track_map, draft['strokes_px'],
                                        draft['stroke_width_px']), draft['region_px'])
-            if len(guide.off_road(kept, [value])):
-                raise AnnotationError('the start must be on the road: click inside the track')
+            if len(guide.off_road(kept, [[float(v) for v in ends.mean(axis=0)]])):
+                raise AnnotationError('the start line must cross the road: click on one side '
+                                      'of the track, then on the other')
 
         if field == 'guide_px':
             # A drawn guide stays as drawn.
@@ -211,7 +223,8 @@ class Editor:
             return
 
         if self.draft['start_px'] is None:
-            self.route = 'no start yet: press Set start and click where the car starts'
+            self.route = ('no start yet: press Set start and click on each side of the road '
+                          'to draw the start line')
             return
 
         try:
@@ -228,7 +241,9 @@ class Editor:
                        'right_px': [px(s['right']) for s in payload['sections']],
                        'gates_px': [px((s['right'][-1], s['left'][-1]))
                                     for s in payload['sections']],
-                       'start_px': px(payload['start']['zone']),
+                       # The start line: the gate into the first section, wall to wall.
+                       'start_px': px((payload['sections'][0]['right'][0],
+                                       payload['sections'][0]['left'][0])),
                        'payload': payload, 'digest': route.digest}
         car = f', portal zones checked for {self.car.name}' if self.car else ''
         self.route = (f'valid: {len(payload["sections"])} sections, lap {lap.period:.2f} m{car}. '

@@ -161,7 +161,7 @@ class Workspace:
                 'id': view_id,
                 'walls': [section.polygon for section in route.sections] if route else [],
                 'gates': [portal.gate for portal in route.portals] if route else [],
-                'start': route.start.zone if route else [],
+                'start': route.start_line if route else [],
                 'period_m': route.section_bounds[-1] if route else 0.,
                 'lines': {kind: item['telemetry'] for kind, item in current.items()},
             }

@@ -18,8 +18,8 @@ const HINTS = {
   guide: 'Draw guide: click points round the track in the direction of travel; click the first ' +
          'point (or double-click) to close it. Backspace drops the last point, Escape all. ' +
          'A drawn guide stays as drawn; Suggest makes it follow the road again.',
-  start: 'Set start: click on the track where the car starts; the first gate and the start ' +
-         'zone are placed there, facing along the guide.'};
+  start: 'Set start: draw the start line with two clicks, one on each side of the road. ' +
+         'It is run on to the walls and is the first gate; the lap starts where a line crosses it.'};
 // How close, in canvas pixels, a click must be to the guide's first point to close it.
 const CLOSE_PX = 10;
 
@@ -110,7 +110,11 @@ function draw() {
   }
   if (shown.guide) {
     line(V.guide_px, C('guide')); arrows(V.guide_px, C('guide'));
-    if (V.start_px) {
+    if (V.start_px && Array.isArray(V.start_px[0])) {
+      // The start line as drawn; the route shows it run on to the walls.
+      ctx.setLineDash([4, 3]); line(V.start_px, C('startmark'), false, 2); ctx.setLineDash([]);
+    } else if (V.start_px) {
+      // A start set as one click, from an older draft.
       const [x, y] = toCanvas(V.start_px);
       ctx.beginPath(); ctx.arc(x, y, 7, 0, 2 * Math.PI);
       ctx.fillStyle = C('startmark'); ctx.strokeStyle = '#000'; ctx.lineWidth = 2;
@@ -120,13 +124,9 @@ function draw() {
   const R = shown.route && V.result;
   if (R) {
     R.left_px.concat(R.right_px).forEach(w => line(w, C('route'), false, 2.5));
-    if (R.start_px.length > 2) {
-      ctx.beginPath();
-      R.start_px.forEach((p, i) => { const q = toCanvas(p); i ? ctx.lineTo(...q) : ctx.moveTo(...q); });
-      ctx.closePath(); ctx.globalAlpha = .4; ctx.fillStyle = C('start'); ctx.fill(); ctx.globalAlpha = 1;
-    }
-    line(R.start_px, C('start'), true, 1.5);
     R.gates_px.forEach(g => line(g, C('gates'), false, 3.5));
+    // The start line is a gate too: drawn over it, wider, black under its own colour.
+    line(R.start_px, '#000', false, 7); line(R.start_px, C('start'), false, 4);
   }
   // Where the route fails: a ring round every cell named.
   ctx.strokeStyle = C('problem'); ctx.lineWidth = 2.5;
@@ -223,7 +223,13 @@ cv.addEventListener('click', e => {
   if (!V.size || pan) return;
   const p = toPixel(e);
   if (tool === 'region') return edit('region_px', p.map(Math.round));
-  if (tool === 'start') return edit('start_px', p);
+  // The start line: one click on each side of the road.
+  if (tool === 'start') {
+    draft.push(p);
+    if (draft.length < 2) return draw();
+    const ends = draft; draft = []; hover = null;
+    return edit('start_px', ends);
+  }
   if (!tool) return;
   // A click while a refused line shows starts a new one.
   if (refused) { draft = []; refused = false; }
