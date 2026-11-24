@@ -20,6 +20,8 @@ result.passes, result.refinements       # what each pass did; rounds of tighter 
 limits = CarLimits.load('car_model.yaml')
 result = optimize(route, car, limits=limits)    # the fastest line, from the smoothest one
 result.profile                                  # its speeds and lap time (speed/)
+
+result = optimize(route, car, limits=limits, shortest=True)  # the shortest line it can steer
 ```
 
 ## How it works
@@ -167,6 +169,19 @@ Asked with `limits`, the optimizer first finds the smoothest line as above and t
   may need a smaller `spacing_m`: the speed rules ask for points close enough for the bend
   between them, and here that is asked of the optimizer's points.
 
+## The shortest line
+
+- **What for.** The car's file has a second line, the shortest path. The overtaking sectors
+  are found where it and the raceline part, so it must be a different line, not another
+  fastest one.
+- **What it lowers.** With `shortest=True` the passes go on from the smoothest line to lower
+  `length / length of the smoothest line + smoothness x energy / energy of the smoothest line`.
+  The turning row and the walls hold as always: it is the shortest line the car can steer
+  with its body and margin on the road, where a plain shortest path cuts corners tighter
+  than the car turns.
+- **Its smoothness.** Lower than the fastest line's. With 0.03 it came out as short as the
+  old planner's shortest paths, or shorter, on the tracks tried; with 0.01 it failed on one.
+
 ## What it promises
 
 - **Legal:** on the returned curve, every `check_m` and at its knots, the body plus margin lies
@@ -174,6 +189,10 @@ Asked with `limits`, the optimizer first finds the smoothest line as above and t
   thousandth. The lap starts where the curve crosses the start line.
 - **Settled:** the last pass could have moved twice as far, and moved no point more than
   `settle_m` or had too little left to gain.
+- **No slower than the smoothest:** asked for the fastest line, the result is never slower
+  than the smoothest line it started from. With a low `smoothness` the passes can get
+  stuck on a line slower than their start; the smoothest line is then returned, and the
+  log says so.
 - **Falling cost:** a pass that starts from a legal line keeps every wall it picked and
   never raises the energy; once the lap time is aimed at, never the mix of the two as
   measured with that pass's limits.

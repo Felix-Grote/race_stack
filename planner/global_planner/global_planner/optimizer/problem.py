@@ -17,9 +17,7 @@ rows:       what the line must keep, each a value that must not be negative, in 
             walls       the planes and vertices of free_space, for the body at the poses
                         they were picked at and for base_link at the points;
             turning     the curvature at every point within the limit, times the spacing
-                        squared: about how far the point is from where it would meet it;
-            start       one point facing within the start heading range, as an angle times
-                        the spacing.
+                        squared: about how far the point is from where it would meet it.
 recovery:   a row that is not met yet is elastic: it may fall short, at a cost of `elastic`
             per metre. A pass can then always be solved, IPOPT pulls the line back as fast as
             the other rows allow, and once the line is legal the cost is zero. A row within
@@ -60,6 +58,9 @@ time:       given the car's speed limits, a pass can aim at lap time as well (ai
             before the pass and again after it, both with the track's limits looked up
             where the points were when the pass began. If the moved points cannot be
             timed at all, the pass does not count.
+length:     a pass can aim at length instead (shorten): the cost is then a share of the
+            length of the polyline through the points plus a share of the energy. The
+            turning row still holds, so the line is the shortest the car can steer.
 left out:   most speed rows cannot bind in a pass; on a lap driven at the track's limit
             none can. A gap's speed rows are given to the solver only if one of them is
             within _NEAR of binding where the solve starts, as a share of its limit. The
@@ -321,8 +322,6 @@ class LapProblem:
     spacing:        the gap between neighbouring points the line starts with, in metres.
     equal_gaps:     the points that keep their two gaps equal: all but the first of a section.
     gates:          the first point of every section and the gate it stays on.
-    start:          the start point and the middle of the heading range it faces; None for
-                    a range that is a full turn.
     turn:           the most a pose may turn in one pass, in radians.
     elastic:        cost per metre a row falls short while it recovers.
     met:            how far short of met a row may be and still count as met, in metres.
@@ -332,19 +331,18 @@ class LapProblem:
     """
 
     def __init__(self, n: int, car: Car, spacing: float, equal_gaps: Sequence[int],
-                 gates: Sequence[GateRow], start: tuple[int, XY] | None, turn: float,
+                 gates: Sequence[GateRow], turn: float,
                  elastic: float, met: float, gain: float, tolerance: float,
                  max_iterations: int, limits: CarLimits | None = None) -> None:
         self.n = n
         self.limits = limits
-        self.goal = None
+        self.goal = self.shorter = None
         self._timed_at = {}
         if limits is not None and _SPEED.grip_exponent != 1:
             raise ValueError('the speed rules of timing.py are written for grip_exponent 1')
         self.corners = np.array(car.corners)
         self.edges = car.edges
         self.spacing = spacing
-        self.start = start
         self.turn = turn
         self.elastic = elastic
         self.met = met
@@ -369,6 +367,7 @@ class LapProblem:
         gaps = (_length(ahead) ** 2 - _length(back) ** 2)[list(equal_gaps)]
         on_gate = [self._across(points, row) for row in gates]
         self._bent = ca.Function('bent', [x], [energy, ca.vertcat(gaps, *on_gate)])
+        self._lap_length = ca.Function('lap_length', [x], [ca.sum1(_length(ahead))])
         self._solver = None
 
         # What the turning and trust rows need at the start of a pass, and how each changes.
@@ -476,6 +475,20 @@ class LapProblem:
         """
         self.goal = (time_share, energy_share)
 
+    def shorten(self, length_share: float, energy_share: float) -> None:
+        """
+        Aim the untimed passes at length as well as curvature.
+
+        Their cost becomes length_share times the length of the lap plus energy_share times
+        the energy. The turning row still holds, so the line is the shortest the car can
+        steer, not the shortest there is.
+        """
+        self.shorter = (length_share, energy_share)
+
+    def length(self, xy: np.ndarray) -> float:
+        """Return the length of the closed polyline through the points."""
+        return float(self._lap_length(xy.ravel()))
+
     def fastest(self, xy: np.ndarray, cap: np.ndarray) -> tuple[float, np.ndarray]:
         """
         Return the lap time of the points driven as fast as the car can, and those speeds.
@@ -511,10 +524,13 @@ class LapProblem:
                 f'no longer state the same rules')
 
     def cost(self, xy: np.ndarray, cap: np.ndarray | None) -> float:
-        """Return what a pass lowers: the energy, or with limits its mix with the lap time."""
+        """Return what a pass lowers: the energy, or its mix with the length or the lap time."""
         energy = self.evaluate(xy)[0]
         if cap is None:
-            return energy
+            if self.shorter is None:
+                return energy
+
+            return self.shorter[0] * self.length(xy) + self.shorter[1] * energy
 
         if self.goal is None:
             raise ValueError('a pass aims at lap time only after aim() has said how much')
@@ -595,17 +611,17 @@ class LapProblem:
 
         return np.asarray(value).ravel(), change
 
-    def _kept(self, xy: np.ndarray, picked: _Picked, curvature_limit: float,
-              heading_range: tuple[float, float] | None) -> tuple[np.ndarray, sparse.csr_matrix]:
+    def _kept(self, xy: np.ndarray, picked: _Picked,
+              curvature_limit: float) -> tuple[np.ndarray, sparse.csr_matrix]:
         """
         Return every row the line must keep, at xy: its value in metres and how it changes.
 
-        In order: the body's planes, its vertices, base_link's planes, the turning limit to
-        either side, and the start heading to either side.
+        In order: the body's planes, its vertices, base_link's planes, and the turning limit
+        to either side.
         """
         x = xy.ravel()
-        _, curvature, heading = self.evaluate(xy)
-        changes = [sparse.csr_matrix(c.sparse()) for c in self._changes(x)[1:]]
+        curvature = self.evaluate(xy)[1]
+        bending = sparse.csr_matrix(self._changes(x)[1].sparse())
         values, slopes = [], []
 
         value, change = self._posed(self._plane, xy, picked.plane_point, picked.plane_along,
@@ -627,21 +643,7 @@ class LapProblem:
 
         for sign in (1, -1):
             values.append((curvature_limit - sign * curvature) * self.spacing ** 2)
-            slopes.append(-sign * self.spacing ** 2 * changes[0])
-
-        if self.start is not None and heading_range is not None:
-            point, (ahead, left) = self.start
-            facing = heading[point]
-
-            # The angle of the heading from the middle of its range, and how it changes.
-            sideways = ahead * facing[1] - left * facing[0]
-            forward = ahead * facing[0] + left * facing[1]
-            angle = math.atan2(sideways, forward)
-            change = ((-forward * left - sideways * ahead) * changes[1][point]
-                      + (forward * ahead - sideways * left) * changes[2][point])
-            for sign, edge in zip((-1, 1), heading_range):
-                values.append(np.array([sign * (edge - angle) * self.spacing]))
-                slopes.append(-sign * self.spacing * change)
+            slopes.append(-sign * self.spacing ** 2 * bending)
 
         return np.concatenate(values), sparse.vstack(slopes).tocsr()
 
@@ -704,6 +706,8 @@ class LapProblem:
         wide, kept = None, None
         if speeds is None:
             options['ipopt.jac_d_constant'] = 'yes'
+            if self.shorter is not None:
+                cost = self.shorter[0] * self._lap_length(x) + self.shorter[1] * cost
         else:
             # The speeds join the unknowns, squared, each between a crawl and its cap.
             driven, cap = speeds
@@ -756,22 +760,19 @@ class LapProblem:
         return result, float(self.elastic * np.maximum(0., paid).sum()), ipopt, believed
 
     def solve(self, xy: np.ndarray, bodies: Sequence[BodyWalls], points: Sequence[PointWalls],
-              curvature_limit: float, heading_range: tuple[float, float] | None,
-              step: float, cap: np.ndarray | None = None) -> PassResult:
+              curvature_limit: float, step: float, cap: np.ndarray | None = None) -> PassResult:
         """
         Run one pass from xy.
 
         bodies, points:     the walls of the body poses and of the base_links, from free_space.
         curvature_limit:    the most the line may curve at a point.
-        heading_range:      the angles the start point may face between, measured from the
-                            direction given as `start`; None for no limit.
         step:               the most a coordinate may move.
         cap:                the track's speed limit at every point, for a pass that aims
-                            at lap time as well (aim); None for the least curvature alone.
+                            at lap time as well (aim); None for an untimed pass.
         """
         x0 = xy.ravel()
         picked = self._picked(bodies, points)
-        current, slope = self._kept(xy, picked, curvature_limit, heading_range)
+        current, slope = self._kept(xy, picked, curvature_limit)
         short = _short(current, self.met)
         cost_before = self.cost(xy, cap) + self.elastic * short
         turned = self._turned(xy)
@@ -817,7 +818,7 @@ class LapProblem:
 
             straight = current + slope @ (result - x0)
             said = straight + correction
-            true = self._kept(moved, picked, curvature_limit, heading_range)[0]
+            true = self._kept(moved, picked, curvature_limit)[0]
             promised, after = _short(said, self.met), _short(true, self.met)
 
             # A legal line stays legal; one that is not comes half as much closer as promised.
