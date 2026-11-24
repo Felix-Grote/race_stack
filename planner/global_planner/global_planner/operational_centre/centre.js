@@ -100,6 +100,13 @@ for (const [kind, title] of Object.entries(labels)) {
   $('metrics-rows').append(metrics);
 }
 
+// Head a dialog with what it acts on: the map once, not as folder/file, the car, and the rest.
+function facts(id, extra = []) {
+  const rows = [['Map', state.map.split('/').pop()], ['Car', state.car.name], ...extra];
+  $(id).replaceChildren(...rows.flatMap(([name, value]) =>
+    [element('dt', name), element('dd', value)]));
+}
+
 function profileInputs({alpha, margin_m, gamma}) {
   return 'α ' + Math.round(alpha * 100) + '% · ' + (margin_m * 100).toFixed(1)
     + ' cm required · γ ' + (gamma == null ? '–' : gamma.toPrecision(3));
@@ -122,6 +129,7 @@ function updateTracks() {
   $('open-in-editor').disabled = !map;
   $('generate').disabled = !connected || !track.digest || !car.timing || Boolean(settings.error || job?.running);
   $('stop').disabled = !connected || !job?.running;
+  $('export').disabled = !connected || !track.digest || !car.timing;
 
   const attempts = job?.map === map ? job.attempts : {};
   let current = 0;
@@ -167,6 +175,8 @@ function updateTracks() {
     car.message,
   ].filter(Boolean).join(' ') || 'Using saved route and applied optimizer values.');
   status('layer-status', current + ' of 3 profiles current');
+  status('car-file', 'Car file · ' + state.car_file.message);
+  $('car-file').dataset.level = state.car_file.level;
 }
 
 async function refresh() {
@@ -201,7 +211,7 @@ async function refresh() {
 
 $('generate').onclick = () => {
   selection = {map: state.map, revision: state.revision};
-  status('generate-map', state.map + ' · ' + state.car.name);
+  facts('generate-map');
   const choices = Object.entries(labels).map(([kind, name]) => {
     const label = element('label');
     const checkbox = element('input');
@@ -234,6 +244,51 @@ $('generate-form').onsubmit = async event => {
     await refresh();
   } finally {
     $('run').disabled = false;
+  }
+};
+
+$('export').onclick = () => {
+  selection = {map: state.map, revision: state.revision};
+  facts('export-map', [['Writes', state.map.split('/')[0] + '/global_waypoints.json']]);
+  for (const [slot, preferred] of [['raceline', 'balanced'], ['shortest_path', 'aggressive']]) {
+    const select = $('export-' + slot);
+    const kept = select.value;
+    select.replaceChildren(...state.exportable.map(kind => new Option(labels[kind], kind)),
+                           new Option('Centreline', 'centreline'));
+    select.value = [kept, preferred].find(kind => state.exportable.includes(kind)) || select.value;
+  }
+  notice('export-error');
+  exportChoice();
+  $('export-dialog').showModal();
+};
+
+// Next to each choice, what is known of that line; and the centreline's caveat only when the
+// centreline is about to go to the car.
+function exportChoice() {
+  const slots = ['raceline', 'shortest_path'];
+  for (const slot of slots) {
+    const metrics = state.summaries[$('export-' + slot).value]?.metrics;
+    status('export-' + slot + '-time', metrics ? metrics.lap_time_s.toFixed(2) + ' s' : '–');
+    status('export-' + slot + '-length', metrics ? metrics.length_m.toFixed(2) + ' m' : '–');
+  }
+  $('export-centreline-note').hidden = !slots.some(slot => $('export-' + slot).value === 'centreline');
+}
+$('export-raceline').onchange = $('export-shortest_path').onchange = exportChoice;
+
+$('export-form').onsubmit = async event => {
+  event.preventDefault();
+  $('export-run').disabled = true;
+  try {
+    await api('export', {...selection, raceline: $('export-raceline').value,
+                         shortest_path: $('export-shortest_path').value});
+    $('export-dialog').close();
+    notice('track-error', 'Exported ' + selection.map + ' to its global_waypoints.json.');
+    await refresh();
+  } catch (error) {
+    notice('export-error', error.message);
+    await refresh();
+  } finally {
+    $('export-run').disabled = false;
   }
 };
 

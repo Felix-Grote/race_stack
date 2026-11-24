@@ -41,6 +41,19 @@ Each profile runs the native geometry and flying-lap optimizer independently. Th
 
 On a scratch copy of `test/test`, set **Speed limit** to 20 m/s in Annotator and export the route. Generate Balanced and Aggressive with the NUC5 car model. In Tracks, select **Active Constraints** and inspect Balanced. With the road cap above the planning top speed, the map shows where cornering grip, tyre drive and braking grip limit the lap. At about 45 m of route progress the inspector shows the cornering demand alongside both lateral limits.
 
+## Export to the car
+
+**Export to car** in Tracks writes `global_waypoints.json` next to the map, replacing the one there. The stack reads it as before. Choose what goes in the two lines the car is launched with:
+
+| Slot | Topic | Launched with |
+|---|---|---|
+| Raceline | `/global_waypoints` | `raceline:=mincurv` (the default) |
+| Shortest path | `/global_waypoints/shortest_path` | `raceline:=shortest_path`; also the line overtaking sectors are tuned on |
+
+Each slot takes Gentle, Balanced, Aggressive or Centreline. Only profiles with a current result are offered, so a stale line never reaches the car. Results generated before export existed must be generated again. The file's third slot, `/centerline_waypoints`, always holds the centreline; where the car cannot steer it, the raceline's choice stands in.
+
+The centreline is the route's centre curve timed for the car's unscaled limits. Unlike the profiles it is not optimized, and nothing checks that the body stays clear of the walls along it. Retune `ot_sectors.yaml` and `speed_scaling.yaml` after exporting a new raceline, since they index its waypoints.
+
 ## Data and limits
 
 The existing [annotation workflow](global_planner/annotation/README.md) validates and exports the route and its source receipt. The Centre detects changes to the saved route or its map calibration. An export without a receipt can be used after operator review if its image hash matches. An open draft can differ from the saved export used by Tracks.

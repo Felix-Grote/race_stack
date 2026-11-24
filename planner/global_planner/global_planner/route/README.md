@@ -143,5 +143,5 @@ for that car.
 
 `route` checks the track, not a line. Whether the car's whole body stays on legal road along a
 planned line is for a separate geometry checker, built on the portal zones. The ROS export
-will compute the `d_left`/`d_right` widths itself, as the distance to the first wall the normal
-ray hits.
+(`ros_export.py`) computes the `d_left`/`d_right` widths itself, as the distance to the nearest
+point of each wall, the way the old planner measured them.

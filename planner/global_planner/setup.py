@@ -34,7 +34,8 @@ setup(
             'mapping_node = global_planner.mapping_node:main',
             'global_trajectory_publisher = global_planner.global_trajectory_publisher:main',
             'annotation = global_planner.annotation.server:main',
-            'operational_centre = global_planner.operational_centre.server:main'
+            'operational_centre = global_planner.operational_centre.server:main',
+            'export_route = global_planner.ros_export:main'
         ],
     },
 )

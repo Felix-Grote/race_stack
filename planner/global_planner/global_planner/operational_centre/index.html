@@ -81,6 +81,8 @@
         <button data-command="generate">Generate…</button>
         <button data-command="stop">Stop generation</button>
         <hr>
+        <button data-command="export">Export to car</button>
+        <hr>
         <button id="refresh-inputs">Refresh inputs</button>
       </div></details>
       <details name="track-menu"><summary>View</summary><div class="popup">
@@ -99,6 +101,7 @@
       <div class="run-actions">
         <button id="generate" class="default-button" disabled>Generate…</button>
         <button id="stop" disabled>Stop</button>
+        <button id="export" disabled>Export to car</button>
       </div>
     </div>
     <div class="statusbar route-status">
@@ -169,6 +172,7 @@
     </div>
     <footer class="statusbar tracks-status">
       <div id="generation-inputs" role="status">Checking workspace…</div>
+      <div id="car-file" role="status"></div>
       <div id="layer-status">0 trajectories ready</div>
     </footer>
   </section>
@@ -177,7 +181,7 @@
 <dialog id="generate-dialog" aria-labelledby="generate-title">
   <header class="titlebar" id="generate-title">Generate trajectories</header>
   <form id="generate-form">
-    <p id="generate-map"></p>
+    <dl id="generate-map" class="facts"></dl>
     <fieldset>
       <legend>Driving profiles</legend>
       <div id="generate-choices" class="choices"></div>
@@ -189,6 +193,40 @@
     <p id="generate-error" class="notice" role="status" hidden></p>
     <div class="dialog-actions">
       <button id="run" class="default-button" type="submit">Generate</button>
+      <button type="button" data-close>Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="export-dialog" aria-labelledby="export-title">
+  <header class="titlebar" id="export-title">Export to car</header>
+  <form id="export-form">
+    <dl id="export-map" class="facts"></dl>
+    <div class="sheet">
+      <table class="metrics export-lines">
+        <thead><tr><th scope="col">The car's line</th><th scope="col">Send</th><th scope="col">Lap time</th><th scope="col">Length</th></tr></thead>
+        <tbody>
+          <tr>
+            <th scope="row"><label for="export-raceline">Raceline</label><small>What the car drives.</small></th>
+            <td><select id="export-raceline"></select></td>
+            <td id="export-raceline-time">–</td><td id="export-raceline-length">–</td>
+          </tr>
+          <tr>
+            <th scope="row"><label for="export-shortest_path">Shortest path</label><small>Its second line; overtaking sectors use it.</small></th>
+            <td><select id="export-shortest_path"></select></td>
+            <td id="export-shortest_path-time">–</td><td id="export-shortest_path-length">–</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="notice export-notes">
+      <li>The car loads its racelines for this map from one file, global_waypoints.json. Exporting overwrites that file.</li>
+      <li>If this map has speed or overtaking sectors, set them up again afterwards. They are tied to positions along the old raceline and will be in the wrong places on a new one.</li>
+      <li id="export-centreline-note" hidden>Centreline is the middle of the track, driven as fast as the car's limits allow. Unlike the three profiles, it has not been checked for the car's body clearing the walls.</li>
+    </ul>
+    <p id="export-error" class="notice" role="status" hidden></p>
+    <div class="dialog-actions">
+      <button id="export-run" class="default-button" type="submit">Export</button>
       <button type="button" data-close>Cancel</button>
     </div>
   </form>
