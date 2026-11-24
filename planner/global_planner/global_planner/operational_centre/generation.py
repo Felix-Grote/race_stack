@@ -2,9 +2,10 @@
 from dataclasses import asdict, replace
 from functools import cache
 import logging
-import time
 from pathlib import Path
+import time
 import traceback
+from typing import NamedTuple
 
 from .inputs import Track, Vehicle
 from .storage import digest, write_json
@@ -14,11 +15,29 @@ from ..optimizer.solve import optimize, OptimizerSettings
 from ..ros_export import waypoints
 from ..speed.speeds import SpeedSettings
 
-# Provisional performance fractions, added clearance in metres, and multipliers on Balanced γ.
+
+class Profile(NamedTuple):
+    """
+    One driving profile; the values are provisional.
+
+    alpha:      the share of the car's limits it plans with.
+    extra_m:    clearance added to the margin, in metres.
+    gamma:      its smoothness, as a multiple of Balanced's γ (the worksheet's).
+    shortest:   the shortest line the car can steer instead of the fastest: the shortest-path
+                slot of the car's file, which the overtaking sectors are tuned on.
+    """
+
+    alpha: float
+    extra_m: float
+    gamma: float
+    shortest: bool = False
+
+
 PROFILES = {
-    'gentle': (0.80, 0.050, 2.0),
-    'balanced': (0.90, 0.025, 1.0),
-    'aggressive': (0.95, 0.000, 0.5),
+    'gentle': Profile(0.80, 0.050, 2.0),
+    'balanced': Profile(0.90, 0.025, 1.0),
+    'aggressive': Profile(0.95, 0.000, 1.0),
+    'shortest': Profile(0.90, 0.025, 0.3, shortest=True),
 }
 RESULT_VERSION = 3
 _LOG = logging.getLogger(__name__)
@@ -37,9 +56,10 @@ def _planner_revision() -> str:
 
 def profile_info(kind: str, margin: float, settings: OptimizerSettings | None) -> dict:
     """Return the effective policy shown to the operator and saved with the result."""
-    alpha, extra, multiplier = PROFILES[kind]
-    return {'alpha': alpha, 'margin_m': margin + extra,
-            'gamma': None if settings is None else settings.smoothness * multiplier}
+    profile = PROFILES[kind]
+    return {'alpha': profile.alpha, 'margin_m': margin + profile.extra_m,
+            'gamma': None if settings is None else settings.smoothness * profile.gamma,
+            'aim': 'shortest' if profile.shortest else 'fastest'}
 
 
 def _effective(kind: str, vehicle: Vehicle, settings: OptimizerSettings
@@ -81,7 +101,8 @@ def provenance(kind: str, track: Track, vehicle: Vehicle,
 def generate(kind: str, track: Track, vehicle: Vehicle, settings: OptimizerSettings) -> dict:
     """Run a full geometry and speed solve and sample its validated result."""
     car, limits, optimizer = _effective(kind, vehicle, settings)
-    result = optimize(track.route, car, optimizer, limits=limits)
+    result = optimize(track.route, car, optimizer, limits=limits,
+                      shortest=PROFILES[kind].shortest)
     _LOG.info('Measuring telemetry')
     telemetry = measure(result.lap, car, result.profile, vehicle.limits)
     return {

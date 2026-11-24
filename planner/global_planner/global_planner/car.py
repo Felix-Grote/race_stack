@@ -121,8 +121,9 @@ class Car:
              source: str | None = None) -> 'Car':
         """Read a car's body and steering, optionally from captured YAML text."""
         keys = ('width_m', 'body_front_m', 'body_rear_m', 'wheelbase', 'max_steering_angle')
-        name, values = _read(car_model_yaml, keys, 'the body, whose extents are measured from '
-                             'base_link (rear axle centre on the ground), and the steering', source)
+        name, values = _read(car_model_yaml, keys, 'the body, whose extents are measured '
+                             'from base_link (rear axle centre on the ground), and the steering',
+                             source)
         wheelbase, steering = values['wheelbase'], values['max_steering_angle']
         numbers = is_number(wheelbase) and is_number(steering)
         if not numbers or wheelbase <= 0 or not 0 < steering < math.pi / 2:

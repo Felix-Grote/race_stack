@@ -16,8 +16,9 @@ PARAMETERS = {
                   'Maximum initial distance between optimizer points.'),
     'step_m': ('Step limit', 'm', 0.002, 0.5,
                'Maximum movement per coordinate in one pass. At most point spacing.'),
-    'smoothness': ('Balanced smoothness γ', '', 0.0, 10.0,
-                   'Curvature penalty for Balanced. Gentle uses 2× and Aggressive ½× this.'),
+    'smoothness': ('Smoothness γ', '', 0.0, 10.0,
+                   'Curvature penalty for Balanced and Aggressive. Gentle uses 2× and '
+                   'Shortest 0.3× this.'),
     'max_passes': ('Pass limit', '', 1, 500,
                    'Maximum passes per refinement.'),
     'max_refinements': ('Refinement limit', '', 0, 20,

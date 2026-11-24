@@ -3,6 +3,7 @@
   --gentle: #0000a0;
   --balanced: #008000;
   --aggressive: #c00030;
+  --shortest: #a05a00;
 }
 
 body {
@@ -133,6 +134,7 @@ p { margin: 4px 0; }
 .gentle { --ink: var(--gentle); }
 .balanced { --ink: var(--balanced); }
 .aggressive { --ink: var(--aggressive); }
+.shortest { --ink: var(--shortest); }
 .curve.stale { stroke: #8a8a8a; stroke-width: 1.6; stroke-dasharray: 1 4; }
 .curve.gentle { stroke-dasharray: 2 4; stroke-width: 2; }
 .curve.balanced { stroke-dasharray: 7 3; }

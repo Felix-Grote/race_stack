@@ -13,8 +13,8 @@ from ..annotation.server import handler as annotation_handler
 
 _ASSETS = {'/': ('index.html', 'text/html'), '/centre.css': ('centre.css', 'text/css'),
            **{f'/{name}': (name, 'text/javascript')
-              for name in ('centre.js', 'common.js', 'constraints.js', 'graph.js', 'logs.js',
-                           'plots.js', 'worksheet.js')}}
+              for name in ('centre.js', 'common.js', 'constraints.js', 'export.js', 'graph.js',
+                           'logs.js', 'plots.js', 'worksheet.js')}}
 _MAX_BODY = 2 * 1024 * 1024
 
 
@@ -104,8 +104,8 @@ def handler(workspace: Workspace, lock: Lock):
                     self._json(404, {'error': 'Command not found.'})
                     return
                 with lock:
-                    action()
-                self._json(200, {'ok': True})
+                    note = action()
+                self._json(200, {'ok': True, 'note': note or ''})
             except (OSError, ValueError, OverflowError, TypeError) as exc:
                 self._json(400, {'error': str(exc)})
 

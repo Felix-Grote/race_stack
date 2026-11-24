@@ -13,28 +13,19 @@ guide:      the road's midline unless the operator draws one: a suggested guide 
 export:     writes exactly the route checked after the last edit, so only a valid one. It is
             read back through load_route to confirm it holds the same route.
 """
-import base64
 import json
 from pathlib import Path
 
-import cv2
 import numpy as np
 
 from . import checks, files, guide, sections
-from .track_map import (AnnotationError, floating_strokes, free_mask, kept_mask, read_source,
-                        TrackMap)
+from .track_map import (AnnotationError, floating_strokes, free_mask, kept_mask, png_url,
+                        read_source, TrackMap)
 from .walls import is_track, keep_track, loops
 from ..car import Car
 from ..route.lap import LapCurve
 from ..route.manifest import load_route
 from ..route.track import Route
-
-
-def _png_url(image: np.ndarray | bytes) -> str:
-    """Return an image as a data URL the page can show."""
-    data = image if isinstance(image, bytes) else cv2.imencode('.png', image)[1].tobytes()
-
-    return 'data:image/png;base64,' + base64.b64encode(data).decode()
 
 
 class Editor:
@@ -67,7 +58,7 @@ class Editor:
 
         self.track_map = TrackMap(self.maps_dir / f'{name}.yaml')
         self.map_name = name
-        self._map_url = _png_url(self.track_map.png)
+        self._map_url = png_url(self.track_map.png)
         self.draft, message = files.load_draft(self.track_map)
         self.draft['region_px'] = keep_track(self._free(), self.draft['region_px'])
         self._follow()
@@ -248,7 +239,7 @@ class Editor:
                        'payload': payload, 'digest': route.digest}
         self.summary = (f'{len(payload["sections"])} sections · {lap.period:.2f} m lap'
                         + (f' · fits {self.car.name}' if self.car else ''))
-        car = f', portal zones checked for {self.car.name}' if self.car else ''
+        car = f', portal zones and road width checked for {self.car.name}' if self.car else ''
         self.route = (f'valid: {len(payload["sections"])} sections, lap {lap.period:.2f} m{car}. '
                       f'Not optimized yet: export it for the optimizer')
 
@@ -272,24 +263,14 @@ class Editor:
         files.write_receipt(self.track_map, path, self.result['digest'])
         return f'Route exported as {path.name}.'
 
-    def _exported(self) -> str:
-        """Return how the route file on disk relates to the draft: none, current or changed."""
-        try:
-            written = json.loads(files.path(self.track_map, 'route').read_bytes())
-        except FileNotFoundError:
-            return 'none'
-        except (OSError, ValueError):
-            return 'changed'
-
-        return 'current' if self.result and written == self.result['payload'] else 'changed'
-
     def view(self) -> dict:
         """Return what the page shows: the map, the draft, the walls and the last route."""
         if self.track_map is None:
             return {'maps': self.maps()}
 
         view = dict(self.draft, maps=self.maps(), map=self.map_name, route=self.route,
-                    route_summary=self.summary, exported=self._exported(),
+                    route_summary=self.summary,
+                    exported=files.exported(self.track_map, self.result),
                     exported_path=str(files.path(self.track_map, 'route')),
                     problem_px=self.route_at,
                     size=[self.track_map.width, self.track_map.height], png=self._map_url,
@@ -304,7 +285,7 @@ class Editor:
                 overlay = np.zeros((*excluded.shape, 4), np.uint8)
                 # --excluded in the page's palette, as BGRA.
                 overlay[excluded > 0] = (60, 146, 251, 150)
-                view['excluded_png'] = _png_url(overlay)
+                view['excluded_png'] = png_url(overlay)
         except AnnotationError as exc:
             view['walls_error'] = str(exc)
 

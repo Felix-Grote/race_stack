@@ -130,10 +130,11 @@ def _drawn_gate(ends: np.ndarray, left: np.ndarray, right: np.ndarray, seed: lis
         met.append(int(near[np.argmin(np.abs(offset[near] @ along))]))
 
     # As for every gate: the left wall to the left of the way the guide runs, the right one
-    # to its right.
+    # to its right. Seen from the line's own middle: in a bend the guide's first point can
+    # lie off to one side of it, with both walls on the same side of the point.
     tangent = seed[1] - seed[-1]
     normal = np.array([-tangent[1], tangent[0]])
-    if not (np.dot(left[met[0]] - seed[0], normal) > 0 > np.dot(right[met[1]] - seed[0], normal)):
+    if not (np.dot(left[met[0]] - middle, normal) > 0 > np.dot(right[met[1]] - middle, normal)):
         raise AnnotationError('the start line does not cross the road: draw it from one wall '
                               'to the other, across the guide')
 

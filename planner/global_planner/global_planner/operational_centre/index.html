@@ -68,7 +68,7 @@
     </form>
     <footer class="statusbar settings-status">
       <div id="worksheet-status" role="status">Loading worksheet…</div>
-      <div>Applies to all three driving profiles</div>
+      <div>Applies to every driving profile</div>
     </footer>
   </section>
 
@@ -180,6 +180,7 @@
         <option value="gentle">Gentle</option>
         <option value="balanced" selected>Balanced</option>
         <option value="aggressive">Aggressive</option>
+        <option value="shortest">Shortest</option>
       </select></label>
       <span>Last run on the map selected in Tracks</span>
     </div>
@@ -229,7 +230,7 @@
             <td id="export-raceline-time">–</td><td id="export-raceline-length">–</td>
           </tr>
           <tr>
-            <th scope="row"><label for="export-shortest_path">Shortest path</label><small>Its second line; overtaking sectors use it.</small></th>
+            <th scope="row"><label for="export-shortest_path">Shortest path</label><small>Its second line; overtaking sectors are tuned on its difference to the raceline. Give it Shortest.</small></th>
             <td><select id="export-shortest_path"></select></td>
             <td id="export-shortest_path-time">–</td><td id="export-shortest_path-length">–</td>
           </tr>
@@ -239,7 +240,7 @@
     <ul class="notice export-notes">
       <li>The car loads its racelines for this map from one file, global_waypoints.json. Exporting overwrites that file.</li>
       <li>If this map has speed or overtaking sectors, set them up again afterwards. They are tied to positions along the old raceline and will be in the wrong places on a new one.</li>
-      <li id="export-centreline-note" hidden>Centreline is the middle of the track, driven as fast as the car's limits allow. Unlike the three profiles, it has not been checked for the car's body clearing the walls.</li>
+      <li id="export-centreline-note" hidden>Centreline is the middle of the track, driven as fast as the car's limits allow. Unlike the driving profiles, it has not been checked for the car's body clearing the walls.</li>
     </ul>
     <p id="export-error" class="notice" role="status" hidden></p>
     <div class="dialog-actions">

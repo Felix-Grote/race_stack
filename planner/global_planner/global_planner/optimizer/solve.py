@@ -29,7 +29,14 @@ fastest:    given the car's speed limits, the passes go on from that smoothest l
             per cent of lap time. The lap time the passes go by is that of the points,
             driven as fast as the car can (speed/points.py). The one reported is the speed
             profile's of the finished curve, which can differ from it by a per cent or two.
-            Each of the two aims may tighten the rows up to max_refinements times.
+            Each of the two aims may tighten the rows up to max_refinements times. If the
+            finished line is still slower than the smoothest one, which the passes can end
+            on when smoothness is low and they get stuck, the smoothest line is kept: what
+            is asked for the lap time never makes it longer.
+shortest:   asked for instead, the passes go on from the smoothest line to lower its length,
+            with the same share of the curvature kept. The car still has to steer it: the
+            line turns no tighter than the car can, and its body keeps the margin. It is
+            the line the overtaking sectors are tuned on (ros_export).
 """
 from dataclasses import dataclass, replace
 import logging
@@ -163,9 +170,9 @@ class OptimizedLap:
     start_energy:   the curvature energy of the points before the first pass.
     passes:         every pass that counted, in order, across all refinements.
     refinements:    rounds of tighter rows the checked curve needed.
-    profile:        the speeds of the lap, if the fastest line was asked for; None otherwise.
+    profile:        the speeds of the lap, if the car's limits were given; None otherwise.
     smoothest_time_s:   the lap time of the smoothest line's points, which the lap times of
-                    the passes are measured against; None if only the smoothest was asked for.
+                    the passes are measured against; None unless the fastest was asked for.
     """
 
     lap: LapCurve
@@ -264,8 +271,9 @@ class _Optimization:
     """
 
     def __init__(self, route: Route, car: Car, settings: OptimizerSettings,
-                 initial: LapCurve | None, limits: CarLimits | None) -> None:
+                 initial: LapCurve | None, limits: CarLimits | None, shortest: bool) -> None:
         self.route, self.car, self.settings, self.limits = route, car, settings, limits
+        self.shortest, self.aim = shortest, 'Smoothest'
         if limits is not None:
             turning = limits.wheelbase / math.tan(limits.max_steering_angle)
             if limits.name != car.name or not math.isclose(turning, car.min_radius_m):
@@ -292,7 +300,7 @@ class _Optimization:
         self.reach = self.move + (car.corner_m + settings.spacing_m / 4) * turn
         self.problem = LapProblem(
             count, car, settings.spacing_m, [i for i in range(count) if i not in self.gate_points],
-            gates, None, turn, settings.elastic, settings.met_m, settings.settle_gain,
+            gates, turn, settings.elastic, settings.met_m, settings.settle_gain,
             settings.tolerance, settings.max_iterations, limits)
         self.passes = []
         self.refinements = 0
@@ -302,7 +310,8 @@ class _Optimization:
                    car.width_m, car.margin_m, car.min_radius_m)
         _LOG.debug('%d points, %d of them on gates, the first on the start line; clearance '
                    'held %.4f m; %s', count, len(gates), self.clearance, settings)
-        _LOG.debug('aim: %s', 'smoothest line only' if limits is None
+        _LOG.debug('aim: %s', f'shortest line with smoothness {settings.smoothness:g}'
+                   if shortest else 'smoothest line only' if limits is None
                    else f'fastest line with smoothness {settings.smoothness:g}; {limits}')
 
     def _caps(self, xy: np.ndarray) -> np.ndarray:
@@ -380,7 +389,7 @@ class _Optimization:
                 walls = self._walls(xy, tightening.clearance)
                 cap = self._caps(xy) if timed else None
 
-            result = self.problem.solve(xy, *walls, limit, None, step, cap)
+            result = self.problem.solve(xy, *walls, limit, step, cap)
             if not result.accepted:
                 _LOG.debug('pass %d not counted at step %.4f m (IPOPT %s, %d iterations, %d '
                            'solves): trying half the step', len(self.passes) + 1, step,
@@ -399,8 +408,8 @@ class _Optimization:
             self.passes.append(Pass(
                 self.refinements, self.problem.evaluate(xy)[0], move, step, result.short_before,
                 result.short_after, time.monotonic() - began, result.ipopt, lap_time))
-            _LOG.info('%s line, pass %d%s', 'Fastest' if timed else 'Smoothest',
-                      len(self.passes), f', lap {lap_time:.2f} s' if timed else '')
+            _LOG.info('%s line, pass %d%s', self.aim, len(self.passes),
+                      f', lap {lap_time:.2f} s' if timed else '')
             done = self.passes[-1]
             _LOG.debug('pass %d: energy %.6g, moved %.2f mm at step %.1f mm, short %.3g -> '
                        '%.3g m, %s, %.2f s (IPOPT %s, %d iterations, %d rows, %d solves)',
@@ -464,7 +473,15 @@ class _Optimization:
         tightening = _Tightening(np.zeros(len(xy)))
         xy, lap, tightening = self._legal(xy, tightening, timed=False)
         profile = smoothest_time = None
-        if self.limits is not None:
+        if self.shortest:
+            # Measured against the smoothest line, as the lap time is (fastest, above).
+            self.aim = 'Shortest'
+            self.problem.shorten(self.problem.evaluate(xy)[0] / self.problem.length(xy),
+                                 settings.smoothness)
+            xy, lap, tightening = self._legal(xy, tightening, timed=False)
+            if self.limits is not None:
+                profile = self._timed(lap)
+        elif self.limits is not None:
             try:
                 """
                 From the smoothest line on, the passes lower lap time / its lap time +
@@ -477,13 +494,13 @@ class _Optimization:
                            lap.curve.length, self.problem.evaluate(xy)[0], smoothest_time)
                 self.problem.aim(self.problem.evaluate(xy)[0] / smoothest_time,
                                  settings.smoothness)
+                smoothest, self.aim = lap, 'Fastest'
                 xy, lap, tightening = self._legal(xy, tightening, timed=True)
-                _LOG.info('Timing the finished line')
-                profile = speed_profile(lap, self.space.zones, self.limits)
-                _LOG.debug('finished line: %.2f m, lap %.3f s over %d points, speeds settled '
-                           'in %d rounds, %.2f to %.2f m/s', lap.curve.length,
-                           profile.lap_time_s, len(profile.samples), profile.rounds,
-                           profile.points.speed_mps.min(), profile.points.speed_mps.max())
+                profile, kept = self._timed(lap), self._timed(smoothest)
+                if kept.lap_time_s < profile.lap_time_s:
+                    _LOG.info('Smoothest line is faster, %.2f s against %.2f s: kept',
+                              kept.lap_time_s, profile.lap_time_s)
+                    lap, profile = smoothest, kept
             except SpeedError as error:
                 raise OptimizerError(f'the lap cannot be timed for this car: {error}') from error
 
@@ -495,6 +512,16 @@ class _Optimization:
         # The lap starts where the line crosses the start line: its first point, at q 0.
         return OptimizedLap(lap, 0., start_energy, tuple(self.passes), self.refinements,
                             profile, smoothest_time)
+
+    def _timed(self, lap: LapCurve) -> SpeedProfile:
+        """Return the speed profile of a finished curve; raises SpeedError."""
+        _LOG.info('Timing the finished line')
+        profile = speed_profile(lap, self.space.zones, self.limits)
+        _LOG.debug('finished line: %.2f m, lap %.3f s over %d points, speeds settled in %d '
+                   'rounds, %.2f to %.2f m/s', lap.curve.length, profile.lap_time_s,
+                   len(profile.samples), profile.rounds, profile.points.speed_mps.min(),
+                   profile.points.speed_mps.max())
+        return profile
 
     def _legal(self, xy: np.ndarray, tightening: _Tightening,
                timed: bool) -> tuple[np.ndarray, LapCurve, _Tightening]:
@@ -525,12 +552,15 @@ class _Optimization:
 
 
 def optimize(route: Route, car: Car, settings: OptimizerSettings = OptimizerSettings(),
-             initial: LapCurve | None = None, limits: CarLimits | None = None) -> OptimizedLap:
+             initial: LapCurve | None = None, limits: CarLimits | None = None,
+             shortest: bool = False) -> OptimizedLap:
     """
     Return the optimized lap for car, starting from the centre curve or from initial.
 
-    limits: the car's speed limits. With them the lap is the fastest one, with a share of
-            smoothness kept (settings.smoothness), and comes with its speeds; without them
-            it is the smoothest one.
+    limits:     the car's speed limits. With them the lap is the fastest one, with a share
+                of smoothness kept (settings.smoothness), and comes with its speeds;
+                without them it is the smoothest one.
+    shortest:   the shortest line the car can steer instead of the fastest, with the same
+                share of smoothness kept; timed if limits are given.
     """
-    return _Optimization(route, car, settings, initial, limits).run()
+    return _Optimization(route, car, settings, initial, limits, shortest).run()

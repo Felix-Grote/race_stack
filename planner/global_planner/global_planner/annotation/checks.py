@@ -6,10 +6,14 @@ legal:      every section covers no area off the kept road's cell squares (walls
 route:      the route package reads the manifest (validate_route), builds the lap
             (centre_curve), finds its gate crossings and samples it; and, given a car, works
             out the portal zones for the car's reach.
+wide:       given a car, no section's walls come closer than the car's width plus its margin
+            on both sides: there the car cannot pass, and the optimizer would only find out
+            after a long run.
 """
 import numpy as np
 import shapely
-from shapely.geometry import Polygon
+from shapely.geometry import LineString, Polygon
+from shapely.ops import nearest_points
 
 from .track_map import AnnotationError, TrackMap
 from .walls import AREA_EPS_M2, legal_union
@@ -49,4 +53,23 @@ def check(payload: dict, track_map: TrackMap, kept: np.ndarray,
     except (RouteError, LapError, GeometryError) as exc:
         raise AnnotationError(f'the route package refuses the route: {exc}') from exc
 
+    if car is not None:
+        _check_width(route, track_map, car)
+
     return route, lap
+
+
+def _check_width(route: Route, track_map: TrackMap, car: Car) -> None:
+    """Refuse the route where a section is narrower than the car plus its margin."""
+    needed = car.width_m + 2 * car.margin_m
+    for section in route.sections:
+        left, right = LineString(section.left), LineString(section.right)
+        gap = left.distance(right)
+        if gap < needed:
+            a, b = nearest_points(left, right)
+            middle = ((a.x + b.x) / 2, (a.y + b.y) / 2)
+            raise AnnotationError(
+                f'section {section.uid} narrows to {gap:.2f} m, and {car.name} needs '
+                f'{needed:.2f} m: its {car.width_m:.2f} m plus {car.margin_m:.2f} m of margin '
+                f'on each side (marked red). Widen the road there or cut it off',
+                at_px=[track_map.world_to_pixel(middle)])

@@ -2,7 +2,7 @@
 
 ## Operational Centre
 
-The local Windows 95-style workspace uses the route, optimizer and speed packages to prepare tracks and compare predicted flying laps. Use **Annotator** to export a validated route, **Settings** to tune the optimizer and **Tracks** to generate Gentle, Balanced and Aggressive driving profiles.
+The local Windows 95-style workspace uses the route, optimizer and speed packages to prepare tracks and compare predicted flying laps. Use **Annotator** to export a validated route, **Settings** to tune the optimizer and **Tracks** to generate Gentle, Balanced, Aggressive and Shortest driving profiles.
 
 Tracks includes a trajectory overlay, an Active Constraints map, a wall-clearance heatmap and telemetry linked by route progress. The inspector shows the effective profile limits alongside the original vehicle limits. Route, vehicle or optimizer changes mark affected results stale.
 
@@ -14,8 +14,8 @@ The Global Planner package is a ROS2 package designed to generate a global traje
 ## Exporting a route to the car
 `ros_export.py` writes optimized lines as the map's `global_waypoints.json`, the file `global_trajectory_publisher` reads. Nothing on the car changes, and it needs no ROS. The file has three slots, one for each `raceline` the car can be launched with: the raceline (`mincurv`), the shortest path and the centreline.
 
-- **Operational Centre:** in Tracks, **Export to car** puts Gentle, Balanced, Aggressive or the centreline in the raceline and shortest-path slots; see [OPERATIONAL_CENTRE.md](OPERATIONAL_CENTRE.md).
-- **Command line:** `ros2 run global_planner export_route track.json stack_master/config/NUC5/car_model.yaml stack_master/maps/<map_name>` optimizes one line and writes it in all three slots.
+- **Operational Centre:** in Tracks, **Export to car** puts Gentle, Balanced, Aggressive, Shortest or the centreline in the raceline and shortest-path slots; see [OPERATIONAL_CENTRE.md](OPERATIONAL_CENTRE.md).
+- **Command line:** `ros2 run global_planner export_route track.json stack_master/config/NUC5/car_model.yaml stack_master/maps/<map_name>` optimizes the fastest and the shortest line and writes them as the raceline and the shortest path, with the centreline in the third slot.
 - **Python:** `waypoints(lap, profile, start_q)` for each line, then `write_lines(map_dir, route, raceline, shortest_path, centreline)`.
 
 The waypoints are 0.1 m apart and count from the start line. `ot_sectors.yaml` and `speed_scaling.yaml` index the waypoints, so retune them after exporting a new raceline.

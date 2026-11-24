@@ -8,7 +8,7 @@ sections and checks them.
 ```bash
 ros2 run global_planner annotation --maps stack_master/maps
 # then open http://127.0.0.1:8766
-# --car stack_master/config/NUC5/car_model.yaml also checks the portal zones for that car
+# --car stack_master/config/NUC5/car_model.yaml also checks the portal zones and the road width for that car
 
 # without a browser: check and export saved drafts again, e.g. after changing this code
 ros2 run global_planner annotation --maps stack_master/maps --export test/test baku/baku
@@ -24,6 +24,8 @@ It writes two files next to the map's YAML and never touches the map itself:
 ## Using it
 
 1. **Open** a map. Set the route name, surface and speed limit; they apply to every section.
+   A new draft's speed limit is 20 m/s, above any car's top speed: the car's own then bounds
+   the line. Lower it only where the track asks for it.
    The view frames the track, and frames it again whenever the track changes.
 2. **Draw wall** wherever the map leaves a gap, so the track is one closed ring. Strokes only
    add occupied cells, and a wall must start and end on a wall of the map: one that touches
@@ -96,7 +98,9 @@ flowchart LR
    nearest after it.
 6. **Checks**, the first failure refusing the route: the sections cover no area outside the
    kept cells' squares, measured exactly; the route package reads the manifest, builds the
-   lap, finds its gate crossings and samples it; given a car, it works out the portal zones.
+   lap, finds its gate crossings and samples it; given a car, it works out the portal zones
+   and refuses a section whose walls come closer than the car's width plus its margin on
+   each side, marked red where they do.
 
 ## Legality
 
