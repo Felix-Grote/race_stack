@@ -5,19 +5,24 @@ import json
 from multiprocessing import get_context
 from pathlib import Path
 from tempfile import TemporaryDirectory
+import time
 from uuid import uuid4
 
 from .generation import profile_info, PROFILES, provenance, RESULT_VERSION, run_job
 from .inputs import Track, Vehicle
 from .settings import parameter_info, validate, Worksheet
-from .storage import digest
+from .storage import digest, write_json
 from ..annotation.editor import Editor
 from ..annotation.track_map import AnnotationError, read_source
+from ..ros_export import centreline_waypoints, write_lines
 
 _CHANGED = {'route': 'Route export changed', 'map': 'Map source changed',
             'car': 'Car model changed', 'optimizer': 'Optimizer values changed',
             'profile': 'Profile policy changed', 'speed_model': 'Speed model settings changed',
             'planner': 'Planner source changed'}
+# The lines the car can be given, and the two slots of its file the operator fills.
+EXPORT_LINES = (*PROFILES, 'centreline')
+EXPORT_SLOTS = ('raceline', 'shortest_path')
 
 
 @lru_cache(maxsize=18)
@@ -132,6 +137,35 @@ class Workspace:
             }
         return summaries, current
 
+    def _car_file(self, name: str | None, track: Track, vehicle: Vehicle,
+                  current: dict) -> tuple[str, str]:
+        """Return how the map's global_waypoints.json relates to the results shown."""
+        if name is None:
+            return 'off', 'No map selected.'
+        try:
+            stat = (self._map_path(name).parent / 'global_waypoints.json').stat()
+        except OSError:
+            return 'off', 'Nothing exported for this map.'
+        try:
+            stamp = json.loads((self._results(name) / 'export.json').read_bytes())
+            lines = stamp['lines']
+            what = (f'{lines["raceline"].capitalize()} + {lines["shortest_path"].capitalize()}, '
+                    f'exported {stamp["time"]}')
+            if stamp['stat'] != [stat.st_mtime_ns, stat.st_size]:
+                return 'off', 'The file was replaced outside the Centre. Its lines are unknown.'
+            if track.route is None or stamp['route'] != track.route.digest:
+                return 'warn', f'Out of date: route changed. Holds {what}.'
+            if stamp['car'] != vehicle.revision:
+                return 'warn', f'Out of date: car model changed. Holds {what}.'
+            changed = [kind.capitalize() for kind, made in stamp['ids'].items()
+                       if current.get(kind, {}).get('id') != made]
+            if changed:
+                return 'warn', (f'Out of date: {", ".join(changed)} changed since export. '
+                                f'Holds {what}.')
+            return 'ok', f'Up to date: {what}.'
+        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+            return 'off', 'Not exported from the Centre. Its lines are unknown.'
+
     def state(self, name: str | None, seen_view: str | None) -> dict:
         """Describe current inputs and return plot data only when the plotted snapshot changes."""
         self.update_job()
@@ -155,6 +189,9 @@ class Workspace:
             'settings': asdict(worksheet), 'parameters': parameter_info(),
             'profiles': {kind: profile_info(kind, self.margin, settings) for kind in PROFILES},
             'summaries': summaries, 'job': self.job,
+            'exportable': [kind for kind, item in current.items() if 'waypoints' in item],
+            'car_file': dict(zip(('level', 'message'),
+                                 self._car_file(name, track, vehicle, current))),
         }
         if seen_view != view_id:
             state['view'] = {
@@ -208,6 +245,51 @@ class Workspace:
             scratch.cleanup()
             raise
         self.job, self._worker, self._scratch = job, worker, scratch
+
+    def export(self, body: dict) -> None:
+        """Write the chosen lines into the map's global_waypoints.json, which the car reads."""
+        name = body.get('map')
+        if name not in self.editor.maps():
+            raise ValueError('Select a map from the workspace.')
+        chosen = {slot: body.get(slot) for slot in EXPORT_SLOTS}
+        if not all(kind in EXPORT_LINES for kind in chosen.values()):
+            raise ValueError('Choose a line for the raceline and for the shortest path.')
+
+        track, vehicle, _, settings, revision = self._inputs(name)
+        if body.get('revision') != revision:
+            raise ValueError('Planner inputs changed. Review the current inputs and try again.')
+        if track.route is None or vehicle.car is None or vehicle.limits is None:
+            raise ValueError(vehicle.message or track.message)
+
+        # Only results of the inputs as they are now go to the car, never stale ones.
+        current = self._comparison(name, track, vehicle, settings)[1]
+        lines = {}
+        for kind in set(chosen.values()) - {'centreline'}:
+            if kind not in current:
+                raise ValueError(f'{kind.capitalize()} has no current result. Generate it first.')
+            if 'waypoints' not in current[kind]:
+                raise ValueError(f'{kind.capitalize()} was generated before export existed. '
+                                 f'Generate it again.')
+            lines[kind] = current[kind]['waypoints']
+
+        try:
+            lines['centreline'] = centreline_waypoints(track.route, vehicle.car, vehicle.limits)
+        except ValueError as exc:
+            if 'centreline' in chosen.values():
+                raise ValueError(f'The centreline cannot be driven by this car. {exc}') from exc
+            # The file needs a line in its centreline slot; without one, the raceline's.
+            lines['centreline'] = lines[chosen['raceline']]
+
+        info = ''.join(f'{slot}: {kind}; ' for slot, kind in chosen.items())
+        path = write_lines(self._map_path(name).parent, track.route, lines[chosen['raceline']],
+                           lines[chosen['shortest_path']], lines['centreline'], info)
+
+        # What the file holds, so that the Centre can say when it falls behind the results.
+        stat = path.stat()
+        write_json(self._results(name) / 'export.json', {
+            'lines': chosen, 'route': track.route.digest, 'car': vehicle.revision,
+            'ids': {kind: current[kind]['id'] for kind in lines if kind in current},
+            'time': time.strftime('%H:%M on %d %b'), 'stat': [stat.st_mtime_ns, stat.st_size]})
 
     def stop(self, job_id: str) -> None:
         """Stop only the job shown when the operator pressed Stop."""

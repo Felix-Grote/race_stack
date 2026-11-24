@@ -88,6 +88,7 @@ def handler(workspace: Workspace, lock: Lock):
                     raise TypeError('Send a JSON object.')
                 actions = {'/api/centre/settings': lambda: workspace.save_settings(body),
                            '/api/centre/generate': lambda: workspace.generate(body),
+                           '/api/centre/export': lambda: workspace.export(body),
                            '/api/centre/stop': lambda: workspace.stop(body.get('id'))}
                 action = actions.get(self.path)
                 if action is None:

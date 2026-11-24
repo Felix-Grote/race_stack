@@ -76,6 +76,7 @@ body {
 .statusbar { display: grid; gap: 3px; }
 .route-status, .tracks-status, .settings-status { grid-template-columns: minmax(0, 1fr) minmax(10rem, auto); }
 .route-status > :last-child, .tracks-status > :last-child { text-align: right; }
+.tracks-status { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(10rem, auto); }
 .route-status { margin-bottom: 5px; }
 #route-identity { font-variant-numeric: tabular-nums; }
 .notice { background: #ffffdf; box-shadow: var(--sunken); padding: 6px 8px; overflow-wrap: anywhere; }
@@ -197,6 +198,19 @@ dialog form, .help-content { padding: 7px 8px 5px; }
 dialog form > p, dialog fieldset { margin-bottom: 6px; }
 .dialog-actions { justify-content: end; }
 .dialog-actions button { min-width: 72px; }
+/* What a dialog is about: a name and its value on each line. */
+.facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 12px; margin: 0 0 8px; }
+.facts dt { font-weight: bold; }
+.facts dd { margin: 0; overflow-wrap: anywhere; }
+#export-dialog { width: min(34rem, calc(100vw - 12px)); }
+.export-lines th:first-child { width: 40%; }
+.export-lines th:nth-child(2) { width: 27%; }
+.export-lines select { width: 100%; }
+.export-lines small { display: block; color: #555; font: inherit; }
+.export-lines tbody th label { font-weight: bold; }
+.export-lines td { vertical-align: middle; }
+.export-notes { margin: 8px 0 6px; padding-left: 24px; }
+.export-notes li + li { margin-top: 4px; }
 .choices { display: grid; gap: 3px; }
 .choices label { display: block; }
 .choices small { display: block; padding-left: 22px; font: inherit; }

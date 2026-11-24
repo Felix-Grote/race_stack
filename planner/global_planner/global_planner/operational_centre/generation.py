@@ -9,6 +9,7 @@ from .storage import digest, write_json
 from .telemetry import measure
 from ..car import Car, CarLimits
 from ..optimizer.solve import optimize, OptimizerSettings
+from ..ros_export import waypoints
 from ..speed.speeds import SpeedSettings
 
 # Provisional performance fractions, added clearance in metres, and multipliers on Balanced γ.
@@ -84,6 +85,8 @@ def generate(kind: str, track: Track, vehicle: Vehicle, settings: OptimizerSetti
                     'lap_time_s': result.profile.lap_time_s,
                     'min_clearance_m': min(telemetry['values']['clearance'])},
         'telemetry': telemetry,
+        # What the car is given if this profile is exported (ros_export.write_lines).
+        'waypoints': waypoints(result.lap, result.profile, result.start_q),
     }
 
 
