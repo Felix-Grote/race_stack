@@ -32,6 +32,7 @@ fastest:    given the car's speed limits, the passes go on from that smoothest l
             Each of the two aims may tighten the rows up to max_refinements times.
 """
 from dataclasses import dataclass, replace
+import logging
 import math
 import time
 
@@ -50,6 +51,11 @@ from ..route.track import Route
 from ..route.zones import portal_zones
 from ..speed.errors import SpeedError
 from ..speed.speeds import speed_profile, SpeedProfile
+
+# Where a run says how far it is. A library does not print: whoever calls it listens here, or
+# not at all (the Operational Centre shows it, export_route prints it). INFO is one short
+# line a step, fit for a status line; DEBUG is every figure a pass was judged by.
+_LOG = logging.getLogger(__name__)
 
 # What the turning limit is held to on the checked curve: this fraction of it. Below it the
 # points say nothing about the curve.
@@ -290,6 +296,14 @@ class _Optimization:
             settings.tolerance, settings.max_iterations, limits)
         self.passes = []
         self.refinements = 0
+        _LOG.debug('route %s: %d sections, centre curve %.2f m; %s, body %.3f x %.3f m, margin '
+                   '%.3f m, turning radius %.3f m', route.digest[:12], len(route.sections),
+                   centre.curve.length, car.name, car.body_front_m + car.body_rear_m,
+                   car.width_m, car.margin_m, car.min_radius_m)
+        _LOG.debug('%d points, %d of them on gates, the first on the start line; clearance '
+                   'held %.4f m; %s', count, len(gates), self.clearance, settings)
+        _LOG.debug('aim: %s', 'smoothest line only' if limits is None
+                   else f'fastest line with smoothness {settings.smoothness:g}; {limits}')
 
     def _caps(self, xy: np.ndarray) -> np.ndarray:
         """
@@ -368,6 +382,9 @@ class _Optimization:
 
             result = self.problem.solve(xy, *walls, limit, None, step, cap)
             if not result.accepted:
+                _LOG.debug('pass %d not counted at step %.4f m (IPOPT %s, %d iterations, %d '
+                           'solves): trying half the step', len(self.passes) + 1, step,
+                           result.ipopt.status, result.ipopt.iterations, result.ipopt.solves)
                 step /= 2
                 if step < settings.settle_m:
                     raise OptimizerError(f'pass {len(self.passes) + 1} found no step that '
@@ -382,6 +399,16 @@ class _Optimization:
             self.passes.append(Pass(
                 self.refinements, self.problem.evaluate(xy)[0], move, step, result.short_before,
                 result.short_after, time.monotonic() - began, result.ipopt, lap_time))
+            _LOG.info('%s line, pass %d%s', 'Fastest' if timed else 'Smoothest',
+                      len(self.passes), f', lap {lap_time:.2f} s' if timed else '')
+            done = self.passes[-1]
+            _LOG.debug('pass %d: energy %.6g, moved %.2f mm at step %.1f mm, short %.3g -> '
+                       '%.3g m, %s, %.2f s (IPOPT %s, %d iterations, %d rows, %d solves)',
+                       len(self.passes), done.energy, move * 1e3, step * 1e3,
+                       done.short_before + 0., done.short_after + 0.,   # no -0
+                       'trusted' if result.trusted else 'corrected', done.seconds,
+                       done.ipopt.status, done.ipopt.iterations, done.ipopt.rows,
+                       done.ipopt.solves)
 
             # A full step that cannot bring the rows settle_m closer, or halfway if nearer.
             closer = result.short_before - result.short_promised
@@ -393,6 +420,8 @@ class _Optimization:
                                      'tighter, than the car can drive at this spacing')
 
             if settled:
+                _LOG.debug('settled after pass %d: no point moved more than %.1f mm',
+                           len(self.passes), settings.settle_m * 1e3)
                 return xy
 
             if result.trusted:
@@ -444,15 +473,24 @@ class _Optimization:
                 of a row that falls short and the settle rule are set for.
                 """
                 smoothest_time = self.problem.fastest(xy, self._caps(xy))[0]
+                _LOG.debug('smoothest line: %.2f m, energy %.6g, lap %.3f s; now the fastest',
+                           lap.curve.length, self.problem.evaluate(xy)[0], smoothest_time)
                 self.problem.aim(self.problem.evaluate(xy)[0] / smoothest_time,
                                  settings.smoothness)
                 xy, lap, tightening = self._legal(xy, tightening, timed=True)
+                _LOG.info('Timing the finished line')
                 profile = speed_profile(lap, self.space.zones, self.limits)
+                _LOG.debug('finished line: %.2f m, lap %.3f s over %d points, speeds settled '
+                           'in %d rounds, %.2f to %.2f m/s', lap.curve.length,
+                           profile.lap_time_s, len(profile.samples), profile.rounds,
+                           profile.points.speed_mps.min(), profile.points.speed_mps.max())
             except SpeedError as error:
                 raise OptimizerError(f'the lap cannot be timed for this car: {error}') from error
 
         # Raises unless the curve crosses every gate once, forwards and in lap order.
         portal_crossings(lap)
+        _LOG.debug('done: %d passes, %d refinements, %.1f s in passes', len(self.passes),
+                   self.refinements, sum(done.seconds for done in self.passes))
 
         # The lap starts where the line crosses the start line: its first point, at q 0.
         return OptimizedLap(lap, 0., start_energy, tuple(self.passes), self.refinements,
@@ -472,11 +510,15 @@ class _Optimization:
             xy = self._settle(xy, tightening, timed)
             lap = refit_lap(self.initial, self.samples, [tuple(p) for p in xy])
             excess = self._check(lap)
+            _LOG.debug('checked curve of %.2f m: %d pieces off the road (worst %.2f mm), '
+                       'turning %.4f times the limit', lap.curve.length, len(excess.off_road),
+                       max(excess.off_road.values(), default=0.) * 1e3, excess.too_tight)
             if not excess:
                 return xy, lap, tightening
 
             tightening = _tightened(tightening, excess, settings.settle_m)
             self.refinements += 1
+            _LOG.info('Curve off its limits, refinement %d', self.refinements)
 
         raise OptimizerError(f'the curve still leaves the road or turns too tight after '
                              f'{settings.max_refinements} refinements')

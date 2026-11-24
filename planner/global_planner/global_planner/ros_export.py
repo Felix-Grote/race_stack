@@ -16,6 +16,7 @@ slots:      the file holds three lines the car can drive: the raceline, the "sho
 """
 import argparse
 import json
+import logging
 import math
 import os
 from pathlib import Path
@@ -166,6 +167,7 @@ def main(argv: list[str] | None = None) -> None:
                         help='clearance kept around the body, in metres (default 0.05)')
     args = parser.parse_args(argv)
 
+    logging.basicConfig(level=logging.INFO, format='%(message)s')   # the optimizer's progress
     route = load_route(args.route)
     result = optimize(route, Car.load(args.car, args.margin), limits=CarLimits.load(args.car))
     line = waypoints(result.lap, result.profile, result.start_q)
