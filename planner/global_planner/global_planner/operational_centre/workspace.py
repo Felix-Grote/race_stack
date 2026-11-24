@@ -43,7 +43,8 @@ class Workspace:
         self.directory, self.car_path, self.margin = directory, car, margin
         self.worksheet_path = directory / 'optimizer.json'
         self.job = None
-        self._worker = self._scratch = None
+        # One worker for a job run in sequence; one for each profile when run side by side.
+        self._workers, self._scratch = [], None
 
     def _map_path(self, name: str) -> Path:
         return self.editor.maps_dir / f'{name}.yaml'
@@ -103,8 +104,9 @@ class Workspace:
                 and (editor.result is None or editor.result['digest'] != track.route.digest)}
 
     def _comparison(self, name: str | None, track: Track, vehicle: Vehicle,
-                    settings) -> tuple[dict, dict]:
-        summaries, current = {}, {}
+                    settings) -> tuple[dict, dict, dict]:
+        """Return each profile's summary, the current results and the stale ones."""
+        summaries, current, stale = {}, {}, {}
         for kind in PROFILES:
             if name is None:
                 summaries[kind] = {'status': 'missing'}
@@ -128,14 +130,13 @@ class Workspace:
                        if artifact['inputs'].get(key) != expected.get(key)]
             if not changed and artifact['inputs'] != expected:
                 changed = ['Effective planning inputs changed']
-            if not changed:
-                current[kind] = artifact
+            (stale if changed else current)[kind] = artifact
             summaries[kind] = {
                 'status': 'stale' if changed else 'current',
                 'message': ', '.join(changed) + '.' if changed else None,
                 'metrics': artifact['metrics'],
             }
-        return summaries, current
+        return summaries, current, stale
 
     def _car_file(self, name: str | None, track: Track, vehicle: Vehicle,
                   current: dict) -> tuple[str, str]:
@@ -175,9 +176,9 @@ class Workspace:
                 f'{Path(item).name}_route.json').is_file()), maps[0] if maps else None)
         track, vehicle, worksheet, settings, revision = self._inputs(name)
         annotation = self._annotation(name, track, vehicle)
-        summaries, current = self._comparison(name, track, vehicle, settings)
+        summaries, current, stale = self._comparison(name, track, vehicle, settings)
         route = track.route
-        ids = {kind: item['id'] for kind, item in current.items()}
+        ids = [{kind: item['id'] for kind, item in shown.items()} for shown in (current, stale)]
         view_id = digest(json.dumps([name, route.digest if route else None, ids]).encode())
         state = {
             'maps': maps, 'map': name, 'annotation': annotation, 'revision': revision,
@@ -201,6 +202,8 @@ class Workspace:
                 'start': route.start_line if route else [],
                 'period_m': route.section_bounds[-1] if route else 0.,
                 'lines': {kind: item['telemetry'] for kind, item in current.items()},
+                # Shown greyed: a stale line is still a result, only not of these inputs.
+                'stale': {kind: item['telemetry']['points'] for kind, item in stale.items()},
             }
         return state
 
@@ -211,7 +214,7 @@ class Workspace:
     def generate(self, body: dict) -> None:
         """Validate, snapshot and start the requested planner runs."""
         self.update_job()
-        if self._worker is not None:
+        if self._workers:
             raise ValueError('A generation job is already running.')
         name, categories = body.get('map'), body.get('categories')
         if name not in self.editor.maps():
@@ -232,19 +235,27 @@ class Workspace:
         if vehicle.car is None or vehicle.limits is None:
             raise ValueError(vehicle.message)
 
-        job = {'id': uuid4().hex, 'map': name, 'running': True,
+        parallel = body.get('parallel') is True
+        job = {'id': uuid4().hex, 'map': name, 'running': True, 'parallel': parallel,
                'attempts': {kind: {'status': 'queued'} for kind in PROFILES if kind in categories}}
         scratch = TemporaryDirectory(prefix='forzaeth-planner-')
-        progress = Path(scratch.name) / 'progress.json'
-        worker = get_context('spawn').Process(target=run_job, daemon=True,
-                                              args=(self._results(name), progress, job,
-                                                    track, vehicle, settings))
+        workers = []
         try:
-            worker.start()
+            for kinds in ([[kind] for kind in job['attempts']] if parallel
+                          else [list(job['attempts'])]):
+                progress = Path(scratch.name) / f'progress-{kinds[0]}.json'
+                part = dict(job, attempts={kind: job['attempts'][kind] for kind in kinds})
+                worker = get_context('spawn').Process(
+                    target=run_job, daemon=True,
+                    args=(self._results(name), progress, part, track, vehicle, settings))
+                worker.start()
+                workers.append((worker, progress, kinds))
         except BaseException:
+            for worker, _, _ in workers:
+                worker.kill()
             scratch.cleanup()
             raise
-        self.job, self._worker, self._scratch = job, worker, scratch
+        self.job, self._workers, self._scratch = job, workers, scratch
 
     def export(self, body: dict) -> None:
         """Write the chosen lines into the map's global_waypoints.json, which the car reads."""
@@ -291,41 +302,52 @@ class Workspace:
             'ids': {kind: current[kind]['id'] for kind in lines if kind in current},
             'time': time.strftime('%H:%M on %d %b'), 'stat': [stat.st_mtime_ns, stat.st_size]})
 
+    def log(self, name: str | None, kind: str | None) -> str:
+        """Return what the planner logged in the last run of a profile on a map."""
+        if name not in self.editor.maps() or kind not in PROFILES:
+            raise ValueError('Select a map and a driving profile.')
+        try:
+            return (self._results(name) / f'{kind}.log').read_text(encoding='utf-8')
+        except FileNotFoundError:
+            return ''
+
     def stop(self, job_id: str) -> None:
         """Stop only the job shown when the operator pressed Stop."""
         self.update_job()
-        if self._worker is not None:
+        if self._workers:
             if self.job['id'] != job_id:
                 raise ValueError('The active job changed. Review it before stopping.')
             self.update_job(cancel=True)
 
     def update_job(self, cancel: bool = False) -> None:
-        """Collect completed attempts and reap or stop the worker."""
-        if self._worker is None:
+        """Collect completed attempts and reap or stop the workers."""
+        if not self._workers:
             return
-        worker = self._worker
-        if cancel and worker.is_alive():
-            worker.terminate()
-            worker.join(timeout=0.5)
-            if worker.is_alive():
-                worker.kill()
-                worker.join()
+        for worker, progress, _ in self._workers:
+            if cancel and worker.is_alive():
+                worker.terminate()
+                worker.join(timeout=0.5)
+                if worker.is_alive():
+                    worker.kill()
+                    worker.join()
 
-        progress = Path(self._scratch.name) / 'progress.json'
-        if progress.exists():
-            self.job = json.loads(progress.read_bytes())
-        if worker.is_alive():
+            if progress.exists():
+                self.job['attempts'].update(json.loads(progress.read_bytes())['attempts'])
+
+        if any(worker.is_alive() for worker, _, _ in self._workers):
             return
 
-        worker.join()
         self.job['running'] = False
-        for attempt in self.job['attempts'].values():
-            if attempt['status'] in ('queued', 'running'):
-                if cancel:
-                    attempt.update(status='cancelled', message='Generation stopped.')
-                else:
-                    attempt.update(status='failed', message=f'Planner worker exited '
-                                   f'(code {worker.exitcode}). See server output.')
-        worker.close()
+        for worker, _, kinds in self._workers:
+            worker.join()
+            for attempt in (self.job['attempts'][kind] for kind in kinds):
+                attempt.pop('progress', None)
+                if attempt['status'] in ('queued', 'running'):
+                    if cancel:
+                        attempt.update(status='cancelled', message='Generation stopped.')
+                    else:
+                        attempt.update(status='failed', message=f'Planner worker exited '
+                                       f'(code {worker.exitcode}). See server output.')
+            worker.close()
         self._scratch.cleanup()
-        self._worker = self._scratch = None
+        self._workers, self._scratch = [], None

@@ -72,13 +72,24 @@ body {
 .documentbar select { width: 12rem; }
 .car { margin-left: 5px; }
 .run-actions { display: flex; gap: 4px; margin-left: auto; }
-.default-button { border: 1px solid #000; font-weight: bold; }
 .statusbar { display: grid; gap: 3px; }
 .route-status, .tracks-status, .settings-status { grid-template-columns: minmax(0, 1fr) minmax(10rem, auto); }
 .route-status > :last-child, .tracks-status > :last-child { text-align: right; }
 .tracks-status { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(10rem, auto); }
 .route-status { margin-bottom: 5px; }
 #route-identity { font-variant-numeric: tabular-nums; }
+.log-text {
+  flex: 1 1 0;
+  min-height: 8em;
+  margin: 3px 0;
+  padding: 5px 7px;
+  overflow: auto;
+  background: #fff;
+  box-shadow: var(--sunken);
+  font: 12px/1.45 ui-monospace, "DejaVu Sans Mono", monospace;
+  white-space: pre;
+  user-select: text;
+}
 .notice { background: #ffffdf; box-shadow: var(--sunken); padding: 6px 8px; overflow-wrap: anywhere; }
 #connection { margin: 5px 4px; }
 .workbench {
@@ -96,7 +107,8 @@ fieldset {
   border: 1px solid var(--shadow);
   box-shadow: inset 1px 1px #fff, 1px 1px #fff;
 }
-legend { padding: 0 4px; }
+/* The box's white highlight is a shadow, which a legend does not break: cover it. */
+legend { padding: 0 4px; background: var(--face); }
 p { margin: 4px 0; }
 .map-field { display: flex; flex-direction: column; }
 .plot-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 6px; margin-bottom: 4px; }
@@ -121,6 +133,7 @@ p { margin: 4px 0; }
 .gentle { --ink: var(--gentle); }
 .balanced { --ink: var(--balanced); }
 .aggressive { --ink: var(--aggressive); }
+.curve.stale { stroke: #8a8a8a; stroke-width: 1.6; stroke-dasharray: 1 4; }
 .curve.gentle { stroke-dasharray: 2 4; stroke-width: 2; }
 .curve.balanced { stroke-dasharray: 7 3; }
 .heat-line { fill: none; stroke-width: 4; stroke-linecap: round; vector-effect: non-scaling-stroke; }
@@ -129,10 +142,23 @@ p { margin: 4px 0; }
 .heat-legend i { width: 12px; height: 12px; box-shadow: var(--sunken); }
 .cursor { stroke: #000; stroke-dasharray: 3 2; vector-effect: non-scaling-stroke; }
 .marker { fill: var(--ink); stroke: #fff; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-#inspection { min-height: 4em; max-height: 15em; overflow: auto; }
+/* Inspect takes what the column has left, so Generation ends level with the graph. */
+.inspect-field { flex: 1 1 0; min-height: 6em; display: flex; flex-direction: column; }
+#inspection { flex: 1 1 0; min-height: 0; overflow: auto; }
 #inspection p { margin: 2px 0; }
-#inspection ul { padding: 0 0 0 15px; margin: 3px 0; }
-#inspection li + li { margin-top: 3px; }
+#inspection strong { display: block; }
+#inspection * + strong { margin-top: 6px; }
+.reading { display: grid; grid-template-columns: 13px minmax(0, 1fr) auto; gap: 5px; align-items: center; margin-top: 2px; }
+/* One limit: its map colour, its name, a bar of how much of it is used, and that as a number. */
+.limit { display: grid; grid-template-columns: 10px minmax(0, 1fr) 4.5rem 2.6rem; gap: 5px; align-items: center; margin-top: 3px; }
+.limit i { height: 10px; background: var(--c); box-shadow: var(--sunken); }
+.limit span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.limit.active span { font-weight: bold; }
+.limit b { position: relative; height: 10px; background: #fff; box-shadow: var(--sunken); }
+.limit b::before { content: ""; position: absolute; inset: 1px auto 1px 1px; width: calc(var(--used) * (100% - 2px)); background: var(--c); }
+.limit b::after { content: ""; position: absolute; top: -2px; bottom: -2px; left: calc(var(--cap) * (100% - 1px)); width: 1px; background: #000; }
+.limit em { font-style: normal; text-align: right; }
+#inspection summary { margin-top: 5px; cursor: default; }
 .axis { stroke: #000; stroke-width: 1; }
 .gridline { stroke: #ccc; stroke-width: 1; shape-rendering: crispEdges; }
 .graph-label { fill: #000; font: 12px Arial, sans-serif; }
@@ -182,22 +208,10 @@ tbody tr + tr { border-top: 1px solid #dfdfdf; }
 .parameters tbody th { font-weight: normal; }
 .parameters th span { display: block; margin-top: 2px; }
 .parameters input { width: 100%; }
-.form-actions, .dialog-actions { display: flex; align-items: center; justify-content: space-between; gap: 5px; margin-top: 8px; }
+.form-actions { display: flex; align-items: center; justify-content: space-between; gap: 5px; margin-top: 8px; }
 .form-actions > div { display: flex; flex-wrap: wrap; gap: 4px; }
-dialog {
-  width: min(27rem, calc(100vw - 12px));
-  margin: auto;
-  padding: 4px;
-  border: 0;
-  background: var(--face);
-  color: #000;
-  box-shadow: var(--raised);
-}
-dialog::backdrop { background: #0006; }
-dialog form, .help-content { padding: 7px 8px 5px; }
+dialog form { padding: 7px 8px 5px; }
 dialog form > p, dialog fieldset { margin-bottom: 6px; }
-.dialog-actions { justify-content: end; }
-.dialog-actions button { min-width: 72px; }
 /* What a dialog is about: a name and its value on each line. */
 .facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 12px; margin: 0 0 8px; }
 .facts dt { font-weight: bold; }

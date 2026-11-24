@@ -1,5 +1,6 @@
 // The Operational Centre: tabs, the embedded editor, and the Tracks comparison.
 import {$, api, element, notice, status} from './common.js';
+import {showLog} from './logs.js';
 import {drawPlots, fit, zoom} from './plots.js';
 import {bindWorksheet, showWorksheet, unapplied} from './worksheet.js';
 
@@ -7,7 +8,7 @@ const labels = {gentle: 'Gentle', balanced: 'Balanced', aggressive: 'Aggressive'
 const visible = new Set(Object.keys(labels));
 const tabs = [...document.querySelectorAll('[role="tab"]')];
 let state, view, mapName, selection, requestNumber = 0, connected = false;
-const emptyView = {walls: [], gates: [], start: [], period_m: 0, lines: {}};
+const emptyView = {walls: [], gates: [], start: [], period_m: 0, lines: {}, stale: {}};
 
 function activate(id, focus = false) {
   for (const tab of tabs) {
@@ -38,6 +39,8 @@ for (const [index, tab] of tabs.entries()) {
   };
 }
 window.addEventListener('hashchange', tabFromHash);
+window.addEventListener('hashchange', () => showLog(mapName));
+$('log-profile').onchange = () => showLog(mapName);
 tabFromHash();
 
 function sendEditor(details) {
@@ -48,6 +51,9 @@ function updateAnnotation() {
   if (!state) return;
   const annotation = state.annotation;
   status('annotation-status', annotation.message);
+  // The editor's own checklist says how the draft and its export stand; this bar is for what
+  // only the Centre knows: the map changed on disk, or the car cannot be checked.
+  $('annotation-status').parentElement.hidden = !(annotation.source_changed || annotation.export_blocked);
   sendEditor({type: 'annotation-status', sourceChanged: Boolean(annotation.source_changed),
               carUnavailable: Boolean(annotation.export_blocked)});
 }
@@ -140,16 +146,19 @@ function updateTracks() {
     const failed = ['failed', 'cancelled'].includes(attempt?.status);
     const available = item.status === 'current';
     if (available) current++;
-    $('show-' + kind).disabled = !available;
+    $('show-' + kind).disabled = !available && !(kind in (view || emptyView).stale);
     const label = running ? attempt.status : (failed && item.status === 'missing' ? attempt.status : item.status);
     $('trajectory-' + kind).dataset.status = label;
     status('result-' + kind, label[0].toUpperCase() + label.slice(1));
     const metrics = available ? item.metrics : null;
-    const messages = [item.message, failed && attempt.message].filter(Boolean);
+    const messages = [item.status === 'stale' && item.message && item.message + ' Regenerate.'
+                      || item.message, failed && attempt.message].filter(Boolean);
     const policy = profileInputs(profiles[kind]);
     const detail = metrics ? metrics.length_m.toFixed(2) + ' m lap · '
       + (metrics.min_clearance_m * 100).toFixed(1) + ' cm minimum clearance' : policy;
-    status('detail-' + kind, messages.join(' ') || detail);
+    // While it runs: where the optimizer says it is.
+    status('detail-' + kind, running ? attempt.progress || 'Waiting to start'
+      : messages.join(' ') || detail);
     $('trajectory-' + kind).title = policy;
     status('time-' + kind, metrics ? metrics.lap_time_s.toFixed(2) + ' s' : '–');
     const delta = metrics && balanced != null ? metrics.lap_time_s - balanced : null;
@@ -158,11 +167,12 @@ function updateTracks() {
   }
 
   const allAttempts = Object.entries(job?.attempts || {});
-  const active = allAttempts.find(([, attempt]) => attempt.status === 'running');
+  const active = allAttempts.filter(([, attempt]) => attempt.status === 'running');
   const completed = allAttempts.filter(([, attempt]) => !['running', 'queued'].includes(attempt.status)).length;
   const succeeded = allAttempts.filter(([, attempt]) => attempt.status === 'complete').length;
   status('job-status', job?.running
-    ? (active ? labels[active[0]] + ' running' : 'Starting planner') + ' · ' + job.map
+    ? (active.length ? active.map(([kind]) => labels[kind]).join(', ') + ' running'
+      : 'Starting planner') + ' · ' + job.map
     : job ? succeeded + ' of ' + completed + ' completed · ' + job.map : 'No job running.');
   $('progress').hidden = !job?.running;
   $('progress').setAttribute('aria-valuemax', allAttempts.length || 1);
@@ -177,6 +187,9 @@ function updateTracks() {
   status('layer-status', current + ' of 3 profiles current');
   status('car-file', 'Car file · ' + state.car_file.message);
   $('car-file').dataset.level = state.car_file.level;
+  // A dot marks a tab holding work that Tracks does not use yet.
+  status('tab-settings', 'Settings' + (unapplied() ? ' •' : ''));
+  status('tab-annotator', 'Annotator' + (annotation.draft_differs ? ' •' : ''));
 }
 
 async function refresh() {
@@ -198,6 +211,7 @@ async function refresh() {
     updateAnnotation();
     showWorksheet(state, connected);
     updateTracks();
+    showLog(mapName);
   } catch (error) {
     if (request !== requestNumber) return;
     connected = false;
@@ -212,13 +226,15 @@ async function refresh() {
 $('generate').onclick = () => {
   selection = {map: state.map, revision: state.revision};
   facts('generate-map');
+  const allCurrent = Object.values(state.summaries).every(item => item.status === 'current');
   const choices = Object.entries(labels).map(([kind, name]) => {
     const label = element('label');
     const checkbox = element('input');
     checkbox.type = 'checkbox';
     checkbox.value = kind;
     checkbox.name = 'category';
-    checkbox.checked = true;
+    // Offered: what is not current, or everything when everything is.
+    checkbox.checked = allCurrent || state.summaries[kind].status !== 'current';
     label.append(checkbox, document.createTextNode(' ' + name));
     label.append(element('small', profileInputs(state.profiles[kind])));
     return label;
@@ -236,7 +252,8 @@ $('generate-form').onsubmit = async event => {
   const categories = [...$('generate-choices').querySelectorAll('input:checked')].map(input => input.value);
   $('run').disabled = true;
   try {
-    await api('generate', {...selection, categories, allow_unverified: $('allow-unverified').checked});
+    await api('generate', {...selection, categories, parallel: $('run-parallel').checked,
+                           allow_unverified: $('allow-unverified').checked});
     $('generate-dialog').close();
     await refresh();
   } catch (error) {

@@ -24,8 +24,9 @@
   </header>
   <div class="tabs" role="tablist" aria-label="Operational Centre">
     <button id="tab-annotator" role="tab" aria-controls="annotator" aria-selected="false" tabindex="-1">Annotator</button>
-    <button id="tab-hyperparameters" role="tab" aria-controls="hyperparameters" aria-selected="false" tabindex="-1">Hyperparameters</button>
+    <button id="tab-settings" role="tab" aria-controls="settings" aria-selected="false" tabindex="-1">Settings</button>
     <button id="tab-tracks" role="tab" aria-controls="tracks" aria-selected="true">Tracks</button>
+    <button id="tab-logs" role="tab" aria-controls="logs" aria-selected="false" tabindex="-1">Logs</button>
   </div>
   <div id="connection" class="notice" role="status" hidden></div>
 
@@ -34,8 +35,8 @@
     <div class="statusbar"><div id="annotation-status" role="status">Connecting to the annotator…</div></div>
   </section>
 
-  <section id="hyperparameters" class="panel" role="tabpanel" aria-labelledby="tab-hyperparameters" hidden>
-    <nav class="menubar" aria-label="Hyperparameter commands">
+  <section id="settings" class="panel" role="tabpanel" aria-labelledby="tab-settings" hidden>
+    <nav class="menubar" aria-label="Settings commands">
       <details name="settings-menu"><summary>File</summary><div class="popup">
         <button data-command="apply">Apply settings</button>
         <button data-command="reload-settings">Reload saved</button>
@@ -43,9 +44,7 @@
       <details name="settings-menu"><summary>Edit</summary><div class="popup">
         <button data-command="defaults">Restore defaults</button>
       </div></details>
-      <details name="settings-menu"><summary>Help</summary><div class="popup">
-        <button data-help>About the Operational Centre</button>
-      </div></details>
+      <button data-help title="About the Operational Centre">Help</button>
     </nav>
     <form id="parameters-form" class="parameters-form" novalidate>
       <fieldset>
@@ -78,7 +77,7 @@
       <details name="track-menu"><summary>File</summary><div class="popup">
         <button data-command="open-in-editor">Open in Annotator</button>
         <hr>
-        <button data-command="generate">Generate…</button>
+        <button data-command="generate">Generate</button>
         <button data-command="stop">Stop generation</button>
         <hr>
         <button data-command="export">Export to car</button>
@@ -90,16 +89,14 @@
         <button data-command="zoom-in">Zoom in</button>
         <button data-command="zoom-out">Zoom out</button>
       </div></details>
-      <details name="track-menu"><summary>Help</summary><div class="popup">
-        <button data-help>About the Operational Centre</button>
-      </div></details>
+      <button data-help title="About the Operational Centre">Help</button>
     </nav>
     <div class="documentbar">
       <label>Map <select id="map"><option value="">Loading…</option></select></label>
       <button id="open-in-editor" disabled>Open in Annotator</button>
       <span id="car" class="car" title="">Car model loading…</span>
       <div class="run-actions">
-        <button id="generate" class="default-button" disabled>Generate…</button>
+        <button id="generate" class="default-button" disabled>Generate</button>
         <button id="stop" disabled>Stop</button>
         <button id="export" disabled>Export to car</button>
       </div>
@@ -158,7 +155,7 @@
             </table>
           </div>
         </fieldset>
-        <fieldset>
+        <fieldset class="inspect-field">
           <legend>Inspect</legend>
           <div id="inspection" tabindex="0">Point at the graph or a diagnostic line to inspect a location.</div>
         </fieldset>
@@ -176,6 +173,19 @@
       <div id="layer-status">0 trajectories ready</div>
     </footer>
   </section>
+
+  <section id="logs" class="panel" role="tabpanel" aria-labelledby="tab-logs" hidden>
+    <div class="documentbar">
+      <label>Profile <select id="log-profile">
+        <option value="gentle">Gentle</option>
+        <option value="balanced" selected>Balanced</option>
+        <option value="aggressive">Aggressive</option>
+      </select></label>
+      <span>Last run on the map selected in Tracks</span>
+    </div>
+    <pre id="log-text" class="log-text" tabindex="0" aria-label="Planner log"></pre>
+    <footer class="statusbar"><div id="log-status" role="status">Loading log…</div></footer>
+  </section>
 </main>
 
 <dialog id="generate-dialog" aria-labelledby="generate-title">
@@ -185,6 +195,13 @@
     <fieldset>
       <legend>Driving profiles</legend>
       <div id="generate-choices" class="choices"></div>
+    </fieldset>
+    <fieldset>
+      <legend>Run</legend>
+      <div class="choices">
+        <label><input type="radio" name="run-order" value="sequence" checked> One after another</label>
+        <label><input id="run-parallel" type="radio" name="run-order" value="parallel"> All at once <small>A processor core and up to 0.6 GB of memory for each profile.</small></label>
+      </div>
     </fieldset>
     <div id="legacy-warning" class="notice" hidden>
       <p id="legacy-message"></p>
@@ -237,7 +254,8 @@
   <div class="help-content">
     <dl>
       <dt>Annotator</dt><dd>Open a map, place the start and export a validated route.</dd>
-      <dt>Hyperparameters</dt><dd>Apply optimizer values. Changing one marks the trajectories it affects as stale.</dd>
+      <dt>Settings</dt><dd>Apply optimizer values. Changing one marks the trajectories it affects as stale.</dd>
+      <dt>Logs</dt><dd>Read what the planner did in the last run of a profile, pass by pass, and the stack trace if it failed.</dd>
       <dt>Tracks</dt><dd>Generate the driving profiles, then select the layers to compare. Choose one profile for Active Constraints or Wall clearance. Point at the map or graph to inspect the location.</dd>
     </dl>
     <p>Times and telemetry are predictions from the vehicle model. The profile presets are provisional.</p>
