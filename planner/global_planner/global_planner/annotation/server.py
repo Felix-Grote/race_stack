@@ -20,6 +20,8 @@ from ..car import Car
 _FILES = {'/': ('ui.html', 'text/html; charset=utf-8'),
           '/ui.js': ('ui.js', 'text/javascript; charset=utf-8'),
           '/menubar.js': ('menubar.js', 'text/javascript; charset=utf-8'),
+          '/checklist.js': ('checklist.js', 'text/javascript; charset=utf-8'),
+          '/ui.css': ('ui.css', 'text/css; charset=utf-8'),
           '/win95.css': ('win95.css', 'text/css; charset=utf-8')}
 
 

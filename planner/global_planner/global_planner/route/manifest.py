@@ -38,6 +38,11 @@ _VALIDATOR = Draft7Validator(_SCHEMA)
 
 def _check_structure(payload: object) -> None:
     """Check fields, types, ranges and text rules against the schema."""
+    # Routes exported before the start line held a start box, which the schema now refuses.
+    if isinstance(payload, dict) and 'start' in payload:
+        raise RouteError('this route was exported with a start box, from before the start '
+                         'line: open it in the annotator, draw the start line and export again')
+
     error = best_match(_VALIDATOR.iter_errors(payload))
     if error is None:
         return

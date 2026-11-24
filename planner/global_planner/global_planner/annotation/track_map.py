@@ -12,6 +12,7 @@ strokes:    lines the operator draws to close gaps in the walls; they only add o
 region:     a free pixel the operator picks; only the free cells connected to it stay free.
             Strokes and region only ever shrink the free space.
 """
+import base64
 from dataclasses import dataclass
 import hashlib
 import json
@@ -222,3 +223,10 @@ def kept_mask(free: np.ndarray, region_px: list | None) -> np.ndarray:
     _, labels = cv2.connectedComponents((free > 0).astype(np.uint8), connectivity=8)
 
     return np.where(labels == labels[v, u], 255, 0).astype(np.uint8)
+
+
+def png_url(image: np.ndarray | bytes) -> str:
+    """Return an image as a data URL the page can show."""
+    data = image if isinstance(image, bytes) else cv2.imencode('.png', image)[1].tobytes()
+
+    return 'data:image/png;base64,' + base64.b64encode(data).decode()

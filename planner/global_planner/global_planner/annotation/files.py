@@ -18,6 +18,10 @@ FIELDS = {'strokes_px': list, 'stroke_width_px': int, 'region_px': (list, type(N
           'guide_px': list, 'start_px': (list, type(None)), 'name': str, 'surface': str,
           'max_speed_mps': (int, float)}
 
+# A new draft's speed limit: above any car's top speed, so that it is the car's own v_max
+# that bounds the line. A lower one is for a track that asks for it, set by the operator.
+UNLIMITED_MPS = 20.
+
 
 def path(track_map: TrackMap, suffix: str) -> Path:
     """Return the path of one of the map's files, e.g. suffix 'route'."""
@@ -41,7 +45,7 @@ def load_draft(track_map: TrackMap) -> tuple[dict, str]:
     """Return the map's saved draft, or a new one, and which it is."""
     draft = {'strokes_px': [], 'stroke_width_px': 5, 'region_px': None, 'guide_px': [],
              'guide_auto': True, 'start_px': None, 'name': track_map.name,
-             'surface': 'ground', 'max_speed_mps': 2.5}
+             'surface': 'ground', 'max_speed_mps': UNLIMITED_MPS}
     file = path(track_map, 'annotation')
     try:
         saved = json.loads(file.read_text(encoding='utf-8')) if file.exists() else None
@@ -74,3 +78,15 @@ def write_receipt(track_map: TrackMap, route: Path, digest: str) -> None:
     """Record which route and map source an export was checked on."""
     write(route.with_suffix('.source.json'),
           json.dumps({'route': digest, 'map': track_map.source_digest}, indent=1))
+
+
+def exported(track_map: TrackMap, result: dict | None) -> str:
+    """Return how the route file on disk relates to the draft's result: none, current, changed."""
+    try:
+        written = json.loads(path(track_map, 'route').read_bytes())
+    except FileNotFoundError:
+        return 'none'
+    except (OSError, ValueError):
+        return 'changed'
+
+    return 'current' if result and written == result['payload'] else 'changed'
