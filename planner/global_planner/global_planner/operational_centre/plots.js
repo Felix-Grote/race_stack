@@ -26,12 +26,22 @@ export function fit() {
   if (fitted) box(fitted);
 }
 
-export function zoom(factor) {
+// Zoom about `at`, a point of the map that stays where it is on screen, or about the middle.
+export function zoom(factor, at) {
   if (!fitted) return;
   const {x, y, width, height} = map.viewBox.baseVal;
   if (width * factor < fitted[2] / 8 || width * factor > fitted[2] * 4) return;
-  box([x + width * (1 - factor) / 2, y + height * (1 - factor) / 2, width * factor, height * factor]);
+  const cx = at?.x ?? x + width / 2, cy = at?.y ?? y + height / 2;
+  box([cx - (cx - x) * factor, cy - (cy - y) * factor, width * factor, height * factor]);
 }
+
+map.addEventListener('wheel', event => {
+  if (!fitted) return;
+  event.preventDefault();
+  // A trackpad pinch arrives as a wheel with ctrl held, in finer steps than a mouse wheel's.
+  const step = event.deltaY * (event.deltaMode ? 16 : 1) * (event.ctrlKey ? 0.01 : 0.0015);
+  zoom(Math.exp(step), pointerAt(map, event));
+}, {passive: false});
 
 map.addEventListener('pointerdown', event => {
   if (!fitted || event.button !== 0) return;
@@ -116,7 +126,8 @@ function drawMap() {
     .concat(view.gates.map(gate => drawPath(gate, 'gate')), drawPath(view.start, 'start'));
   let overlay = '';
   if (!isHeatmap) {
-    overlay = lines.map(([kind, line]) => drawPath(line.points, 'curve ' + kind, true)).join('');
+    overlay = scene.stale.map(points => drawPath(points, 'curve stale', true)).join('')
+      + lines.map(([kind, line]) => drawPath(line.points, 'curve ' + kind, true)).join('');
   } else if (active) {
     overlay = drawMapOverlay(view.lines[active], legend, profiles[active].margin_m);
   } else {
@@ -159,14 +170,21 @@ function inspect(q) {
     const value = sample.value(line.values[key], metric.step);
     const display = value === null ? '—' : (value * (metric.factor || 1))
       .toFixed(key === 'curvature' ? 3 : 2) + ' ' + metric.unit;
-    appendText('p', title(kind) + ' · ' + display);
+    // One line a profile: its colour on the map, its name, its value.
+    const reading = appendText('div', '');
+    reading.className = 'reading';
+    const swatch = document.createElement('i'), name = document.createElement('span');
+    swatch.className = 'swatch ' + kind;
+    name.textContent = title(kind);
+    reading.append(swatch, name, display);
     if (isHeatmap && kind !== heatProfile.value) continue;
     markers.push('<circle class="marker ' + kind + '" cx="' + x + '" cy="' + y + '" r="' + 4 / scale + '"/>');
   }
   if (isHeatmap && heatProfile.value) {
     const kind = heatProfile.value, line = view.lines[kind];
     const {index} = sampleAt(line, lapQ, view.period_m);
-    appendText('p', title(kind) + ' · interval starts at q ' + line.q[index].toFixed(2) + ' m');
+    appendText('strong', title(kind) + (mode.value === 'constraints' ? ' · active constraints' : ' clearance'))
+      .title = 'The interval from q ' + line.q[index].toFixed(2) + ' m to the next point';
     if (mode.value === 'constraints') {
       showConstraints(line, index, appendText);
     } else {
@@ -190,7 +208,9 @@ export function drawPlots(view, visible, profiles) {
   heatProfile.replaceChildren(...lines.map(([kind]) => new Option(title(kind), kind)));
   if (lines.some(([kind]) => kind === current)) heatProfile.value = current;
   else if (lines.some(([kind]) => kind === 'balanced')) heatProfile.value = 'balanced';
-  scene = {view, lines, profiles};
+  const stale = Object.entries(view.stale || {}).filter(([kind]) => visible.has(kind))
+    .map(([, points]) => points);
+  scene = {view, lines, profiles, stale};
   display();
 }
 

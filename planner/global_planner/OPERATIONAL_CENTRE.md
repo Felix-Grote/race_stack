@@ -12,7 +12,7 @@ PYTHONPATH=planner/global_planner python -m global_planner.operational_centre.se
   --car stack_master/config/NUC5/car_model.yaml
 ```
 
-Open the address printed by the server. Use a writable copy of the map directory to keep your checkout clean. With `test/test`, open the map and use **Set start** on the suggested guide along the upper straight, around image pixel (206, 39). Export the route, switch to **Tracks** and choose **Generate…**.
+Open the address printed by the server. Use a writable copy of the map directory to keep your checkout clean. With `test/test`, open the map and use **Set start** on the suggested guide along the upper straight, around image pixel (206, 39). Export the route, switch to **Tracks** and choose **Generate**.
 
 The `--workspace` directory defaults to `.forzaeth/operational-centre` relative to the working directory. It stores the worksheet and the latest successful result for each profile. A car model with body and speed limits is required for generation. Annotation can run without a car.
 
@@ -26,7 +26,7 @@ The `--workspace` directory defaults to `.forzaeth/operational-centre` relative 
 
 Each profile runs the native geometry and flying-lap optimizer independently. The performance fraction scales vehicle top speed, lateral and longitudinal tyre limits, braking, motor acceleration at the calibrated speed breakpoints and steering-rate limits. Mass, drag, steering geometry and the source calibration stay fixed. The clearance baseline defaults to 0.05 m and the added clearance is in metres.
 
-**Hyperparameters** applies one worksheet across all maps. Its γ value refers to Balanced. Gentle uses twice that value and Aggressive uses half. The chosen γ weights curvature energy in the native lap-time objective. The presets are provisional. Changing the weight can change convergence and the relative lap times.
+**Settings** applies one worksheet across all maps. Its γ value refers to Balanced. Gentle uses twice that value and Aggressive uses half. The chosen γ weights curvature energy in the native lap-time objective. The presets are provisional. Changing the weight can change convergence and the relative lap times.
 
 ## Compare and inspect
 
@@ -40,6 +40,12 @@ Each profile runs the native geometry and flying-lap optimizer independently. Th
 ### High-speed-cap demonstration
 
 On a scratch copy of `test/test`, set **Speed limit** to 20 m/s in Annotator and export the route. Generate Balanced and Aggressive with the NUC5 car model. In Tracks, select **Active Constraints** and inspect Balanced. With the road cap above the planning top speed, the map shows where cornering grip, tyre drive and braking grip limit the lap. At about 45 m of route progress the inspector shows the cornering demand alongside both lateral limits.
+
+## Is it current?
+
+- A stale profile stays on the map as a grey dotted line, with what changed next to its name, and **Generate** offers the profiles that are not current.
+- The status bar of Tracks says what the map's `global_waypoints.json` holds and whether it still matches the current results. The Centre knows this from a record kept in the workspace; a file written by anything else reads as unknown.
+- A dot after a tab's name marks work Tracks does not use yet: unapplied values in Settings, an unexported draft in Annotator.
 
 ## Export to the car
 
@@ -58,6 +64,6 @@ The centreline is the route's centre curve timed for the car's unscaled limits. 
 
 The existing [annotation workflow](global_planner/annotation/README.md) validates and exports the route and its source receipt. The Centre detects changes to the saved route or its map calibration. An export without a receipt can be used after operator review if its image hash matches. An open draft can differ from the saved export used by Tracks.
 
-One isolated worker runs the requested profiles in sequence. Each completed profile is saved atomically with its effective settings, body, profile and original model limits, calibration and route digests, worksheet revision and a planner source fingerprint. Changing an effective input removes stale results from the plots. Bounds-only edits do not invalidate results. Results saved before Active Constraints require regeneration to populate the new diagnostics.
+**Generate** runs the requested profiles one after another in one isolated worker, or all at once with a worker each; the second is faster and takes a processor core and up to 0.6 GB of memory for each profile. While a profile runs, its line in Driving profiles says where the optimizer is ("Fastest line, pass 12, lap 9.71 s"). The optimizer reports this through Python's `logging`, under `global_planner.optimizer.solve`; it prints nothing by itself. The **Logs** tab shows everything the planner wrote during the last run of a profile on the selected map: the inputs, every pass with the figures it was judged by, every pass that did not count, each check of the curve, and the stack trace if the run failed. The same text is kept as `<profile>.log` next to the result in the workspace. Each completed profile is saved atomically with its effective settings, body, profile and original model limits, calibration and route digests, worksheet revision and a planner source fingerprint. Changing an effective input removes stale results from the plots. Bounds-only edits do not invalidate results. Results saved before Active Constraints require regeneration to populate the new diagnostics.
 
 The Centre is for offline, single-operator planning. Times, dynamics and clearances come from the model and sampled trajectories. They require offline evaluation and vehicle testing before the presets can be calibrated for operational use.

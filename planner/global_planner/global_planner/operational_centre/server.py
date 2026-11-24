@@ -13,8 +13,8 @@ from ..annotation.server import handler as annotation_handler
 
 _ASSETS = {'/': ('index.html', 'text/html'), '/centre.css': ('centre.css', 'text/css'),
            **{f'/{name}': (name, 'text/javascript')
-              for name in ('centre.js', 'common.js', 'constraints.js', 'graph.js', 'plots.js',
-                           'worksheet.js')}}
+              for name in ('centre.js', 'common.js', 'constraints.js', 'graph.js', 'logs.js',
+                           'plots.js', 'worksheet.js')}}
 _MAX_BODY = 2 * 1024 * 1024
 
 
@@ -63,6 +63,15 @@ def handler(workspace: Workspace, lock: Lock):
                         state = workspace.state(query.get('map', [None])[0],
                                                 query.get('view', [None])[0])
                         self._json(200, state)
+                except (OSError, ValueError) as exc:
+                    self._json(400, {'error': str(exc)})
+            elif url.path == '/api/centre/log':
+                query = parse_qs(url.query)
+                try:
+                    with lock:
+                        text = workspace.log(query.get('map', [None])[0],
+                                             query.get('kind', [None])[0])
+                    self._json(200, {'text': text})
                 except (OSError, ValueError) as exc:
                     self._json(400, {'error': str(exc)})
             else:

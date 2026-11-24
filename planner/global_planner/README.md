@@ -2,7 +2,7 @@
 
 ## Operational Centre
 
-The local Windows 95-style workspace uses the route, optimizer and speed packages to prepare tracks and compare predicted flying laps. Use **Annotator** to export a validated route, **Hyperparameters** to tune the optimizer and **Tracks** to generate Gentle, Balanced and Aggressive driving profiles.
+The local Windows 95-style workspace uses the route, optimizer and speed packages to prepare tracks and compare predicted flying laps. Use **Annotator** to export a validated route, **Settings** to tune the optimizer and **Tracks** to generate Gentle, Balanced and Aggressive driving profiles.
 
 Tracks includes a trajectory overlay, an Active Constraints map, a wall-clearance heatmap and telemetry linked by route progress. The inspector shows the effective profile limits alongside the original vehicle limits. Route, vehicle or optimizer changes mark affected results stale.
 

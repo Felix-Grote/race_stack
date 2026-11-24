@@ -1,6 +1,8 @@
 """Optimize the driving profiles independently using captured planning inputs."""
 from dataclasses import asdict, replace
 from functools import cache
+import logging
+import time
 from pathlib import Path
 import traceback
 
@@ -19,6 +21,7 @@ PROFILES = {
     'aggressive': (0.95, 0.000, 0.5),
 }
 RESULT_VERSION = 3
+_LOG = logging.getLogger(__name__)
 
 
 @cache
@@ -79,6 +82,7 @@ def generate(kind: str, track: Track, vehicle: Vehicle, settings: OptimizerSetti
     """Run a full geometry and speed solve and sample its validated result."""
     car, limits, optimizer = _effective(kind, vehicle, settings)
     result = optimize(track.route, car, optimizer, limits=limits)
+    _LOG.info('Measuring telemetry')
     telemetry = measure(result.lap, car, result.profile, vehicle.limits)
     return {
         'metrics': {'length_m': result.lap.curve.length,
@@ -90,22 +94,57 @@ def generate(kind: str, track: Track, vehicle: Vehicle, settings: OptimizerSetti
     }
 
 
+class _Progress(logging.Handler):
+    """Publish what the optimizer says of its own progress as the running attempt's."""
+
+    def __init__(self, path: Path, job: dict, attempt: dict) -> None:
+        super().__init__(logging.INFO)
+        self.path, self.job, self.attempt = path, job, attempt
+
+    def emit(self, record: logging.LogRecord) -> None:
+        self.attempt['progress'] = record.getMessage()
+        write_json(self.path, self.job)
+
+
 def run_job(directory: Path, progress: Path, job: dict, track: Track, vehicle: Vehicle,
             settings: OptimizerSettings) -> None:
     """Publish each completed profile independently in the worker process."""
+    # Everything the planner's packages log, down to DEBUG, goes to the profile's own file;
+    # the short INFO lines also become the attempt's progress.
+    planner = logging.getLogger(optimize.__module__.split('.')[0])
+    planner.setLevel(logging.DEBUG)
+    directory.mkdir(parents=True, exist_ok=True)
     for kind, attempt in job['attempts'].items():
         attempt['status'] = 'running'
         write_json(progress, job)
+        listener = _Progress(progress, job, attempt)
+        record = logging.FileHandler(directory / f'{kind}.log', mode='w', encoding='utf-8')
+        record.setFormatter(logging.Formatter('%(asctime)s.%(msecs)03d %(levelname)-5s '
+                                              '%(name)s: %(message)s', '%H:%M:%S'))
+        planner.addHandler(record)
+        planner.addHandler(listener)
+        began = time.monotonic()
         try:
+            _LOG.debug('%s on %s, job %s: %s', kind, job['map'], job['id'],
+                       profile_info(kind, vehicle.car.margin_m, settings))
             result = generate(kind, track, vehicle, settings)
             write_json(directory / f'{kind}.json',
                        dict(result, version=RESULT_VERSION, id=job['id'],
                             inputs=provenance(kind, track, vehicle, settings)))
+            _LOG.debug('saved after %.1f s: %s', time.monotonic() - began, result['metrics'])
         except (ValueError, OSError) as exc:
+            # A refusal the planner explains; the trace says where it gave up.
+            _LOG.exception('failed after %.1f s', time.monotonic() - began)
             attempt.update(status='failed', message=str(exc))
         except Exception as exc:  # noqa: BLE001 - report unexpected worker failures to the UI
+            _LOG.exception('failed after %.1f s', time.monotonic() - began)
             traceback.print_exc()
             attempt.update(status='failed', message=f'{type(exc).__name__}: {exc}')
         else:
             attempt['status'] = 'complete'
+        finally:
+            planner.removeHandler(listener)
+            planner.removeHandler(record)
+            record.close()
+            attempt.pop('progress', None)
         write_json(progress, job)

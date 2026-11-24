@@ -1,4 +1,4 @@
-// The Hyperparameters tab: one value per exposed optimizer setting, applied to every map.
+// The Settings tab: one value per exposed optimizer setting, applied to every map.
 import {$, api, element, notice, status} from './common.js';
 
 let state, connected = false, revision, edited = false, saving = false;
