@@ -32,14 +32,14 @@ button {
 button:disabled { color: #555; }
 button:active:not(:disabled), button.on { box-shadow: var(--sunken); }
 :focus-visible { outline: 1px dotted currentColor; outline-offset: -3px; }
-input:not([type="checkbox"]), select {
+input:not([type="checkbox"], [type="radio"]), select {
   min-width: 0;
   min-height: 24px;
   padding: 3px 5px;
   background: #fff;
   box-shadow: var(--sunken);
 }
-input[type="checkbox"] { accent-color: var(--navy); }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--navy); }
 .menubar { display: flex; flex-wrap: wrap; align-items: center; position: relative; z-index: 1; padding: 2px 0; }
 .menubar details { position: relative; }
 .menubar details:last-child { position: static; }
@@ -51,6 +51,9 @@ input[type="checkbox"] { accent-color: var(--navy); }
 }
 .menubar summary::-webkit-details-marker { display: none; }
 .menubar details[open] > summary { box-shadow: var(--sunken); }
+/* A menu title that acts by itself, with no list under it: it looks like the others. */
+.menubar > button { padding: 3px 8px; background: none; box-shadow: none; }
+.menubar > button:active { box-shadow: var(--sunken); }
 .popup {
   position: absolute;
   top: 100%;
@@ -78,3 +81,18 @@ input[type="checkbox"] { accent-color: var(--navy); }
 .popup hr { border: 0; border-top: 1px solid var(--shadow); border-bottom: 1px solid #fff; margin: 3px 2px; }
 .statusbar > div { padding: 5px 7px; box-shadow: var(--sunken); overflow-wrap: anywhere; }
 [hidden] { display: none !important; }
+/* Pop-up windows, shared by the editor and the Operational Centre. */
+dialog {
+  width: min(27rem, calc(100vw - 12px));
+  margin: auto;
+  padding: 4px;
+  border: 0;
+  background: var(--face);
+  color: #000;
+  box-shadow: var(--raised);
+}
+dialog::backdrop { background: #0006; }
+.help-content { padding: 7px 8px 5px; }
+.dialog-actions { display: flex; align-items: center; justify-content: end; gap: 5px; margin-top: 8px; }
+.dialog-actions button { min-width: 72px; }
+.default-button { border: 1px solid #000; font-weight: bold; }

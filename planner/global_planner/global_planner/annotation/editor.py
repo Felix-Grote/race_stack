@@ -50,6 +50,7 @@ class Editor:
         self.draft = {}
         self.result = None
         self.route = ''
+        self.summary = ''
         self.route_at = []
         self.map_name = None
         self._map_url = None
@@ -217,7 +218,7 @@ class Editor:
 
     def _recheck(self) -> None:
         """Build and check the route for the draft, and keep it, or why it fails, to show."""
-        self.result, self.route_at = None, []
+        self.result, self.route_at, self.summary = None, [], ''
         if len(self.draft['guide_px']) < 3:
             self.route = 'no guide yet: draw one, or press Suggest'
             return
@@ -245,6 +246,8 @@ class Editor:
                        'start_px': px((payload['sections'][0]['right'][0],
                                        payload['sections'][0]['left'][0])),
                        'payload': payload, 'digest': route.digest}
+        self.summary = (f'{len(payload["sections"])} sections · {lap.period:.2f} m lap'
+                        + (f' · fits {self.car.name}' if self.car else ''))
         car = f', portal zones checked for {self.car.name}' if self.car else ''
         self.route = (f'valid: {len(payload["sections"])} sections, lap {lap.period:.2f} m{car}. '
                       f'Not optimized yet: export it for the optimizer')
@@ -252,7 +255,7 @@ class Editor:
     def save(self) -> str:
         """Write the draft next to the map."""
         self._require_current_source()
-        return f'draft saved to {files.save_draft(self.track_map, self.draft)}'
+        return f'Draft saved as {files.save_draft(self.track_map, self.draft).name}.'
 
     def export(self) -> str:
         """Write the route last checked next to the map, and confirm it reads back the same."""
@@ -267,7 +270,18 @@ class Editor:
 
         self.save()
         files.write_receipt(self.track_map, path, self.result['digest'])
-        return f'route written to {path}'
+        return f'Route exported as {path.name}.'
+
+    def _exported(self) -> str:
+        """Return how the route file on disk relates to the draft: none, current or changed."""
+        try:
+            written = json.loads(files.path(self.track_map, 'route').read_bytes())
+        except FileNotFoundError:
+            return 'none'
+        except (OSError, ValueError):
+            return 'changed'
+
+        return 'current' if self.result and written == self.result['payload'] else 'changed'
 
     def view(self) -> dict:
         """Return what the page shows: the map, the draft, the walls and the last route."""
@@ -275,6 +289,8 @@ class Editor:
             return {'maps': self.maps()}
 
         view = dict(self.draft, maps=self.maps(), map=self.map_name, route=self.route,
+                    route_summary=self.summary, exported=self._exported(),
+                    exported_path=str(files.path(self.track_map, 'route')),
                     problem_px=self.route_at,
                     size=[self.track_map.width, self.track_map.height], png=self._map_url,
                     result={k: v for k, v in self.result.items() if k not in ('payload', 'digest')}
