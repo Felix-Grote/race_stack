@@ -47,7 +47,7 @@ flowchart LR
 |---|---|
 | `manifest.py` | read JSON → validated `Route` (structure via the schema, geometry by hand) |
 | `manifest.schema.json` | the manifest's structure: fields, types, ranges |
-| `track.py` | the data: `Section`, `Portal`, `Start`, `Route` |
+| `track.py` | the data: `Section`, `Portal`, `Route` |
 | `centreline.py` | a section's centreline, derived from its walls |
 | `lap.py` | lap progress `q`; the closed curve through all centrelines (`LapCurve`) |
 | `sampling.py` | samples along the lap; refit a curve through moved samples |
@@ -103,10 +103,6 @@ for that car.
 {
   "name": "test_track",
   "map": {"frame_id": "map", "sha256": "49efc38e…"},
-  "start": {
-    "heading_range_rad": [2.01, 2.61],
-    "zone": [[3.01, 3.71], [1.65, 5.18], [0.48, 4.10], [1.83, 2.63]]
-  },
   "sections": [
     {
       "uid": "o0",
@@ -121,7 +117,7 @@ for that car.
 
 | Field | Meaning |
 |---|---|
-| `start` | the start box the car stands in before the race (`zone`), and the directions it may face there (`heading_range_rad`); the whole zone must lie within the union of the section polygons — it may straddle a gate or sit in any section, but no part of it may leave the road |
+| `sections` | in driving order. The first one begins on the **start line**: the gate into it, from wall to wall (`Route.start_line`). The lap starts where a line crosses it, at lap progress 0; the manifest holds no other start, and nothing is asked of a line there but to cross it |
 | `surface` | groups sections on one physical surface (a bridge deck vs. the road below) |
 | `max_speed_mps` | speed limit over the whole section; to change it, cut a new section |
 | `left`, `right` | the walls, in driving direction; `right` + reversed `left` closes the section; the end cap is the gate into the next section, the last one closes the lap |

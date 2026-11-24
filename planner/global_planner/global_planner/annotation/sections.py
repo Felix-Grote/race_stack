@@ -15,16 +15,14 @@ walls:      each wall is walked one way round for the whole lap, the way that pa
             Each section's walls are the stretches between its gates, thinned (walls.py) so
             the route package's centreline stays fast. Both sections at a gate share its two
             end points exactly.
-start:      a zone in the middle of the road centred on the start the operator set, facing
-            along the guide: a strip that follows the walls for 1.2 m or, where that does not
-            fit, ever smaller boxes. The first cut is the one nearest the start, so the zone
-            may straddle its gate. The route package needs it wholly on the road.
+start:      the operator draws the start line: two clicks, one on each side of the road.
+            The line through them, run on to the walls, is the first gate; the lap begins
+            where a line crosses it, and nothing else is asked of the line there. A start
+            set as one click, as older drafts hold, gets the gate that fits nearest after it.
 """
 import math
 
 import numpy as np
-import shapely
-from shapely.geometry import LinearRing, Polygon
 
 from .guide import off_road, resample, signed_area, starting_at
 from .track_map import AnnotationError, TrackMap
@@ -33,14 +31,6 @@ from .walls import douglas_peucker, ear_ok, MAX_THINNING_PX, thin
 # How far apart the thinned walls may stray from the traced ones, in metres; capped at
 # MAX_THINNING_PX on fine maps.
 WALL_EPS_M = 0.02
-
-# Where the start zone's corners sit along the guide from the start, and across the road
-# (0 right, 1 left).
-_START_STATIONS_M = (-0.6, -0.3, 0., 0.3, 0.6)
-_START_BOXES = ((1.2, 0.25), (0.8, 0.30), (0.5, 0.35), (0.3, 0.40))
-
-# How far either way the start heading may turn from the guide's, in radians.
-_HEADING_SPREAD_RAD = 0.3
 
 # The fewest points the resampled guide has round a lap: enough for well separated cuts on a
 # short track. Longer laps keep the given spacing.
@@ -116,6 +106,40 @@ def _sides(seed: list[np.ndarray], left: np.ndarray,
     return lj, rj, fits
 
 
+def _drawn_gate(ends: np.ndarray, left: np.ndarray, right: np.ndarray, seed: list[np.ndarray],
+                reach_m: float) -> tuple[int, int]:
+    """
+    Return the left- and right-wall points the drawn start line meets, run on to the walls.
+
+    ends:       the two points the operator clicked, in metres, in either order.
+    reach_m:    how near the line a wall point must lie to count as met: a cell of the map.
+
+    Of the places where the line meets a wall, the nearest to its middle counts: the line
+    run on would cross the rest of the track too.
+    """
+    middle, along = ends.mean(axis=0), ends[1] - ends[0]
+    along = along / np.linalg.norm(along)
+    met = []
+    for wall in (left, right):
+        offset = wall - middle
+        near = np.flatnonzero(np.abs(offset @ np.array([-along[1], along[0]])) <= reach_m)
+        if not near.size:
+            raise AnnotationError('the start line misses a wall: draw it across the road, '
+                                  'from one wall to the other')
+
+        met.append(int(near[np.argmin(np.abs(offset[near] @ along))]))
+
+    # As for every gate: the left wall to the left of the way the guide runs, the right one
+    # to its right.
+    tangent = seed[1] - seed[-1]
+    normal = np.array([-tangent[1], tangent[0]])
+    if not (np.dot(left[met[0]] - seed[0], normal) > 0 > np.dot(right[met[1]] - seed[0], normal)):
+        raise AnnotationError('the start line does not cross the road: draw it from one wall '
+                              'to the other, across the guide')
+
+    return met[0], met[1]
+
+
 def _direction(idxs: list[int], n: int, side: str) -> int:
     """Return the step, 1 or -1, that walks a closed wall of n points through idxs in one turn."""
     for step in (1, -1):
@@ -128,7 +152,13 @@ def _direction(idxs: list[int], n: int, side: str) -> int:
 
 
 def _cuts(seed: list[np.ndarray], n_sections: int, fits: list[bool]) -> list[int]:
-    """Return where to cut the seed: near even fractions, on its straightest points that fit."""
+    """
+    Return where to cut the seed: near even fractions, on its straightest points that fit.
+
+    The first cut is the start line, so it is not moved to a straighter place: it is made at
+    the seed's first point, where the operator drew it, or, for a start set as one click, at
+    the first point after it where a gate fits.
+    """
     n = len(seed)
     turn = []
     for i, p in enumerate(seed):
@@ -142,6 +172,15 @@ def _cuts(seed: list[np.ndarray], n_sections: int, fits: list[bool]) -> list[int
         target = int(round(k * n / n_sections))
         window = [j % n for j in range(target - n // 8, target + n // 8)]
         window = [j for j in window if fits[j] and all(_gap(j, c, n) >= min_sep for c in cuts)]
+        if k == 0:
+            ahead = [j for j in range(n // 8) if fits[j]]
+            if not ahead:
+                raise AnnotationError('no start line fits across the road there: set the start '
+                                      'on a straighter part of the track')
+
+            cuts.append(ahead[0])
+            continue
+
         if not window:
             raise AnnotationError('cannot cut the guide into well separated sections: redraw '
                                   'it more evenly, between the walls')
@@ -159,54 +198,6 @@ def _cuts(seed: list[np.ndarray], n_sections: int, fits: list[bool]) -> list[int
     return cuts
 
 
-def _heading_range(heading: float) -> list[float]:
-    """
-    Return the start heading range: _HEADING_SPREAD_RAD either way of heading, in [-pi, pi].
-
-    The manifest cannot hold a range across pi, so near it the range slides inward, keeping
-    its width and heading, rather than losing a side.
-    """
-    first = min(max(heading - _HEADING_SPREAD_RAD, -math.pi), math.pi - 2 * _HEADING_SPREAD_RAD)
-
-    return [first, first + 2 * _HEADING_SPREAD_RAD]
-
-
-def _start_zone(sections: list[dict], seed: list[np.ndarray], left: np.ndarray,
-                right: np.ndarray) -> list[list[float]]:
-    """Return the first start zone shape, centred on the seed's first point, on the road."""
-    road = shapely.union_all([Polygon(list(s['right']) + list(reversed(s['left'])))
-                              for s in sections])
-    path = LinearRing(seed)
-    walls = LinearRing(left), LinearRing(right)
-
-    def across(dist_m: float, frac: float) -> np.ndarray:
-        p = path.interpolate(dist_m % path.length)
-        lp, rp = (np.array(w.interpolate(w.project(p)).coords[0]) for w in walls)
-        return rp + frac * (lp - rp)
-
-    shapes = [[across(d, .25) for d in _START_STATIONS_M]
-              + [across(d, .75) for d in reversed(_START_STATIONS_M)]]
-    shapes += [[across(-length / 2, f), across(length / 2, f), across(length / 2, 1 - f),
-                across(-length / 2, 1 - f)] for length, f in _START_BOXES]
-    for shape in shapes:
-        zone = []
-        for p in shape:
-            point = [float(p[0]), float(p[1])]
-            if not zone or math.dist(point, zone[-1]) > 1e-9:
-                zone.append(point)
-
-        if len(zone) > 1 and math.dist(zone[0], zone[-1]) <= 1e-9:
-            zone.pop()
-
-        if len(zone) >= 3:
-            poly = Polygon(zone)
-            if poly.is_valid and road.covers(poly):
-                return zone
-
-    raise AnnotationError('no start zone fits on the road there: set the start on a '
-                          'straighter part of the track')
-
-
 def build(track_map: TrackMap, outer_px: np.ndarray, inner_px: np.ndarray, guide_px,
           start_px, kept: np.ndarray, name: str, surface: str, max_speed_mps: float,
           n_sections: int = 4, spacing_m: float = 0.75, smoothing_passes: int = 4) -> dict:
@@ -222,17 +213,25 @@ def build(track_map: TrackMap, outer_px: np.ndarray, inner_px: np.ndarray, guide
         raise AnnotationError('the guide crosses a wall or leaves the road (marked red): redraw '
                               'it there, or press Suggest', at_px=off)
 
-    if len(off_road(kept, [start_px])):
+    # One click, or the two ends of a drawn start line: either way the lap starts at its middle.
+    start = np.asarray(start_px, float).reshape(-1, 2)
+    middle_px = [float(v) for v in start.mean(axis=0)]
+    if len(off_road(kept, [middle_px])):
         raise AnnotationError('the start is off the road (marked red): set it again',
-                              at_px=[start_px])
+                              at_px=[middle_px])
 
-    guide_px = starting_at(guide_px, start_px)
+    guide_px = starting_at(guide_px, middle_px)
 
     outer = np.array([track_map.pixel_to_world(p) for p in outer_px])
     inner = np.array([track_map.pixel_to_world(p) for p in inner_px])
     seed = _seed(track_map, outer, inner, guide_px, spacing_m, smoothing_passes)
     left, right = (inner, outer) if signed_area(seed) > 0 else (outer, inner)
     lj, rj, fits = _sides(seed, left, right)
+    if len(start) == 2:
+        ends = np.array([track_map.pixel_to_world(p) for p in start])
+        lj[0], rj[0] = _drawn_gate(ends, left, right, seed, track_map.resolution)
+        fits[0] = True
+
     cuts = _cuts(seed, n_sections, fits)
     left_step = _direction([lj[c] for c in cuts], len(left), 'left')
     right_step = _direction([rj[c] for c in cuts], len(right), 'right')
@@ -256,11 +255,6 @@ def build(track_map: TrackMap, outer_px: np.ndarray, inner_px: np.ndarray, guide
                          'right': [[float(x), float(y)]
                                    for x, y in wall(right, rj[a], rj[b], right_step)]})
 
-    # The start faces along the guide.
-    ahead = seed[1] - seed[-1]
-    heading = math.atan2(ahead[1], ahead[0])
-
+    # The first section begins on the start line; the manifest holds no other start.
     return {'name': name, 'map': {'frame_id': 'map', 'sha256': track_map.sha256},
-            'start': {'heading_range_rad': _heading_range(heading),
-                      'zone': _start_zone(sections, seed, left, right)},
             'sections': sections}

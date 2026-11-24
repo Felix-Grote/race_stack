@@ -14,7 +14,7 @@ route = load_route('track.json')
 car = Car.load('car_model.yaml', margin_m=0.05)
 result = optimize(route, car)           # the smoothest line; starts from the centre curve
 result.lap                              # the optimized LapCurve
-result.start_q                          # lap progress of the pose in the start box
+result.start_q                          # lap progress where the lap starts: 0, on the start line
 result.passes, result.refinements       # what each pass did; rounds of tighter rows
 
 limits = CarLimits.load('car_model.yaml')
@@ -77,7 +77,7 @@ rows below are in metres; the speed rules of the fastest line come in their own 
 | body on the road | the body rectangle (`Car.body`) keeps its clearance from the walls, at every point, halfway to the next, and wherever a wall corner passes its front or rear |
 | `base_link` in its section | ownership by `q` must match where the point is |
 | turning | the curvature at every point is at most one over the car's turning radius, wheelbase / tan(max steering angle) |
-| start | of the points in the start box, the one nearest its middle (among those facing within the heading range, if any) stays in the box and faces within the range |
+| start | the first point is on the start line, the gate into the first section, like every section's first point on its gate; it is free from wall to wall |
 
 **The road** of a section is the section plus the supports of the portals at its two ends. A
 body whose `base_link` is in its section can only reach a neighbour through the gate, and then
@@ -100,8 +100,8 @@ legal, the checked curve is; it spares most lines a refinement.
   taken as a straight line: its value at the start and how it changes with the first move.
   The energy, the gaps and the gates keep their bends, and so do the lap time and the speed
   rules when the fastest line is asked for.
-- **Elastic rows.** A row that is not met yet (a start off the road, too tight, or facing the
-  wrong way) may fall short at a cost of `elastic` per metre, so IPOPT pulls the line back.
+- **Elastic rows.** A row that is not met yet (a start off the road or too tight) may fall
+  short at a cost of `elastic` per metre, so IPOPT pulls the line back.
   A row within `met_m` of met counts as met: it is not pulled back, and may not get worse.
 - **A pass counts** only if the true rows bear its straight rows out. From a legal line,
   every true row must still be met after it, so the line stays legal and its cost falls.
@@ -135,8 +135,8 @@ Asked with `limits`, the optimizer first finds the smoothest line as above and t
 - **Speeds in the solver.** The speed at every point joins the points as unknowns. The
   car's speed rules are those of `speed/` (the bend, speeding up and braking with shared
   grip at both ends of a gap, the steering), written in `timing.py` for one gap and applied
-  to every gap of the lap. They keep their bends in a pass. The walls, the turning limit
-  and the start heading are still taken as straight lines.
+  to every gap of the lap. They keep their bends in a pass. The walls and the turning limit
+  are still taken as straight lines.
 - **Speed rows left out.** Most speed rows cannot bind in a pass; on a lap driven at the
   track's limit none can. A gap's speed rows are given to the solver only if one of them is
   within half its limit of binding where the solve starts. The answer is then held against
@@ -170,8 +170,8 @@ Asked with `limits`, the optimizer first finds the smoothest line as above and t
 ## What it promises
 
 - **Legal:** on the returned curve, every `check_m` and at its knots, the body plus margin lies
-  on its road, `base_link` in its section, and the start pose in the start box. The turning
-  limit and the start heading hold to within a thousandth.
+  on its road and `base_link` in its section. The turning limit holds to within a
+  thousandth. The lap starts where the curve crosses the start line.
 - **Settled:** the last pass could have moved twice as far, and moved no point more than
   `settle_m` or had too little left to gain.
 - **Falling cost:** a pass that starts from a legal line keeps every wall it picked and

@@ -113,7 +113,7 @@ function drawMap() {
   }
 
   const road = view.walls.map(wall => drawPath(wall, 'road', true))
-    .concat(view.gates.map(gate => drawPath(gate, 'gate')), drawPath(view.start, 'start', true));
+    .concat(view.gates.map(gate => drawPath(gate, 'gate')), drawPath(view.start, 'start'));
   let overlay = '';
   if (!isHeatmap) {
     overlay = lines.map(([kind, line]) => drawPath(line.points, 'curve ' + kind, true)).join('');

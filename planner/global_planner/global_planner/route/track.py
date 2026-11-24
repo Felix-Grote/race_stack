@@ -62,33 +62,28 @@ class Portal:
 
 
 @dataclass(frozen=True)
-class Start:
-    """
-    Where the car stands before the race.
-
-    zone:           the start box: polygon base_link stands in.
-    heading_range:  (from, to) directions the car may face there, in radians.
-    """
-
-    zone: Chain
-    heading_range: tuple[float, float]
-
-
-@dataclass(frozen=True)
 class Route:
     """
     One closed lap.
 
     sections:   in driving order.
     portals:    portal i joins section i to section i + 1, the last one closes the lap.
-    start:      where the car starts.
     digest:     SHA-256 of the manifest (keys sorted), to record which track was used.
     """
 
     sections: tuple[Section, ...]
     portals: tuple[Portal, ...]
-    start: Start
     digest: str
+
+    @property
+    def start_line(self) -> tuple[XY, XY]:
+        """
+        Return the start line: the gate into the first section, from right wall to left wall.
+
+        The lap begins where a line crosses it, at lap progress 0. It runs from wall to
+        wall, so it fixes where the lap starts and nothing about the line across the road.
+        """
+        return self.portals[-1].gate
 
     @cached_property
     def section_bounds(self) -> tuple[float, ...]:

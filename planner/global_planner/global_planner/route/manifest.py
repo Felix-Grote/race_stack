@@ -2,10 +2,11 @@
 Read a manifest into a validated, immutable Route.
 
 1. structure:   fields, types, ranges and text rules against manifest.schema.json.
-2. geometry:    walls, centrelines, gates, section contacts and starting zone, checked here.
+2. geometry:    walls, centrelines, gates and section contacts, checked here.
 
 Section i's portal joins it to section i + 1; the last portal closes the lap.
-A portal's gate is the section's end cap, from right wall to left wall.
+A portal's gate is the section's end cap, from right wall to left wall. The gate into the first
+section is the start line.
 """
 from collections import Counter
 import hashlib
@@ -25,7 +26,7 @@ from .centreline import centreline
 from .errors import require, RouteError
 from .geometry import (Chain, chains_touch, counterclockwise, covers, cross, distance, EPS,
                        outline, simple_polygon, sub)
-from .track import Portal, Route, Section, Start
+from .track import Portal, Route, Section
 
 # Walls closer than EPS for longer than this count as a shared wall.
 _SHARED_WALL_M = 1e-3
@@ -169,27 +170,6 @@ def _check_section_contacts(sections: list[Section], portals: list[Portal]) -> N
             _check_neighbours(sections[i], sections[j])
 
 
-def _start(value: dict, sections: list[Section]) -> Start:
-    """Check the start zone and heading range."""
-    heading = value['heading_range_rad']
-    require(heading[0] < heading[1], 'start heading range must run from a smaller to a larger '
-            'angle')
-
-    zone = _points(value['zone'], 'start zone')
-    require(simple_polygon(zone), 'start zone must be a polygon with an area that does not '
-            'cross itself')
-    # The whole zone, edges included, must lie on the road: within the union
-    # of all sections. It may straddle a gate or sit in any section; PR #10
-    # assigns it no section of its own. Boundary contact counts as inside,
-    # as in geometry.covers (EPS slack for float noise).
-    road = unary_union([Polygon(s.polygon) for s in sections])
-    require(road.buffer(EPS).covers(Polygon(zone)),
-            'start zone is not contained in the route sections; move the '
-            'zone wholly inside the track')
-
-    return Start(zone, tuple(heading))
-
-
 def validate_route(payload: object) -> Route:
     """Validate one complete closed lap; return its frozen geometry and identity."""
     _check_structure(payload)
@@ -225,9 +205,7 @@ def validate_route(payload: object) -> Route:
 
     _check_section_contacts(sections, portals)
 
-    start = _start(payload['start'], sections)
-
-    return Route(tuple(sections), tuple(portals), start, digest)
+    return Route(tuple(sections), tuple(portals), digest)
 
 
 def decode_manifest(data: bytes) -> object:
